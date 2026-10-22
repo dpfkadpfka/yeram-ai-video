@@ -631,6 +631,30 @@ body.stg-in .wrap>section,body.stg-in .main{animation:stgIn .28s ease-out}
 @keyframes stgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){body.stg-in .wrap>section,body.stg-in .main{animation:none}}
 :focus-visible{outline:3px solid rgba(232,85,138,.45);outline-offset:2px}
+
+/* ===== 챗봇: 미리클처럼 ===== */
+.msg.bot.wait>*:not(.who){display:none}
+.msg.bot.wait{white-space:normal}
+.msg.bot.wait::after{content:"";display:inline-block;width:34px;height:10px;background:radial-gradient(circle,var(--accent) 3px,transparent 3.5px) 0 50%/11px 10px repeat-x;animation:dots 1s steps(3) infinite;vertical-align:middle}
+.msg.bot.wait{color:transparent}.msg.bot.wait .who{color:var(--accent-strong)}
+@keyframes dots{from{clip-path:inset(0 66% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.qwait{visibility:hidden}
+.phone .quick:not(:empty){margin:0 12px 6px;border:1px solid var(--line);border-radius:18px;background:var(--paper);box-shadow:0 12px 28px -16px rgba(0,0,0,.35);padding:12px;animation:qpop .28s cubic-bezier(.2,.9,.3,1.2)}
+.phone .quick:not(:empty)::before{content:"골라 주세요";display:block;width:100%;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:2px}
+@keyframes qpop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.phone .quick{border-top:0}
+/* 처음엔 챗봇만 가운데 크게 → 답하면 옆에 결과 창이 열림 */
+body[data-stage="chat"] .main{grid-template-columns:minmax(0,760px)!important;justify-content:center}
+body[data-stage="chat"] .outcol{display:none}
+body[data-stage="chat"] .chatcol{position:static}
+body.cfresh .cgrid{grid-template-columns:minmax(0,760px)!important;justify-content:center}
+body.cfresh .cmain{display:none}
+body.cfresh .cp-next{display:none}
+body[data-stage="chat"] .phone,body.cfresh .phone{height:min(calc(100vh - 80px),720px);border-width:1px;border-color:var(--line);border-radius:24px;padding-top:0;box-shadow:0 30px 60px -40px rgba(0,0,0,.35)}
+body[data-stage="chat"] .phone::before,body.cfresh .phone::before{display:none}
+body[data-stage="split"] .outcol,body:not(.cfresh) .cmain{animation:sideIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes sideIn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.chat-intro{text-align:center;margin:8px 0 18px}.chat-intro h2{font-size:28px;font-weight:800;margin:0 0 6px}.chat-intro p{margin:0;color:var(--muted)}
 /* 폰 말풍선 차분하게 */
 .phone .log{background:#FBFAF9}
 .phone .msg.bot{background:var(--paper);border:1px solid var(--line)}
@@ -1560,8 +1584,10 @@ function renderAll(keep){renderOutline();renderOut(keep);renderMine()}
 
 /* ===================== 챗봇 ===================== */
 const log=$("#log"), quick=$("#quick");
-function bot(text,cls){const d=document.createElement("div");d.className="msg bot"+(cls?" "+cls:"");d.innerHTML=`<span class="who"><img class="ava-s" src="${AVA}" alt="">예람쌤</span>`;d.append(document.createTextNode(text));log.append(d);log.scrollTop=log.scrollHeight;return d}
-function botHTML(html,cls){const d=document.createElement("div");d.className="msg bot"+(cls?" "+cls:"");d.innerHTML=`<span class="who"><img class="ava-s" src="${AVA}" alt="">예람쌤</span>`+html;log.append(d);log.scrollTop=log.scrollHeight;return d}
+var restoring=false;
+function typing(d,quickEl){d.classList.add("wait");if(quickEl)quickEl.classList.add("qwait");clearTimeout(typing.t);typing.t=setTimeout(()=>{document.querySelectorAll(".msg.wait").forEach(x=>x.classList.remove("wait"));document.querySelectorAll(".qwait").forEach(x=>x.classList.remove("qwait"));const l=d.parentNode;if(l)l.scrollTop=l.scrollHeight},650)}
+function bot(text,cls){const d=document.createElement("div");d.className="msg bot"+(cls?" "+cls:"");d.innerHTML=`<span class="who"><img class="ava-s" src="${AVA}" alt="">예람쌤</span>`;d.append(document.createTextNode(text));log.append(d);log.scrollTop=log.scrollHeight;if(!restoring)typing(d,quick);return d}
+function botHTML(html,cls){const d=document.createElement("div");d.className="msg bot"+(cls?" "+cls:"");d.innerHTML=`<span class="who"><img class="ava-s" src="${AVA}" alt="">예람쌤</span>`+html;log.append(d);log.scrollTop=log.scrollHeight;if(!restoring)typing(d,quick);return d}
 function me(text,step){const d=document.createElement("div");d.className="msg me";d.textContent=text;if(step)d.dataset.step=step;d.title="눌러서 이 답 고치기";log.append(d);log.scrollTop=log.scrollHeight}
 function setQuick(html){quick.innerHTML=html}
 
@@ -2293,7 +2319,7 @@ function ratioDesc(){const v=cv("ratio");return RATIO_D[v]||v}
 const PLACE_O=["흰 배경","투명 배경(PNG)","파스텔 배경","교실"];
 const cLog=$("#cLog"), cQuick=$("#cQuick");
 let cq=null; // 지금 묻는 질문 {sec,k}
-function cbot(html){const d=document.createElement("div");d.className="msg bot";d.innerHTML=`<span class="who"><img class="ava-s" src="${AVA}" alt="">예람쌤</span>`+html;cLog.append(d);cLog.scrollTop=cLog.scrollHeight}
+function cbot(html){const d=document.createElement("div");d.className="msg bot";d.innerHTML=`<span class="who"><img class="ava-s" src="${AVA}" alt="">예람쌤</span>`+html;cLog.append(d);if(!restoring)typing(d,cQuick);cLog.scrollTop=cLog.scrollHeight}
 function cme(t){const d=document.createElement("div");d.className="msg me";d.textContent=t;cLog.append(d);cLog.scrollTop=cLog.scrollHeight}
 function chips(list,isOn,attr,extra){return list.map(t=>`<button type="button" class="opt" ${attr}="${esc(t)}" aria-pressed="${isOn(t)}">${esc(t)}</button>`).join("")+(extra||"")}
 function cAsk(sec,k){
@@ -2338,7 +2364,7 @@ function cAdvance(){
 let cDoneOnly=false;
 function cDone(){cq=null;$("#sPick").hidden=true;cQuick.innerHTML=`<button type="button" class="opt" data-goscript>대본 프롬프트 만들기</button>`;
   cbot(`캐릭터 설정 완성! 순서대로 눌러 주세요.<div class="cdone"><a class="cd-btn" href="https://chatgpt.com/" target="_blank" rel="noopener" data-ccopy="cBase"><b>① 기본 이미지</b><span>복사하고 ChatGPT 열기</span></a><a class="cd-btn" href="https://chatgpt.com/" target="_blank" rel="noopener" data-ccopy="cSheet"><b>② 캐릭터 시트</b><span>그림이 나오면, 같은 대화창에 이어서</span></a></div>바꾸고 싶은 건 왼쪽 줄을 누르면 다시 물어볼게요.`);renderCards()}
-function cSet(k,v){$("#c_"+k).value=v;renderChar();saveChar();renderCards();if($("#cBase").dataset.edited||$("#cSheet").dataset.edited)toast("직접 고친 프롬프트는 그대로 뒀어요. 바뀐 내용을 넣으려면 ‘피동장스로 다시 채우기’를 누르세요")}
+function cSet(k,v){document.body.classList.remove("cfresh");$("#c_"+k).value=v;renderChar();saveChar();renderCards();if($("#cBase").dataset.edited||$("#cSheet").dataset.edited)toast("직접 고친 프롬프트는 그대로 뒀어요. 바뀐 내용을 넣으려면 ‘피동장스로 다시 채우기’를 누르세요")}
 function cPick(t){
   const q=cq;if(!q)return;
   if(q.sec==="subj"){
@@ -2369,7 +2395,7 @@ function renderCards(){
   const st=styleByName(cv("style"));$("#cv_thumb").innerHTML=st&&STYLE_IMG[st.id]?`<img src="${STYLE_IMG[st.id]}" alt="">`:"";
   $$(".ccard").forEach((c,i)=>c.classList.toggle("on",cq&&(cq.sec==="ratio"?"style":cq.sec)===["subj","act","place","style"][i]));
 }
-function cStart(fresh){
+function cStart(fresh){document.body.classList.toggle("cfresh",!cv("subj")||fresh);
   cLog.innerHTML="";cQuick.innerHTML="";
   if(fresh){["cBase","cSheet"].forEach(id=>delete $("#"+id).dataset.edited);sb={sel:{},step:0};["subj","act","place","style","ratio"].forEach(k=>$("#c_"+k).value="");S.character=null;renderChar()}
   const nick=S.profile&&S.profile.nick;
@@ -2405,7 +2431,7 @@ $("#cRestart").addEventListener("click",()=>cStart(true));
 const SESS="ymSession.v1";
 function saveSess(){try{const st=h=>h.split(AVA).join("@AVA@");
   localStorage.setItem(SESS,JSON.stringify({cur,ans:[...answered],curStep,phase,chatStage,openRow,stage:document.body.dataset.stage,log:st(log.innerHTML),quick:st(quick.innerHTML),cLog:st(cLog.innerHTML),cQuick:st(cQuick.innerHTML),cq,sb}))}catch(e){}}
-function loadSess(){try{const x=JSON.parse(localStorage.getItem(SESS)||"null");if(!x)return false;const un=h=>(h||"").split("@AVA@").join(AVA);
+function loadSess(){restoring=true;setTimeout(()=>restoring=false,0);try{const x=JSON.parse(localStorage.getItem(SESS)||"null");if(!x)return false;const un=h=>(h||"").split("@AVA@").join(AVA);
   if(x.log){cur=Object.assign(JSON.parse(JSON.stringify(DEF)),x.cur||{});answered.clear();(x.ans||[]).forEach(k=>answered.add(k));curStep=x.curStep||null;phase=x.phase||"ask";chatStage=x.chatStage||"chat";openRow=x.openRow||null;log.innerHTML=un(x.log);quick.innerHTML=un(x.quick);renderAll();log.scrollTop=log.scrollHeight}
   if(x.cLog){cLog.innerHTML=un(x.cLog);cQuick.innerHTML=un(x.cQuick);cq=x.cq||null;if(x.sb)sb=x.sb;cLog.scrollTop=cLog.scrollHeight}
   if(x.stage==="char"){setStage("char");loadChar()}else if((x.stage==="chat"||x.stage==="split")&&x.log)setStage(x.stage);
