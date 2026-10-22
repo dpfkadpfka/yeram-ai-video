@@ -586,6 +586,15 @@ body[data-stage="start"] .startcard{display:block}
 @keyframes mqL{to{transform:translateX(-50%)}}@keyframes mqR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 @media (prefers-reduced-motion:reduce){.mq-row{animation:none}}
 @media (max-width:900px){.startcard{margin:0 -16px}.hero{padding:36px 16px 28px}.hbtn{width:100%;justify-content:flex-start}.mq-it{height:140px}.mq-it.v916{width:79px}.mq-it.v169{width:249px}.mq-it.v11{width:140px}}
+/* 홈 버튼: 같은 크기, 가운데 글자, 포인트 색만 */
+.hero-btns{display:grid;grid-template-columns:repeat(2,240px);justify-content:center;gap:14px}
+.hbtn{justify-content:center;text-align:center;padding:17px 20px;border-radius:14px;border:2px solid var(--accent)!important;background:var(--paper)!important;color:var(--accent-deep)!important}
+.hbtn b{font-size:18px;font-weight:800}
+.hbtn[data-gochar]{background:var(--accent)!important;color:#fff!important}
+.hbtn:hover{transform:translateY(-3px);box-shadow:0 14px 26px -14px rgba(232,85,138,.65)}
+.hbtn[data-gochar]:hover{background:var(--accent-deep)!important;border-color:var(--accent-deep)!important}
+.hbtn[data-goscript]:hover{background:var(--accent-soft)!important}
+@media (max-width:900px){.hero-btns{grid-template-columns:minmax(0,1fr)}.hbtn{width:100%;justify-content:center}}
 /* 폰 말풍선 차분하게 */
 .phone .log{background:#FBFAF9}
 .phone .msg.bot{background:var(--paper);border:1px solid var(--line)}
@@ -763,8 +772,8 @@ label.opt input[type=file]{display:none}
       <h2>브루 영상, 프롬프트부터<br>예람쌤이랑 같이 만들어요</h2>
       <p>질문에 답하기만 하면 캐릭터 이미지 프롬프트와 브루 대본 프롬프트가 완성돼요.</p>
       <div class="hero-btns">
-        <button type="button" class="hbtn" data-gochar><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjRTg1NThBIj48cGF0aCBkPSJNMjI0LDEyOGE5Niw5NiwwLDEsMS05Ni05NkE5Niw5NiwwLDAsMSwyMjQsMTI4WiIgb3BhY2l0eT0iMC4yIi8+PHBhdGggZD0iTTEyOCwyNEExMDQsMTA0LDAsMSwwLDIzMiwxMjgsMTA0LjExLDEwNC4xMSwwLDAsMCwxMjgsMjRabTAsMTkyYTg4LDg4LDAsMSwxLDg4LTg4QTg4LjEsODguMSwwLDAsMSwxMjgsMjE2Wk04MCwxMDhhMTIsMTIsMCwxLDEsMTIsMTJBMTIsMTIsMCwwLDEsODAsMTA4Wm05NiwwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE3NiwxMDhabS0xLjA4LDQ4Yy0xMC4yOSwxNy43OS0yNy4zOSwyOC00Ni45MiwyOHMtMzYuNjMtMTAuMi00Ni45Mi0yOGE4LDgsMCwxLDEsMTMuODQtOGM3LjQ3LDEyLjkxLDE5LjIxLDIwLDMzLjA4LDIwczI1LjYxLTcuMSwzMy4wOC0yMGE4LDgsMCwxLDEsMTMuODQsOFoiLz48L3N2Zz4=" alt=""><span><b>캐릭터 만들기</b><small id="charStatus"></small></span></button>
-        <button type="button" class="hbtn" data-goscript><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjRTg1NThBIj48cGF0aCBkPSJNMjA4LDQ4VjIxNmE4LDgsMCwwLDEtOCw4SDU2YTgsOCwwLDAsMS04LThWNDhhOCw4LDAsMCwxLDgtOEg5NmEzOS44MywzOS44MywwLDAsMC04LDI0djhoODBWNjRhMzkuODMsMzkuODMsMCwwLDAtOC0yNGg0MEE4LDgsMCwwLDEsMjA4LDQ4WiIgb3BhY2l0eT0iMC4yIi8+PHBhdGggZD0iTTE2OCwxNTJhOCw4LDAsMCwxLTgsOEg5NmE4LDgsMCwwLDEsMC0xNmg2NEE4LDgsMCwwLDEsMTY4LDE1MlptLTgtNDBIOTZhOCw4LDAsMCwwLDAsMTZoNjRhOCw4LDAsMCwwLDAtMTZabTU2LTY0VjIxNmExNiwxNiwwLDAsMS0xNiwxNkg1NmExNiwxNiwwLDAsMS0xNi0xNlY0OEExNiwxNiwwLDAsMSw1NiwzMkg5Mi4yNmE0Ny45Miw0Ny45MiwwLDAsMSw3MS40OCwwSDIwMEExNiwxNiwwLDAsMSwyMTYsNDhaTTk2LDY0aDY0YTMyLDMyLDAsMCwwLTY0LDBaTTIwMCw0OEgxNzMuMjVBNDcuOTMsNDcuOTMsMCwwLDEsMTc2LDY0djhhOCw4LDAsMCwxLTgsOEg4OGE4LDgsMCwwLDEtOC04VjY0YTQ3LjkzLDQ3LjkzLDAsMCwxLDIuNzUtMTZINTZWMjE2SDIwMFoiLz48L3N2Zz4=" alt=""><span><b>대본 프롬프트 만들기</b><small id="scriptStatus"></small></span></button>
+        <button type="button" class="hbtn" data-gochar><b>캐릭터 만들기</b><small id="charStatus" hidden></small></button>
+        <button type="button" class="hbtn" data-goscript><b>대본 프롬프트 만들기</b><small id="scriptStatus" hidden></small></button>
       </div>
     </div>
     <div class="mq" id="mq" aria-label="예람쌤이 만든 영상과 캐릭터"><div class="mq-row" data-dir="l"></div><div class="mq-row" data-dir="r"></div></div>
