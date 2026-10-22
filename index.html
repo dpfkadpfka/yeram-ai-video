@@ -400,7 +400,7 @@ body.fsbig .phone{height:min(calc(100vh/1.25 - 40px),700px)}
 body.sidemini .sn .ico{width:28px;height:28px}
 /* 접은 상태 */
 body.sidemini header.side{width:76px}
-body.sidemini .logo-full,body.sidemini .snlab,body.sidemini .sn span,body.sidemini .acct-btn .uname,body.sidemini #loginBtn{display:none!important}
+body.sidemini .logo-full,body.sidemini .snlab,body.sidemini .sn span:not(.ico),body.sidemini .acct-btn .uname,body.sidemini #loginBtn{display:none!important}
 body.sidemini header.side .brand{justify-content:center;padding-inline:0;flex-direction:column;gap:10px}
 body.sidemini .logo-mark{display:block}
 body.sidemini .sn{justify-content:center!important;padding:10px 0!important}
@@ -410,15 +410,45 @@ body.sidemini .acct-btn>:not(.uava){display:none}
 body.sidemini .acct-btn .uava{font-size:15px}
 body.sidemini .acct-btn::after{display:none}
 @media (max-width:900px){
- body,body.sidemini{padding-left:16px!important;padding-right:16px!important;padding-top:64px!important}
- header.side,body.sidemini header.side{top:0;bottom:auto;right:0;width:auto;height:58px;flex-direction:row;align-items:center;padding:0 10px;border-right:0;border-bottom:1px solid var(--line)}
- header.side .brand{padding:0}.sidetog{display:none}.logo-full{width:150px}
- .sidenav{flex-direction:row;gap:0;margin-left:auto}.snlab{display:none}
- header.side .stepper{flex-direction:row}
- .sn span{display:none!important}.sn{padding:8px!important}
- header.side .acct{margin:0 0 0 6px;flex-direction:row}#loginBtn{display:none}.fsz{display:none}
- header.side .acct-btn .uname{display:none}
- header.side .menu{top:calc(100% + 6px);bottom:auto;right:0;left:auto}
+ body,body.sidemini{padding-left:16px!important;padding-right:16px!important;padding-top:64px!important;padding-bottom:88px!important}
+ header.side,body.sidemini header.side{top:0;bottom:auto;left:0;right:0;width:auto;height:56px;flex-direction:row;align-items:center;justify-content:space-between;padding:0 12px;border-right:0;border-bottom:1px solid var(--line)}
+ header.side .brand{padding:0}.sidetog{display:none}.logo-full{display:block!important;width:150px}.logo-mark{display:none!important}
+ /* 아래 탭바 */
+ .sidenav{position:fixed;left:0;right:0;bottom:0;z-index:31;flex-direction:row;align-items:stretch;gap:0;background:var(--paper);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px -14px rgba(0,0,0,.25)}
+ .snlab{display:none}
+ header.side .stepper{display:contents!important}
+ header.side .stepper li{display:contents}
+ .sidenav .sn{flex:1;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:3px!important;padding:6px 2px!important;border-radius:12px;font-size:12px}
+ .sidenav .sn span{display:flex!important;align-items:center}
+ .sidenav .sn b,.sidenav .sn span{font-size:12px!important;font-weight:700!important;white-space:nowrap}
+ .sidenav .sn small{display:none!important}
+ .sidenav .sn .ico{width:24px!important;height:24px!important}
+ .sidenav .sn[aria-current="step"],.sidenav .sn.cur{background:none!important}
+ header.side .acct{margin:0;flex-direction:row;align-items:center;gap:6px}
+ #loginBtn{display:inline-flex!important;width:auto!important;padding:6px 12px!important;font-size:13px}.fsz{display:none}
+ header.side .acct-btn{width:auto!important;padding:3px!important;border:0}
+ header.side .acct-btn .uname,header.side .acct-btn>:not(.uava){display:none}
+ header.side .menu{position:fixed;top:60px;bottom:auto;right:10px;left:auto}
+ /* 콘텐츠 */
+ .cgrid,.main,body.fsbig .cgrid,body.fsbig .main{grid-template-columns:minmax(0,1fr)!important}
+ .ctitle{font-size:24px}.home-h h2{font-size:24px}
+ .startcard{padding-block:20px}
+ .phone{height:auto!important;border:1px solid var(--line)!important;border-radius:18px!important;padding-top:0!important;box-shadow:none!important}
+ .phone::before{display:none}
+ .phone .log{max-height:46vh;min-height:180px}
+ .chatcol{position:static!important}
+ .cp-out{grid-template-columns:minmax(0,1fr)!important}
+ .ccards .ccard{grid-template-columns:28px minmax(0,6em) minmax(0,1fr) auto!important;gap:10px}
+ .ccards .ccard .cc-thumb{display:none}
+ .cc-go{grid-column:4!important}
+ .cc-k small{display:none}
+ .cp-next{flex-direction:column;align-items:stretch}.cp-next .btn{justify-content:center}
+}
+/* 노트북 화면(메뉴 + 휴대폰이 다 들어가기 좁을 때) */
+@media (min-width:901px) and (max-width:1280px){
+ .cgrid,.main{grid-template-columns:minmax(0,1fr) 340px}
+ .cp-out{grid-template-columns:minmax(0,1fr)}
+ .phone{border-width:5px}
 }
 /* ===== 캐릭터 화면 새 디자인 (A+C) ===== */
 .chead{margin:4px 0 2px}.ctitle{font-size:28px;font-weight:800;margin:0 0 6px;letter-spacing:-.5px}.cdesc{margin:0;color:var(--muted);font-size:15px}
@@ -2124,8 +2154,10 @@ try{const f=localStorage.getItem("ymFs");if(f)setFs(f)}catch(e){}
 $("#fsRange").addEventListener("input",e=>setFs(e.target.value/100));
 $("#fsReset").addEventListener("click",()=>{setFs(1);toast("글자 크기를 기본(100%)으로 돌렸어요")});
 /* 왼쪽 메뉴 접기 */
-try{if(localStorage.getItem("ymSideMini")==="1")document.body.classList.add("sidemini")}catch(e){}
-$("#sideTog").addEventListener("click",()=>{const m=document.body.classList.toggle("sidemini");try{localStorage.setItem("ymSideMini",m?"1":"0")}catch(e){}});
+let sideUser=null;try{sideUser=localStorage.getItem("ymSideMini")}catch(e){}
+function autoSide(){if(sideUser!==null)return document.body.classList.toggle("sidemini",sideUser==="1");document.body.classList.toggle("sidemini",innerWidth>900&&innerWidth<=1280)}
+autoSide();addEventListener("resize",autoSide);
+$("#sideTog").addEventListener("click",()=>{const m=document.body.classList.toggle("sidemini");sideUser=m?"1":"0";try{localStorage.setItem("ymSideMini",sideUser)}catch(e){}});
 new MutationObserver(()=>{const st=document.body.dataset.stage;$$(".sn[data-snav]").forEach(b=>b.classList.toggle("cur",b.dataset.snav===st))}).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});
 /* 브루 칸 새로고침 */
 document.addEventListener("click",e=>{const b=e.target.closest("[data-refresh]");if(!b)return;const k=b.dataset.refresh;
