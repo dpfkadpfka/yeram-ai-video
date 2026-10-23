@@ -1081,7 +1081,17 @@ body[data-stage="char"]:not(.cfresh) .pgh,body[data-stage="split"] .pgh{max-widt
 .pgh-meta div{display:flex;align-items:center;gap:8px;font-size:14px}
 .pgh-meta dt{color:var(--muted);font-weight:600}
 .pgh-meta dd{margin:0;font-weight:700}
-.pgh-help{margin-top:16px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.pgh-help{margin-top:16px}
+.hb{display:flex;align-items:flex-end;gap:14px;animation:hbIn .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes hbIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hb-ava{width:110px;height:auto;flex-shrink:0;mix-blend-mode:multiply;animation:hbBob 2.4s ease-in-out infinite}
+@keyframes hbBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.hb-bub{position:relative;flex:1;background:var(--paper);border:1.5px solid #F3C6D8;border-radius:22px 22px 22px 6px;padding:18px 20px 16px;box-shadow:0 20px 40px -28px rgba(232,85,138,.45);display:grid;gap:14px}
+.hb-bub::before{content:"";position:absolute;left:-9px;bottom:14px;width:16px;height:16px;background:var(--paper);border-left:1.5px solid #F3C6D8;border-bottom:1.5px solid #F3C6D8;transform:rotate(45deg)}
+.hb-hi{margin:0;font-size:16px;font-weight:700;line-height:1.5}.hb-hi b{display:block;font-size:13px;color:var(--accent-deep);margin-bottom:2px}
+.hb-ok{justify-self:end}
+@media (max-width:600px){.hb-ava{width:72px}.hb-bub{padding:14px 16px}}
+@media (prefers-reduced-motion:reduce){.hb,.hb-ava{animation:none}}
 .pgh-help ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .pgh-help li{display:flex;gap:12px;align-items:flex-start}
 .pgh-help .hk{flex-shrink:0;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:14px}
@@ -2921,13 +2931,13 @@ $$("#shotStage .scopts").forEach(g=>[...g.querySelectorAll("button")].forEach(b=
 $$("[data-shtg]").forEach(x=>x.checked=!!SH.tg[x.dataset.shtg]);shPaintRef();paintPills();["#shStyle","#scStyle"].forEach(q=>{if(!SH.ref&&$(q).value==="참고 이미지")$(q).value="3D 애니메이션"});
 /* 페이지 머리 내용 */
 const PGH={
- char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 AI 이미지"]],
+ char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",hi:"캐릭터는 이 네 가지만 정하면 돼요! 앞 글자만 따서 ‘피동장스’라고 불러요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 AI 이미지"]],
   help:[["피","피사체","누구를 그릴지 · 머리, 옷, 생김새"],["동","동작","포즈와 표정 · 손 흔들기, 웃는 얼굴"],["장","장소","배경 · 흰 배경, 교실, 놀이터"],["스","스타일","그림체 · 3D 애니, 웹툰, 수채화"]],helpB:"피동장스"},
- chat:{eye:"프롬프트 만들기",t:"대본",d:"영상 형식과 주제를 고르면 브루에 넣을 대본 프롬프트를 만들어요.",meta:[["결과물","대본 프롬프트 · 이미지 프롬프트"],["넣는 곳","브루 텍스트로 비디오 만들기 → AI 글쓰기"]],
+ chat:{eye:"프롬프트 만들기",t:"대본",d:"영상 형식과 주제를 고르면 브루에 넣을 대본 프롬프트를 만들어요.",hi:"대본은 이렇게 만들어요! 제가 하나씩 물어볼 테니 편하게 답해 주세요.",meta:[["결과물","대본 프롬프트 · 이미지 프롬프트"],["넣는 곳","브루 텍스트로 비디오 만들기 → AI 글쓰기"]],
   help:[["1","형식 고르기","숏폼·롱폼과 영상 종류를 골라요"],["2","질문에 답하기","주제, 대상, 말투를 정해요"],["3","브루에 붙여 넣기","칸마다 복사해서 브루 AI 글쓰기에 넣어요"]]},
- shot:{eye:"프롬프트 만들기",t:"컷 편집",d:"마음에 안 드는 컷 하나를 다시 만들 이미지·영상 프롬프트를 써 드려요.",meta:[["결과물","이미지 프롬프트 · 영상 프롬프트 (영문)"],["카메라","장면에 맞게 자동"]],link:["모델 비교","models"],
+ shot:{eye:"프롬프트 만들기",t:"컷 편집",d:"마음에 안 드는 컷 하나를 다시 만들 이미지·영상 프롬프트를 써 드려요.",hi:"마음에 안 드는 컷이 나왔나요? 그 장면만 다시 만들면 돼요!",meta:[["결과물","이미지 프롬프트 · 영상 프롬프트 (영문)"],["카메라","장면에 맞게 자동"]],link:["모델 비교","models"],
   help:[["1","장면 설명","바꾸고 싶은 컷을 한두 문장으로 써요"],["2","참고 이미지 · 모델","캐릭터 이미지를 넣고 쓸 모델을 골라요"],["3","다시 만들기","이미지 프롬프트로 그림을, 영상 프롬프트로 움직임을 만들어요"]]},
- scene:{eye:"프롬프트 만들기",t:"씬 나누기",d:"이야기를 길이에 맞춰 씬으로 나누고, 씬마다 이미지·영상 프롬프트를 만들어요.",meta:[["결과물","씬별 이미지 · 영상 프롬프트 (영문)"],["카메라","씬마다 자동"]],link:["모델 비교","models"],
+ scene:{eye:"프롬프트 만들기",t:"씬 나누기",d:"이야기를 길이에 맞춰 씬으로 나누고, 씬마다 이미지·영상 프롬프트를 만들어요.",hi:"긴 이야기도 걱정 마세요. 길이에 맞춰 씬으로 나눠 드릴게요!",meta:[["결과물","씬별 이미지 · 영상 프롬프트 (영문)"],["카메라","씬마다 자동"]],link:["모델 비교","models"],
   help:[["1","이야기 쓰기","보여 주고 싶은 내용을 대략 써요"],["2","길이 맞추기","전체 길이와 씬 길이로 씬 개수가 정해져요"],["3","씬마다 복사","하나씩 복사하거나 전체 복사해요"]]}};
 PGH.split=PGH.chat;
 function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h.hidden=!P;if(!P)return;
@@ -2935,8 +2945,9 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   $("#pghMeta").innerHTML=P.meta.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("");
   const L=$("#pghLink");L.hidden=!P.link;if(P.link){L.textContent=P.link[0];L.dataset.models="";L.setAttribute("role","button");L.href="#"}
   $("#pghHelpB").textContent=P.helpB?P.helpB+"란?":"사용 방법";
-  $("#pghHelp").innerHTML=`<ol>${P.help.map(([k,b,t])=>`<li><span class="hk">${k}</span><div><b>${b}</b><small>${t}</small></div></li>`).join("")}</ol>`;
+  const avaSrc=($(".ab-ava")||{}).src||"";$("#pghHelp").innerHTML=`<div class="hb"><img class="hb-ava" src="${avaSrc}" alt="예람쌤"><div class="hb-bub"><p class="hb-hi"><b>예람쌤</b>${esc(P.hi)}</p><ol>${P.help.map(([k,b,t])=>`<li><span class="hk">${k}</span><div><b>${b}</b><small>${t}</small></div></li>`).join("")}</ol><button type="button" class="btn sm primary hb-ok">알겠어요</button></div></div>`;
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
+$("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
 $("#pghLink").addEventListener("click",e=>e.preventDefault());
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
