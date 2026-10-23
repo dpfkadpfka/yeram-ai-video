@@ -40,6 +40,18 @@ export default {
     }
     if (!/^[a-z0-9]{10,}$/i.test(id)) return J({ error: "id" }, 400);
     const key = new Request("https://cache.local/padlet/" + id), cache = caches.default;
+    if (req.method === "POST" && act === "edit") {
+      const b = await req.json().catch(() => ({}));
+      const post = String(b.post || "");
+      if (!post) return J({ error: "post" }, 400);
+      const ok = (b.token && b.token === await sign(env.PADLET_KEY, post)) || await isAdmin(b.idToken);
+      if (!ok) return J({ error: "forbidden" }, 403);
+      let old = {}; try { old = JSON.parse(await env.HIDE.get("m:" + post) || "{}") } catch (e) {}
+      const m = { ...old, subject: String(b.subject || "").slice(0, 120), intro: String(b.intro || "").slice(0, 300), by: String(b.by || "").slice(0, 30) };
+      await env.HIDE.put("m:" + post, JSON.stringify(m));
+      ctx.waitUntil(cache.delete(key));
+      return J({ ok: true });
+    }
     if (req.method === "POST" && act === "del") {
       const b = await req.json().catch(() => ({}));
       const post = String(b.post || "");
@@ -75,7 +87,7 @@ export default {
     const sections = Object.fromEntries(inc.filter(x => x.type === "section").map(x => [x.id, x.attributes?.title || ""]));
     const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
       const a = x.attributes || {}, c = a.content || {}, at = c.attachment || {};
-      return { id: x.id, subject: strip(c.subject), body: strip(c.body), url: at.url || "", caption: at.caption || "", color: a.color || "",
+      return { id: x.id, subject: meta[x.id]?.subject || strip(c.subject), body: strip(c.body), url: at.url || "", caption: at.caption || "", color: a.color || "",
         section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: meta[x.id]?.by || a.author?.name || a.authorName || "", intro: meta[x.id]?.intro || "" };
     }).sort((p, q) => String(q.at).localeCompare(String(p.at)));
     const out = JSON.stringify({ board: { id, title: j.data?.attributes?.title || "" }, posts });
