@@ -3009,7 +3009,7 @@ function renderPad(force){
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
 }
 /* 영상 올리기: Cloudinary(파일) → Worker(패들렛 글) → 갤러리 */
-let CLD={cloud:"",preset:"yeram_video"};
+let CLD={cloud:"mcilphba",preset:"yeram_video"};
 function padPopup(){const f=$("#svPopF");$("#svPopT").textContent="영상 올리기";f.setAttribute("allow","camera;microphone;display-capture;clipboard-write");const u=padEmbed(PADLET);if(f.getAttribute("src")!==u)f.src=u;document.querySelector(".svpop-c").classList.add("wide");$("#svPop").hidden=false;document.body.style.overflow="hidden";padJT=0}
 document.addEventListener("click",e=>{const b=e.target.closest("#padOpen");if(!b||!PADLET)return;e.preventDefault();
   if(!CLD.cloud||!PAD_API){padPopup();return}
@@ -3043,7 +3043,7 @@ let MENU_CFG={};try{MENU_CFG=JSON.parse(localStorage.getItem("ymMenuCfg")||"{}")
 function applyMenuCfg(c){MENU_CFG=c||{};MENU_DEF.forEach(([k,def,ic,sel])=>{const el=document.querySelector("header.side "+sel);if(!el)return;const o=MENU_CFG[k]||{};const lab=o.label||def;
   const b=el.querySelector("span:not(.ico) b")||el.querySelector("span:not(.ico)");if(b)b.textContent=lab;const ico=el.querySelector(".ico");const icn=o.icon&&ICONS[o.icon]?o.icon:null;if(ico&&icn)ico.style.setProperty("--i",`url(${ICONS[icn]})`);else if(ico&&ico.dataset.orig)ico.style.setProperty("--i",ico.dataset.orig)});
   applyMenuOrder();try{localStorage.setItem("ymMenuCfg",JSON.stringify(MENU_CFG))}catch(e){}}
-const MENU_ORDER0=["home","script","shot","scene","char","models","gallery","community","survey"];
+const MENU_ORDER0=["home","script","shot","scene","char","gallery","community","models","survey"];
 function menuOrder(c){const o=((c||MENU_CFG)._order||MENU_ORDER0).filter(k=>MENU_DEF.some(d=>d[0]===k));MENU_DEF.forEach(d=>{if(!o.includes(d[0]))o.push(d[0])});return o}
 function applyMenuOrder(){const ord=menuOrder(),G=new Map();
   MENU_DEF.forEach(([k,,,sel])=>{const el=document.querySelector("header.side "+sel);if(!el)return;const n=el.closest("li")||el;if(!G.has(n.parentNode))G.set(n.parentNode,[]);G.get(n.parentNode).push([k,n])});
@@ -3279,7 +3279,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792776049"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792776276"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3474,7 +3474,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792776049";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792776276";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
