@@ -1477,6 +1477,45 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .pcc{display:grid;place-items:center;font-size:16px!important;font-weight:700;color:var(--muted);background:conic-gradient(#f06292,#fdd835,#43a047,#29b6f6,#8e24aa,#f06292)}.pcc input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .pccode{font-size:12.5px;font-weight:700;color:var(--ink-2,#555);font-family:ui-monospace,monospace}.pccode.muted{font-family:inherit;color:var(--muted);font-weight:500}
 .pcdot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-left:3px;vertical-align:middle;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+
+/* 반응·댓글 */
+.rxbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.rxbar button{font:inherit;cursor:pointer}
+.rxc{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-size:14px;color:var(--ink);transition:transform .12s,background .15s}
+.rxc b{font-size:12.5px;font-weight:700;color:var(--muted)}
+.rxc.on{background:var(--accent-soft);border-color:var(--accent)}.rxc.on b{color:var(--accent-strong)}
+.rxc:active,.rxpick button:active{transform:scale(.9)}
+.rxpw{position:relative;display:inline-flex}
+.rxadd{height:30px;min-width:38px;padding:0 9px;border-radius:999px;border:1px dashed var(--line);background:transparent;color:var(--muted);font-size:15px;display:inline-flex;align-items:center;gap:1px}
+.rxadd small{font-size:11px;font-weight:700}
+.rxadd:hover,.rxcm:hover{border-color:var(--accent);color:var(--accent-strong)}
+.rxpick{position:absolute;bottom:calc(100% + 6px);left:0;z-index:30;display:flex;gap:2px;padding:6px;border-radius:999px;background:var(--paper);border:1px solid var(--line);box-shadow:0 12px 28px -12px rgba(0,0,0,.35)}
+.rxpick[hidden]{display:none}
+.rxpick button{width:36px;height:36px;border:0;border-radius:50%;background:transparent;font-size:21px;line-height:1;transition:transform .12s}
+.rxpick button:hover{transform:translateY(-3px) scale(1.18);background:var(--band)}
+.rxcm{margin-left:auto;height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px}
+.gcard .gx{font-size:12.5px;color:var(--muted);min-height:0}
+.rxcmts{display:grid;gap:10px}
+.rxcmts h3{margin:0;font-size:15px}
+.rxlist{display:grid;gap:8px;max-height:46vh;overflow:auto}
+.rxitem{padding:9px 12px;border-radius:12px;background:var(--bg);font-size:14px;line-height:1.5;display:grid;gap:2px}
+.rxitem .rxh{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.rxitem .rxh b{color:var(--ink);font-size:13px}
+.rxitem .rxh button{margin-left:auto;border:0;background:none;color:var(--muted);font:inherit;font-size:12px;cursor:pointer}
+.rxitem p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.rxempty{color:var(--muted);font-size:13.5px;margin:0}
+.rxform{display:flex;gap:6px}
+.rxform input{flex:1;min-width:0;height:42px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+.rxform button{height:42px;padding:0 16px;border-radius:12px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:700;cursor:pointer}
+.rxlogin{justify-self:start}
+#rxModal .modal-card{width:min(520px,94vw)}
+.rshape{display:inline-block;flex:none;border:2px solid currentColor;border-radius:3px;vertical-align:middle;margin-right:6px}
+.rshape.rv{width:12px;height:20px}.rshape.rh{width:22px;height:12px}.rshape.rs{width:16px;height:16px}
+.ratioopts{display:flex;gap:10px;flex-wrap:wrap}
+.ratioopt{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;width:92px;height:96px;padding:10px 6px;border:1px solid var(--line);background:var(--paper);border-radius:14px;font:inherit;font-weight:700;font-size:15px;color:var(--ink);cursor:pointer}
+.ratioopt .rshape{margin:0;border-width:2.5px;border-radius:5px}
+.ratioopt .rshape.rv{width:30px;height:52px}.ratioopt .rshape.rh{width:62px;height:35px}.ratioopt .rshape.rs{width:42px;height:42px}
+.ratioopt:hover,.ratioopt[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-strong);background:var(--accent-soft)}
 </style>
 
 <div class="wrap">
@@ -1675,7 +1714,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <div class="cmp-bar">
         <label class="cmp-plus" title="참고 이미지 넣기" aria-label="참고 이미지 넣기"><input type="file" id="shFile" accept="image/*" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></label>
         <div class="pdd"><button type="button" class="pill" data-pill="style"><span class="pk">스타일</span><span class="pv" id="shStyleV"></span></button><div class="ppop plist" data-sel="shStyle" hidden></div><select id="shStyle" hidden><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option><option value="3D 치비">3D 치비</option><option value="종이공예">종이공예</option><option value="레트로 애니">레트로 애니</option></select></div>
-        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="shRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sh="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="9:16sq" aria-pressed="false">세로 + 가운데 정사각</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="shRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sh="ratio"><button type="button" data-v="16:9" aria-pressed="true"><i class="rshape rh"></i>16:9</button><button type="button" data-v="9:16" aria-pressed="false"><i class="rshape rv"></i>9:16</button><button type="button" data-v="9:16sq" aria-pressed="false"><i class="rshape rs"></i>1:1</button></div></div></div>
         <div class="mpick" data-mp="img" data-for="shImgM"></div><input type="hidden" id="shImgM" value="GPT Image 2.5">
         <div class="mpick" data-mp="vid" data-for="shVidM"></div><input type="hidden" id="shVidM" value="Veo 3.1">
         <div class="pdd"><div class="pill pnum" role="group" aria-label="길이 길이"><span class="pk">길이</span><input type="number" class="pnin" id="shSecV" min="1" max="60" inputmode="numeric" aria-label="길이 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>영상 길이</b><input type="range" id="shSec" min="3" max="15" step="1" value="6" aria-label="영상 길이(초)"></div></div>
@@ -1695,7 +1734,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <div class="cmp-bar">
         <label class="cmp-plus" title="참고 이미지 넣기" aria-label="참고 이미지 넣기"><input type="file" id="scFile" accept="image/*" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></label>
         <div class="pdd"><button type="button" class="pill" data-pill="style"><span class="pk">스타일</span><span class="pv" id="scStyleV"></span></button><div class="ppop plist" data-sel="scStyle" hidden></div><select id="scStyle" hidden><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option><option value="3D 치비">3D 치비</option><option value="종이공예">종이공예</option><option value="레트로 애니">레트로 애니</option></select></div>
-        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="scRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="9:16sq" aria-pressed="false">세로 + 가운데 정사각</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="scRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true"><i class="rshape rh"></i>16:9</button><button type="button" data-v="9:16" aria-pressed="false"><i class="rshape rv"></i>9:16</button><button type="button" data-v="9:16sq" aria-pressed="false"><i class="rshape rs"></i>1:1</button></div></div></div>
         <div class="mpick" data-mp="img" data-for="scImgM"></div><input type="hidden" id="scImgM" value="GPT Image 2.5">
         <div class="mpick" data-mp="vid" data-for="scVidM"></div><input type="hidden" id="scVidM" value="Veo 3.1">
         <div class="pdd"><div class="pill pnum" role="group" aria-label="전체 길이"><span class="pk">전체</span><input type="number" class="pnin" id="scTotalV" min="1" max="900" inputmode="numeric" aria-label="전체 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>전체 길이</b><input type="range" id="scTotal" min="15" max="180" step="15" value="30" aria-label="전체 영상 길이"></div></div><div class="pdd"><div class="pill pnum" role="group" aria-label="씬 길이"><span class="pk">씬</span><input type="number" class="pnin" id="scSecV" min="1" max="60" inputmode="numeric" aria-label="씬 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>씬 하나 길이</b><input type="range" id="scSec" min="3" max="15" step="1" value="6" aria-label="씬 하나 길이"></div></div>
@@ -1872,6 +1911,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 <div class="modal" id="gvModal" hidden role="dialog" aria-modal="true">
   <div class="modal-card gv-card" id="gvCard"></div>
 </div>
+<div class="modal" id="rxModal" hidden role="dialog" aria-modal="true"><div class="modal-card" id="rxCard"></div></div>
 <div class="modal" id="zoomBox" hidden><img alt="" style="max-width:min(92vw,1100px);max-height:86vh;border-radius:16px;background:#fff"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -2112,7 +2152,8 @@ const IMG_STYLES=[
  {v:"pixel",t:"픽셀 아트",s:"레트로 게임 같은 픽셀 아트 스타일로 또렷하게 표현한다."},
  {v:"retro",t:"레트로 애니",s:"1980년대 말~1990년대 초 손으로 그린 셀 애니메이션처럼, 섬세한 선화와 절제된 2단계 셀 명암, 머리카락의 넓은 하이라이트로 표현한다. 세피아나 과하게 바랜 필터는 쓰지 않는다."},
  {v:"chibi3d",t:"3D 치비",s:"2~3등신 귀여운 3D 치비 캐릭터와 부드러운 3D 애니메이션 조명으로, 은은한 무광 재질로 표현한다. 번들거리는 플라스틱 광택은 쓰지 않는다."}];
-const IMG_RATIO=[{v:"9:16",t:"9:16 꽉 찬 세로",s:"9:16 세로 화면"},{v:"9:16sq",t:"9:16 + 가운데 정사각형",s:"9:16 세로 화면, 장면은 가운데 정사각형"},{v:"16:9",t:"16:9 가로",s:"16:9 가로 화면"}];
+const IMG_RATIO=[{v:"9:16",t:"9:16",s:"9:16 세로 화면"},{v:"16:9",t:"16:9",s:"16:9 가로 화면"},{v:"9:16sq",t:"1:1",s:"9:16 세로 화면, 장면은 가운데 1:1 정사각형"}];
+const RSHAPE=v=>`<i class="rshape r${v==="9:16"?"v":v==="16:9"?"h":"s"}"></i>`;
 const IMG_PAL=[{v:"extract",t:"이미지에서 색 뽑기",s:""},{v:"pick",t:"직접 고르기",s:""},{v:"auto",t:"알아서",s:""}];
 const PAL_KEYS=[["main","메인"],["sub1","보조 1"],["sub2","보조 2"],["text","글자·어두운 색"],["point","포인트(조금만)"]];
 const BASE_KEYS={form:FORMS,imgUse:IMG_USE,imgRef:IMG_REF,imgStyle:IMG_STYLES,imgRatio:IMG_RATIO,imgPal:IMG_PAL,mode:MODES,genre:null,length:LENGTHS,grade:GRADES,subject:SUBJECTS,viewer:VIEWERS,hook:HOOKS,tone:TONES,speaker:SPEAKERS,ending:ENDINGS};
@@ -2132,7 +2173,6 @@ function rawOpts(key){
   if(key==="genre") return genreList();
   if(key.startsWith("gf.")){const [,gv,k]=key.split(".");const g=findGenre(gv);const f=g&&(g.f||[]).find(x=>x.k===k);return f&&f.opts?f.opts:[]}
   if(key==="length")return ALL_L;
-  if(key==="imgRatio")return IMG_RATIO.filter(o=>cur.form==="long"?o.v==="16:9":o.v!=="16:9");
   return BASE_KEYS[key]||[];
 }
 function optsFor(key){
@@ -2478,7 +2518,7 @@ function steps(){
   if(cur.imgUse==="yes"){
     A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?\n첨부한다면 그 이미지에 캐릭터가 들어 있는지가 중요해요. 첨부하면 그림체·색감·배경을 참고 이미지에 맞추라고 쓸게요."});
     if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요. 생김새·옷·색을 넣으면 장면마다 비슷하게 나와요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
-    if(cur.form!=="long")A.push({id:"imgRatio",key:"imgRatio",ask:()=>"화면 구성은요?\n요즘 숏폼은 세로 화면 가운데에 정사각형 장면을 두고, 위아래 빈 곳에 제목·자막을 넣는 방식이 많아요. 브루 AI 이미지에 9:16만 있어도 이렇게 만들 수 있어요."});
+    A.push({id:"imgRatio",key:"imgRatio",ask:()=>"이미지 비율은요?\n1:1을 고르면 세로 화면 가운데에 정사각형 장면을 두고, 위아래에 제목·자막 넣을 자리를 비워 둬요."});
     if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요? 영상으로 움직일 그림이라 장면 분위기에 맞게 골라 주세요."});
     A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요? 로고·학교 상징·캐릭터 이미지를 올리면 거기서 색 코드를 뽑아 드려요."})}
   }
@@ -2497,6 +2537,7 @@ function ask(st){
     let rec=recFor(st.key), fav=topOf(st.key);
     if(fav&&getVal(st.key)!==fav&&!answered.has(st.id)&&S.history.length){/* 지난번 선택 제안 */}
     const ICQ={form:[["short","세로 영상","쇼츠·릴스 · 9:16"],["long","가로 영상","유튜브·수업 화면 · 16:9"]],mode:[["edu","수업·교육용","학년·교과에 맞춰"],["gen","일반 영상","장르를 골라서"],["contest","공모전 출품","아이디어까지 골라서"]]}[st.key];
+    if(st.key==="imgRatio"){const sel=getVal("imgRatio");setQuick(`<div class="ratioopts">${IMG_RATIO.map(o=>`<button type="button" class="ratioopt" data-qkey="imgRatio" data-v="${o.v}" aria-pressed="${sel===o.v}">${RSHAPE(o.v)}<span>${o.t}</span></button>`).join("")}</div>`);$("#say").placeholder="골라도 되고, 말로 답해도 돼요";return}
     if(ICQ){setQuick(`<div class="iconopts">${ICQ.map(([v,t,d])=>`<button type="button" class="iconopt" data-qkey="${st.key}" data-v="${v}"><img src="${ICON[v]||ICON.gen}" alt=""><span>${t}<small>${d}</small></span></button>`).join("")}</div>`);$("#say").placeholder="골라도 되고, 말로 답해도 돼요";return}
     setQuick(chipsHTML(st.key,rec,true).replace(/data-key=/g,"data-qkey=")+(st.skip?`<button type="button" class="opt" data-qskip>건너뛰기</button>`:""));
     $("#say").placeholder="골라도 되고, 말로 답해도 돼요";
@@ -3138,7 +3179,7 @@ function renderPad(force){
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
     W.classList.add("native");
-    W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${padMedia(p.url)}<div class="pdtx">${p.subject?`<b>${esc(p.subject)}</b>`:""}${intro?`<p>${esc(intro)}</p>`:""}${by?`<small>${esc(by)}</small>`:""}${can?`<span class="pdact"><button type="button" class="pddel pdedit" data-vedit="${esc(p.id)}">수정</button><button type="button" class="pddel" data-vdel="${esc(p.id)}">삭제</button></span>`:""}</div></article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
+    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${padMedia(p.url)}<div class="pdtx">${p.subject?`<b>${esc(p.subject)}</b>`:""}${intro?`<p>${esc(intro)}</p>`:""}${by?`<small>${esc(by)}</small>`:""}${rxHTML("v_"+p.id)}${can?`<span class="pdact"><button type="button" class="pddel pdedit" data-vedit="${esc(p.id)}">수정</button><button type="button" class="pddel" data-vdel="${esc(p.id)}">삭제</button></span>`:""}</div></article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
@@ -3291,7 +3332,7 @@ async function galLoad(reset){
   renderGal();
 }
 function renderGal(){
-  $("#galGrid").innerHTML=galItems.map(it=>`<button type="button" class="gcard" data-gopen="${esc(it.id)}"><span class="gi"><img src="${esc(it.thumb)}" alt="${esc(it.title||"")}" loading="lazy"></span><span class="gm"><b>${esc(it.title||"제목 없음")}</b><small>${it.style?`<span class="gtag">${esc(it.style)}</span>`:""}${esc(it.name||"")}</small></span></button>`).join("");
+  $("#galGrid").innerHTML=galItems.map(it=>`<button type="button" class="gcard" data-gopen="${esc(it.id)}"><span class="gi"><img src="${esc(it.thumb)}" alt="${esc(it.title||"")}" loading="lazy"></span><span class="gm"><b>${esc(it.title||"제목 없음")}</b><small>${it.style?`<span class="gtag">${esc(it.style)}</span>`:""}${esc(it.name||"")}</small><span class="gx" data-rxs="g_${esc(it.id)}">${rxSum("g_"+it.id)}</span></span></button>`).join("");loadRx();
   $("#galEmpty").hidden=galItems.length>0;$("#galMore").hidden=!galLast;
 }
 function promptText(pr){return pr?["[피사체] "+(pr.subj||""),"[동작] "+(pr.act||""),"[장소] "+(pr.place||""),"[스타일] "+(pr.style||""),"","① 기본 이미지","",pr.base||"","","② 캐릭터 시트","",pr.sheet||""].join("\n"):""}
@@ -3302,8 +3343,9 @@ async function openItem(id){
     <h2>${esc(it.title||"제목 없음")}</h2>
     <dl><dt>만든 이</dt><dd>${esc(it.name||"")}</dd>${it.style?`<dt>스타일</dt><dd>${esc(it.style)}</dd>`:""}</dl>
     ${it.prompt?`<pre id="gvPrompt">${esc(promptText(it.prompt))}</pre><div class="btnrow"><button type="button" class="btn sm" data-gcopy>프롬프트 복사</button><button type="button" class="btn sm primary" data-guse>이걸로 캐릭터 만들기</button></div>`:""}
-    <div class="btnrow">${canDelete(it)?`<button type="button" class="btn sm" data-gedit>수정</button><button type="button" class="btn sm" data-gdel>지우기</button>`:""}${fb?`<button type="button" class="btn sm ghost" data-greport>신고</button>`:""}<button type="button" class="btn sm" data-gclose>닫기</button></div></div>`;
-  $("#gvModal").hidden=false;
+    ${rxHTML("g_"+it.id)}
+    <div class="btnrow">${canDelete(it)?`<button type="button" class="btn sm" data-gedit>수정</button><button type="button" class="btn sm" data-gdel>지우기</button>`:""}${fb?`<button type="button" class="btn sm ghost" data-greport>신고</button>`:""}<button type="button" class="btn sm" data-gclose>닫기</button></div>${cmtBox("g_"+it.id)}</div>`;
+  $("#gvModal").hidden=false;loadCmt("g_"+it.id);
   if(fb&&!it.img){try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"galleryFull",id));if(d.exists()){it.img=d.data().img;const el=$("#gvImg");if(el)el.src=it.img}}catch(e){}}
 }
 function openUpload(){
@@ -3432,7 +3474,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792782959"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792783128"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3511,7 +3553,7 @@ const SC_STY_IMG={"3D 애니메이션":"us3d","실사 3D":"real3d","일본 애�
 const STY_KO=v=>v==="참고 이미지"?"참고 이미지":v;
 function paintPills(){["sh","sc"].forEach(x=>{const sel=$("#"+x+"Style");if(!sel)return;$("#"+x+"StyleV").textContent=STY_KO(sel.value);
   const pl=document.querySelector(`.plist[data-sel="${x}Style"]`);pl.classList.add("sgrid");pl.innerHTML=[...sel.options].map(o=>{const k=SC_STY_IMG[o.value],ref=o.value==="참고 이미지";const im=ref?(SH.ref?`<img src="${SH.ref.th}" alt="">`:`<span class="sg-ph">+<small>이미지 넣기</small></span>`):k&&STYLE_IMG[k]?`<img src="${STYLE_IMG[k]}" alt="">`:`<span class="sg-ph film"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 5v4M13 5v4M18 5v4"/></svg><small>실제 영상</small></span>`;return `<button type="button" data-plv="${esc(o.value)}" aria-selected="${o.value===sel.value}"><span class="sg-im">${im}</span>${esc(ref?"참고 이미지":o.textContent)}</button>`}).join("");
-  const R=x==="sh"?SH:SC3;$("#"+x+"RatioV").textContent=R.ratio==="9:16sq"?"9:16 정사각":R.ratio;const T=R.tg;const on=[T.sfx&&"효과음",T.voice&&"목소리",T.bgm&&"음악"].filter(Boolean);$("#"+x+"SndV").textContent=on.length?on.join("·"):"없음"})}
+  const R=x==="sh"?SH:SC3;$("#"+x+"RatioV").textContent=R.ratio==="9:16sq"?"1:1":R.ratio;const T=R.tg;const on=[T.sfx&&"효과음",T.voice&&"목소리",T.bgm&&"음악"].filter(Boolean);$("#"+x+"SndV").textContent=on.length?on.join("·"):"없음"})}
 document.addEventListener("click",e=>{let b;
   if((b=e.target.closest(".mpick [data-mv]"))){const el=b.closest(".mpick"),inp=$("#"+el.dataset.for);inp.value=b.dataset.mv;paintPick(el);inp.dispatchEvent(new Event("change",{bubbles:true}));return}
   if((b=e.target.closest(".mpick .mdd-b"))){const l=b.nextElementSibling,open=l.hidden;mddClose(l);l.hidden=!open;b.setAttribute("aria-expanded",open);return}
@@ -3627,7 +3669,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792782959";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792783128";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -3820,5 +3862,51 @@ addEventListener("pagehide",saveSess);
   /* 새로고침해도 보던 탭 그대로 (대화 내용은 처음부터) */
   const SEL={chat:'#stepper [data-stepgo="2"]',split:'#stepper [data-stepgo="2"]',char:'#stepper [data-stepgo="1"]',shot:'#stepper [data-stepgo="3"]',scene:'#stepper [data-stepgo="4"]',gallery:".sn[data-gallery]",community:".sn[data-community]",models:".sn[data-models]",about:"[data-about]"}[keep];
   if(SEL)setTimeout(()=>{const el=document.querySelector(SEL);if(el)el.click()},0)})();
+
+/* ===================== 반응(이모지)·댓글 ===================== */
+const RX=[["heart","❤️"],["like","👍"],["lol","😆"],["wow","😮"],["clap","👏"],["fire","🔥"]];
+const RXD={};let rxLoaded=0;
+function myRx(){try{return JSON.parse(localStorage.getItem("ymRx")||"{}")}catch(_){return {}}}
+function saveMyRx(m){try{localStorage.setItem("ymRx",JSON.stringify(m))}catch(_){}}
+async function loadRx(){if(!fb||rxLoaded)return;rxLoaded=1;try{const F=fb.fs;const sn=await F.getDocs(F.collection(fb.db,"rx"));sn.forEach(d=>{RXD[d.id]=d.data()});paintAllRx()}catch(e){rxLoaded=0}}
+function rxInner(key){const c=RXD[key]||{},mine=myRx()[key]||[];
+  return RX.filter(([k])=>c[k]>0).map(([k,e])=>`<button type="button" class="rxc${mine.includes(k)?" on":""}" data-rxk="${k}" aria-pressed="${mine.includes(k)}">${e}<b>${c[k]}</b></button>`).join("")
+   +`<span class="rxpw"><button type="button" class="rxadd" data-rxadd aria-label="이모지 반응 남기기" title="반응 남기기">☺<small>+</small></button><span class="rxpick" hidden>${RX.map(([k,e])=>`<button type="button" data-rxk="${k}" aria-label="${e}">${e}</button>`).join("")}</span></span>`
+   +`<button type="button" class="rxcm" data-rxcm>💬 댓글${c.c>0?" "+c.c:""}</button>`}
+function rxHTML(key){return `<div class="rxbar" data-rx="${esc(key)}">${rxInner(key)}</div>`}
+function rxSum(key){const c=RXD[key]||{},t=RX.reduce((a,[k])=>a+(c[k]||0),0);const top=RX.filter(([k])=>c[k]>0).sort((a,b)=>c[b[0]]-c[a[0]]).slice(0,3).map(x=>x[1]).join("");return [t?`${top} ${t}`:"",c.c>0?`💬 ${c.c}`:""].filter(Boolean).join(" · ")}
+function paintAllRx(){$$("[data-rx]").forEach(el=>{el.innerHTML=rxInner(el.dataset.rx)});$$("[data-rxs]").forEach(el=>{el.textContent=rxSum(el.dataset.rxs)})}
+async function toggleRx(key,k){if(!fb){toast("잠시 뒤 다시 눌러 주세요");return}
+  const m=myRx(),mine=m[key]||[],on=mine.includes(k),d=on?-1:1,c=RXD[key]=RXD[key]||{};
+  if(on&&!(c[k]>0)){m[key]=mine.filter(x=>x!==k);saveMyRx(m);paintAllRx();return}
+  c[k]=(c[k]||0)+d;m[key]=on?mine.filter(x=>x!==k):mine.concat(k);saveMyRx(m);paintAllRx();
+  try{const F=fb.fs;await F.setDoc(F.doc(fb.db,"rx",key),{[k]:F.increment(d)},{merge:true})}
+  catch(e){c[k]=Math.max(0,(c[k]||0)-d);m[key]=mine;saveMyRx(m);paintAllRx();toast("반응을 남기지 못했어요")}}
+function cmtBox(key){return `<div class="rxcmts" data-cbox="${esc(key)}"><h3>댓글</h3><div class="rxlist"><p class="rxempty">불러오는 중…</p></div>${user()?`<form class="rxform" data-rxform="${esc(key)}"><input maxlength="300" placeholder="따뜻한 한마디를 남겨 주세요" aria-label="댓글"><button type="submit">등록</button></form>`:`<button type="button" class="btn sm rxlogin" data-rxlogin>로그인하고 댓글 쓰기</button>`}</div>`}
+const CMTS={};
+async function loadCmt(key){const box=document.querySelector(`[data-cbox="${CSS.escape(key)}"] .rxlist`);if(!box)return;if(!fb){box.innerHTML='<p class="rxempty">댓글을 불러오지 못했어요.</p>';return}
+  try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"rx",key,"c"),F.orderBy("at","asc"),F.limit(200)));CMTS[key]=sn.docs.map(d=>({id:d.id,...d.data()}));paintCmt(key)}
+  catch(e){box.innerHTML='<p class="rxempty">댓글을 불러오지 못했어요.</p>'}}
+function paintCmt(key){const box=document.querySelector(`[data-cbox="${CSS.escape(key)}"] .rxlist`);if(!box)return;const u=user(),L=CMTS[key]||[];
+  box.innerHTML=L.length?L.map(x=>{const t=x.at&&x.at.toDate?x.at.toDate():null;return `<div class="rxitem"><span class="rxh"><b>${esc(x.nick||"선생님")}</b>${t?`${t.getMonth()+1}.${t.getDate()} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`:"방금"}${u&&(x.uid===u.uid||isAdmin())?`<button type="button" data-rxdel="${esc(x.id)}">삭제</button>`:""}</span><p>${esc(x.body)}</p></div>`}).join(""):'<p class="rxempty">첫 댓글을 남겨 주세요.</p>';
+  box.scrollTop=box.scrollHeight}
+function openCmtModal(key){$("#rxCard").innerHTML=`${cmtBox(key)}<div class="btnrow" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn sm" data-rxclose>닫기</button></div>`;$("#rxModal").hidden=false;loadCmt(key);setTimeout(()=>{const i=$("#rxCard input");if(i)i.focus()},50)}
+document.addEventListener("click",async e=>{const t=e.target;let b;
+  if(!t.closest(".rxpw"))$$(".rxpick").forEach(p=>p.hidden=true);
+  if((b=t.closest("[data-rxadd]"))){const p=b.nextElementSibling;const was=p.hidden;$$(".rxpick").forEach(x=>x.hidden=true);p.hidden=!was;return}
+  if((b=t.closest("[data-rxk]"))){const bar=b.closest("[data-rx]");if(bar){toggleRx(bar.dataset.rx,b.dataset.rxk)}return}
+  if((b=t.closest("[data-rxcm]"))){const key=b.closest("[data-rx]").dataset.rx;const inl=document.querySelector(`#gvCard [data-cbox="${CSS.escape(key)}"]`);if(inl){inl.scrollIntoView({behavior:"smooth",block:"nearest"});const i=inl.querySelector("input");if(i)i.focus({preventScroll:true})}else openCmtModal(key);return}
+  if(t.closest("[data-rxclose]")||t.id==="rxModal"){$("#rxModal").hidden=true;return}
+  if(t.closest("[data-rxlogin]")){openLogin();return}
+  if((b=t.closest("[data-rxdel]"))){const key=b.closest("[data-cbox]").dataset.cbox,id=b.dataset.rxdel;if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="한 번 더 누르면 삭제";return}
+    try{const F=fb.fs;await F.deleteDoc(F.doc(fb.db,"rx",key,"c",id));CMTS[key]=(CMTS[key]||[]).filter(x=>x.id!==id);paintCmt(key);const c=RXD[key]=RXD[key]||{};if(c.c>0){c.c--;paintAllRx();F.setDoc(F.doc(fb.db,"rx",key),{c:F.increment(-1)},{merge:true}).catch(()=>{})}}catch(err){toast("지우지 못했어요")}}
+});
+document.addEventListener("submit",async e=>{const f=e.target.closest("[data-rxform]");if(!f)return;e.preventDefault();const key=f.dataset.rxform,inp=f.querySelector("input"),body=inp.value.trim();if(!body)return;
+  if(!fb||!user()){openLogin();return}const btn=f.querySelector("button");btn.disabled=true;
+  try{const F=fb.fs;const r=await F.addDoc(F.collection(fb.db,"rx",key,"c"),{body,nick:myNick(),uid:user().uid,at:F.serverTimestamp()});
+    (CMTS[key]=CMTS[key]||[]).push({id:r.id,body,nick:myNick(),uid:user().uid,at:null});inp.value="";paintCmt(key);
+    const c=RXD[key]=RXD[key]||{};c.c=(c.c||0)+1;paintAllRx();F.setDoc(F.doc(fb.db,"rx",key),{c:F.increment(1)},{merge:true}).catch(()=>{})}
+  catch(err){toast("댓글을 올리지 못했어요")}btn.disabled=false});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rxModal").hidden)$("#rxModal").hidden=true});
 </script>
 </body></html>
