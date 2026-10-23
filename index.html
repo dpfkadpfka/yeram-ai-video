@@ -1673,6 +1673,9 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .svpop-c{max-height:calc(92vh / var(--z,1))}
 .gv-card{height:calc(min(88vh,860px) / var(--z,1))!important;max-height:calc((100vh - 32px) / var(--z,1))!important}.admcard{height:calc(min(720px,92vh) / var(--z,1))!important}
 #gvModal{display:grid;place-items:center;padding:calc(28px / var(--z,1))}.gv-card{height:calc(min(80vh,820px) / var(--z,1))!important;max-height:calc((100vh - 56px) / var(--z,1))!important;width:min(1180px,92vw)!important;max-width:min(1180px,92vw)!important}.gvimg>video,.gvimg>iframe,.gvimg>img{inset:24px!important;width:calc(100% - 48px)!important;height:calc(100% - 48px)!important}.gvimg{background:#16121a!important}
+.pdr .pdbg{display:none!important}.pdr .pd-go{position:relative;z-index:3;margin-top:10px}
+.gbar .vfil{margin-right:auto}
+.ptlrow{display:flex;align-items:flex-start;gap:6px;padding-right:8px}.ptlrow .ptl{flex:1;min-width:0}.pdcard>.ptlrow:first-child{padding-top:10px}.pdcard>.ptlrow:first-child .ptl{margin-top:4px}.gvhead.ptlrow,.gvhead .ptlrow{padding:0 34px 0 0}.gvhead .ptlrow h2,.gvhead.ptlrow h2{flex:1}
 </style>
 
 <div class="wrap">
@@ -2987,7 +2990,7 @@ document.addEventListener("click",e=>{
   if(t.closest("[data-gclose]")||t.id==="gvModal"){$("#gvModal").hidden=true;$$("#gvCard video").forEach(v=>v.pause());const f=$("#gvCard iframe");if(f)f.remove();return}
   if(t.closest("[data-gcopy]")){const it=galItems.find(x=>x.id===galOpenId);if(it&&it.prompt)copyText(it.prompt.base,t.closest("[data-gcopy]"));return}
   if(t.closest("[data-guse]")){const it=galItems.find(x=>x.id===galOpenId);if(it&&it.prompt){S.character=null;setStage("char");["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=it.prompt[k]||"");loadCharFromInputs();$("#gvModal").hidden=true;window.scrollTo({top:0});toast("이 프롬프트로 채웠어요. 고쳐서 써 보세요")}return}
-  if(t.closest("[data-gedit]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;const h=$("#gvCard h2"),dl=$("#gvCard .pnm b");
+  if(t.closest("[data-gedit]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;const h=$("#gvCard h2");let dl=$("#gvCard .pnm b");if(!dl){h.insertAdjacentHTML("afterend","<i class='geName0'></i>");dl=$("#gvCard .geName0")}
     h.outerHTML=`<input class="tinput" id="geTitle" maxlength="40" value="${esc(it.title||"")}" placeholder="제목">`;dl.outerHTML=`<input class="tinput" id="geName" maxlength="20" value="${esc(it.name||"")}" placeholder="만든 이 이름">`;
     $("#gvCard .gvhead").insertAdjacentHTML("beforeend",`<div class="gvact"><button type="button" class="gva" data-gecancel>취소</button><button type="button" class="gva save" data-gesave>저장</button></div>`);return}
   if(t.closest("[data-gecancel]")){openItem(galOpenId);return}
@@ -3342,7 +3345,7 @@ function renderPad(force){
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
     W.classList.add("native");
-    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.filter(p=>!VF||p.kind===VF).map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard" data-open="v:${esc(p.id)}">${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}${p.kind?`<span class="vtag">${p.kind==="t2v"?"텍스트 → 영상":"이미지 → 영상"}</span>`:""}<h4 class="ptl"><button type="button" class="gt" data-vopen="${esc(p.id)}">${esc(p.subject||"제목 없음")}</button></h4><div class="pdmw">${padMedia(p.url)}<button type="button" class="pdexp" data-vopen="${esc(p.id)}" aria-label="크게 보기" title="크게 보기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><div class="pdtx" data-vopen="${esc(p.id)}">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
+    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.filter(p=>!VF||p.kind===VF).map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard" data-open="v:${esc(p.id)}">${authorRow(by,p.at,"")}${p.kind?`<span class="vtag">${p.kind==="t2v"?"텍스트 → 영상":"이미지 → 영상"}</span>`:""}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-vopen="${esc(p.id)}">${esc(p.subject||"제목 없음")}</button></h4>${can?kMenu(`<button type="button" data-vdl="${esc(p.url||"")}">다운로드</button><button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):""}</div><div class="pdmw">${padMedia(p.url)}<button type="button" class="pdexp" data-vopen="${esc(p.id)}" aria-label="크게 보기" title="크게 보기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><div class="pdtx" data-vopen="${esc(p.id)}">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
@@ -3495,7 +3498,7 @@ async function galLoad(reset){
   renderGal();
 }
 function renderGal(){
-  $("#galGrid").innerHTML=galItems.map(it=>`<article class="pdcard gcard2" data-gid="${esc(it.id)}" data-open="g:${esc(it.id)}">${authorRow(it.name,it.createdAt,canDelete(it)?kMenu(`<button type="button" data-gopenedit="${esc(it.id)}">수정</button><button type="button" class="kdel" data-gdel>삭제</button>`):"")}<h4 class="ptl"><button type="button" class="gt" data-gopen="${esc(it.id)}">${esc(it.title||"제목 없음")}</button></h4><button type="button" class="gi" data-gopen="${esc(it.id)}" aria-label="크게 보기"><img src="${esc(it.thumb)}" alt="" loading="lazy"></button>${rxHTML("g_"+it.id)}${cmtBox("g_"+it.id,1)}</article>`).join("");loadRx();
+  $("#galGrid").innerHTML=galItems.map(it=>`<article class="pdcard gcard2" data-gid="${esc(it.id)}" data-open="g:${esc(it.id)}">${authorRow(it.name,it.createdAt,"")}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-gopen="${esc(it.id)}">${esc(it.title||"제목 없음")}</button></h4>${canDelete(it)?kMenu(`<button type="button" data-gopenedit="${esc(it.id)}">수정</button><button type="button" data-gdl="${esc(it.id)}">다운로드</button><button type="button" class="kdel" data-gdel>삭제</button>`):""}</div><button type="button" class="gi" data-gopen="${esc(it.id)}" aria-label="크게 보기"><img src="${esc(it.thumb)}" alt="" loading="lazy"></button>${rxHTML("g_"+it.id)}${cmtBox("g_"+it.id,1)}</article>`).join("");loadRx();
   $("#galEmpty").hidden=galItems.length>0;$("#galMore").hidden=!galLast;
 }
 function promptText(pr){return pr?["[피사체] "+(pr.subj||""),"[동작] "+(pr.act||""),"[장소] "+(pr.place||""),"[스타일] "+(pr.style||""),"","① 기본 이미지","",pr.base||"","","② 캐릭터 시트","",pr.sheet||""].join("\n"):""}
@@ -3503,8 +3506,8 @@ async function openItem(id){
   const it=galItems.find(x=>x.id===id);if(!it)return;galOpenId=id;
   let img=it.img||it.thumb;
   $("#gvCard").innerHTML=`<button type="button" class="gvx" data-gclose aria-label="닫기">✕</button><div class="gvimg"><img class="gimg" id="gvImg" src="${esc(img)}" alt="" data-zoom></div><div class="gvside">
-    ${authorRow(it.name,it.createdAt,canDelete(it)?kMenu(`<button type="button" data-gedit>수정</button><button type="button" class="kdel" data-gdel>삭제</button>`):"")}
-    <div class="gvhead"><h2>${esc(it.title||"제목 없음")}</h2></div>
+    ${authorRow(it.name,it.createdAt,"")}
+    <div class="gvhead ptlrow"><h2>${esc(it.title||"제목 없음")}</h2>${canDelete(it)?kMenu(`<button type="button" data-gedit>수정</button><button type="button" data-gdl="${esc(it.id)}">다운로드</button><button type="button" class="kdel" data-gdel>삭제</button>`):""}</div>
     ${it.prompt?`<details class="gvpr"><summary>캐릭터 프롬프트 보기</summary><pre id="gvPrompt">${esc(promptText(it.prompt))}</pre><div class="btnrow"><button type="button" class="btn sm" data-gcopy>프롬프트 복사</button><button type="button" class="btn sm primary" data-guse>이걸로 캐릭터 만들기</button></div></details>`:""}
     ${rxHTML("g_"+it.id)}
     ${cmtBox("g_"+it.id)}</div>`;
@@ -3637,7 +3640,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792786592"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792787244"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3835,7 +3838,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792786592";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792787244";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4101,8 +4104,8 @@ function openVid(id){const p=(PADJ&&PADJ.posts||[]).find(x=>String(x.id)===Strin
   const media=yt?`<iframe src="https://www.youtube.com/embed/${yt[1]}?rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:/\.(png|jpe?g|gif|webp|avif)(\?|#|$)/i.test(u)?`<img class="gimg" src="${esc(u)}" alt="">`:`<video src="${esc(u)}#t=0.1" controls preload="metadata" playsinline></video>`;
   const can=!!(myVids()[p.id]||(fb&&isAdmin()));
   $("#gvCard").innerHTML=`<button type="button" class="gvx" data-gclose aria-label="닫기">✕</button><div class="gvimg">${media}</div><div class="gvside">
-    ${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit2="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}
-    <div class="gvhead"><h2>${esc(p.subject||"제목 없음")}</h2>${intro?`<p class="gvintro">${esc(intro)}</p>`:""}</div>
+    ${authorRow(by,p.at,"")}
+    <div class="gvhead"><div class="ptlrow"><h2>${esc(p.subject||"제목 없음")}</h2>${can?kMenu(`<button type="button" data-vedit2="${esc(p.id)}">수정</button><button type="button" data-vdl="${esc(p.url||"")}">다운로드</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):""}</div>${intro?`<p class="gvintro">${esc(intro)}</p>`:""}</div>
     ${rxHTML(key)}${cmtBox(key)}</div>`;
   $("#gvModal").hidden=false;paintCmt(key)}
 document.addEventListener("click",e=>{const t=e.target;let b;
@@ -4142,5 +4145,13 @@ window.addEventListener("popstate",()=>{hashReady=false;goHash();setTimeout(()=>
 document.addEventListener("visibilitychange",()=>{if(document.hidden)pauseAllMedia()});
 (function(){const ss=window.setStage;window.setStage=function(x){if(document.body.dataset.stage!==x)pauseAllMedia();const r=ss.apply(this,arguments);const h=S2H[x];if(h&&location.hash!=="#"+h){try{history[hashReady?"pushState":"replaceState"](null,"","#"+h)}catch(_){}}return r}})();
 setTimeout(()=>hashReady=true,1500);
+
+/* 다운로드 (본인·관리자) */
+async function dlFile(url,name){try{const r=await fetch(url);const b=await r.blob();const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}catch(e){window.open(url,"_blank","noopener")}}
+document.addEventListener("click",async e=>{let b=e.target.closest("[data-vdl]");
+  if(b){e.stopPropagation();const u=b.dataset.vdl;if(!u)return;const p=(PADJ&&PADJ.posts||[]).find(x=>x.url===u);const nm=((p&&p.subject)||"영상").replace(/[\\/:*?"<>|]/g,"").slice(0,40)+(u.match(/\.(mp4|mov|webm|m4v|png|jpe?g|gif|webp)(\?|$)/i)||[,"mp4"])[0].replace(/\?.*/,"");dlFile(u,nm.includes(".")?nm:nm+".mp4");return}
+  b=e.target.closest("[data-gdl]");if(b){e.stopPropagation();const it=galItems.find(x=>x.id===b.dataset.gdl);if(!it)return;let img=it.img;
+    if(!img&&fb){try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"galleryFull",it.id));if(d.exists())img=it.img=d.data().img}catch(_){}}
+    img=img||it.thumb;const ext=(img.match(/^data:image\/(\w+)/)||[,"png"])[1].replace("jpeg","jpg");dlFile(img,(it.title||"캐릭터").replace(/[\\/:*?"<>|]/g,"").slice(0,40)+"."+ext)}},true);
 </script>
 </body></html>
