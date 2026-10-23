@@ -2878,7 +2878,11 @@ function padEmbed(u){const m=String(u).match(/padlet\.com\/(?:embed\/)?(?:[^\/]+
 function canEditPad(){return fb?isAdmin():true}
 let PADJ=null,padJT=0;
 function padId(u){const m=String(u||"").match(/padlet\.com\/(?:embed\/)?(?:[^\/]+\/)?(?:[^\/?#]*-)?([a-z0-9]{10,})/i);return m?m[1]:""}
-async function loadPadJson(){if(Date.now()-padJT<60000)return;padJT=Date.now();try{const r=await fetch("data/padlet.json?t="+Date.now(),{cache:"no-store"});if(r.ok){PADJ=await r.json();renderPad()}}catch(_){}}
+/* 실시간 주소(Cloudflare Worker)가 있으면 바로, 없으면 5분마다 만들어지는 파일에서 */
+let PAD_API="";
+async function loadPadJson(){if(Date.now()-padJT<15000)return;padJT=Date.now();
+  if(PAD_API&&PADLET){try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?id="+padId(PADLET),{cache:"no-store"});if(r.ok){PADJ=await r.json();renderPad();return}}catch(_){}}
+  try{const r=await fetch("data/padlet.json?t="+Date.now(),{cache:"no-store"});if(r.ok){PADJ=await r.json();renderPad()}}catch(_){}}
 function padMedia(u){if(!u)return"";const yt=u.match(/(?:youtu\.be\/|v=|shorts\/)([\w-]{11})/);
   if(yt)return `<a class="pdm yt" href="https://www.youtube.com/watch?v=${yt[1]}" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/${yt[1]}/hqdefault.jpg" alt="" loading="lazy"><i></i></a>`;
   if(/\.(mp4|mov|webm|m4v)(\?|#|$)/i.test(u))return `<div class="pdm"><video src="${esc(u)}" controls preload="metadata" playsinline></video></div>`;
@@ -2937,7 +2941,7 @@ $("#homeItemsForm").addEventListener("submit",async e=>{e.preventDefault();const
   try{if(fb){await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{homeHide:cfg.hide,homeYt:cfg.yt,homeChars:cfg.chars,updatedAt:fb.fs.serverTimestamp()},{merge:true})}}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.");return}
   HOME_CFG=cfg;try{localStorage.setItem("ymHomeCfg",JSON.stringify(cfg))}catch(_){}renderMarquee(HOME_MEDIA);toast("홈 화면 그림을 저장했어요")});
 async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());applyHidden(x.hideMenus||[]);if(x.menuCfg)applyMenuCfg(x.menuCfg);
-    try{HOME_CFG={hide:x.homeHide||[],yt:x.homeYt||[],chars:x.homeChars||[]};try{localStorage.setItem("ymHomeCfg",JSON.stringify(HOME_CFG))}catch(_){}renderMarquee(x.homeMedia||HOME_MEDIA)}catch(_){}if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
+    if(x.padApi&&x.padApi!==PAD_API){PAD_API=x.padApi;padJT=0;if(document.body.dataset.stage==="gallery")loadPadJson()}try{HOME_CFG={hide:x.homeHide||[],yt:x.homeYt||[],chars:x.homeChars||[]};try{localStorage.setItem("ymHomeCfg",JSON.stringify(HOME_CFG))}catch(_){}renderMarquee(x.homeMedia||HOME_MEDIA)}catch(_){}if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
 function canManageAdmins(){return fb?isOwner():true}
 function renderAdmins(){$("#admBox").hidden=!canManageAdmins();$("#admList").innerHTML=SITE_ADMINS.length?SITE_ADMINS.map(e=>`<li>${esc(e)}<button type="button" class="x" data-admdel="${esc(e)}" aria-label="${esc(e)} 관리자 빼기">×</button></li>`).join(""):`<li class="hint" style="border:0;background:none;padding:4px 0">아직 추가한 관리자가 없어요.</li>`}
 async function saveAdmins(){try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{admins:SITE_ADMINS,updatedAt:fb.fs.serverTimestamp()},{merge:true});else localStorage.setItem("ymAdmins",JSON.stringify(SITE_ADMINS));renderAdmins();return true}catch(e){toast("저장하지 못했어요. 다시 시도해 주세요.");return false}}
@@ -2956,6 +2960,7 @@ $("#homeForm").addEventListener("submit",async e=>{e.preventDefault();const m=$(
   try{if(fb){await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{homeMedia:m,updatedAt:fb.fs.serverTimestamp()},{merge:true})}try{localStorage.setItem("ymHomeMedia",m)}catch(_){}}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.");return}
   renderMarquee(m);$("#adminModal").hidden=true;toast(m==="yt"?"홈을 썸네일 홈으로 바꿨어요":"홈을 캐릭터 홈으로 바꿨어요")});
 function openGallery(tab){setStage("gallery");window.scrollTo({top:0});galTab(tab||"chars")}
+setInterval(()=>{if(PAD_API&&document.body.dataset.stage==="gallery"&&!document.hidden)loadPadJson()},20000);
 function galTab(t){$$("[data-gtab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.gtab===t));$$("[data-gpane]").forEach(p=>p.hidden=p.dataset.gpane!==t);if(t==="videos")renderPad();else galLoad(true)}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-gtab]");if(b)galTab(b.dataset.gtab)});
 async function loadCharFeed(){const box=$("#charFeed");if(!box)return;let items=[];
@@ -3119,7 +3124,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792774529"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792774559"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3312,7 +3317,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792774529";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792774559";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};

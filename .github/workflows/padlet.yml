@@ -1,7 +1,7 @@
 name: 패들렛 가져오기
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
   push:
     paths: ["scripts/padlet.mjs", ".github/workflows/padlet.yml"]
