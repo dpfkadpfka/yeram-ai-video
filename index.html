@@ -1659,7 +1659,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <div class="cmp-bar">
         <label class="cmp-plus" title="참고 이미지 넣기" aria-label="참고 이미지 넣기"><input type="file" id="shFile" accept="image/*" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></label>
         <div class="pdd"><button type="button" class="pill" data-pill="style"><span class="pk">스타일</span><span class="pv" id="shStyleV"></span></button><div class="ppop plist" data-sel="shStyle" hidden></div><select id="shStyle" hidden><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div>
-        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="shRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sh="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="shRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sh="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="9:16sq" aria-pressed="false">세로 + 가운데 정사각</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
         <div class="mpick" data-mp="img" data-for="shImgM"></div><input type="hidden" id="shImgM" value="GPT Image 2.5">
         <div class="mpick" data-mp="vid" data-for="shVidM"></div><input type="hidden" id="shVidM" value="Veo 3.1">
         <div class="pdd"><div class="pill pnum" role="group" aria-label="길이 길이"><span class="pk">길이</span><input type="number" class="pnin" id="shSecV" min="1" max="60" inputmode="numeric" aria-label="길이 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>영상 길이</b><input type="range" id="shSec" min="3" max="15" step="1" value="6" aria-label="영상 길이(초)"></div></div>
@@ -1679,7 +1679,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <div class="cmp-bar">
         <label class="cmp-plus" title="참고 이미지 넣기" aria-label="참고 이미지 넣기"><input type="file" id="scFile" accept="image/*" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></label>
         <div class="pdd"><button type="button" class="pill" data-pill="style"><span class="pk">스타일</span><span class="pv" id="scStyleV"></span></button><div class="ppop plist" data-sel="scStyle" hidden></div><select id="scStyle" hidden><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div>
-        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="scRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="scRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="9:16sq" aria-pressed="false">세로 + 가운데 정사각</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
         <div class="mpick" data-mp="img" data-for="scImgM"></div><input type="hidden" id="scImgM" value="GPT Image 2.5">
         <div class="mpick" data-mp="vid" data-for="scVidM"></div><input type="hidden" id="scVidM" value="Veo 3.1">
         <div class="pdd"><div class="pill pnum" role="group" aria-label="전체 길이"><span class="pk">전체</span><input type="number" class="pnin" id="scTotalV" min="1" max="900" inputmode="numeric" aria-label="전체 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>전체 길이</b><input type="range" id="scTotal" min="15" max="180" step="15" value="30" aria-label="전체 영상 길이"></div></div><div class="pdd"><div class="pill pnum" role="group" aria-label="씬 길이"><span class="pk">씬</span><input type="number" class="pnin" id="scSecV" min="1" max="60" inputmode="numeric" aria-label="씬 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>씬 하나 길이</b><input type="range" id="scSec" min="3" max="15" step="1" value="6" aria-label="씬 하나 길이"></div></div>
@@ -2067,7 +2067,7 @@ const REASONS=[
 
 const IMG_USE=[{v:"yes",t:"이미지 프롬프트도 만들기",s:""},{v:"no",t:"대본만",s:""}];
 const IMG_REF=[
- {v:"ref",t:"캐릭터가 든 이미지 첨부",s:"첨부한 참고 이미지의 캐릭터를 메인 캐릭터로 모든 장면에 똑같이 등장시킨다. 얼굴 비율, 눈·코·입, 색, 털이나 옷의 질감, 기본 인상을 그대로 유지한다."},
+ {v:"ref",t:"캐릭터가 든 이미지 첨부",s:"첨부한 참고 이미지는 스타일 참고용이 아니라 모든 장면에 실제로 등장해야 하는 원본 캐릭터다. 새 캐릭터를 만들거나 재해석하지 말고, 얼굴·눈·머리카락·의상·색·외곽선·신체 비율과 디자인을 원본 그대로 유지한다. 다른 그림체(3D, 실사 등)로 바꾸지 말고, 장면에 맞게 표정과 포즈만 바꾼다. 픽셀 그림이면 픽셀을 부드럽게 보정하거나 새로 그리지 말고 선명한 픽셀 형태를 그대로 둔다."},
  {v:"bg",t:"배경·분위기 이미지만 첨부",s:"첨부한 참고 이미지는 캐릭터가 아니라 그림체·색감·배경 분위기를 맞추기 위한 참고용이다. 참고 이미지에 없는 인물이나 캐릭터는 새로 만들지 말고, 대본 내용을 보여 주는 사물과 장소 위주로 그린다."},
  {v:"desc",t:"첨부 없이 글로 설명",s:"메인 캐릭터는 {char}. 모든 장면에서 같은 생김새와 옷차림을 유지한다."},
  {v:"none",t:"캐릭터 없음",s:"사람이나 캐릭터 없이, 대본 내용을 보여 주는 사물과 장면 위주로 그린다."}];
@@ -2089,7 +2089,7 @@ const IMG_STYLES=[
  {v:"clay",t:"클레이",s:"말랑한 점토 질감의 클레이 애니메이션 스타일로 표현한다."},
  {v:"pixel",t:"픽셀 아트",s:"레트로 게임 같은 픽셀 아트 스타일로 또렷하게 표현한다."},
  {v:"retro",t:"레트로 만화",s:"옛날 만화영화처럼 바랜 색감과 굵은 선의 레트로 스타일로 표현한다."}];
-const IMG_RATIO=[{v:"9:16",t:"9:16 세로",s:"9:16 세로 화면"},{v:"16:9",t:"16:9 가로",s:"16:9 가로 화면"},{v:"1:1",t:"1:1 정사각",s:"1:1 정사각 화면"}];
+const IMG_RATIO=[{v:"9:16",t:"9:16 꽉 찬 세로",s:"9:16 세로 화면"},{v:"9:16sq",t:"9:16 + 가운데 정사각형",s:"9:16 세로 화면, 장면은 가운데 정사각형"},{v:"16:9",t:"16:9 가로",s:"16:9 가로 화면"},{v:"1:1",t:"1:1 정사각",s:"1:1 정사각 화면"}];
 const IMG_PAL=[{v:"extract",t:"이미지에서 색 뽑기",s:""},{v:"pick",t:"직접 고르기",s:""},{v:"auto",t:"알아서",s:""}];
 const PAL_KEYS=[["main","메인"],["sub1","보조 1"],["sub2","보조 2"],["text","글자·어두운 색"],["point","포인트(조금만)"]];
 const BASE_KEYS={form:FORMS,imgUse:IMG_USE,imgRef:IMG_REF,imgStyle:IMG_STYLES,imgRatio:IMG_RATIO,imgPal:IMG_PAL,mode:MODES,genre:null,length:LENGTHS,grade:GRADES,subject:SUBJECTS,viewer:VIEWERS,hook:HOOKS,tone:TONES,speaker:SPEAKERS,ending:ENDINGS};
@@ -2382,7 +2382,8 @@ function buildImg(){
   L.push("");L.push("[구도]");
   L.push("장면마다 가까이·중간·멀리 구도를 섞어 단조롭지 않게 한다. 주요 대상은 화면 중앙보다 조금 위에 두고, 앞쪽 대상과 뒤쪽 배경을 분리해 깊이감을 준다.");
   L.push("영상으로 움직이기 좋게 머리카락, 옷자락, 물, 구름, 빛처럼 자연스럽게 움직일 요소를 한두 개 넣는다.");
-  L.push("화면 아래쪽 1/4은 자막이 들어가도록 단순하게 둔다.");
+  if(cur.imgRatio==="9:16sq"){L.push("");L.push("[화면 구성]");L.push("최종 이미지는 세로 9:16 비율로 만들되, 실제 장면과 캐릭터, 중요한 사물은 화면 정중앙의 1:1 정사각형 영역 안에만 배치한다.");L.push("정사각형 위아래 공간은 장면과 같은 색감의 단순하고 깔끔한 배경(은은한 하늘, 벽, 무늬 등)으로 남겨 제목과 자막을 넣을 수 있게 한다. 위아래에 중요한 물체나 인물을 두지 않는다.")}
+  else L.push("화면 아래쪽 1/4은 자막이 들어가도록 단순하게 둔다.");
   L.push("");L.push("[넣지 말 것]");
   L.push("글자, 숫자, 로고, 워터마크, 말풍선, 화면 분할, 테두리.");
   return L.join("\n");
@@ -2398,7 +2399,7 @@ function renderOut(keep){
   $("#pCount").textContent=generated?$("#outPrompt").value.length+"자":"";
   const im=buildImg();$("#imgSlot").hidden=!im;
   if(im&&($("#outImg").value===genImg||!$("#outImg").value))$("#outImg").value=im;genImg=im;
-  $("#imgHint").textContent=im?(cur.imgRef==="ref"?"브루 ‘참고 이미지’ 버튼으로 캐릭터 이미지를 꼭 올리세요. 그래야 이 프롬프트가 제대로 먹혀요. ":cur.imgRef==="bg"?"브루 ‘참고 이미지’ 버튼으로 배경·분위기 이미지를 꼭 올리세요. ":"")+`비율 버튼도 ‘${cur.imgRatio||"9:16"}’에 맞추세요.`:"";
+  $("#imgHint").textContent=im?(cur.imgRef==="ref"?"브루 ‘참고 이미지’ 버튼으로 캐릭터 이미지를 꼭 올리세요. 그래야 이 프롬프트가 제대로 먹혀요. ":cur.imgRef==="bg"?"브루 ‘참고 이미지’ 버튼으로 배경·분위기 이미지를 꼭 올리세요. ":"")+`비율 버튼도 ‘${(cur.imgRatio||"9:16").replace("sq","")}’에 맞추세요.`:"";
   const g=curGenre();$("#genreTip").hidden=!(g&&g.tip);if(g&&g.tip)$("#genreTip").textContent=""+g.tip;
 }
 
@@ -2452,6 +2453,7 @@ function steps(){
   if(cur.imgUse==="yes"){
     A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?\n첨부한다면 그 이미지에 캐릭터가 들어 있는지가 중요해요. 첨부하면 그림체·색감·배경을 참고 이미지에 맞추라고 쓸게요."});
     if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요. 생김새·옷·색을 넣으면 장면마다 비슷하게 나와요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
+    if(cur.form!=="long")A.push({id:"imgRatio",key:"imgRatio",ask:()=>"화면 구성은요?\n요즘 숏폼은 세로 화면 가운데에 정사각형 장면을 두고, 위아래 빈 곳에 제목·자막을 넣는 방식이 많아요. 브루 AI 이미지에 9:16만 있어도 이렇게 만들 수 있어요."});
     if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요? 영상으로 움직일 그림이라 장면 분위기에 맞게 골라 주세요."});
     A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요? 로고·학교 상징·캐릭터 이미지를 올리면 거기서 색 코드를 뽑아 드려요."})}
   }
@@ -3385,7 +3387,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792778774"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792779000"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3409,7 +3411,7 @@ const SHOTRULES=[[/가까이|얼굴|표정|눈물|웃|울었|울며|미소|놀�
  [/반응|마무리|끝|멀어|떠나/,"medium shot","35mm","slow dolly out from a medium shot to a wide shot"]];
 const SHOTDEF=[["medium shot","35mm","slow dolly in, ending in a medium close-up"],["wide shot","24mm","slow lateral pan across the space, settling on the subject"],["medium close-up","50mm","subtle handheld drift with a slow push-in"],["high-angle shot","35mm","slow crane down to eye level"]];
 function autoShot(t,i){const r=SHOTRULES.find(x=>x[0].test(t));return r?r.slice(1):SHOTDEF[i%SHOTDEF.length]}
-function scPrompts(txt,i,O){O=O||{ref:window._ref};const stK=O.style||$("#scStyle").value,REF=O.ref,ch=O.ch!=null?O.ch:$("#scChar").value.trim(),ar=O.ratio||SC3.ratio,T=O.tg||SC3.tg,IM=O.im||$("#scImgM").value,VM=O.vm||$("#scVidM").value;
+function scPrompts(txt,i,O){O=O||{ref:window._ref};const stK=O.style||$("#scStyle").value,REF=O.ref,ch=O.ch!=null?O.ch:$("#scChar").value.trim(),arR=O.ratio||SC3.ratio,SQ=arR==="9:16sq",ar=SQ?"9:16":arR,T=O.tg||SC3.tg,IM=O.im||$("#scImgM").value,VM=O.vm||$("#scVidM").value;
   const pal=REF&&REF.colors&&REF.colors.length?`color palette ${REF.colors.join(", ")}`:"";
   const st=stK==="참고 이미지"?"the same art style as the reference image":(STYLE_EN[stK]||stK);
   const [view,lens,cam]=autoShot(txt,i),light=LIGHTS[i%LIGHTS.length];
@@ -3429,6 +3431,7 @@ function scPrompts(txt,i,O){O=O||{ref:window._ref};const stK=O.style||$("#scStyl
   else if(/^Seedance/.test(VM))vid=`[Shot] ${view}, ${lens} lens\n[Camera] ${cam}\n[Action] "${scene}" (${sec}s, one continuous motion)\n[Style] cinematic ${st}, ${light}, consistent with the start frame\n[Sound] ${[sfx,voice,bgm].filter(Boolean).join(", ")}`;
   else if(VM==="Grok Imagine")vid=`Cinematic ${st}. "${scene}" ${cam[0].toUpperCase()+cam.slice(1)}, ${view}. ${light[0].toUpperCase()+light.slice(1)}, shallow depth of field. ${T.sfx?"Sound: "+sfx+". ":""}${voice}, ${bgm}.`;
   else vid=`${cam[0].toUpperCase()+cam.slice(1)}: "${scene}" ${view}, cinematic ${st}, ${light}, shallow depth of field. Natural motion, keep the character identical to the start frame. (Runway has no audio.)`;
+  if(SQ){img+=(/Midjourney/.test(IM)?" ":"\n")+"Final image is vertical 9:16, but place the actual scene, characters and key objects only inside the centered 1:1 square area. Keep the top and bottom areas as simple, clean background in the same colors, empty for titles and captions.";vid+="\nKeep all action inside the centered square area; the top and bottom background areas stay calm and simple."}
   return [img,vid]}
 const fmtT=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
 let SCENES=[];
@@ -3463,7 +3466,7 @@ const SC_STY_IMG={"3D 애니메이션":"us3d","실사 3D":"real3d","일본 애�
 const STY_KO=v=>v==="참고 이미지"?"참고 이미지":v;
 function paintPills(){["sh","sc"].forEach(x=>{const sel=$("#"+x+"Style");if(!sel)return;$("#"+x+"StyleV").textContent=STY_KO(sel.value);
   const pl=document.querySelector(`.plist[data-sel="${x}Style"]`);pl.classList.add("sgrid");pl.innerHTML=[...sel.options].map(o=>{const k=SC_STY_IMG[o.value],ref=o.value==="참고 이미지";const im=ref?(SH.ref?`<img src="${SH.ref.th}" alt="">`:`<span class="sg-ph">+<small>이미지 넣기</small></span>`):k&&STYLE_IMG[k]?`<img src="${STYLE_IMG[k]}" alt="">`:`<span class="sg-ph film"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 5v4M13 5v4M18 5v4"/></svg><small>실제 영상</small></span>`;return `<button type="button" data-plv="${esc(o.value)}" aria-selected="${o.value===sel.value}"><span class="sg-im">${im}</span>${esc(ref?"참고 이미지":o.textContent)}</button>`}).join("");
-  const R=x==="sh"?SH:SC3;$("#"+x+"RatioV").textContent=R.ratio;const T=R.tg;const on=[T.sfx&&"효과음",T.voice&&"목소리",T.bgm&&"음악"].filter(Boolean);$("#"+x+"SndV").textContent=on.length?on.join("·"):"없음"})}
+  const R=x==="sh"?SH:SC3;$("#"+x+"RatioV").textContent=R.ratio==="9:16sq"?"9:16 정사각":R.ratio;const T=R.tg;const on=[T.sfx&&"효과음",T.voice&&"목소리",T.bgm&&"음악"].filter(Boolean);$("#"+x+"SndV").textContent=on.length?on.join("·"):"없음"})}
 document.addEventListener("click",e=>{let b;
   if((b=e.target.closest(".mpick [data-mv]"))){const el=b.closest(".mpick"),inp=$("#"+el.dataset.for);inp.value=b.dataset.mv;paintPick(el);inp.dispatchEvent(new Event("change",{bubbles:true}));return}
   if((b=e.target.closest(".mpick .mdd-b"))){const l=b.nextElementSibling,open=l.hidden;mddClose(l);l.hidden=!open;b.setAttribute("aria-expanded",open);return}
@@ -3579,7 +3582,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792778774";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792779000";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
