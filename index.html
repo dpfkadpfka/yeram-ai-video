@@ -1031,6 +1031,7 @@ body[data-stage="scene"] .main,body[data-stage="scene"] .startcard,body[data-sta
 body:not([data-stage="models"]) #modelsSec{display:none!important}
 body[data-stage="models"] .main,body[data-stage="models"] .startcard,body[data-stage="models"] #charStage,body[data-stage="models"] .phead-s,body[data-stage="models"] footer.ft{display:none!important}
 .modelspage{margin:-24px -32px 0}
+.mdl-out{max-width:560px;margin:80px auto;padding:36px;text-align:center;display:grid;gap:12px;justify-items:center}.mdl-out h2{margin:0}.mdl-out p{margin:0;color:var(--muted)}
 #modelsFrame{display:block;width:100%;height:100vh;border:0;background:var(--bg)}
 @media (max-width:900px){.modelspage{margin:-64px -16px 0}#modelsFrame{height:calc(100vh - 140px);margin-top:56px}}
 
@@ -2661,7 +2662,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style")&&cv("ratio"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(location.hostname.endsWith("github.io")?"":"https://dpfkadpfka.github.io/yeram-ai-video/")+"models/index.html"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(location.hostname.endsWith("github.io")){if(!f.src)f.src="models/index.html"}else{$("#modelsSec").innerHTML=`<div class="card mdl-out"><h2>브루 AI 모델 비교</h2><p>이 화면은 실제 사이트에서 열려요.</p><a class="btn primary lg" href="https://dpfkadpfka.github.io/yeram-ai-video/models/index.html" target="_blank" rel="noopener">새 창에서 모델 비교 열기 ↗</a></div>`}}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const CAMS=["천천히 앞으로 다가가기 (slow dolly in)","옆으로 천천히 흘러가기 (slow pan)","인물을 따라가기 (tracking shot)","위로 올라가며 넓게 보여 주기 (crane up)","인물 주위를 반 바퀴 돌기 (orbit)","천천히 뒤로 물러나기 (dolly out)"];
