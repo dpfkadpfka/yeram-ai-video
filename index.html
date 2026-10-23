@@ -909,7 +909,7 @@ body[data-stage="chat"] .phone,body.cfresh .phone{height:min(calc(100vh - 200px)
 @media (max-width:900px){.hero{padding:40px 16px 28px}.hero .hero-sub br.pc{display:none}}
 
 /* 홈: 첫 화면은 글자만, 아래로 내리면 영상·캐릭터 */
-body[data-stage="start"] .hero{min-height:calc(100vh - 150px);display:flex!important;flex-direction:column;justify-content:center;align-items:center;padding-top:40px;padding-bottom:40px}
+body[data-stage="start"] .hero{min-height:calc(100vh / var(--z,1) - 150px);display:flex!important;flex-direction:column;justify-content:center;align-items:center;padding-top:40px;padding-bottom:40px}
 .scrollcue{display:flex;flex-direction:column;align-items:center;gap:6px;margin:-70px auto 40px;color:var(--muted);font-size:13px;font-weight:600;position:relative}
 .scrollcue i{width:22px;height:34px;border:2px solid #CFC7C3;border-radius:12px;position:relative}
 .scrollcue i::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:7px;margin-left:-2px;border-radius:2px;background:var(--accent);animation:cue 1.6s ease-in-out infinite}
@@ -924,7 +924,7 @@ body[data-stage="start"] .hero{min-height:calc(100vh - 150px);display:flex!impor
 .ytplay{position:absolute;right:10px;bottom:10px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);opacity:0;transition:opacity .15s}
 .ytplay::after{content:"";position:absolute;left:12px;top:9px;border-left:9px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
 .mq-it.yt:hover .ytplay{opacity:1}
-@media (max-width:900px){body[data-stage="start"] .hero{min-height:calc(100vh - 220px)}.scrollcue{margin:-40px auto 24px}.mqhead h3{font-size:21px}}
+@media (max-width:900px){body[data-stage="start"] .hero{min-height:calc(100vh / var(--z,1) - 220px)}.scrollcue{margin:-40px auto 24px}.mqhead h3{font-size:21px}}
 @media (prefers-reduced-motion:reduce){.mq-reveal{opacity:1;transform:none}}
 
 /* 두 챗봇 첫 화면 위치 맞추기 */
@@ -3562,7 +3562,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792783813"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792784594"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3757,7 +3757,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792783813";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792784594";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -3961,7 +3961,7 @@ let SHOW_TIME=false;
 function relT(v){const t=v&&v.toDate?v.toDate():v&&v.seconds?new Date(v.seconds*1000):v?new Date(v):null;if(!t||isNaN(t))return "";const m=(Date.now()-t)/6e4;if(m<1)return "방금";if(m<60)return Math.floor(m)+"분 전";if(m<1440)return Math.floor(m/60)+"시간 전";if(m<43200)return Math.floor(m/1440)+"일 전";if(m<525600)return Math.floor(m/43200)+"개월 전";return Math.floor(m/525600)+"년 전"}
 const AVC=["#F6A6C1","#FFC857","#8BD3C7","#A5B4FC","#FDBA74","#86EFAC","#F9A8D4","#93C5FD"];
 function avatar(n){n=String(n||"?").trim()||"?";let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return `<span class="pav" style="background:${AVC[h%AVC.length]}">${esc([...n][0])}</span>`}
-function authorRow(name,at,menu){return `<div class="pdhead">${avatar(name)}<span class="pnm"><b>${esc(name||"익명")}</b>${SHOW_TIME&&at&&relT(at)?`<i>${relT(at)}</i>`:""}</span>${menu||""}</div>`}
+function authorRow(name,at,menu){return `<div class="pdhead"><span class="pnm"><b>${esc(name||"익명")}</b>${SHOW_TIME&&at&&relT(at)?`<i>${relT(at)}</i>`:""}</span>${menu||""}</div>`}
 const kMenu=html=>`<span class="kmenu"><button type="button" class="kbtn" data-kmenu aria-label="더 보기">⋮</button><span class="kpop" hidden>${html}</span></span>`;
 function myRx(){try{return JSON.parse(localStorage.getItem("ymRx")||"{}")}catch(_){return {}}}
 function saveMyRx(m){try{localStorage.setItem("ymRx",JSON.stringify(m))}catch(_){}}
