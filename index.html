@@ -2050,7 +2050,8 @@ const REASONS=[
 
 const IMG_USE=[{v:"yes",t:"이미지 프롬프트도 만들기",s:""},{v:"no",t:"대본만",s:""}];
 const IMG_REF=[
- {v:"ref",t:"참고 캐릭터 첨부함",s:"첨부한 참고 이미지의 캐릭터를 메인 캐릭터로 모든 장면에 똑같이 등장시킨다. 얼굴 비율, 눈·코·입, 색, 털이나 옷의 질감, 기본 인상을 그대로 유지한다."},
+ {v:"ref",t:"캐릭터가 든 이미지 첨부",s:"첨부한 참고 이미지의 캐릭터를 메인 캐릭터로 모든 장면에 똑같이 등장시킨다. 얼굴 비율, 눈·코·입, 색, 털이나 옷의 질감, 기본 인상을 그대로 유지한다."},
+ {v:"bg",t:"배경·분위기 이미지만 첨부",s:"첨부한 참고 이미지는 캐릭터가 아니라 그림체·색감·배경 분위기를 맞추기 위한 참고용이다. 참고 이미지에 없는 인물이나 캐릭터는 새로 만들지 말고, 대본 내용을 보여 주는 사물과 장소 위주로 그린다."},
  {v:"desc",t:"첨부 없이 글로 설명",s:"메인 캐릭터는 {char}. 모든 장면에서 같은 생김새와 옷차림을 유지한다."},
  {v:"none",t:"캐릭터 없음",s:"사람이나 캐릭터 없이, 대본 내용을 보여 주는 사물과 장면 위주로 그린다."}];
 const IMG_STYLES=[
@@ -2349,14 +2350,17 @@ function buildImg(){
   const L=[],ref=optOf("imgRef",cur.imgRef),st=optOf("imgStyle",cur.imgStyle),topic=(cur.topic||"").trim();
   L.push("[장면]");
   L.push("대본의 각 문장이 말하는 내용을 한 장면으로 보여 준다. 그 문장의 핵심 대상 하나가 그림만 봐도 바로 알아보이게 크고 또렷하게 그린다.");
+  const REFD=["ref","bg"].includes(cur.imgRef);
   if(topic)L.push(`배경과 소품은 ‘${topic}’ 이야기에 어울리는 실제 장소와 물건으로 채운다.`);
+  if(REFD)L.push("배경은 장면마다 내용에 맞게 바꾸되, 모두 첨부한 참고 이미지와 같은 그림체·색감·조명·분위기로 그려 한 세계처럼 이어지게 한다.");
   if(cur.mode==="edu")L.push("설명하는 개념은 비교, 확대, 단면, 전후 변화처럼 눈으로 이해되는 장면으로 보여 준다.");
   if(ref){L.push("");L.push("[캐릭터]");L.push(ref.s.replace("{char}",cur.imgChar||"주제에 어울리는 캐릭터 하나"));
-    if(cur.imgRef!=="none")L.push("캐릭터는 장면을 안내하는 역할로 화면의 25~40%만 차지하고, 머리와 발이 잘리지 않게 둔다. 표정과 손동작은 문장 내용에 맞게 매번 바꾼다.")}
+    if(!["none","bg"].includes(cur.imgRef))L.push("캐릭터는 장면을 안내하는 역할로 화면의 25~40%만 차지하고, 머리와 발이 잘리지 않게 둔다. 표정과 손동작은 문장 내용에 맞게 매번 바꾼다.")}
   L.push("");L.push("[그림체]");
-  if(st)L.push(st.s);
-  const look=st&&IMG_LOOK[st.v];if(look)L.push(look+".");
-  if(cur.imgPal&&cur.imgPal!=="auto"){const c=cur.colors;L.push(`색은 메인 ${c.main}, 보조 ${c.sub1}·${c.sub2}, 어두운 부분은 ${c.text} 계열로 맞추고, 포인트 ${c.point}는 작은 부분에만 쓴다.`)}
+  if(REFD)L.push("그림체, 선, 질감, 색감, 조명은 첨부한 참고 이미지를 그대로 따른다. 다른 스타일을 섞지 않는다.");
+  else{if(st)L.push(st.s);
+  const look=st&&IMG_LOOK[st.v];if(look)L.push(look+".");}
+  if(REFD){}else if(cur.imgPal&&cur.imgPal!=="auto"){const c=cur.colors;L.push(`색은 메인 ${c.main}, 보조 ${c.sub1}·${c.sub2}, 어두운 부분은 ${c.text} 계열로 맞추고, 포인트 ${c.point}는 작은 부분에만 쓴다.`)}
   else L.push("색은 밝고 선명하되 장면마다 톤이 튀지 않게 맞춘다.");
   L.push("");L.push("[구도]");
   L.push("장면마다 가까이·중간·멀리 구도를 섞어 단조롭지 않게 한다. 주요 대상은 화면 중앙보다 조금 위에 두고, 앞쪽 대상과 뒤쪽 배경을 분리해 깊이감을 준다.");
@@ -2377,7 +2381,7 @@ function renderOut(keep){
   $("#pCount").textContent=generated?$("#outPrompt").value.length+"자":"";
   const im=buildImg();$("#imgSlot").hidden=!im;
   if(im&&($("#outImg").value===genImg||!$("#outImg").value))$("#outImg").value=im;genImg=im;
-  $("#imgHint").textContent=im?(cur.imgRef==="ref"?"브루 ‘참고 이미지’ 버튼으로 캐릭터 이미지를 꼭 올리세요. 그래야 이 프롬프트가 제대로 먹혀요. ":"")+`비율 버튼도 ‘${cur.imgRatio||"9:16"}’에 맞추세요.`:"";
+  $("#imgHint").textContent=im?(cur.imgRef==="ref"?"브루 ‘참고 이미지’ 버튼으로 캐릭터 이미지를 꼭 올리세요. 그래야 이 프롬프트가 제대로 먹혀요. ":cur.imgRef==="bg"?"브루 ‘참고 이미지’ 버튼으로 배경·분위기 이미지를 꼭 올리세요. ":"")+`비율 버튼도 ‘${cur.imgRatio||"9:16"}’에 맞추세요.`:"";
   const g=curGenre();$("#genreTip").hidden=!(g&&g.tip);if(g&&g.tip)$("#genreTip").textContent=""+g.tip;
 }
 
@@ -2429,10 +2433,10 @@ function steps(){
   A.push({id:"msg",key:"msg",type:"text",skip:true,ask:()=>"보는 사람이 영상을 다 보고 딱 하나 기억했으면 하는 말은요?",ph:"예: 북극곰 털은 사실 투명하다"});
   A.push({id:"imgUse",key:"imgUse",ask:()=>"대본 내용은 다 정했어요!\n브루 다음 단계 ‘비디오 꾸미기’의 이미지 프롬프트도 만들까요?"});
   if(cur.imgUse==="yes"){
-    A.push({id:"imgRef",key:"imgRef",ask:()=>"캐릭터 참고 이미지를 브루에 첨부할 건가요?\n첨부하면 ‘그 캐릭터를 그대로 유지’하라고 쓰고, 없으면 글로 설명하거나 캐릭터 없이 갈게요."});
+    A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?\n첨부한다면 그 이미지에 캐릭터가 들어 있는지가 중요해요. 첨부하면 그림체·색감·배경을 참고 이미지에 맞추라고 쓸게요."});
     if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요. 생김새·옷·색을 넣으면 장면마다 비슷하게 나와요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
-    A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요? 영상으로 움직일 그림이라 장면 분위기에 맞게 골라 주세요."});
-    A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요? 로고·학교 상징·캐릭터 이미지를 올리면 거기서 색 코드를 뽑아 드려요."});
+    if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요? 영상으로 움직일 그림이라 장면 분위기에 맞게 골라 주세요."});
+    A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요? 로고·학교 상징·캐릭터 이미지를 올리면 거기서 색 코드를 뽑아 드려요."})}
   }
   return A.filter(s=>!s.when||s.when());
 }
@@ -3364,7 +3368,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792777901"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792778117"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3558,7 +3562,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792777901";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792778117";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
