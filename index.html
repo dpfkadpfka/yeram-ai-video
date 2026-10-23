@@ -914,6 +914,10 @@ body[data-stage="start"] .hero{min-height:calc(100vh - 150px);display:flex!impor
 .mq-it.yt:hover .ytplay{opacity:1}
 @media (max-width:900px){body[data-stage="start"] .hero{min-height:calc(100vh - 220px)}.scrollcue{margin:-40px auto 24px}.mqhead h3{font-size:21px}}
 @media (prefers-reduced-motion:reduce){.mq-reveal{opacity:1;transform:none}}
+
+/* 두 챗봇 첫 화면 위치 맞추기 */
+body.cfresh[data-stage="char"] #charStage{padding-top:0!important}
+.phead.phead-s{margin-bottom:20px}
 </style>
 
 <div class="wrap">
@@ -971,7 +975,7 @@ body[data-stage="start"] .hero{min-height:calc(100vh - 150px);display:flex!impor
 
   <section class="charpage" id="charStage" aria-labelledby="charH">
     <h2 id="charH" class="sr">캐릭터 만들기</h2>
-    <div class="phead"><span class="pstep">1단계</span><h2>캐릭터 만들기</h2><p>예람쌤 질문에 답하면 ChatGPT에 넣을 캐릭터 프롬프트가 완성돼요.</p></div>
+    <div class="phead"><span class="pstep">1단계</span><h2>캐릭터 만들기</h2><p>예람쌤 질문에 답하면 캐릭터 프롬프트가 완성돼요.</p></div>
     <div class="cgrid"><div class="cmain">
       <div class="chead"><h2 class="ctitle">캐릭터 만들기</h2><p class="cdesc">오른쪽 예람쌤 질문에 답하면 아래 프롬프트가 완성돼요. 줄을 누르면 다시 고를 수 있어요.</p></div>
       <h3 class="sec-h">피동장스</h3>
@@ -1012,7 +1016,7 @@ body[data-stage="start"] .hero{min-height:calc(100vh - 150px);display:flex!impor
     <div class="cp-next"><button type="button" class="btn lg" data-upload><img class="bi" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjRTg1NThBIj48cGF0aCBkPSJNMjQwLDEyOGE4MCw4MCwwLDAsMS04MCw4MEg3MkE1Niw1NiwwLDEsMSw4NS45Miw5Ny43NGwwLC4xQTgwLDgwLDAsMCwxLDI0MCwxMjhaIiBvcGFjaXR5PSIwLjIiLz48cGF0aCBkPSJNMTc4LjM0LDE2NS42NiwxNjAsMTQ3LjMxVjIwOGE4LDgsMCwwLDEtMTYsMFYxNDcuMzFsLTE4LjM0LDE4LjM1YTgsOCwwLDAsMS0xMS4zMi0xMS4zMmwzMi0zMmE4LDgsMCwwLDEsMTEuMzIsMGwzMiwzMmE4LDgsMCwwLDEtMTEuMzIsMTEuMzJaTTE2MCw0MEE4OC4wOCw4OC4wOCwwLDAsMCw4MS4yOSw4OC42OCw2NCw2NCwwLDEsMCw3MiwyMTZoNDBhOCw4LDAsMCwwLDAtMTZINzJhNDgsNDgsMCwwLDEsMC05NmMxLjEsMCwyLjIsMCwzLjI5LjEyQTg4LDg4LDAsMCwwLDcyLDEyOGE4LDgsMCwwLDAsMTYsMCw3Miw3MiwwLDEsMSwxMDAuOCw2Niw4LDgsMCwwLDAsMy4yLDE1LjM0LDcuOSw3LjksMCwwLDAsMy4yLS42OEE4OCw4OCwwLDAsMCwxNjAsNDBaIi8+PC9zdmc+" alt="">갤러리에 올리기</button><button type="button" class="btn primary lg" data-goscript>대본 프롬프트 만들기</button><a class="btn lg miri" href="https://www.miricanvas.com/ko/miricle/ai-character-maker" target="_blank" rel="noopener" data-ccopy="cBase" data-miricle>미리클 AI로 캐릭터 만들기</a></div>
   </section>
 
-  <div class="phead phead-s"><span class="pstep">2단계</span><h2>대본 프롬프트 만들기</h2><p>예람쌤 질문에 답하면 브루에 넣을 대본·이미지 프롬프트가 완성돼요.</p></div>
+  <div class="phead phead-s"><span class="pstep">2단계</span><h2>대본 프롬프트 만들기</h2><p>예람쌤 질문에 답하면 대본 프롬프트가 완성돼요.</p></div>
   <div class="main">
     <!-- 개요창 -->
     <div class="outcol">
