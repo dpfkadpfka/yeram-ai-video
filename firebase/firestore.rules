@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function isOwnerAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == 'dpfkadpfka@gmail.com' ||
+        (exists(/databases/$(database)/documents/config/site) &&
+         request.auth.token.email.lower() in get(/databases/$(database)/documents/config/site).data.admins));
+    }
+    // 반응 수(±1씩만 바뀜) 검사
+    function oneStep(keys) {
+      let d = request.resource.data.diff(resource == null ? {} : resource.data).affectedKeys();
+      let k = d.toList()[0];
+      let before = resource == null ? 0 : resource.data.get(k, 0);
+      return d.size() == 1 && d.hasOnly(keys) && request.resource.data.keys().hasOnly(keys)
+        && request.resource.data[k] is int && request.resource.data[k] >= 0
+        && (request.resource.data[k] == before + 1 || request.resource.data[k] == before - 1);
+    }
+
+    // 선생님 개인 기록: 본인만 읽고 쓰기
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    // 사이트 설정: 누구나 읽기, 관리자만 쓰기
+    match /config/site {
+      allow read: if true;
+      allow write: if request.auth != null && (
+        request.auth.token.email == 'dpfkadpfka@gmail.com' ||
+        (exists(/databases/$(database)/documents/config/site) &&
+         request.auth.token.email.lower() in get(/databases/$(database)/documents/config/site).data.admins &&
+         request.resource.data.admins == resource.data.admins)
+      );
+    }
+    // 홈 캐릭터 영상(config/hv_…): 누구나 보기, 관리자만 쓰기
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if doc.matches('hv_.*') && isOwnerAdmin();
+    }
+    // 캐릭터 갤러리
+    match /gallery/{id} {
+      allow read: if true;
+      allow create: if signed() && request.resource.data.uid == request.auth.uid;
+      allow update: if signed() && (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reports']) ||
+        ((resource.data.uid == request.auth.uid || isOwnerAdmin()) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'name'])));
+      allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
+    }
+    match /galleryFull/{id} {
+      allow read: if true;
+      allow create: if signed() && request.resource.data.uid == request.auth.uid;
+      allow update: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin()) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'name']);
+      allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
+    }
+    // 커뮤니티 글·댓글
+    match /community/{id} {
+      allow read: if true;
+      allow create: if signed() && request.resource.data.uid == request.auth.uid;
+      allow update: if signed() && (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cmtN']) ||
+        resource.data.uid == request.auth.uid || isOwnerAdmin());
+      allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
+      match /comments/{cid} {
+        allow read: if true;
+        allow create: if signed() && request.resource.data.uid == request.auth.uid;
+        allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
+      }
+    }
+    // 갤러리 캐릭터·영상 반응(이모지)과 댓글
+    match /rx/{key} {
+      allow read: if true;
+      allow create, update: if oneStep(['heart', 'like', 'lol', 'wow', 'clap', 'fire', 'c']);
+      match /c/{cid} {
+        allow read: if true;
+        allow create: if signed() && request.resource.data.uid == request.auth.uid &&
+          request.resource.data.body is string && request.resource.data.body.size() > 0 &&
+          request.resource.data.body.size() <= 300;
+        allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
+      }
+    }
+  }
+}
