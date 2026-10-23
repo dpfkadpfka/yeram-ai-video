@@ -1,4 +1,5 @@
 // 패들렛 게시물을 가져와 data/padlet.json 으로 저장 (GitHub Actions에서 실행, 키는 Secrets에만 있음)
+// run
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 const KEY = process.env.PADLET_KEY;
 if (!KEY) { console.log("PADLET_KEY 없음 — 건너뜀"); process.exit(0); }
