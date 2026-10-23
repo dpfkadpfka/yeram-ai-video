@@ -8,14 +8,17 @@ service cloud.firestore {
         (exists(/databases/$(database)/documents/config/site) &&
          request.auth.token.email.lower() in get(/databases/$(database)/documents/config/site).data.admins));
     }
-    // 반응 수(±1씩만 바뀜) 검사
-    function oneStep(keys) {
-      let d = request.resource.data.diff(resource == null ? {} : resource.data).affectedKeys();
-      let k = d.toList()[0];
+    // 반응 수: 한 번에 하나씩 ±1만
+    function stepOk(k) {
       let before = resource == null ? 0 : resource.data.get(k, 0);
-      return d.size() == 1 && d.hasOnly(keys) && request.resource.data.keys().hasOnly(keys)
-        && request.resource.data[k] is int && request.resource.data[k] >= 0
-        && (request.resource.data[k] == before + 1 || request.resource.data[k] == before - 1);
+      let after = request.resource.data.get(k, 0);
+      return after is int && after >= 0 && (after == before || after == before + 1 || after == before - 1);
+    }
+    function rxOk() {
+      let keys = ['heart', 'like', 'lol', 'wow', 'clap', 'fire', 'c'];
+      return request.resource.data.keys().hasOnly(keys)
+        && stepOk('heart') && stepOk('like') && stepOk('lol') && stepOk('wow')
+        && stepOk('clap') && stepOk('fire') && stepOk('c');
     }
 
     // 선생님 개인 기록: 본인만 읽고 쓰기
@@ -71,7 +74,7 @@ service cloud.firestore {
     // 갤러리 캐릭터·영상 반응(이모지)과 댓글
     match /rx/{key} {
       allow read: if true;
-      allow create, update: if oneStep(['heart', 'like', 'lol', 'wow', 'clap', 'fire', 'c']);
+      allow create, update: if rxOk();
       match /c/{cid} {
         allow read: if true;
         allow create: if signed() && request.resource.data.uid == request.auth.uid &&
