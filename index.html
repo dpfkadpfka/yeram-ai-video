@@ -1080,7 +1080,7 @@ body:not(.scfresh) #sceneStage .scmain{animation:sideIn .45s cubic-bezier(.2,.8,
 /* 페이지 머리 (공통) */
 .pgh{width:100%;max-width:1100px;box-sizing:border-box;margin:0 auto 22px;padding:4px 0 18px;border-bottom:1px solid var(--line)}
 .pgh[hidden]{display:none}
-body.cfresh[data-stage="char"] .pgh,body[data-stage="chat"] .pgh{max-width:760px}
+body.cfresh[data-stage="char"] .pgh,body[data-stage="chat"] .pgh{max-width:1040px}
 body[data-stage="char"]:not(.cfresh) .pgh,body[data-stage="split"] .pgh{max-width:1180px}
 #shotStage,#sceneStage{width:100%}
 .pgh-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -1382,6 +1382,13 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .phone .log{min-height:120px}
 .phone .quick:not(:empty){max-height:min(46vh,330px);overflow-y:auto;overscroll-behavior:contain;flex-shrink:0}
 .phone .quick .sbact{position:sticky;bottom:-12px;z-index:2;background:var(--paper);margin:10px -12px -12px;padding:10px 12px 12px}
+@media (min-width:901px){.sn::before{top:0!important;left:0!important;width:100%!important;height:100%!important;margin:0!important;border-radius:12px}}
+/* 대본·캐릭터 첫 대화 화면: 컷 편집처럼 넓고 크게 */
+@media (min-width:901px){
+ body[data-stage="chat"] .main,body.cfresh .cgrid{grid-template-columns:minmax(0,1040px)!important;justify-content:center}
+ body.cfresh .phone,body[data-stage="chat"] .phone{height:max(520px,calc(100vh - 230px))!important;max-height:900px;min-height:0}
+ body.cfresh .phone .quick:not(:empty),body[data-stage="chat"] .phone .quick:not(:empty){max-height:min(48vh,420px)}
+}
 </style>
 
 <div class="wrap">
@@ -2023,7 +2030,8 @@ function label(key,v){const o=optOf(key,v);return o?o.t:key==="length"&&v?fmtSec
 /* ===================== 저장 ===================== */
 const LS="shortsPromptMaker.v2";
 /* 창(탭)을 새로 열면 만들던 내용은 처음부터. 만든 기록·저장한 스타일·설정은 그대로 */
-const FRESH_SESS=(()=>{try{if(sessionStorage.getItem("ymAlive"))return false;sessionStorage.setItem("ymAlive","1");
+/* 새로고침·새 탭마다 대화는 처음부터 (내 캐릭터·만든 기록·설정은 유지) */
+const FRESH_SESS=(()=>{try{
   ["ymSession.v1","ymScene3","ymShot"].forEach(k=>localStorage.removeItem(k));
   const j=JSON.parse(localStorage.getItem(LS)||"null");if(j&&j.character){j.character=null;localStorage.setItem(LS,JSON.stringify(j))}return true}catch(e){return false}})();
 const local={load(){try{const j=JSON.parse(localStorage.getItem(LS)||"null");if(j&&j.v)return j;const o=JSON.parse(localStorage.getItem("vrewPromptMaker.v1")||"null");if(o&&o.v){const n=EMPTY();n.rules=o.rules||[];return n}return null}catch(e){return null}},
@@ -2115,6 +2123,7 @@ function build(){
   L.push("제목, 장면 번호, 시간 표시, 연출 지시문 없이 실제로 읽을 대본 문장만 출력해 줘.");
   const extra=cur.extra.concat(S.rules.filter(r=>r.on).map(r=>r.text));
   if(extra.length){L.push("");L.push("[추가 요청]");extra.forEach(t=>L.push("- "+t))}
+  if(cur.brief){L.push("");L.push("[공모전 요강] 아래 요강의 주제·형식·분량·유의사항을 꼭 지켜서 써 줘. 표기 문구는 자막으로 따로 넣을 거라 대본에는 쓰지 않아도 돼.");L.push(cur.brief.replace(/\s+/g," ").slice(0,3000))}
   return L.join("\n");
 }
 function topicLine(){
@@ -2331,9 +2340,9 @@ function steps(){
   const g=curGenre(), A=[];
   A.push({id:"form",key:"form",ask:()=>"대본 프롬프트를 같이 만들어 볼게요!\n숏폼이에요, 롱폼이에요?\n숏폼은 쇼츠·릴스(세로 9:16, 90초 이하), 롱폼은 유튜브·수업 영상(가로 16:9, 2분 이상)이에요."});
   A.push({id:"mode",key:"mode",ask:()=>`좋아요, ${cur.form==="long"?"롱폼":"숏폼"}으로 할게요. 어떤 영상이에요?`});
-  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.mode==="contest"?"어떤 공모전이에요? 분야를 골라 주세요. 다음에 영상 아이디어도 골라 드릴게요.":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
+  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.mode==="contest"?"공모전 안내문이나 요강이 있으면 길어도 그대로 붙여 넣어 주세요. 형식·길이·주제를 알아서 채우고, 규정도 프롬프트에 넣을게요.\n없으면 분야를 골라 주세요.":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
   A.push({id:"length",key:"length",ask:()=>cur.form==="long"?"영상 길이는요? 길수록 글자 수가 많아져서, 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요.":"영상 길이는요? 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요."});
-  A.push({id:"topic",key:"topic",type:"text",ask:()=>(g?g.topicQ:"주제가 뭐예요?")+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>exPick(g)});
+  A.push({id:"topic",key:"topic",type:"text",ask:()=>(cur.contestTheme?`요강 주제는 ‘${cur.contestTheme}’예요. 이 안에서 어떤 내용으로 만들까요?`:(g?g.topicQ:"주제가 뭐예요?"))+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>exPick(g)});
   A.push({id:"focus",key:"focus",type:"text",skip:true,when:()=>cur.topic&&cur.topic.replace(/\s/g,"").length<7,
     ask:()=>`‘${cur.topic}’은(는) ${secLabel()}에 담기엔 조금 넓어요. 숏폼은 하나만 확실히 남기는 게 좋아요.\n이 영상에서 딱 하나 전할 것은 뭐예요?`});
   if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"누가 보나요? 정하지 않으면 초·중·고 누구나 알아듣게 써 달라고 할게요."});A.push({id:"subject",key:"subject",ask:()=>"교과는요? 정해진 과목이 없으면 ‘과목 없음’을 고르세요."})}
@@ -2488,9 +2497,36 @@ function understand(text){
   genreList().forEach(g=>{if(t.includes(g.t)||t.includes(g.t.split("·")[0]+"로")){if(cur.genre!==g.v&&/장르|로 바꿔|로 해/.test(t)){cur.genre=g.v;changed.push(`장르 → ${g.t}`)}}});
   return changed;
 }
+/* 공모전 요강(긴 글) 붙여넣기: 정보를 뽑아 칸을 채우고, 원문은 프롬프트에 그대로 붙임 */
+function looksBrief(t){return (t.length>=120&&/공모|접수|출품|응모|제출|심사|참여\s*자격|주최|주관/.test(t))||t.length>=400}
+function absorbBrief(t){
+  const got=[];let m;cur.brief=t;
+  const name=(m=t.match(/[「『‘'"“]\s*([^」』’'"”]{4,50}?(?:공모전|공모|대회|챌린지|페스티벌))\s*[」』’'"”]/))?m[1].trim():"";
+  const theme=(m=t.match(/(?:공모\s*)?주제\s*[:：]\s*([^\n※•]+?)(?=\s+-\s|\s*[※•\n]|\s{2}|$)/))?m[1].trim().slice(0,60):"";
+  cur.contestName=name;cur.contestTheme=theme;
+  if(/공모|출품|응모|접수|심사/.test(t)){if(cur.mode!=="contest"){cur.mode="contest";cur.genre="";purgeGenreSteps()}answered.add("mode");got.push("용도: 공모전 출품")}
+  let form=null,sec=null;
+  if(/숏폼|쇼츠|숏츠|릴스|세로\s*(형|영상)|9\s*:\s*16/.test(t))form="short";else if(/롱폼|가로\s*(형|영상)|16\s*:\s*9/.test(t))form="long";
+  if((m=t.match(/(\d+)\s*초\s*(이내|이하|내외|미만|까지)/)))sec=+m[1];else if((m=t.match(/(\d+)\s*분\s*(이내|이하|내외|미만|까지)/)))sec=+m[1]*60;
+  if(!form&&sec)form=sec<=90?"short":"long";
+  if(form){cur.form=form;cur.imgRatio=form==="long"?"16:9":"9:16";answered.add("form");got.push("형식: "+(form==="long"?"롱폼":"숏폼"))}
+  if(sec){const L=(cur.form==="long"?LONG_L:SHORT_L).map(o=>+o.v);const pick=L.filter(x=>x<=sec).pop()||L[0];cur.length=String(pick);answered.add("length");got.push("길이: "+fmtSec(pick)+(pick!==sec?` (요강: ${fmtSec(sec)} 이내)`:""))}
+  if(cur.mode==="contest"){const R={c_env:/환경|기후|탄소|생태|재활용|에너지/g,c_promo:/홍보|관광|지역|기관|브랜드|축제|명소/g,c_edu:/수업|교육\s*자료|교수|학습|에듀|교사/g,c_public:/공익|캠페인|예방|안전|인식\s*개선|저작권|윤리|폭력|금연|복지|인권|보호/g,c_ai:/AI\s*창작|AI\s*영상\s*창작|자유\s*창작|단편|뮤직비디오/g};
+    const score=x=>{let b=null,bs=0;for(const k in R){const n=(x.match(R[k])||[]).length;if(n>bs){bs=n;b=k}}return b};
+    const best=score(theme+" "+name)||score(t);const g=best&&findGenre(best);
+    if(g){cur.genre=best;cur.hook=g.hooks[0];cur.ending=g.end;cur.speaker=g.sp;answered.add("genre");got.push("분야: "+g.t)}}
+  if(theme&&!/자유/.test(theme)){cur.topic=theme;answered.add("topic");got.push("주제: "+theme)}
+  const must=(m=t.match(/[‘'"“]([^’'"”]{6,80})[’'"”]\s*(?:라는\s*|이라는\s*)?문구/))?m[1]:"";
+  me(`📋 공모전 요강 붙여넣기 (${t.length.toLocaleString()}자)`);
+  renderAll();
+  bot(`${name?`‘${name}’ `:"공모전 "}요강을 읽었어요.\n${got.length?"정해진 것: "+got.join(" · "):"요강에서 형식·길이를 찾지 못했어요."}${theme&&/자유/.test(theme)?`\n주제는 ‘${theme}’라서, 그 안에서 무엇을 다룰지만 정하면 돼요.`:""}${must?`\n필수 문구 ‘${must}’는 브루에서 자막으로 넣으세요.`:""}\n요강 원문은 프롬프트 끝에 붙여서 AI가 규정을 지키게 할게요. 남은 것만 물어볼게요.`);
+  if(answered.has("length")&&document.body.dataset.stage==="chat")setStage("split");
+  const n=nextStep();if(n)ask(n);else review();
+}
 function onSay(text){
   text=text.trim(); if(!text)return;
   if(phase==="naming"){saveStyle(text);return}
+  if(looksBrief(text)){absorbBrief(text);return}
   if(/스타일/.test(text)&&/(저장|지정|만들어|기억|남겨)/.test(text)){me(text);startSaveStyle();return}
   if(phase==="pickstyle"){const st=(S.styles||[]).find(x=>text.includes(x.title));if(st){me(text);applyStyle(st.id);return}me(text);phase="ask";ask(nextStep());return}
   if(phase==="ask"&&curStep){
@@ -3124,7 +3160,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792774559"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792775002"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3317,7 +3353,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792774559";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792775002";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
