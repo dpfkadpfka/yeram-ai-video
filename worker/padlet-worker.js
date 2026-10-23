@@ -1,5 +1,5 @@
 // Cloudflare Worker: 패들렛 읽기 / 올리기 / 숨기기(삭제)
-// 비밀값 PADLET_KEY·GEMINI_KEY, KV 바인딩 HIDE (숨긴 글 목록), AI(act=ai)
+// 비밀값 PADLET_KEY·GEMINI_KEY·VERTEX_KEY(선택), KV 바인딩 HIDE (숨긴 글 목록), AI(act=ai)
 const ALLOW = "https://dpfkadpfka.github.io";
 const FB_KEY = "AIzaSyCZ-UaL2zBCzYYkjwzrdEUAA9dEVLg5uKM";
 const OWNER = ["dpfkadpfka@gmail.com"];
@@ -27,15 +27,21 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
     const u = new URL(req.url), id = u.searchParams.get("id") || "", act = u.searchParams.get("act") || "";
     if (req.method === "POST" && act === "ai") {
-      if (!env.GEMINI_KEY) return J({ error: "nokey" }, 503);
+      if (!env.GEMINI_KEY && !env.VERTEX_KEY) return J({ error: "nokey" }, 503);
       const b = await req.json().catch(() => ({}));
-      const body = { system_instruction: { parts: [{ text: String(b.system || "").slice(0, 8000) }] }, contents: [{ role: "user", parts: [{ text: String(b.prompt || "").slice(0, 12000) }] }], generationConfig: { temperature: 0.2, responseMimeType: b.json ? "application/json" : "text/plain" } };
-      for (const m of ["gemini-flash-lite-latest", "gemini-flash-latest"]) {
-        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${env.GEMINI_KEY}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
-        if (!r.ok) continue;
+      const body = { systemInstruction: { parts: [{ text: String(b.system || "").slice(0, 8000) }] }, contents: [{ role: "user", parts: [{ text: String(b.prompt || "").slice(0, 12000) }] }], generationConfig: { temperature: 0.2, responseMimeType: b.json ? "application/json" : "text/plain" } };
+      const tries = [];
+      // 1순위: Vertex AI (구글 클라우드 크레딧), 2순위: AI Studio 무료 키
+      if (env.VERTEX_KEY) for (const m of ["gemini-2.5-flash-lite", "gemini-2.5-flash"]) tries.push([m, `https://aiplatform.googleapis.com/v1/publishers/google/models/${m}:generateContent?key=${env.VERTEX_KEY}`]);
+      if (env.GEMINI_KEY) for (const m of ["gemini-flash-lite-latest", "gemini-flash-latest"]) tries.push([m, `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${env.GEMINI_KEY}`]);
+      let lastErr = "";
+      for (const [m, url] of tries) {
+        const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+        if (!r.ok) { lastErr = r.status + " " + (await r.text()).slice(0, 200); continue; }
         const d = await r.json();
-        return J({ text: d?.candidates?.[0]?.content?.parts?.map(p => p.text).join("") || "", model: m });
+        return J({ text: d?.candidates?.[0]?.content?.parts?.map(p => p.text).join("") || "", model: m, via: url.includes("aiplatform") ? "vertex" : "studio" });
       }
+      if (u.searchParams.get("dbg") === "1") return J({ error: "ai", lastErr }, 502);
       return J({ error: "ai" }, 502);
     }
     if (!/^[a-z0-9]{10,}$/i.test(id)) return J({ error: "id" }, 400);
