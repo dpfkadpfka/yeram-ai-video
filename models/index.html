@@ -230,11 +230,11 @@ IMG.map(m=>m.f?`<div class="tile" tabindex="0" data-id="${m.id}" data-src="${m.f
  :`<div class="tile empty" tabindex="0" data-id="${m.id}"><div class="m" style="aspect-ratio:1/1">캐릭터 첨부가 안 돼서<br>결과 없음</div>${tag(m)}${ov(m)}</div>`).join('');
 
 const vg=document.getElementById('vidGrid');
-vg.innerHTML=`<div class="tile" tabindex="0" data-src="start_frame.jpg" data-name="시작 이미지 (Nano Banana 2.1)"><img class="m" src="start_frame.jpg" alt="시작 이미지"><div class="tag"><span class="name">시작 이미지</span></div><div class="cap"><span class="co"><span>Nano Banana 2.1로 생성</span></span>모든 비디오 모델의 첫 장면</div></div>`+
+vg.innerHTML=`<div class="tile" tabindex="0" data-src="start_frame.jpg" data-name="원본"><img class="m" src="start_frame.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap">모든 비디오 모델의 첫 장면</div></div>`+
 VID.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
 const hg=document.getElementById('hardGrid');
-hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="시작 이미지 (과학실)"><img class="m" src="h00_start.jpg" alt="과학실 시작 이미지"><div class="tag"><span class="name">시작 이미지</span></div><div class="cap"><span class="co">Nano Banana 2.1로 생성</span>빈 칠판 · 파란 비커 · 분필</div></div>`+
+hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="원본"><img class="m" src="h00_start.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap">빈 칠판 · 파란 비커 · 분필</div></div>`+
 HARD.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
 // 탭
