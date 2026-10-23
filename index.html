@@ -1171,6 +1171,9 @@ body.hm-char #stepper li:has([data-stepgo="1"]),body.hm-script #stepper li:has([
 .cvl .cy{flex:0 0 96px;font-size:14px;font-weight:800;color:var(--accent-deep);white-space:nowrap;font-variant-numeric:tabular-nums}
 
 @media (max-width:900px){.cvsec{grid-template-columns:minmax(0,1fr);gap:14px;padding:22px 20px}.cvsec-h{position:static}.cvsec-h h3{font-size:20px}.cvl li{font-size:14.5px;gap:10px}}
+/* 글자 크기: 계정 메뉴 안으로 */
+.fsbtn{display:none!important}
+#acctMenu .fsz{display:grid!important;position:static!important;left:auto!important;bottom:auto!important;width:auto!important;box-shadow:none!important;border:0!important;margin:2px 2px 8px;background:var(--bg)}
 /* 메뉴 묶음 이름 */
 @media (min-width:901px){
  header.side .sidenav .snlab{display:block!important;width:64px;height:auto;margin:18px auto 6px!important;padding:14px 0 0!important;border-top:1.5px solid #EADFE3;font-size:12px!important;font-weight:800;color:var(--accent-deep);letter-spacing:.5px;text-align:center;line-height:1.2}
@@ -1257,7 +1260,7 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
       <button type="button" class="btn primary" id="loginBtn">로그인</button>
       <div class="menuwrap">
         <button type="button" class="acct-btn" id="acctBtn" aria-haspopup="true" aria-expanded="false"><span class="uava" id="uAva">손</span><span class="uname"><b id="uName">게스트</b><small id="uSub">이 브라우저에 저장 중</small></span><span aria-hidden="true">▾</span></button>
-        <div class="menu" id="acctMenu" hidden>
+        <div class="menu" id="acctMenu" hidden><div id="fsSlot"></div>
           <button type="button" data-my="profile"><span class="ico mi" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTI4LDI0QTEwNCwxMDQsMCwxLDAsMjMyLDEyOCwxMDQuMTEsMTA0LjExLDAsMCwwLDEyOCwyNFpNNzQuMDgsMTk3LjVhNjQsNjQsMCwwLDEsMTA3Ljg0LDAsODcuODMsODcuODMsMCwwLDEtMTA3Ljg0LDBaTTk2LDEyMGEzMiwzMiwwLDEsMSwzMiwzMkEzMiwzMiwwLDAsMSw5NiwxMjBabTk3Ljc2LDY2LjQxYTc5LjY2LDc5LjY2LDAsMCwwLTM2LjA2LTI4Ljc1LDQ4LDQ4LDAsMSwwLTU5LjQsMCw3OS42Niw3OS42NiwwLDAsMC0zNi4wNiwyOC43NSw4OCw4OCwwLDEsMSwxMzEuNTIsMFoiLz48L3N2Zz4=)" aria-hidden="true"></span>내 정보</button>
           <button type="button" data-my="chars"><span class="ico mi" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTI4LDI0QTEwNCwxMDQsMCwxLDAsMjMyLDEyOCwxMDQuMTEsMTA0LjExLDAsMCwwLDEyOCwyNFptMCwxOTJhODgsODgsMCwxLDEsODgtODhBODguMSw4OC4xLDAsMCwxLDEyOCwyMTZaTTgwLDEwOGExMiwxMiwwLDEsMSwxMiwxMkExMiwxMiwwLDAsMSw4MCwxMDhabTEwNCwwYTgsOCwwLDAsMS04LDhIMTUyYTgsOCwwLDAsMSwwLTE2aDI0QTgsOCwwLDAsMSwxODQsMTA4Wm0tOS4wOCw0OGMtMTAuMjksMTcuNzktMjcuMzksMjgtNDYuOTIsMjhzLTM2LjYzLTEwLjItNDYuOTMtMjhhOCw4LDAsMSwxLDEzLjg2LThjNy40NiwxMi45MSwxOS4yLDIwLDMzLjA3LDIwczI1LjYxLTcuMSwzMy4wOC0yMGE4LDgsMCwxLDEsMTMuODQsOFoiLz48L3N2Zz4=)" aria-hidden="true"></span>내 캐릭터</button>
           <button type="button" data-my="styles"><span class="ico mi" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTg0LDMySDcyQTE2LDE2LDAsMCwwLDU2LDQ4VjIyNGE4LDgsMCwwLDAsMTIuMjQsNi43OEwxMjgsMTkzLjQzbDU5Ljc3LDM3LjM1QTgsOCwwLDAsMCwyMDAsMjI0VjQ4QTE2LDE2LDAsMCwwLDE4NCwzMlptMCwxNzcuNTctNTEuNzctMzIuMzVhOCw4LDAsMCwwLTguNDgsMEw3MiwyMDkuNTdWNDhIMTg0WiIvPjwvc3ZnPg==)" aria-hidden="true"></span>저장한 스타일</button>
@@ -2839,6 +2842,7 @@ function autoSide(){document.body.classList.remove("sidemini");return;if(sideUse
 autoSide();addEventListener("resize",autoSide);
 $("#sideTog").addEventListener("click",()=>{const m=document.body.classList.toggle("sidemini");sideUser=m?"1":"0";try{localStorage.setItem("ymSideMini",sideUser)}catch(e){}});
 new MutationObserver(()=>{const st=document.body.dataset.stage;$$(".sn[data-snav]").forEach(b=>b.classList.toggle("cur",b.dataset.snav===st))}).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});
+$("#fsSlot").appendChild($("#fsPop"));
 $("#fsBtn").addEventListener("click",e=>{e.stopPropagation();const o=document.body.classList.toggle("fsopen");$("#fsBtn").setAttribute("aria-expanded",o)});
 document.addEventListener("click",e=>{if(document.body.classList.contains("fsopen")&&!e.target.closest("#fsPop,#fsBtn")){document.body.classList.remove("fsopen");$("#fsBtn").setAttribute("aria-expanded",false)}});
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style")&&cv("ratio"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
