@@ -1329,6 +1329,7 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
 .gtabs{padding:5px}.gtabs button{padding:10px 26px;font-size:16px}
 header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 @media (min-width:901px){header.side .brand{margin-bottom:22px!important}}
+.iconopts:has(> :nth-child(3)){grid-template-columns:repeat(3,minmax(0,1fr))!important}
 </style>
 
 <div class="wrap">
@@ -1700,7 +1701,7 @@ const FIREBASE_CONFIG = {apiKey:"AIzaSyCZ-UaL2zBCzYYkjwzrdEUAA9dEVLg5uKM", authD
 const FB_VER = "10.12.2";
 
 /* ===================== 선택지 데이터 ===================== */
-const MODES=[{v:"edu",t:"수업·교육용",s:""},{v:"gen",t:"일반 영상",s:""}];
+const MODES=[{v:"edu",t:"수업·교육용",s:""},{v:"gen",t:"일반 영상",s:""},{v:"contest",t:"공모전 출품",s:""}];
 const fmtSec=n=>{n=+n;if(n<=60)return n+"초";const m=Math.floor(n/60),r=n%60;return r?`${m}분 ${r}초`:`${m}분`};
 const SHORT_L=[15,30,60,90].map(n=>({v:String(n),t:fmtSec(n),s:""}));
 const LONG_L=[120,180,300,600].map(n=>({v:String(n),t:fmtSec(n),s:""}));
@@ -1760,6 +1761,28 @@ const ENDINGS=[
 /* 장르: base=구성 문장, hooks=추천 첫 문장, end=추천 마무리, sp=추천 화자, f=장르 전용 질문 */
 const ch=(v,t,s)=>({v,t,s});
 const GENRES={
+contest:[
+  {v:"c_public",t:"공익·캠페인",d:"문제 → 공감 → 행동",hooks:["whatif","daily","fact"],end:"act",sp:"narrator",
+   topicQ:"어떤 공모전이에요? 주제나 공모전 이름을 써 주세요.",ex:["디지털윤리 창작콘텐츠 공모전","학교폭력 예방 영상 공모전","교통안전 캠페인 영상"],
+   s:"공모전 영상이야. 심사 기준(주제 적합성, 창의성, 전달력, 완성도)을 생각해서 ① 첫 3초에 강한 장면으로 시선을 잡고 ② 문제를 보는 사람이 공감하게 보여 주고 ③ 해결 행동 하나를 분명하게 제안하고 ④ 주제를 한 문장 슬로건으로 끝내 줘.",
+   f:[{k:"idea",label:"아이디어",type:"choice",q:"이렇게 풀어 보면 어때요? 마음에 드는 아이디어를 하나 골라 주세요.",opts:[ch("twist","반전 구조","처음엔 평범한 이야기처럼 보이다가 마지막에 공모전 주제가 드러나는 반전 구조로 써 줘."),ch("pov","1인칭 시점","사람이 아닌 사물이나 동물(예: 버려진 플라스틱, 교실 의자)의 1인칭 시점으로 이야기해 줘."),ch("future","미래에서 온 편지","10년 뒤의 내가 지금의 나에게 보내는 편지 형식으로 써 줘."),ch("number","숫자로 보기","놀라운 숫자 하나로 시작해서, 숫자가 우리 일상에서 어떤 의미인지 보여 주는 구성으로 써 줘."),ch("kid","아이의 질문","아이가 던진 순수한 질문 하나에 어른이 답을 찾아가는 구성으로 써 줘."),ch("before","전과 후","같은 장소의 ‘전’과 ‘후’를 나란히 보여 주며 변화를 강조하는 구성으로 써 줘.")]}]},
+  {v:"c_edu",t:"교육·수업 나눔",d:"수업 장면 → 효과 → 나눔",hooks:["result","daily","fact"],end:"sum",sp:"teacher",
+   topicQ:"어떤 공모전이에요? 주제나 공모전 이름을 써 주세요.",ex:["융합교육 영상 콘텐츠 공모","AI 활용 수업 사례 공모","교원 성장 지원 영상 공모"],
+   s:"공모전 영상이야. 심사 기준을 생각해서 ① 수업에서 가장 인상적인 순간으로 시작하고 ② 왜 이 수업을 했는지 ③ 학생들이 어떻게 달라졌는지 ④ 다른 선생님이 바로 따라 할 수 있는 핵심 한 가지로 끝내 줘.",
+   f:[{k:"idea",label:"아이디어",type:"choice",q:"이렇게 풀어 보면 어때요? 마음에 드는 아이디어를 하나 골라 주세요.",opts:[ch("twist","반전 구조","처음엔 평범한 이야기처럼 보이다가 마지막에 공모전 주제가 드러나는 반전 구조로 써 줘."),ch("pov","1인칭 시점","사람이 아닌 사물이나 동물(예: 버려진 플라스틱, 교실 의자)의 1인칭 시점으로 이야기해 줘."),ch("future","미래에서 온 편지","10년 뒤의 내가 지금의 나에게 보내는 편지 형식으로 써 줘."),ch("number","숫자로 보기","놀라운 숫자 하나로 시작해서, 숫자가 우리 일상에서 어떤 의미인지 보여 주는 구성으로 써 줘."),ch("kid","아이의 질문","아이가 던진 순수한 질문 하나에 어른이 답을 찾아가는 구성으로 써 줘."),ch("before","전과 후","같은 장소의 ‘전’과 ‘후’를 나란히 보여 주며 변화를 강조하는 구성으로 써 줘.")]}]},
+  {v:"c_promo",t:"기관·지역 홍보",d:"매력 → 체험 → 초대",hooks:["pov","result","whatif"],end:"act",sp:"narrator",
+   topicQ:"어떤 공모전이에요? 홍보할 기관이나 지역을 써 주세요.",ex:["우리 학교 홍보 영상","지역 축제 홍보 공모전","공유학교 홍보 숏폼"],
+   s:"공모전 홍보 영상이야. ① 가장 매력적인 장면으로 시작하고 ② 직접 체험하는 시선으로 보여 주고 ③ 다른 곳과 다른 점 한 가지를 강조하고 ④ ‘와 보세요’ 같은 초대로 끝내 줘.",
+   f:[{k:"idea",label:"아이디어",type:"choice",q:"이렇게 풀어 보면 어때요? 마음에 드는 아이디어를 하나 골라 주세요.",opts:[ch("twist","반전 구조","처음엔 평범한 이야기처럼 보이다가 마지막에 공모전 주제가 드러나는 반전 구조로 써 줘."),ch("pov","1인칭 시점","사람이 아닌 사물이나 동물(예: 버려진 플라스틱, 교실 의자)의 1인칭 시점으로 이야기해 줘."),ch("future","미래에서 온 편지","10년 뒤의 내가 지금의 나에게 보내는 편지 형식으로 써 줘."),ch("number","숫자로 보기","놀라운 숫자 하나로 시작해서, 숫자가 우리 일상에서 어떤 의미인지 보여 주는 구성으로 써 줘."),ch("kid","아이의 질문","아이가 던진 순수한 질문 하나에 어른이 답을 찾아가는 구성으로 써 줘."),ch("before","전과 후","같은 장소의 ‘전’과 ‘후’를 나란히 보여 주며 변화를 강조하는 구성으로 써 줘.")]}]},
+  {v:"c_env",t:"환경·기후",d:"현실 → 연결 → 작은 실천",hooks:["fact","whatif","daily"],end:"act",sp:"narrator",
+   topicQ:"어떤 공모전이에요? 주제나 공모전 이름을 써 주세요.",ex:["탄소중립 실천 영상 공모","바다 쓰레기 줄이기 캠페인","에너지 절약 숏폼 공모"],
+   s:"공모전 영상이야. ① 놀라운 사실이나 장면으로 시작하고 ② 그 문제가 내 일상과 어떻게 연결되는지 보여 주고 ③ 오늘 바로 할 수 있는 작은 실천 하나를 제안하고 ④ 희망적인 한 문장으로 끝내 줘.",
+   f:[{k:"idea",label:"아이디어",type:"choice",q:"이렇게 풀어 보면 어때요? 마음에 드는 아이디어를 하나 골라 주세요.",opts:[ch("twist","반전 구조","처음엔 평범한 이야기처럼 보이다가 마지막에 공모전 주제가 드러나는 반전 구조로 써 줘."),ch("pov","1인칭 시점","사람이 아닌 사물이나 동물(예: 버려진 플라스틱, 교실 의자)의 1인칭 시점으로 이야기해 줘."),ch("future","미래에서 온 편지","10년 뒤의 내가 지금의 나에게 보내는 편지 형식으로 써 줘."),ch("number","숫자로 보기","놀라운 숫자 하나로 시작해서, 숫자가 우리 일상에서 어떤 의미인지 보여 주는 구성으로 써 줘."),ch("kid","아이의 질문","아이가 던진 순수한 질문 하나에 어른이 답을 찾아가는 구성으로 써 줘."),ch("before","전과 후","같은 장소의 ‘전’과 ‘후’를 나란히 보여 주며 변화를 강조하는 구성으로 써 줘.")]}]},
+  {v:"c_ai",t:"AI 영상 창작",d:"상상 → 장면 → 메시지",hooks:["whatif","pov","conflict"],end:"think",sp:"narrator",
+   topicQ:"어떤 공모전이에요? 주제나 공모전 이름을 써 주세요.",ex:["AI 영상 창작 공모전","생성형 AI 단편 영화제","AI로 그리는 우리 마을 미래"],
+   s:"AI로 만드는 창작 공모전 영상이야. ① 현실에서는 찍기 어려운 상상 장면으로 시작하고 ② 장면마다 그림으로 바로 그릴 수 있게 구체적으로 묘사하고 ③ 이야기 속에 주제 메시지를 자연스럽게 녹이고 ④ 여운이 남는 장면으로 끝내 줘.",
+   f:[{k:"idea",label:"아이디어",type:"choice",q:"이렇게 풀어 보면 어때요? 마음에 드는 아이디어를 하나 골라 주세요.",opts:[ch("twist","반전 구조","처음엔 평범한 이야기처럼 보이다가 마지막에 공모전 주제가 드러나는 반전 구조로 써 줘."),ch("pov","1인칭 시점","사람이 아닌 사물이나 동물(예: 버려진 플라스틱, 교실 의자)의 1인칭 시점으로 이야기해 줘."),ch("future","미래에서 온 편지","10년 뒤의 내가 지금의 나에게 보내는 편지 형식으로 써 줘."),ch("number","숫자로 보기","놀라운 숫자 하나로 시작해서, 숫자가 우리 일상에서 어떤 의미인지 보여 주는 구성으로 써 줘."),ch("kid","아이의 질문","아이가 던진 순수한 질문 하나에 어른이 답을 찾아가는 구성으로 써 줘."),ch("before","전과 후","같은 장소의 ‘전’과 ‘후’를 나란히 보여 주며 변화를 강조하는 구성으로 써 줘.")]}]},
+ ],
  edu:[
   {v:"concept",t:"개념·원리 설명",d:"왜 그런지 풀어 주기",hooks:["quiz","fact","daily"],end:"answer",sp:"teacher",
    topicQ:"어떤 개념이나 원리를 설명할까요?",ex:["북극곰의 털 색깔은 무슨 색일까?","구름은 왜 떠 있을까?","분수의 크기 비교"],
@@ -2240,7 +2263,7 @@ function steps(){
   const g=curGenre(), A=[];
   A.push({id:"form",key:"form",ask:()=>"대본 프롬프트를 같이 만들어 볼게요!\n숏폼이에요, 롱폼이에요?\n숏폼은 쇼츠·릴스(세로 9:16, 90초 이하), 롱폼은 유튜브·수업 영상(가로 16:9, 2분 이상)이에요."});
   A.push({id:"mode",key:"mode",ask:()=>`좋아요, ${cur.form==="long"?"롱폼":"숏폼"}으로 할게요. 어떤 영상이에요?`});
-  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
+  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.mode==="contest"?"어떤 공모전이에요? 분야를 골라 주세요. 다음에 영상 아이디어도 골라 드릴게요.":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
   A.push({id:"length",key:"length",ask:()=>cur.form==="long"?"영상 길이는요? 길수록 글자 수가 많아져서, 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요.":"영상 길이는요? 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요."});
   A.push({id:"topic",key:"topic",type:"text",ask:()=>(g?g.topicQ:"주제가 뭐예요?")+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>exPick(g)});
   A.push({id:"focus",key:"focus",type:"text",skip:true,when:()=>cur.topic&&cur.topic.replace(/\s/g,"").length<7,
@@ -2272,8 +2295,8 @@ function ask(st){
   }else{
     let rec=recFor(st.key), fav=topOf(st.key);
     if(fav&&getVal(st.key)!==fav&&!answered.has(st.id)&&S.history.length){/* 지난번 선택 제안 */}
-    const ICQ={form:[["short","숏폼","쇼츠·릴스 · 세로 9:16"],["long","롱폼","유튜브·수업 · 가로 16:9"]],mode:[["edu","수업·교육용","학년·교과에 맞춰"],["gen","일반 영상","장르를 골라서"]]}[st.key];
-    if(ICQ){setQuick(`<div class="iconopts">${ICQ.map(([v,t,d])=>`<button type="button" class="iconopt" data-qkey="${st.key}" data-v="${v}"><img src="${ICON[v]}" alt=""><span>${t}<small>${d}</small></span></button>`).join("")}</div>`);$("#say").placeholder="골라도 되고, 말로 답해도 돼요";return}
+    const ICQ={form:[["short","숏폼","쇼츠·릴스 · 세로 9:16"],["long","롱폼","유튜브·수업 · 가로 16:9"]],mode:[["edu","수업·교육용","학년·교과에 맞춰"],["gen","일반 영상","장르를 골라서"],["contest","공모전 출품","아이디어까지 골라서"]]}[st.key];
+    if(ICQ){setQuick(`<div class="iconopts">${ICQ.map(([v,t,d])=>`<button type="button" class="iconopt" data-qkey="${st.key}" data-v="${v}"><img src="${ICON[v]||ICON.gen}" alt=""><span>${t}<small>${d}</small></span></button>`).join("")}</div>`);$("#say").placeholder="골라도 되고, 말로 답해도 돼요";return}
     setQuick(chipsHTML(st.key,rec,true).replace(/data-key=/g,"data-qkey=")+(st.skip?`<button type="button" class="opt" data-qskip>건너뛰기</button>`:""));
     $("#say").placeholder="골라도 되고, 말로 답해도 돼요";
   }
@@ -2412,7 +2435,12 @@ function onSay(text){
     const ch=understand(text);
     me(text);
     if(ch.length){bot("반영했어요: "+ch.join(", "));renderAll();if(getVal(curStep.key)){answered.add(curStep.id);const n=nextStep();n?ask(n):review()}return}
-    bot("아래에서 골라 주세요. 원하는 게 없으면 직접 써도 돼요.");return;
+    if(/공모전/.test(text)&&(curStep.key==="mode"||curStep.key==="genre")){cur.mode="contest";cur.genre="";answered.add("mode");renderAll();bot("공모전 출품용으로 바꿨어요.");const n=nextStep();n?ask(n):review();return}
+    {const key=curStep.key,v="my_"+Date.now().toString(36);let o;
+      if(key==="genre")o={v,t:text,d:"직접 쓴 장르",hooks:["fact","daily","whatif"],end:"sum",sp:"narrator",topicQ:"어떤 내용으로 만들까요?",ex:[],s:`장르: ${text}. 이 장르에 어울리는 흐름으로 써 줘.`};
+      else o={v,t:text,s:text};
+      const k=key==="genre"?"genre."+cur.mode:key;S.add[k]=(S.add[k]||[]).concat(o);persist();
+      log.lastElementChild&&log.lastElementChild.classList.contains('me')&&log.lastElementChild.remove();answerChoice(key,v);return}
   }
   me(text);
   const ch=understand(text);
@@ -3005,7 +3033,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792771735"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792771965"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3170,7 +3198,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792771735";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792771965";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey]");if(!a)return;e.preventDefault();const f=$("#svPopF");if(!f.src)f.src=a.href;$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow=""};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
