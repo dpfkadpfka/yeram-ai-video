@@ -86,6 +86,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .foot{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:12px}
 .foot a{color:var(--muted)}
 #lb{display:none!important}
+.sum h2{margin:0 0 10px;font-family:var(--f-title);font-size:22px;font-weight:800}
+.sumg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px}
+.sumc{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:14px 16px;overflow-x:auto}
+.sumc h3{margin:0 0 8px;font-size:16px;font-weight:800;color:var(--accent-strong)}
+.tb{width:100%;border-collapse:collapse;font-size:14px}
+.tb th{text-align:left;font-size:12.5px;color:var(--muted);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tb td{padding:7px 8px;border-bottom:1px dashed var(--line);vertical-align:top}
+.tb tr:last-child td{border-bottom:0}
+.tb td.n{font-weight:800;white-space:nowrap}.tb td.s{color:#E8558A;white-space:nowrap;letter-spacing:1px}.tb td.c{white-space:nowrap;font-weight:700}
+@media (max-width:900px){.sumg{grid-template-columns:1fr}}
 @media (max-width:500px){.grid.img{grid-template-columns:1fr 1fr}.grid.vid{grid-template-columns:1fr}.name{font-size:13px}.cap{font-size:13.5px}}
 </style>
 
@@ -94,6 +104,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <h1>브루 <span class="hl">AI 모델</span> 비교</h1>
     <p class="sub">예람쌤 캐릭터 하나로 브루의 모든 모델을 같은 조건에서 돌려 봤어요. 칸에 <b>마우스를 올리면</b> 아래에 자세한 설명이 떠요.</p>
   </header>
+
+  <section class="sum" aria-label="한눈에 비교">
+    <h2>한눈에 비교</h2>
+    <div class="sumg">
+      <div class="sumc"><h3>이미지 모델</h3><table class="tb" id="sumImg"></table></div>
+      <div class="sumc"><h3>비디오 모델</h3><table class="tb" id="sumVid"></table></div>
+    </div>
+  </section>
 
   <div class="bar" role="tablist">
     <button class="tab" role="tab" id="t-img" aria-selected="true" aria-controls="p-img">이미지 <i>8</i></button>
@@ -205,6 +223,10 @@ const STAR={flare:5,sunburst:5,nb:5,muse:4,gpt2:4,seedream:3,flux:2,sdxl:1,s25:5
 const stars=m=>{const n=STAR[m.co||m.id]||0;return '★'.repeat(n)+'☆'.repeat(5-n);};
 const tag=(m)=>`<div class="tag"><span class="name">${m.n}</span><span class="stars" title="브루 품질 별 ${STAR[m.co||m.id]}개">${stars(m)}</span></div>`;
 
+const rowI=m=>`<tr><td class="n">${m.n}</td><td class="s">${stars(m)}</td><td class="c">🪙 ${m.cr}</td><td>${(ST[m.id]||[])[0]?ST[m.id][0][1]:''}</td></tr>`;
+document.getElementById('sumImg').innerHTML='<tr><th>모델</th><th>품질</th><th>크레딧</th><th>잘하는 것</th></tr>'+IMG.map(rowI).join('');
+const rowV=m=>`<tr><td class="n">${m.n}</td><td class="s">${stars(m)}</td><td class="c">🪙 ${m.cr}</td><td>${m.spec.split(' · ')[0]}</td><td>${m.spec.includes('소리 O')?'O':'X'}</td><td>${(ST[m.id]||[])[0]?ST[m.id][0][1]:''}</td></tr>`;
+document.getElementById('sumVid').innerHTML='<tr><th>모델</th><th>품질</th><th>크레딧</th><th>길이</th><th>소리</th><th>잘하는 것</th></tr>'+VID.map(rowV).join('');
 const ig=document.getElementById('imgGrid');
 ig.innerHTML=`<div class="tile" tabindex="0" data-src="ref_original.jpg" data-name="원본 (첨부한 캐릭터)"><img class="m" src="ref_original.jpg" alt="원본 캐릭터"><div class="tag"><span class="name">원본</span><span class="badge ref">기준</span></div><div class="cap"><span class="co"><span>예람쌤 기본 캐릭터</span></span>모든 모델에 첨부한 2D 원본 그림</div></div>`+
 IMG.map(m=>m.f?`<div class="tile" tabindex="0" data-id="${m.id}" data-src="${m.f}" data-name="${m.n}"><img class="m" src="${m.f}" alt="${m.n} 결과" loading="lazy">${tag(m)}${ov(m)}</div>`

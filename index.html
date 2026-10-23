@@ -1078,6 +1078,10 @@ body:not(.scfresh) #sceneStage .scmain{animation:sideIn .45s cubic-bezier(.2,.8,
 .scn-bh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.scn-bh b{font-size:13.5px;color:var(--accent-deep)}
 .scn-box pre{margin:0;white-space:pre-wrap;font:inherit;font-size:13.5px;line-height:1.6}
 @media (max-width:800px){.scn-p,.scopt-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* 갤러리 탭: 제목 아래 왼쪽으로 */
+.gallery .cp-head{flex-direction:column;align-items:flex-start;gap:14px}
+.gtabs{padding:5px}.gtabs button{padding:10px 26px;font-size:16px}
 </style>
 
 <div class="wrap">
@@ -1086,7 +1090,6 @@ body:not(.scfresh) #sceneStage .scmain{animation:sideIn .45s cubic-bezier(.2,.8,
       <button type="button" class="sidetog" id="sideTog" aria-label="메뉴 접기/펴기" title="메뉴 접기">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M9.5 4.5v15"/></svg></button></div>
     <nav class="sidenav" aria-label="주 메뉴">
-      <button type="button" data-home class="sn" data-snav="start" data-tip="처음 화면으로 가요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE5LjMxLDEwOC42OGwtODAtODBhMTYsMTYsMCwwLDAtMjIuNjIsMGwtODAsODBBMTUuODcsMTUuODcsMCwwLDAsMzIsMTIwdjk2YTgsOCwwLDAsMCw4LDhoNjRhOCw4LDAsMCwwLDgtOFYxNjBoMzJ2NTZhOCw4LDAsMCwwLDgsOGg2NGE4LDgsMCwwLDAsOC04VjEyMEExNS44NywxNS44NywwLDAsMCwyMTkuMzEsMTA4LjY4Wk0yMDgsMjA4SDE2MFYxNTJhOCw4LDAsMCwwLTgtOEgxMDRhOCw4LDAsMCwwLTgsOHY1Nkg0OFYxMjBsODAtODAsODAsODBaIi8+PC9zdmc+)" aria-hidden="true"></span><span>홈</span></button>
       <span class="snlab">만들기</span>
       <ol class="stepper" id="stepper" aria-label="만들기 단계">
         <li><button type="button" data-stepgo="1" class="sn mk" data-tip="1단계 · 질문에 답하며 내 캐릭터 이미지 프롬프트를 만들어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTYwLDQwYTMyLDMyLDAsMSwwLTMyLDMyQTMyLDMyLDAsMCwwLDE2MCw0MFpNMTI4LDU2YTE2LDE2LDAsMSwxLDE2LTE2QTE2LDE2LDAsMCwxLDEyOCw1NlpNMjMxLjUsODcuNzFBMTkuNjIsMTkuNjIsMCwwLDAsMjEyLDcySDQ0YTIwLDIwLDAsMCwwLTguMzgsMzguMTZsLjEzLDAsNTAuNzUsMjIuMzUtMjEsNzkuNzJBMjAsMjAsMCwwLDAsMTAyLDIyOC44bDI2LTQ0Ljg3LDI2LDQ0Ljg3YTIwLDIwLDAsMCwwLDM2LjQtMTYuNTJsLTIxLTc5LjcyLDUwLjc1LTIyLjM1LjEzLDBBMTkuNjQsMTkuNjQsMCwwLDAsMjMxLjUsODcuNzFabS0xNy44LDcuOS01Ni45MywyNS4wNmE4LDgsMCwwLDAtNC41MSw5LjM2TDE3NS4xMywyMTdhNyw3LDAsMCwwLC40OSwxLjM1LDQsNCwwLDAsMS01LDUuNDUsNCw0LDAsMCwxLTIuMjUtMi4wNyw2LjMxLDYuMzEsMCwwLDAtLjM0LS42M0wxMzQuOTIsMTY0YTgsOCwwLDAsMC0xMy44NCwwTDg4LDIyMS4wNWE2LjMxLDYuMzEsMCwwLDAtLjM0LjYzLDQsNCwwLDAsMS0yLjI1LDIuMDcsNCw0LDAsMCwxLTUtNS40NSw3LDcsMCwwLDAsLjQ5LTEuMzVMMTAzLjc0LDEzMGE4LDgsMCwwLDAtNC41MS05LjM2TDQyLjMsOTUuNjFBNCw0LDAsMCwxLDQ0LDg4SDIxMmE0LDQsMCwwLDEsMS43Myw3LjYxWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><i>1</i><span><b><em>1</em>캐릭터</b><small></small></span></button></li>
@@ -1254,7 +1257,7 @@ body:not(.scfresh) #sceneStage .scmain{animation:sideIn .45s cubic-bezier(.2,.8,
         <div class="scrow"><span class="scl">영상 길이</span><div class="scopts" data-sc="total"><button type="button" data-v="15" aria-pressed="false">15초</button><button type="button" data-v="30" aria-pressed="true">30초</button><button type="button" data-v="60" aria-pressed="false">1분</button><button type="button" data-v="120" aria-pressed="false">2분</button><button type="button" data-v="180" aria-pressed="false">3분</button></div></div>
         <div class="scrow"><span class="scl">화면 비율</span><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button></div></div>
         <div class="scrow"><span class="scl">씬 길이</span><div class="scopts" data-sc="sec"><button type="button" data-v="5" aria-pressed="false">5초</button><button type="button" data-v="6" aria-pressed="true">6초</button><button type="button" data-v="8" aria-pressed="false">8초</button><button type="button" data-v="10" aria-pressed="false">10초</button></div></div>
-        <div class="scrow"><span class="scl">그림체</span><input class="tinput" id="scStyle" placeholder="예: 3D 애니메이션"></div>
+        <div class="scrow"><span class="scl">그림체</span><select class="tinput" id="scStyle"><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div><div class="scrow"><span class="scl">이미지 모델</span><select class="tinput" id="scImgM"><option>GPT Image 2.5</option><option>Nano Banana 2.1</option><option>Seedream 4.5</option><option>Midjourney</option><option>FLUX</option></select></div><div class="scrow"><span class="scl">영상 모델</span><select class="tinput" id="scVidM"><option>Veo 3.1</option><option>Kling v3</option><option>Seedance 2.0</option><option>Grok Imagine</option><option>Runway Gen-4</option></select></div>
         <div class="scrow scwide"><span class="scl">주인공</span><input class="tinput" id="scChar" placeholder="예: 긴 생머리에 분홍 원피스를 입은 여자 선생님 (없으면 비워 두세요)"></div>
       </div>
       <div class="scs-tgs">
@@ -1265,7 +1268,7 @@ body:not(.scfresh) #sceneStage .scmain{animation:sideIn .45s cubic-bezier(.2,.8,
         <label class="scs-tg"><input type="checkbox" data-sctg="bgm"><span class="swi"></span>배경음악</label>
       </div>
     </div>
-    <div class="scres-h" id="scResH" hidden><h3 id="scCount"></h3><div class="btnrow"><button type="button" class="btn sm" data-scall="img">이미지 프롬프트 전체 복사</button><button type="button" class="btn sm" data-scall="vid">영상 프롬프트 전체 복사</button></div></div>
+    <div class="scres-h" id="scResH" hidden><h3 id="scCount"></h3><div class="btnrow"><button type="button" class="btn sm" data-scall="img">이미지 프롬프트 전체 복사</button><button type="button" class="btn sm" data-scall="vid">영상 프롬프트 전체 복사</button><button type="button" class="btn sm primary" data-scall="en">전체 영어로 다듬기 (ChatGPT)</button></div></div>
     <div class="sclist" id="scList"></div>
   </section>
 
@@ -2665,38 +2668,54 @@ $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");
 document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
-const CAMS=["천천히 앞으로 다가가기 (slow dolly in)","옆으로 천천히 흘러가기 (slow pan)","인물을 따라가기 (tracking shot)","위로 올라가며 넓게 보여 주기 (crane up)","인물 주위를 반 바퀴 돌기 (orbit)","천천히 뒤로 물러나기 (dolly out)"];
-const VIEWS=["멀리서 전체가 보이게 (wide shot)","허리 위로 (medium shot)","얼굴 가까이 (close-up)","위에서 내려다보기 (high angle)","아래에서 올려다보기 (low angle)","어깨 너머로 (over-the-shoulder)"];
-const SFXMAP=[[/교실|수업|학교|운동장/,"아이들 웅성거림"],[/비|빗/,"빗소리"],[/바다|파도|해변/,"파도 소리"],[/숲|나무|새/,"새소리와 나뭇잎 소리"],[/바람/,"바람 소리"],[/뛰|달려|걷|걸어/,"발걸음 소리"],[/문/,"문 여닫는 소리"],[/물|화분|비커/,"물 따르는 소리"],[/박수|환호|기뻐/,"환호와 박수 소리"],[/종|벨/,"종소리"],[/차|버스|자동차/,"자동차 지나가는 소리"],[/불|모닥/,"장작 타는 소리"],[/창문|햇살|아침/,"새소리와 잔잔한 바람"]];
+const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
+const CAMS=["slow dolly in","slow lateral pan","smooth tracking shot following the subject","crane up revealing the space","slow half orbit around the subject","slow dolly out"];
+const VIEWS=[["wide establishing shot","24mm"],["medium shot","35mm"],["close-up","85mm"],["high-angle shot","35mm"],["low-angle shot","24mm"],["over-the-shoulder shot","50mm"]];
+const LIGHTS=["soft golden-hour backlight","gentle morning window light","warm practical lighting with soft shadows","dramatic rim light","diffused overcast light","high-contrast cinematic lighting"];
+const SFXMAP=[[/교실|수업|학교|운동장/,"children chattering in a classroom"],[/비|빗/,"rain falling"],[/바다|파도|해변/,"ocean waves"],[/숲|나무|새/,"birdsong and rustling leaves"],[/바람/,"soft wind"],[/뛰|달려|걷|걸어/,"footsteps"],[/문/,"a door opening"],[/물|화분|비커/,"water pouring"],[/박수|환호|기뻐/,"cheering and clapping"],[/종|벨/,"a school bell"],[/차|버스|자동차/,"cars passing by"],[/불|모닥/,"crackling fire"],[/창문|햇살|아침/,"morning birds and a light breeze"]];
 const SHOTS=["전체 모습","인물 가까이","반응·마무리"];
 function scSplit(t){let a=t.replace(/\r/g,"").split(/(?<=[.!?。…])\s+|\n+/).map(x=>x.trim()).filter(x=>x.length>1);if(!a.length)return [];
   const n=Math.max(1,Math.min(36,Math.round(+SC3.total/ +SC3.sec)));
   if(a.length>n){const out=[];const per=a.length/n;for(let i=0;i<n;i++)out.push(a.slice(Math.round(i*per),Math.round((i+1)*per)).join(" "));return out.filter(Boolean)}
   if(a.length<n){const out=[];a.forEach((x,i)=>{const k=Math.round((i+1)*n/a.length)-Math.round(i*n/a.length);for(let j=0;j<k;j++)out.push(k>1?`${x} (${SHOTS[j%SHOTS.length]})`:x)});return out}
   return a}
-function sfxOf(x){const f=SFXMAP.filter(([r])=>r.test(x)).map(([,v])=>v);return f.length?[...new Set(f)].slice(0,2).join(", "):"장면에 어울리는 작은 효과음"}
-function scPrompts(txt,i){const st=$("#scStyle").value.trim(),ch=$("#scChar").value.trim(),ratio=SC3.ratio==="16:9"?"가로 16:9":"세로 9:16",T=SC3.tg;
-  const view=T.view?VIEWS[i%VIEWS.length]:"허리 위로 (medium shot)";
-  const img=[`${st?st+" 스타일":"같은 그림체"}, ${ratio} 화면.`,ch?`주인공: ${ch} (첨부한 캐릭터와 얼굴·머리·옷이 똑같게).`:"",`장면: ${txt}`,`구도: ${view}.`,"배경과 소품은 장면에 맞게 자세히, 부드러운 조명. 그림 안에 글자·자막 없이."].filter(Boolean).join("\n");
-  const snd=[T.sfx?`효과음: ${sfxOf(txt)}`:"효과음 없음",T.voice?"대사·내레이션 가능":"목소리 없음 (대사·내레이션 없이)",T.bgm?"분위기에 맞는 배경음악":"배경음악 없음"].join(" / ");
-  const vid=[`첫 장면 그림에서 시작해 ${SC3.sec}초 동안 자연스럽게 움직여 줘.`,`움직임: ${txt}`,T.cam?`카메라: ${CAMS[i%CAMS.length]}`:"카메라: 움직이지 않게 고정 (static camera)",T.view?`시점: ${view}`:"",`소리: ${snd}`,"인물 모습과 그림체는 그림 그대로 유지."].filter(Boolean).join("\n");
+function sfxOf(x){const f=SFXMAP.filter(([r])=>r.test(x)).map(([,v])=>v);return f.length?[...new Set(f)].slice(0,2).join(" and "):"subtle ambient sounds that fit the scene"}
+function scPrompts(txt,i){const stK=$("#scStyle").value,st=STYLE_EN[stK]||stK,ch=$("#scChar").value.trim(),ar=SC3.ratio,T=SC3.tg,IM=$("#scImgM").value,VM=$("#scVidM").value;
+  let vi=i%VIEWS.length;if(/가까이/.test(txt))vi=2;else if(/전체 모습/.test(txt))vi=0;else if(/반응/.test(txt))vi=1;
+  const [view,lens]=T.view?VIEWS[vi]:["medium shot","35mm"],light=LIGHTS[i%LIGHTS.length],cam=T.cam?CAMS[i%CAMS.length]:"static locked-off camera";
+  const scene=txt.replace(/\s*\((전체 모습|인물 가까이|반응·마무리)\)$/,"");
+  const who=ch?`the main character (${ch}), identical to the reference image in face, hair, outfit and colors,`:"";
+  const cine=`${lens} lens, ${light}, shallow depth of field, cinematic color grading, subtle film grain`;
+  let img;
+  if(IM==="Seedream 4.5")img=`${st}, cinematic film still, ${view}, scene: "${scene}"${ch?`, main character: ${ch} (same as reference image)`:""}, ${cine}, highly detailed, ${ar} aspect ratio, no text, no watermark`;
+  else if(IM==="Midjourney")img=`cinematic film still, ${st}, ${view} of ${ch?ch+", ":""}scene: "${scene}", ${cine}, highly detailed --ar ${ar} --style raw --v 7${ch?" --cref [캐릭터 이미지 주소]":""} --no text, watermark`;
+  else if(IM==="FLUX")img=`A cinematic ${view} in ${st}. ${who?who[0].toUpperCase()+who.slice(1)+" ":""}Scene: "${scene}". Shot on a ${cine}. Clean composition, ${ar} frame, no text or watermark.`;
+  else img=`Create a cinematic ${view} in ${st}.${ch?` ${IM==="Nano Banana 2.1"?"Use the attached reference image for the main character":"Keep the main character exactly like the attached reference image"} (${ch}): same face, hair, outfit and colors.`:""}\nScene: "${scene}"\nCinematography: ${cine}. Thoughtful composition with foreground and background depth.\nAspect ratio ${ar}. No text, captions or watermark.`;
+  const sfx=T.sfx?sfxOf(txt):"",voice=T.voice?"natural dialogue allowed":"no dialogue, no narration, no voice",bgm=T.bgm?"cinematic background music":"no music";
+  const sec=SC3.sec;let vid;
+  if(VM==="Veo 3.1")vid=`Subject: ${ch||"the characters"} in ${st}, as in the start frame.\nAction: "${scene}" — one clear, natural motion within ${sec} seconds.\nCamera: ${cam}, ${view}, ${lens} lens.\nStyle: cinematic, ${light}, shallow depth of field.\nAudio: ${[sfx&&("sound effects of "+sfx),voice,bgm].filter(Boolean).join("; ")}.`;
+  else if(VM==="Kling v3")vid=`${view}, ${cam}. "${scene}" Smooth, natural motion over ${sec} seconds; keep the character and style identical to the start frame. Cinematic ${st}, ${light}, shallow depth of field.${T.sfx?` Sound: ${sfx}.`:""} ${voice}, ${bgm}.\nNegative prompt: text, subtitles, distorted face, extra limbs, flicker`;
+  else if(VM==="Seedance 2.0")vid=`[Shot] ${view}, ${lens} lens\n[Camera] ${cam}\n[Action] "${scene}" (${sec}s, one continuous motion)\n[Style] cinematic ${st}, ${light}, consistent with the start frame\n[Sound] ${[sfx,voice,bgm].filter(Boolean).join(", ")}`;
+  else if(VM==="Grok Imagine")vid=`Cinematic ${st}. "${scene}" ${cam[0].toUpperCase()+cam.slice(1)}, ${view}. ${light[0].toUpperCase()+light.slice(1)}, shallow depth of field. ${T.sfx?"Sound: "+sfx+". ":""}${voice}, ${bgm}.`;
+  else vid=`${cam[0].toUpperCase()+cam.slice(1)}: "${scene}" ${view}, cinematic ${st}, ${light}, shallow depth of field. Natural motion, keep the character identical to the start frame. (Runway has no audio.)`;
   return [img,vid]}
 const fmtT=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
 let SCENES=[];
 function renderScenes(){const t=$("#scStory").value;SCENES=scSplit(t);const sec=+SC3.sec;
   $("#scResH").hidden=!SCENES.length;$("#scCount").textContent=`${+SC3.total<=60?"숏폼":"롱폼"} · 씬 ${SCENES.length}개 · 약 ${fmtT(SCENES.length*sec)}`;
   $("#scList").innerHTML=SCENES.map((x,i)=>{const [im,vd]=scPrompts(x,i);return `<article class="scene"><div class="scn-h"><span class="scn-n">씬 ${i+1}</span><span class="scn-t">${fmtT(i*sec)}–${fmtT((i+1)*sec)}</span><p>${esc(x)}</p></div><div class="scn-p"><div class="scn-box"><div class="scn-bh"><b>이미지 프롬프트</b><button type="button" class="btn sm" data-sccp="i${i}">복사</button></div><pre id="sci${i}">${esc(im)}</pre></div><div class="scn-box"><div class="scn-bh"><b>영상 프롬프트</b><button type="button" class="btn sm" data-sccp="v${i}">복사</button></div><pre id="scv${i}">${esc(vd)}</pre></div></div></article>`}).join("");
-  try{localStorage.setItem("ymScene3",JSON.stringify({SC3,story:t,style:$("#scStyle").value,ch:$("#scChar").value}))}catch(e){}}
-function openScene(){setStage("scene");window.scrollTo({top:0});const c=S.character||{};if(!$("#scStyle").value&&c.style)$("#scStyle").value=c.style;if(!$("#scChar").value&&c.subj)$("#scChar").value=c.subj;renderScenes()}
-(function(){try{const d=JSON.parse(localStorage.getItem("ymScene3")||"null");if(d){Object.assign(SC3,d.SC3||{});$("#scStory").value=d.story||"";$("#scStyle").value=d.style||"";$("#scChar").value=d.ch||""}}catch(e){}
-  $$("#sceneStage .scopts").forEach(g=>$$("button",g).forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===String(SC3[g.dataset.sc]))));
+  try{localStorage.setItem("ymScene3",JSON.stringify({SC3,story:t,style:$("#scStyle").value,ch:$("#scChar").value,im:$("#scImgM").value,vm:$("#scVidM").value}))}catch(e){}}
+function openScene(){setStage("scene");window.scrollTo({top:0});const c=S.character||{};if(c.style&&STYLE_EN[c.style]&&!localStorage.getItem("ymScene3"))$("#scStyle").value=c.style;if(!$("#scChar").value&&c.subj)$("#scChar").value=c.subj;renderScenes()}
+(function(){try{const d=JSON.parse(localStorage.getItem("ymScene3")||"null");if(d){Object.assign(SC3,d.SC3||{});$("#scStory").value=d.story||"";if(d.style&&STYLE_EN[d.style])$("#scStyle").value=d.style;$("#scChar").value=d.ch||"";if(d.im)$("#scImgM").value=d.im;if(d.vm)$("#scVidM").value=d.vm}}catch(e){}
+  $$("#sceneStage .scopts").forEach(g=>[...g.querySelectorAll("button")].forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===String(SC3[g.dataset.sc]))));
   $$("[data-sctg]").forEach(x=>x.checked=!!SC3.tg[x.dataset.sctg])})();
 document.addEventListener("click",e=>{let b;
-  if((b=e.target.closest("#sceneStage .scopts button"))){const g=b.parentElement;SC3[g.dataset.sc]=b.dataset.v;if(g.dataset.sc==="total"){SC3.ratio=+b.dataset.v<=60?"9:16":"16:9";$$('[data-sc="ratio"] button').forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===SC3.ratio))}$$("button",g).forEach(x=>x.setAttribute("aria-pressed",x===b));renderScenes();return}
+  if((b=e.target.closest("#sceneStage .scopts button"))){const g=b.parentElement;SC3[g.dataset.sc]=b.dataset.v;if(g.dataset.sc==="total"){SC3.ratio=+b.dataset.v<=60?"9:16":"16:9";$$('[data-sc="ratio"] button').forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===SC3.ratio))}[...g.querySelectorAll("button")].forEach(x=>x.setAttribute("aria-pressed",x===b));renderScenes();return}
   if((b=e.target.closest("[data-sccp]"))){const k=b.dataset.sccp;copyText($("#sc"+k).textContent,b);return}
+  if((b=e.target.closest("[data-scall]"))&&b.dataset.scall==="en"){const all=SCENES.map((x,i)=>{const [a,v]=scPrompts(x,i);return `[Scene ${i+1}]\nIMAGE: ${a}\nVIDEO: ${v}`}).join("\n\n");copyText(`아래 씬별 프롬프트에서 따옴표 안의 한국어 장면 설명을 자연스럽고 구체적인 영어로 바꿔 줘. 형식·카메라·조명 문구는 그대로 두고, 씬마다 IMAGE / VIDEO 프롬프트를 영어로 완성해서 다시 써 줘.\n\n${all}`,b);toast("복사했어요. ChatGPT에 붙여 넣으면 전부 영어로 다듬어 줘요");return}
   if((b=e.target.closest("[data-scall]"))){const im=b.dataset.scall==="img";const all=SCENES.map((x,i)=>`[씬 ${i+1}]\n`+scPrompts(x,i)[im?0:1]).join("\n\n");copyText(all,b);return}});
 document.addEventListener("change",e=>{const t=e.target.closest("[data-sctg]");if(t){SC3.tg[t.dataset.sctg]=t.checked;renderScenes()}});
-["#scStory","#scStyle","#scChar"].forEach(q=>$(q).addEventListener("input",()=>{clearTimeout(renderScenes.t);renderScenes.t=setTimeout(renderScenes,250)}));
+["#scStyle","#scImgM","#scVidM"].forEach(q=>$(q).addEventListener("change",renderScenes));["#scStory","#scChar"].forEach(q=>$(q).addEventListener("input",()=>{clearTimeout(renderScenes.t);renderScenes.t=setTimeout(renderScenes,250)}));
 /* 브루 칸 새로고침 */
 document.addEventListener("click",e=>{const b=e.target.closest("[data-refresh]");if(!b)return;const k=b.dataset.refresh;
   if(k==="img"){$("#outImg").value="";renderOut(true)}else if(k==="prompt"){renderOut(false)}else renderOut(true);
