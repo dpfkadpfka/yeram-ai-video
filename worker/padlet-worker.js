@@ -35,19 +35,20 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
     const u = new URL(req.url), id = u.searchParams.get("id") || "", act = u.searchParams.get("act") || "";
     if (req.method === "POST" && act === "img") {
-      // 나노바나나(Vertex AI) 이미지 생성: 구글 로그인 사용자만, 하루 10장, 기록은 Firestore imglog
+      // 나노바나나(Vertex AI) 이미지 생성: 구글 로그인 사용자만, 하루 기본 이미지 5장·캐릭터 시트 5장, 기록은 Firestore imglog
       const b = await req.json().catch(() => ({}));
       const who = await lookupUser(b.idToken);
       if (!who || !who.google) return J({ error: "login" }, 401);
       const admin = await isAdmin(b.idToken);
+      const kind = b.kind === "sheet" ? "sheet" : "base";
       const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
       const FS = "https://firestore.googleapis.com/v1/projects/yeram-ai-video/databases/(default)/documents";
       const ah = { authorization: "Bearer " + b.idToken, "content-type": "application/json" };
       const sv = v => ({ stringValue: String(v || "") });
-      const q = await fetch(FS + ":runAggregationQuery", { method: "POST", headers: ah, body: JSON.stringify({ structuredAggregationQuery: { structuredQuery: { from: [{ collectionId: "imglog" }], where: { compositeFilter: { op: "AND", filters: [{ fieldFilter: { field: { fieldPath: "uid" }, op: "EQUAL", value: sv(who.uid) } }, { fieldFilter: { field: { fieldPath: "day" }, op: "EQUAL", value: sv(day) } }] } } }, aggregations: [{ alias: "n", count: {} }] } }) }).then(r => r.json()).catch(() => null);
+      const q = await fetch(FS + ":runAggregationQuery", { method: "POST", headers: ah, body: JSON.stringify({ structuredAggregationQuery: { structuredQuery: { from: [{ collectionId: "imglog" }], where: { compositeFilter: { op: "AND", filters: [{ fieldFilter: { field: { fieldPath: "uid" }, op: "EQUAL", value: sv(who.uid) } }, { fieldFilter: { field: { fieldPath: "day" }, op: "EQUAL", value: sv(day) } }, { fieldFilter: { field: { fieldPath: "kind" }, op: "EQUAL", value: sv(kind) } }] } } }, aggregations: [{ alias: "n", count: {} }] } }) }).then(r => r.json()).catch(() => null);
       const used = +((Array.isArray(q) && q[0]?.result?.aggregateFields?.n?.integerValue) || 0);
-      const LIMIT = 10;
-      if (!admin && used >= LIMIT) return J({ error: "limit", used, limit: LIMIT }, 429);
+      const LIMIT = 5;
+      if (!admin && used >= LIMIT) return J({ error: "limit", used, limit: LIMIT, kind }, 429);
       const prompt = String(b.prompt || "").slice(0, 6000);
       if (!prompt) return J({ error: "prompt" }, 400);
       let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
@@ -65,7 +66,7 @@ export default {
         const im = (d?.candidates?.[0]?.content?.parts || []).find(x => x.inlineData || x.inline_data);
         if (!im) { errs.push(m + " noimage " + JSON.stringify(d).slice(0, 200)); continue; }
         const idt = im.inlineData || im.inline_data;
-        const fields = { uid: sv(who.uid), email: sv(who.email), name: sv(who.name), day: sv(day), at: { timestampValue: new Date().toISOString() }, kind: sv(b.kind || "base"), prompt: sv(prompt.slice(0, 1500)), model: sv(m), ref: { booleanValue: !!ref } };
+        const fields = { uid: sv(who.uid), email: sv(who.email), name: sv(who.name), day: sv(day), at: { timestampValue: new Date().toISOString() }, kind: sv(kind), prompt: sv(prompt.slice(0, 1500)), model: sv(m), ref: { booleanValue: !!ref } };
         ctx.waitUntil(fetch(FS + "/imglog", { method: "POST", headers: ah, body: JSON.stringify({ fields }) }).catch(() => {}));
         return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: used + 1, limit: admin ? null : LIMIT, model: m });
       }
