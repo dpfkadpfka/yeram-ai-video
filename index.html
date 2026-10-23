@@ -1912,18 +1912,23 @@ const HOOKS=[
  {v:"whatif",t:"‘만약 ~라면?’",s:"첫 문장은 ‘만약 ~라면?’ 하고 상상하게 만드는 질문으로 시작해 줘."},
  {v:"auto",t:"알아서",s:"첫 문장은 주제에 가장 잘 맞는 방식으로 2초 안에 궁금증이 생기게 시작해 줘."}];
 const TONES=[
- {v:"shorts",t:"쇼츠 빠른 템포",s:"말투는 쇼츠 내레이션처럼 한 문장을 아주 짧게 끊어 빠른 템포로 써 줘. 설명은 줄이고, 다음 문장이 궁금해지게 이어 줘."},
- {v:"eumseum",t:"숏폼 음슴체",s:"말투는 숏폼 정보 채널처럼 ‘~함’, ‘~임’으로 끝나는 음슴체로 짧고 툭툭 써 줘."},
- {v:"ssul",t:"썰 푸는 말투",s:"말투는 친구에게 썰 푸듯 ‘근데 이게’, ‘알고 보니’처럼 이야기하는 구어체로 써 줘. 과하게 친절하지 않게."},
+ {v:"shorts",t:"쇼츠 빠른 템포",s:"말투는 쇼츠 내레이션처럼 한 문장을 아주 짧게 끊어 빠른 템포로 써 줘. 설명은 줄이고, 다음 문장이 궁금해지게 이어 줘.",ex:"이거 모르면 손해. 딱 30초면 됨. 바로 갑니다."},
+ {v:"eumseum",t:"숏폼 음슴체",s:"말투는 숏폼 정보 채널처럼 ‘~함’, ‘~임’으로 끝나는 음슴체로 짧고 툭툭 써 줘.",ex:"물 마시는 시간 바꿨더니 집중력 달라짐. 이유가 있음."},
+ {v:"ssul",t:"썰 푸는 말투",s:"말투는 친구에게 썰 푸듯 ‘근데 이게’, ‘알고 보니’처럼 이야기하는 구어체로 써 줘. 과하게 친절하지 않게.",ex:"근데 이게 진짜 웃긴 게, 알고 보니 범인이 우리 반 화분이었어."},
  {v:"plain",t:"담백한 존댓말",s:"말투는 꾸밈 없이 담백한 존댓말로 써 줘. 과하게 상냥한 표현, 감탄사, 칭찬은 쓰지 마."},
  {v:"warm",t:"친근한 존댓말",s:"말투는 친근한 존댓말(~요)로 쓰되, 과하게 상냥하거나 감탄사를 남발하지 마."},
- {v:"news",t:"뉴스·다큐 해설",s:"말투는 뉴스나 다큐멘터리 해설처럼 ‘~다’로 끝나는 평서문으로 또렷하게 써 줘."},
+ {v:"news",t:"뉴스·다큐 해설",s:"말투는 뉴스나 다큐멘터리 해설처럼 ‘~다’로 끝나는 평서문으로 또렷하게 써 줘.",ex:"지구의 평균 기온은 지난 100년 동안 1도 넘게 올랐다."},
  {v:"calm",t:"차분한 설명",s:"말투는 차분하고 또렷한 설명형 존댓말로 써 줘."},
- {v:"lively",t:"활기찬 유튜버",s:"말투는 리듬감 있고 활기찬 존댓말로 쓰되, 감탄사는 한두 번만 써 줘."},
+ {v:"lively",t:"활기찬 유튜버",s:"말투는 리듬감 있고 활기찬 존댓말로 쓰되, 감탄사는 한두 번만 써 줘.",ex:"자, 오늘은 진짜 신기한 실험 하나 보여 드릴게요!"},
  {v:"banmal",t:"다정한 반말",s:"말투는 다정한 반말로 써 줘."},
  {v:"dry",t:"담담한 내레이션",s:"말투는 감정을 누른 담담한 내레이션으로 써 줘."},
- {v:"chic",t:"짧고 시크한 반말",s:"말투는 짧게 툭툭 던지는 시크한 반말로 써 줘. 친절한 설명조는 빼."},
- {v:"funny",t:"유머 섞기",s:"말투는 존댓말로 쓰되 가벼운 농담을 한두 번 섞어 줘."}];
+ {v:"chic",t:"짧고 시크한 반말",s:"말투는 짧게 툭툭 던지는 시크한 반말로 써 줘. 친절한 설명조는 빼.",ex:"별거 아님. 근데 해 보면 다름."},
+ {v:"funny",t:"유머 섞기",s:"말투는 존댓말로 쓰되 가벼운 농담을 한두 번 섞어 줘."},
+ {v:"psa",t:"공익광고 내레이션",s:"말투는 TV 공익광고 내레이션처럼 쓴다. 짧은 문장, 여운 있는 쉼, 마지막에 마음을 울리는 한 줄 카피로 끝낸다. 설명하거나 가르치려 들지 말고 장면과 감정으로 보여 줘.",ex:"오늘도 버려진 컵 하나. 누군가에겐 작은 습관, 바다에겐 사라지지 않는 상처입니다."},
+ {v:"adcopy",t:"광고 카피(홍보)",s:"말투는 광고 카피처럼 쓴다. 귀에 꽂히는 짧은 문장, 반복되는 리듬, 브랜드 슬로건 같은 한 줄 카피를 중간과 끝에 넣는다. 보는 사람이 ‘해 보고 싶다’, ‘가 보고 싶다’고 느끼게 써 줘.",ex:"걷는 순간, 여행이 됩니다. 부천의 골목, 지금 만나러 오세요."},
+ {v:"emotion",t:"감성 에세이",s:"말투는 감성 에세이처럼 쓴다. 장면을 그리듯 묘사하고, 마음속 생각을 혼잣말처럼 담담하게 털어놓는다.",ex:"그날 교실 창밖으로 들어온 햇빛이, 유난히 따뜻했다."},
+ {v:"poem",t:"시처럼 운율 있게",s:"말투는 시처럼 쓴다. 비슷한 문장 구조를 반복해 리듬을 만들고, 한 줄 한 줄에 여운을 남긴다.",ex:"작은 손이 모이면, 작은 물이 모이면, 작은 내일이 바뀝니다."},
+ {v:"drama",t:"드라마 긴장감",s:"말투는 드라마 예고편처럼 쓴다. 궁금증을 쌓다가 결정적인 순간에 반전을 터뜨린다.",ex:"그런데 그때, 아무도 예상하지 못한 일이 일어났다."}];
 const SPEAKERS=[
  {v:"teacher",t:"선생님 캐릭터",s:"화자는 {name}선생님 캐릭터야. 학생에게 직접 말을 거는 느낌으로 써 줘."},
  {v:"narrator",t:"내레이터",s:"화자는 장면을 설명하는 내레이터야."},
@@ -2107,7 +2112,7 @@ const IMG_STYLES=[
  {v:"pixel",t:"픽셀 아트",s:"레트로 게임 같은 픽셀 아트 스타일로 또렷하게 표현한다."},
  {v:"retro",t:"레트로 애니",s:"1980년대 말~1990년대 초 손으로 그린 셀 애니메이션처럼, 섬세한 선화와 절제된 2단계 셀 명암, 머리카락의 넓은 하이라이트로 표현한다. 세피아나 과하게 바랜 필터는 쓰지 않는다."},
  {v:"chibi3d",t:"3D 치비",s:"2~3등신 귀여운 3D 치비 캐릭터와 부드러운 3D 애니메이션 조명으로, 은은한 무광 재질로 표현한다. 번들거리는 플라스틱 광택은 쓰지 않는다."}];
-const IMG_RATIO=[{v:"9:16",t:"9:16 꽉 찬 세로",s:"9:16 세로 화면"},{v:"9:16sq",t:"9:16 + 가운데 정사각형",s:"9:16 세로 화면, 장면은 가운데 정사각형"},{v:"16:9",t:"16:9 가로",s:"16:9 가로 화면"},{v:"1:1",t:"1:1 정사각",s:"1:1 정사각 화면"}];
+const IMG_RATIO=[{v:"9:16",t:"9:16 꽉 찬 세로",s:"9:16 세로 화면"},{v:"9:16sq",t:"9:16 + 가운데 정사각형",s:"9:16 세로 화면, 장면은 가운데 정사각형"},{v:"16:9",t:"16:9 가로",s:"16:9 가로 화면"}];
 const IMG_PAL=[{v:"extract",t:"이미지에서 색 뽑기",s:""},{v:"pick",t:"직접 고르기",s:""},{v:"auto",t:"알아서",s:""}];
 const PAL_KEYS=[["main","메인"],["sub1","보조 1"],["sub2","보조 2"],["text","글자·어두운 색"],["point","포인트(조금만)"]];
 const BASE_KEYS={form:FORMS,imgUse:IMG_USE,imgRef:IMG_REF,imgStyle:IMG_STYLES,imgRatio:IMG_RATIO,imgPal:IMG_PAL,mode:MODES,genre:null,length:LENGTHS,grade:GRADES,subject:SUBJECTS,viewer:VIEWERS,hook:HOOKS,tone:TONES,speaker:SPEAKERS,ending:ENDINGS};
@@ -2127,6 +2132,7 @@ function rawOpts(key){
   if(key==="genre") return genreList();
   if(key.startsWith("gf.")){const [,gv,k]=key.split(".");const g=findGenre(gv);const f=g&&(g.f||[]).find(x=>x.k===k);return f&&f.opts?f.opts:[]}
   if(key==="length")return ALL_L;
+  if(key==="imgRatio")return IMG_RATIO.filter(o=>cur.form==="long"?o.v==="16:9":o.v!=="16:9");
   return BASE_KEYS[key]||[];
 }
 function optsFor(key){
@@ -2224,12 +2230,13 @@ function build(){
   if(cur.mode==="gen"){const vw=optOf("viewer",cur.viewer);if(vw)L.push(vw.s)}
   const hk=optOf("hook",cur.hook);if(hk)L.push(hk.s);
   const sp=optOf("speaker",cur.speaker);if(sp)L.push(sp.s.replace("{name}",cur.name?`‘${cur.name}’이라는 `:""));
-  const tn=optOf("tone",cur.tone);if(tn)L.push(tn.s);
+  const tn=optOf("tone",cur.tone);if(tn){L.push("");L.push("[말투] (가장 중요)");L.push(tn.s);if(tn.ex)L.push(`이런 느낌의 문장: “${tn.ex}” (이 문장을 그대로 쓰지 말고 말투만 따라 해 줘)`);L.push("첫 문장부터 마지막 문장까지 이 말투를 끝까지 유지해 줘. 중간에 평범한 설명조로 돌아가지 마.");L.push("")}
   if(cur.mode==="edu")L.push(levelRule());
   const ed=optOf("ending",cur.ending);if(ed)L.push(ed.s);
   if(cur.must)L.push(g.fic?`이야기에 꼭 들어갈 내용: ${cur.must}.`:`대본은 다음 내용을 바탕으로 써 줘: ${cur.must}. 이 내용과 어긋나는 사실은 쓰지 마.`);
   if(cur.msg)L.push(`보는 사람이 마지막에 기억할 한 문장은 ‘${cur.msg}’이야. 이 말이 마무리에 자연스럽게 오게 해 줘.`);
   if(cur.avoid)L.push(`다음은 쓰지 마: ${cur.avoid}.`);
+  L.push("뻔한 표현(‘안녕하세요 여러분’, ‘~에 대해 알아볼까요’, ‘~하는 건 어떨까요’)은 쓰지 말고, 남들이 생각 못 한 관점이나 구체적인 장면·숫자·비유를 하나 이상 넣어 창의적으로 써 줘.");
   L.push(g.fic?"창작 이야기지만 실제 사람·가게 이름은 쓰지 마.":"사실은 정확해야 해. 확실하지 않은 내용은 빼 줘.");
   L.push("AI 목소리가 읽기 좋게 문장은 짧게 쓰고, 이모지·괄호·특수기호는 쓰지 마.");
   L.push("제목, 장면 번호, 시간 표시, 연출 지시문 없이 실제로 읽을 대본 문장만 출력해 줘.");
@@ -2262,8 +2269,8 @@ function rows(){
   if(cur.imgUse==="yes"){
     R.push({key:"imgRef",k:"캐릭터"});
     if(cur.imgRef==="desc")R.push({key:"imgChar",k:"캐릭터 설명",type:"text",ph:"예: 주황색 앞치마를 두른 둥근 얼굴의 아기 곰"});
-    R.push({key:"imgStyle",k:"이미지 스타일"},{key:"imgRatio",k:"화면 비율"},{key:"imgPal",k:"색 정하기"});
-    if(cur.imgPal&&cur.imgPal!=="auto")R.push({key:"colors",k:"색 조합",type:"palette"});
+    const RF=["ref","bg"].includes(cur.imgRef);if(!RF)R.push({key:"imgStyle",k:"이미지 스타일"});R.push({key:"imgRatio",k:"화면 비율"});if(!RF)R.push({key:"imgPal",k:"색 정하기"});
+    if(!RF&&cur.imgPal&&cur.imgPal!=="auto")R.push({key:"colors",k:"색 조합",type:"palette"});
   }
   return R;
 }
@@ -2280,10 +2287,10 @@ function chipsHTML(key,recommend,noAdd){
   const list=optsFor(key);
   const rec=recommend||[];
   const sorted=rec.length?list.slice().sort((a,b)=>(rec.includes(b.v)?1:0)-(rec.includes(a.v)?1:0)):list;
-  return sorted.map(o=>`<button type="button" class="opt${editing&&editing.key===key&&editing.v===o.v?" editing":""}" data-key="${esc(key)}" data-v="${esc(o.v)}" aria-pressed="${sel===o.v}">${esc(o.t)}${o.trend?'<span class="fire">요즘 인기</span>':rec.includes(o.v)?'<span class="fire">추천</span>':""}${fav===o.v?'<span class="fav">자주</span>':""}</button>`).join("")
+  return sorted.map(o=>`<button type="button" class="opt${editing&&editing.key===key&&editing.v===o.v?" editing":""}" data-key="${esc(key)}" data-v="${esc(o.v)}" aria-pressed="${sel===o.v}"${o.ex?` title="예: ${esc(o.ex)}"`:""}>${esc(o.t)}${o.trend?'<span class="fire">요즘 인기</span>':rec.includes(o.v)?'<span class="fire">추천</span>':""}${fav===o.v?'<span class="fav">자주</span>':""}</button>`).join("")
    +(editMode&&!noAdd?`<button type="button" class="opt add" data-addkey="${esc(key)}">+ 추가</button>`:"");
 }
-function recFor(key){if(key==="tone"&&(+cur.length||30)<=90)return["shorts","eumseum","ssul"];const g=curGenre();if(!g)return[];if(key==="hook")return g.hooks||[];if(key==="ending")return[g.end];if(key==="speaker")return[g.sp];return[]}
+function recFor(key){if(key==="tone"&&cur.mode==="contest"){const g=cur.genre||"";return g==="c_promo"?["adcopy","psa","lively"]:g==="c_ai"?["drama","emotion","poem"]:["psa","emotion","adcopy"]}if(key==="tone"&&(+cur.length||30)<=90)return["shorts","eumseum","ssul"];const g=curGenre();if(!g)return[];if(key==="hook")return g.hooks||[];if(key==="ending")return[g.end];if(key==="speaker")return[g.sp];return[]}
 function editorHTML(){
   if(!editing)return"";
   const {key,v}=editing, isNew=v==null, o=isNew?{t:"",s:""}:(key==="genre"?curGenre()&&optOf("genre",v):optOf(key,v))||{t:"",s:""};
@@ -2314,7 +2321,7 @@ function oGroups(){
   G.push({k:"내용",items:content,hint:"넣고 싶은 것만"});
   const img=[it("imgUse","이미지")];
   if(cur.imgUse==="yes"){img.push(it("imgRef","캐릭터"));if(cur.imgRef==="desc")img.push(it("imgChar","캐릭터 설명",{type:"text",ph:"예: 주황색 앞치마를 두른 둥근 얼굴의 아기 곰"}));
-    img.push(it("imgStyle","이미지 스타일"),it("imgPal","색"));if(cur.imgPal&&cur.imgPal!=="auto")img.push(it("colors","색 조합",{type:"palette"}))}
+    if(!["ref","bg"].includes(cur.imgRef))img.push(it("imgStyle","이미지 스타일"),it("imgPal","색"));if(!["ref","bg"].includes(cur.imgRef)&&cur.imgPal&&cur.imgPal!=="auto")img.push(it("colors","색 조합",{type:"palette"}))}
   G.push({k:"이미지",items:img});
   return G;
 }
@@ -2422,7 +2429,7 @@ function renderOut(keep){
 }
 
 /* ===================== 내 스타일 ===================== */
-function styleSummary(st){const g=findGenre(st.genre);return [st.form==="long"?"가로":"세로",g&&g.t,st.length&&fmtSec(st.length),label("hook",st.hook),label("tone",st.tone),st.imgUse==="yes"?label("imgStyle",st.imgStyle):""].filter(Boolean).join(" · ")}
+function styleSummary(st){const g=findGenre(st.genre);return [st.form==="long"?"가로":"세로",g&&g.t,st.length&&fmtSec(st.length),label("hook",st.hook),label("tone",st.tone),st.imgUse==="yes"&&!["ref","bg"].includes(st.imgRef)?label("imgStyle",st.imgStyle):""].filter(Boolean).join(" · ")}
 function renderMine(){
   $("#styles").innerHTML=(S.styles||[]).length?S.styles.map(st=>`<div class="style-item"><span>${esc(st.title)}<small>${esc(styleSummary(st))}${st.uses?` · ${st.uses}번 사용`:""}</small></span><span style="display:flex;gap:4px;flex-shrink:0"><button class="btn sm primary" data-applystyle="${st.id}">이 스타일로</button><button class="x" data-delstyle="${st.id}" aria-label="스타일 지우기">×</button></span></div>`).join("")
    :`<p class="empty">아직 없어요. 프롬프트를 만든 뒤 챗봇의 ‘이 스타일 저장’을 누르거나 “이 스타일 저장해 줘”라고 말하면 돼요.</p>`;
@@ -2463,7 +2470,7 @@ function steps(){
     ask:()=>`‘${cur.topic}’은(는) ${secLabel()}에 담기엔 조금 넓어요. 숏폼은 하나만 확실히 남기는 게 좋아요.\n이 영상에서 딱 하나 전할 것은 뭐예요?`});
   if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"누가 보나요? 정하지 않으면 초·중·고 누구나 알아듣게 써 달라고 할게요."});A.push({id:"subject",key:"subject",ask:()=>"교과는요? 정해진 과목이 없으면 ‘과목 없음’을 고르세요."})}
   if(cur.mode==="gen")A.push({id:"viewer",key:"viewer",ask:()=>"주로 누가 볼까요?"});
-  A.push({id:"tone",key:"tone",ask:()=>"말투는요?"});
+  A.push({id:"tone",key:"tone",ask:()=>cur.mode==="contest"?"말투는요?\n공모전이면 공익광고·광고 카피 말투가 잘 어울려요. 고른 말투로 대본 전체를 써 달라고 할게요.":"말투는요? 고른 말투로 대본 전체를 써 달라고 할게요."});
   if(g)(g.f||[]).forEach(f=>A.push({id:"gf."+f.k,key:"gf."+g.v+"."+f.k,type:f.type==="text"?"text":"choice",skip:true,ask:()=>f.q,ph:f.ph}));
   A.push({id:"must",key:"must",type:"text",skip:true,ask:()=>"대본에 꼭 들어가야 할 내용이 있나요? 알고 있는 사실이나 정보를 쉼표로 적어 주면, AI가 틀린 내용을 덜 써요.",ph:"예: 털은 투명하다, 빛이 흩어져 하얗게 보인다, 피부는 검다"});
   A.push({id:"msg",key:"msg",type:"text",skip:true,ask:()=>"보는 사람이 영상을 다 보고 딱 하나 기억했으면 하는 말은요?",ph:"예: 북극곰 털은 사실 투명하다"});
@@ -2499,6 +2506,7 @@ function answerChoice(key,v){
   const st=curStep; setVal(key,v);
   const shown=key==="genre"?(findGenre(v)||{t:v}).t:label(key,v);
   if(key==="form"){cur.imgRatio=v==="long"?"16:9":"9:16"}
+  if(key==="imgRef"&&["ref","bg"].includes(v)){cur.imgStyle="";cur.imgPal="auto"}
   if(key==="mode"){cur.genre="";answered.delete("genre");purgeGenreSteps()}
   if(key==="genre"){purgeGenreSteps();const g=findGenre(v);if(g){cur.hook=g.hooks[0];cur.ending=g.end;cur.speaker=g.sp}}
   if(st)answered.add(st.id);
@@ -2575,7 +2583,7 @@ function finish(){
 
 /* 말로 고치기 (규칙 기반) */
 const ALIASES={
-  tone:{banmal:["반말"],warm:["존댓말","친근"],calm:["차분"],lively:["활기","유튜버","신나게"],dry:["담담"],funny:["유머","웃기게","재밌게","농담"]},
+  tone:{banmal:["반말"],warm:["존댓말","친근"],calm:["차분"],lively:["활기","유튜버","신나게"],dry:["담담"],funny:["유머","웃기게","재밌게","농담"],psa:["공익광고","공익 광고","캠페인"],adcopy:["광고","홍보","카피"],emotion:["감성","에세이"],poem:["시처럼","운율"],drama:["드라마","긴장감","예고편"],news:["뉴스","다큐"],shorts:["빠르게","빠른 템포"],eumseum:["음슴"],ssul:["썰"],chic:["시크"]},
   ending:{loop:["루프"],comment:["댓글"],next:["다음 편","예고"],sum:["정리"],answer:["정답"],think:["생각할"],act:["실천","행동"]},
   hook:{quiz:["퀴즈"],fact:["의외","놀라운 사실"],result:["결과 먼저","결과부터"],conflict:["갈등"],pov:["pov","POV","시점"],constraint:["조건"],mistake:["실수"],stamp:["정체","1일 차","하루"],daily:["일상"],whatif:["만약"]},
   speaker:{teacher:["선생님"],narrator:["내레이터","나레이터"],me:["1인칭","나로"],friend:["친구","선배"],person:["본인","인물이"]},
@@ -2827,7 +2835,7 @@ document.addEventListener("click",e=>{
     const key=b.dataset.key,v=b.dataset.v;
     if(editMode){editing={key,v};renderOutline();return}
     setVal(key,v);
-    if(key==="form"){cur.length=v==="long"?"300":"60";cur.imgRatio=v==="long"?"16:9":"9:16"}
+    if(key==="form"){cur.imgRatio=v==="long"?"16:9":"9:16"}
     if(key==="mode"){const gl=genreList();cur.genre=gl[0].v;purgeGenreSteps()}
     if(key==="genre"){purgeGenreSteps();const g=findGenre(v);if(g){cur.hook=g.hooks[0];cur.ending=g.end;cur.speaker=g.sp}}
     renderAll();
@@ -3360,20 +3368,20 @@ function start(){
 function openScript(){
   saveCharSafe();
   if(chatOn()){setStage(chatStage);window.scrollTo({top:0});return}
-  const c=S.character||{};if(c.subj&&!cur.imgChar){cur.imgUse="yes";cur.imgRef="ref";cur.imgChar=c.subj;if(c.style)cur.imgStyle=styleToImg(c.style)}
+  const c=S.character||{};if(c.subj&&!cur.imgChar){cur.imgUse="yes";cur.imgRef="ref";cur.imgChar=c.subj;cur.imgStyle=""}
   setStage("chat");window.scrollTo({top:0});beginChat();
 }
 function chooseForm(v){
   if(chatOn()&&cur.form===v){setStage(chatStage);window.scrollTo({top:0});return}
   if(chatOn()){const keep=cur.colors;cur=JSON.parse(JSON.stringify(DEF));cur.colors=keep;answered.clear();log.innerHTML="";setQuick("");openRow=null}
-  const c=S.character||{};if(c.subj&&!cur.imgChar){cur.imgUse="yes";cur.imgRef="ref";cur.imgChar=c.subj;if(c.style)cur.imgStyle=styleToImg(c.style)}
+  const c=S.character||{};if(c.subj&&!cur.imgChar){cur.imgUse="yes";cur.imgRef="ref";cur.imgChar=c.subj;cur.imgStyle=""}
   cur.form=v;cur.imgRatio=v==="long"?"16:9":"9:16";answered.add("form");
   setStage("chat");window.scrollTo({top:0});beginChat();
 }
 function beginChat(){
   phase="ask";
   // 자주 쓰던 설정은 미리 채워 두되, 질문은 그대로 함(추천 표시)
-  ["grade","subject","viewer","tone","imgStyle"].forEach(k=>{const t=topOf(k);if(t)cur[k]=t});
+  ["grade","subject","viewer","tone"].forEach(k=>{const t=topOf(k);if(t)cur[k]=t});
   const D=(S.profile&&S.profile.defaults)||{};["grade","subject","tone"].forEach(k=>{if(D[k])cur[k]=D[k]});
   if(S.lastColors)cur.colors={...S.lastColors};
   renderAll();
@@ -3424,7 +3432,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792782565"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792782959"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3619,7 +3627,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792782565";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792782959";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -3806,7 +3814,7 @@ let sessT;const sessObs=new MutationObserver(()=>{clearTimeout(sessT);sessT=setT
 new MutationObserver(()=>{clearTimeout(sessT);sessT=setTimeout(saveSess,300)}).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});
 addEventListener("pagehide",saveSess);
 (function boot(){const loc=local.load();if(loc&&!loc.owner)S=fix(loc);
-  ["grade","subject","viewer","tone","imgStyle"].forEach(k=>{const t=topOf(k);if(t)cur[k]=t});if(S.lastColors)cur.colors={...S.lastColors};
+  ["grade","subject","viewer","tone"].forEach(k=>{const t=topOf(k);if(t)cur[k]=t});if(S.lastColors)cur.colors={...S.lastColors};
   let keep="";try{keep=sessionStorage.getItem("ymStage")||""}catch(_){}
   renderAll();start();loadSess();initFirebase();
   /* 새로고침해도 보던 탭 그대로 (대화 내용은 처음부터) */
