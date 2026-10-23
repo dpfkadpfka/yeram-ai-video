@@ -2662,7 +2662,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style")&&cv("ratio"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(location.hostname.endsWith("github.io")){if(!f.src)f.src="models/index.html"}else{$("#modelsSec").innerHTML=`<div class="card mdl-out"><h2>브루 AI 모델 비교</h2><p>이 화면은 실제 사이트에서 열려요.</p><a class="btn primary lg" href="https://dpfkadpfka.github.io/yeram-ai-video/models/index.html" target="_blank" rel="noopener">새 창에서 모델 비교 열기 ↗</a></div>`}}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const CAMS=["천천히 앞으로 다가가기 (slow dolly in)","옆으로 천천히 흘러가기 (slow pan)","인물을 따라가기 (tracking shot)","위로 올라가며 넓게 보여 주기 (crane up)","인물 주위를 반 바퀴 돌기 (orbit)","천천히 뒤로 물러나기 (dolly out)"];
