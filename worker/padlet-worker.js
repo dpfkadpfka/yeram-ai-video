@@ -34,6 +34,17 @@ export default {
     const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: cors });
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
     const u = new URL(req.url), id = u.searchParams.get("id") || "", act = u.searchParams.get("act") || "";
+    if (act === "vmodels") {
+      let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
+      const tok = await vertexToken(sa); const out = [];
+      let pt = "";
+      for (let i = 0; i < 8; i++) {
+        const r = await fetch(`https://aiplatform.googleapis.com/v1beta1/publishers/google/models?pageSize=100${pt ? "&pageToken=" + pt : ""}`, { headers: { authorization: "Bearer " + tok, "x-goog-user-project": sa.project_id } });
+        const d = await r.json(); (d.publisherModels || []).forEach(m => { if (/gemini|imagen/i.test(m.name)) out.push(m.name.split("/").pop() + ":" + (m.launchStage || "")); });
+        if (!d.nextPageToken) { if (!r.ok) out.push("ERR " + JSON.stringify(d).slice(0, 200)); break; } pt = d.nextPageToken;
+      }
+      return J({ out });
+    }
     if (req.method === "POST" && act === "img") {
       // 나노바나나(Vertex AI) 이미지 생성: 구글 로그인 사용자만, 하루 기본 이미지 5장·캐릭터 시트 5장, 기록은 Firestore imglog
       const b = await req.json().catch(() => ({}));
