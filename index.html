@@ -1138,6 +1138,12 @@ body[data-stage="char"]:not(.cfresh) .pgh,body[data-stage="split"] .pgh{max-widt
 .ptg{display:grid;gap:10px;padding:12px 14px}
 #shotStage .sclist,#shotStage .scres-h,#sceneStage .sclist,#sceneStage .scres-h{max-width:1000px;margin-left:auto;margin-right:auto}
 @media (max-width:600px){.cmp{border-radius:20px;padding:10px 10px 8px}.cmp textarea{font-size:16px;min-height:72px}.ppop,.cmp .mdd-l{position:fixed;left:12px!important;right:12px!important;top:auto;bottom:84px;min-width:0}}
+.mdlpop{position:fixed;inset:0;z-index:200;background:rgba(20,16,14,.45);display:grid;place-items:center;padding:24px}
+.mdlpop[hidden]{display:none}
+.mdlpop-c{width:min(1200px,100%);height:min(88vh,1000px);background:var(--paper);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 80px -30px rgba(0,0,0,.5);animation:hbIn .25s ease-out}
+.mdlpop-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}.mdlpop-h b{font-size:16px}
+.mdlpop iframe{flex:1;width:100%;border:0}
+@media (max-width:600px){.mdlpop{padding:0}.mdlpop-c{height:100%;border-radius:0}}
 /* 메뉴 묶음 이름 */
 @media (min-width:901px){
  header.side .sidenav .snlab{display:block!important;width:60px;height:auto;margin:10px auto 2px!important;padding:12px 0 2px!important;border-top:1px solid var(--line);font-size:11px!important;font-weight:800;color:#A49C97;letter-spacing:0;text-align:center;line-height:1.2}
@@ -1254,6 +1260,7 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
             <div class="mq mq-reveal" id="mq" aria-label="예람쌤이 만든 영상과 캐릭터"><div class="mq-row" data-dir="l"></div><div class="mq-row" data-dir="r"></div></div>
   </section>
 
+  <div class="mdlpop" id="mdlPop" role="dialog" aria-modal="true" aria-label="모델 비교" hidden><div class="mdlpop-c"><div class="mdlpop-h"><b>모델 비교</b><button type="button" class="ibtn" id="mdlPopX" aria-label="닫기">✕</button></div><iframe id="mdlPopF" title="모델 비교"></iframe></div></div>
   <div class="pgh" id="pgh" role="region" aria-labelledby="pghT" hidden>
     <div class="pgh-top">
       <div class="pgh-l"><span class="pgh-eye" id="pghEye"></span><h2 class="pgh-t" id="pghT"></h2><p class="pgh-d" id="pghD"></p></div>
@@ -2943,13 +2950,15 @@ PGH.split=PGH.chat;
 function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h.hidden=!P;if(!P)return;
   $("#pghEye").textContent=P.eye;$("#pghT").textContent=P.t;$("#pghD").textContent=P.d;
   $("#pghMeta").innerHTML=P.meta.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("");
-  const L=$("#pghLink");L.hidden=!P.link;if(P.link){L.textContent=P.link[0];L.dataset.models="";L.setAttribute("role","button");L.href="#"}
+  const L=$("#pghLink");L.hidden=!P.link;if(P.link){L.textContent=P.link[0];L.setAttribute("role","button");L.href="#"}
   $("#pghHelpB").textContent=P.helpB?P.helpB+"란?":"사용 방법";
   const avaSrc=($(".ab-ava")||{}).src||"";$("#pghHelp").innerHTML=`<div class="hb"><img class="hb-ava" src="${avaSrc}" alt="예람쌤"><div class="hb-bub"><p class="hb-hi"><b>예람쌤</b>${esc(P.hi)}</p><ol>${P.help.map(([k,b,t])=>`<li><span class="hk">${k}</span><div><b>${b}</b><small>${t}</small></div></li>`).join("")}</ol><button type="button" class="btn sm primary hb-ok">알겠어요</button></div></div>`;
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>e.preventDefault());
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
+$("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
 /* 브루 칸 새로고침 */
 document.addEventListener("click",e=>{const b=e.target.closest("[data-refresh]");if(!b)return;const k=b.dataset.refresh;
