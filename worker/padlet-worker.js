@@ -46,13 +46,13 @@ export default {
       if (!post) return J({ error: "post" }, 400);
       const ok = (b.token && b.token === await sign(env.PADLET_KEY, post)) || await isAdmin(b.idToken);
       if (!ok) return J({ error: "forbidden" }, 403);
-      await env.HIDE.put(post, "1");
+      await env.HIDE.put("h:" + post, "1");
       ctx.waitUntil(cache.delete(key));
       return J({ ok: true });
     }
     if (req.method === "POST") {
       const b = await req.json().catch(() => ({}));
-      const subject = String(b.subject || "").slice(0, 120), body = String(b.body || "").slice(0, 2000), url = String(b.url || "");
+      const subject = String(b.subject || "").slice(0, 120), body = String(b.body || "").slice(0, 2000), url = String(b.url || ""), by = String(b.by || "").slice(0, 30), intro = String(b.intro || "").slice(0, 300);
       if (!subject || !/^https:\/\/res\.cloudinary\.com\//.test(url)) return J({ error: "bad" }, 400);
       const send = att => fetch(`https://api.padlet.dev/v1/boards/${id}/posts`, { method: "POST", headers: H(env.PADLET_KEY), body: JSON.stringify({ data: { type: "post", attributes: { content: { subject, body, attachment: att } } } }) });
       let r = await send({ url, caption: "" });
@@ -61,19 +61,22 @@ export default {
       if (!r.ok) return J({ ok: false, status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
       const d = await r.json().catch(() => ({}));
       const pid = String(d?.data?.id || "");
+      if (pid && env.HIDE) await env.HIDE.put("m:" + pid, JSON.stringify({ by, intro }));
       return J({ ok: true, id: pid, token: pid ? await sign(env.PADLET_KEY, pid) : "" });
     }
     const hit = await cache.match(key);
     if (hit) return new Response(hit.body, { headers: cors });
     const r = await fetch(`https://api.padlet.dev/v1/boards/${id}?include=posts,sections`, { headers: H(env.PADLET_KEY) });
     if (!r.ok) return J({ error: r.status }, 502);
-    const hidden = new Set(env.HIDE ? (await env.HIDE.list()).keys.map(k => k.name) : []);
+    const hidden = new Set(env.HIDE ? (await env.HIDE.list({ prefix: "h:" })).keys.map(k => k.name.slice(2)) : []);
+    const meta = {};
+    if (env.HIDE) { const ks = (await env.HIDE.list({ prefix: "m:" })).keys; await Promise.all(ks.map(async k => { try { meta[k.name.slice(2)] = JSON.parse(await env.HIDE.get(k.name)) } catch (e) {} })); }
     const j = await r.json(), inc = j.included || [];
     const sections = Object.fromEntries(inc.filter(x => x.type === "section").map(x => [x.id, x.attributes?.title || ""]));
     const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
       const a = x.attributes || {}, c = a.content || {}, at = c.attachment || {};
       return { id: x.id, subject: strip(c.subject), body: strip(c.body), url: at.url || "", caption: at.caption || "", color: a.color || "",
-        section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: a.author?.name || a.authorName || "" };
+        section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: meta[x.id]?.by || a.author?.name || a.authorName || "", intro: meta[x.id]?.intro || "" };
     }).sort((p, q) => String(q.at).localeCompare(String(p.at)));
     const out = JSON.stringify({ board: { id, title: j.data?.attributes?.title || "" }, posts });
     ctx.waitUntil(cache.put(key, new Response(out, { headers: { "Cache-Control": "max-age=10" } })));
