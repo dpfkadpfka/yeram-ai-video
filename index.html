@@ -1261,6 +1261,11 @@ body[data-stage="models"] #modelsFrame{height:calc(100vh - 170px)}
 .icopick{display:grid;grid-template-columns:repeat(auto-fill,40px);gap:6px;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px;margin:2px 0 4px 30px}
 .icopick[hidden]{display:none}
 .svpop-c{width:min(720px,100%)}
+.pktiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px}
+.pktile{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:4px;display:grid;gap:3px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;text-align:center}
+.pktile img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
+.pktile[aria-pressed="true"]{border-color:var(--accent);background:#FFF4F8;color:var(--accent-deep)}
+.sbsub{margin-top:4px}
 /* 메뉴 묶음 이름 */
 .snlab-li{list-style:none}
 @media (max-width:900px){.snlab-li{display:none!important}}
@@ -2226,6 +2231,9 @@ function botHTML(html,cls){const d=document.createElement("div");d.className="ms
 function me(text,step){const d=document.createElement("div");d.className="msg me";d.textContent=text;if(step)d.dataset.step=step;d.title="눌러서 이 답 고치기";log.append(d);log.scrollTop=log.scrollHeight}
 function setQuick(html){quick.innerHTML=html}
 
+/* 주제 예시: 많은 예시 중 4개를 그때그때 섞어서 */
+const EX_POOL={"concept": ["북극곰의 털 색깔은 무슨 색일까?", "구름은 왜 떠 있을까?", "분수의 크기 비교", "무지개는 왜 일곱 색일까?", "낮과 밤은 왜 생길까?", "그림자 길이가 바뀌는 이유", "소리는 어떻게 들릴까?", "물의 순환", "식물은 어떻게 숨을 쉴까?", "자석의 N극과 S극", "받아올림이 있는 덧셈", "곱셈구구 9단의 비밀", "우리 몸의 뼈는 몇 개?", "달의 모양이 바뀌는 이유", "전기는 어떻게 흐를까?", "계절이 바뀌는 이유", "공기에도 무게가 있을까?", "소수와 분수의 관계", "지도 기호 읽는 법", "민주주의란 무엇일까?"], "quiz": ["바나나는 나무에서 열릴까?", "우리나라에서 가장 긴 강은?", "1L와 1kg은 같을까?", "문어의 심장은 몇 개?", "세계에서 가장 큰 사막은?", "한글은 누가 만들었을까?", "펭귄은 북극에 살까?", "거미는 곤충일까?", "무지개 맨 위 색깔은?", "물은 몇 도에서 끓을까?", "독도는 몇 개의 섬일까?", "태양계에서 가장 큰 행성은?", "고래는 물고기일까?", "1년은 몇 주일까?", "우리 몸에서 가장 큰 기관은?"], "person": ["세종대왕", "장영실", "유관순", "이순신", "신사임당", "안중근", "정약용", "허준", "김구", "방정환", "선덕여왕", "광개토대왕", "윤동주", "김만덕", "을지문덕"], "exp": ["달걀이 소금물에 뜨는 이유", "콩나물 기르기 관찰", "정전기로 풍선 붙이기", "식초와 베이킹소다 화산", "물에 뜨는 것과 가라앉는 것", "빨대 피리 만들기", "얼음이 녹는 시간 비교", "양파 껍질 세포 관찰", "종이컵 전화기", "색깔 물 섞기", "거울로 빛 반사하기", "강낭콩 싹 틔우기", "자석으로 클립 옮기기", "증발 관찰하기", "무지개 설탕물 탑"], "book": ["마당을 나온 암탉 - 황선미", "어린 왕자 - 생텍쥐페리", "강아지똥 - 권정생", "나쁜 어린이 표 - 황선미", "샬롯의 거미줄 - E.B. 화이트", "긴긴밤 - 루리", "책 먹는 여우 - 프란치스카 비어만", "수학 도둑 - 송도수", "갈매기의 꿈 - 리처드 바크", "아낌없이 주는 나무 - 셸 실버스타인", "마틸다 - 로알드 달", "구름빵 - 백희나", "만복이네 떡집 - 김리리", "몽실 언니 - 권정생"], "safety": ["엘리베이터에 갇혔을 때", "횡단보도 초록불 깜빡일 때", "모르는 사람이 말을 걸 때", "지진이 나면", "불이 났을 때 대피", "물놀이할 때 지킬 것", "킥보드 탈 때", "교실에서 뛰다가 다쳤을 때", "미세먼지 많은 날", "개인정보를 물어볼 때", "놀이터 미끄럼틀 안전", "음식 알레르기가 있을 때", "길을 잃었을 때", "사이버 폭력을 봤을 때", "가위·칼 안전하게 쓰기"], "career": ["소방관", "게임 개발자", "수의사", "유튜버", "파티시에", "항공기 조종사", "간호사", "웹툰 작가", "로봇 공학자", "기상 캐스터", "동물 사육사", "건축가", "AI 개발자", "프로게이머", "약사"], "notice": ["현장체험학습 준비물", "학예회 일정", "방학 생활 안내", "운동회 안내", "학부모 상담 주간", "급식 알레르기 안내", "등하교 안전 수칙", "독서 행사 안내", "겨울방학 과제", "새 학년 준비물", "교실 규칙 소개", "학급 행사 결과", "졸업식 안내", "시험 안내", "감기 예방 수칙"], "info": ["냉장고에 넣으면 안 되는 과일", "비행기 창문이 둥근 이유", "잠 잘 오는 습관", "물을 많이 마시면 생기는 일", "고양이가 상자를 좋아하는 이유", "하품은 왜 옮을까", "손 씻기 30초의 효과", "눈 건강 지키는 습관", "라면 맛있게 끓이는 과학", "쓰레기 분리배출 헷갈리는 것", "전기요금 아끼는 법", "배터리 오래 쓰는 법"], "story": ["편의점 알바 첫날 생긴 일", "택배 잘못 받은 썰", "소개팅에서 생긴 반전", "첫 출근 날 실수", "버스에서 생긴 일", "교실에서 생긴 웃긴 일", "엄마 몰래 강아지 키운 썰", "단톡방 실수", "시험 전날 벌어진 일", "이사 가던 날"], "drama": ["첫 출근날 사장님이 내 전 남친", "시험 전날 바뀐 시험지", "엘리베이터에 갇힌 앙숙 둘", "전학 첫날 짝꿍의 비밀", "잃어버린 일기장", "10년 만에 열어 본 타임캡슐", "가짜 생일 파티", "마지막 수업 시간"], "mystery": ["새벽 3시 엘리베이터", "아무도 없는 교실의 발자국", "매일 같은 시간에 오는 문자", "학교 괴담 4층 화장실", "사라진 반 친구 이름표", "도서관 마지막 책", "멈춰 버린 교실 시계", "운동장 한가운데 발자국"], "history": ["거북선이 처음 나타난 날", "타이타닉 마지막 무선", "측우기를 만든 장영실", "훈민정음 반포", "3·1 운동의 하루", "달 착륙 그날", "팔만대장경 이야기", "첨성대의 비밀", "직지심체요절", "올림픽의 시작"], "rank": ["세계에서 가장 비싼 과일", "한국인이 가장 많이 틀리는 맞춤법", "잠 깨는 데 좋은 음식", "세계에서 가장 큰 동물", "가장 빠른 동물 TOP5", "한국에서 가장 높은 산", "가장 오래 사는 동물", "세계에서 가장 긴 다리", "인기 많은 반려동물", "가장 작은 나라"], "howto": ["옷에 묻은 김칫국물 지우기", "휴대폰 사진 용량 줄이기", "5분 만에 책상 정리", "운동화 하얗게 빨기", "종이비행기 멀리 날리기", "줄넘기 이단뛰기", "리코더 잘 부는 법", "글씨 예쁘게 쓰기", "가방 정리 꿀팁", "줄임말 없이 문자 쓰기"], "promo": ["동네 빵집 신메뉴", "학교 앞 문구점", "우리 반 바자회", "북카페 오픈", "공방 원데이 클래스", "플리마켓 안내", "도서관 행사", "학교 축제 부스"], "review": ["새로 산 무선 이어폰", "요즘 유행 간식", "학습용 태블릿", "에듀테크 앱", "보드게임", "스마트 워치", "캠핑 의자", "필통 정리템"], "motive": ["작심삼일 극복법", "시험 앞둔 나에게", "새 학기 다짐", "하루 10분 독서", "실수해도 괜찮아", "꾸준함의 힘", "작은 습관 하나", "내일의 나에게"], "news": ["이번 주 날씨", "새로 바뀐 교통 법규", "올해 달라지는 것", "우주 탐사 소식", "기후 변화 소식", "스포츠 하이라이트", "과학 신기술", "우리 지역 행사"], "animal": ["문어는 똑똑할까?", "벌이 사라지면", "펭귄의 하루", "나무늘보는 왜 느릴까", "고래의 노래", "개미의 협동", "카멜레온 색 바꾸기", "철새는 어떻게 길을 찾을까", "반딧불이의 빛", "해파리의 비밀"], "tale": ["토끼와 거북이 다시 쓰기", "해님 달님", "혹부리 영감", "아기 돼지 삼형제", "금도끼 은도끼", "흥부와 놀부", "콩쥐 팥쥐", "선녀와 나무꾼", "의좋은 형제", "눈의 여왕"], "recipe": ["전자레인지 계란찜", "3분 김치볶음밥", "떡꼬치", "주먹밥", "과일 꼬치", "토스트", "샌드위치", "팥빙수", "오므라이스", "떡볶이"], "travel": ["경주 하루 코스", "제주 오름", "부산 바다 산책", "서울 고궁 나들이", "강릉 커피 거리", "전주 한옥마을", "여수 밤바다", "우리 동네 숨은 공원"], "vlog": ["선생님의 출근길", "방과 후 교실", "주말 캠핑", "도서관 하루", "시험 기간 하루", "등교 준비", "방학 첫날", "운동회 날"], "vs": ["짜장면 vs 짬뽕", "여름 vs 겨울", "강아지 vs 고양이", "종이책 vs 전자책", "산 vs 바다", "아침형 vs 저녁형", "버스 vs 지하철", "손글씨 vs 타자"]};
+function exPick(g){if(!g)return[];const pool=[...new Set((EX_POOL[g.v]||[]).concat(g.ex||[]))];for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}return pool.slice(0,4)}
 /* 질문 단계 */
 const answered=new Set(); let curStep=null, phase="ask"; // ask | review | done
 function steps(){
@@ -2234,7 +2242,7 @@ function steps(){
   A.push({id:"mode",key:"mode",ask:()=>`좋아요, ${cur.form==="long"?"롱폼":"숏폼"}으로 할게요. 어떤 영상이에요?`});
   A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
   A.push({id:"length",key:"length",ask:()=>cur.form==="long"?"영상 길이는요? 길수록 글자 수가 많아져서, 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요.":"영상 길이는요? 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요."});
-  A.push({id:"topic",key:"topic",type:"text",ask:()=>(g?g.topicQ:"주제가 뭐예요?")+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>g?g.ex:[]});
+  A.push({id:"topic",key:"topic",type:"text",ask:()=>(g?g.topicQ:"주제가 뭐예요?")+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>exPick(g)});
   A.push({id:"focus",key:"focus",type:"text",skip:true,when:()=>cur.topic&&cur.topic.replace(/\s/g,"").length<7,
     ask:()=>`‘${cur.topic}’은(는) ${secLabel()}에 담기엔 조금 넓어요. 숏폼은 하나만 확실히 남기는 게 좋아요.\n이 영상에서 딱 하나 전할 것은 뭐예요?`});
   if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"누가 보나요? 정하지 않으면 초·중·고 누구나 알아듣게 써 달라고 할게요."});A.push({id:"subject",key:"subject",ask:()=>"교과는요? 정해진 과목이 없으면 ‘과목 없음’을 고르세요."})}
@@ -2259,7 +2267,7 @@ function ask(st){
   bot(st.ask());
   if(st.type==="text"){
     const ex=st.ex?st.ex():[];
-    setQuick(ex.map(e=>`<button type="button" class="opt" data-qtext="${esc(e)}">${esc(e)}</button>`).join("")+(st.skip?`<button type="button" class="opt" data-qskip>건너뛰기</button>`:""));
+    setQuick(ex.map(e=>`<button type="button" class="opt" data-qtext="${esc(e)}">${esc(e)}</button>`).join("")+(ex.length?`<button type="button" class="opt optskip" data-exmore>↻ 다른 예시</button>`:"")+(st.skip?`<button type="button" class="opt" data-qskip>건너뛰기</button>`:""));
     $("#say").placeholder=st.ph||"여기에 써 주세요";$("#say").focus({preventScroll:true});
   }else{
     let rec=recFor(st.key), fav=topOf(st.key);
@@ -2424,6 +2432,7 @@ document.addEventListener("click",e=>{
   let b;
   if((b=t.closest("[data-qkey]"))){answerChoice(b.dataset.qkey,b.dataset.v);return}
   if((b=t.closest("[data-qtext]"))){answerText(b.dataset.qtext);return}
+  if(t.closest("[data-exmore]")){const btns=[...quick.querySelectorAll("[data-qtext]")];const cur=btns.map(x=>x.dataset.qtext);const gg=curGenre();let nx=exPick(gg);let tries=0;while(nx.every(x=>cur.includes(x))&&tries++<5)nx=exPick(gg);btns.forEach((x,i)=>{if(nx[i]){x.dataset.qtext=nx[i];x.textContent=nx[i]}});return}
   if(t.closest("[data-qskip]")){const st=curStep;answered.add(st.id);me("건너뛰기",st.id);afterAnswer(st.key);return}
   if((b=t.closest("[data-my]"))){openMy(b.dataset.my);return}
   if((b=t.closest("[data-tab]"))){showTab(b.dataset.tab);return}
@@ -2996,7 +3005,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792771442"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792771735"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3161,7 +3170,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792771442";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792771735";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey]");if(!a)return;e.preventDefault();const f=$("#svPopF");if(!f.src)f.src=a.href;$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow=""};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -3206,16 +3215,14 @@ function cAsk(sec,k){
     sb.sel={};sb.sum=null;sb.dirty=false;subjPanel();
   }else if(sec==="act"){
     cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
-    cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
+    pkOpen("act");
   }else if(sec==="place"){
     cbot("<b>장소</b> · 배경은요? 기본은 흰 배경이에요. 투명 배경을 고르면 PNG 파일로 달라고 써 둘게요.");
-    cQuick.innerHTML=chips(PLACE_O,t=>placeLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
+    pkOpen("place");
   }else if(sec==="style"){
-    cbot("<b>스타일</b> · 그림체는요? 왼쪽에서 그림을 눌러 골라 주세요. 원하는 게 없으면 여기에 직접 써도 돼요. 예: 동화책 같은 연필 그림");
+    cbot("<b>스타일</b> · 그림체는요? 그림을 눌러 고르거나, 아래 칸에 직접 써도 돼요. 예: 동화책 같은 연필 그림");
     const animal=sb.sel.kind==="동물", list=STYLES.filter(x=>animal?x.g==="동물":x.g==="인물");
-    cQuick.innerHTML=`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
-    $("#sPickGrid").innerHTML=list.map(x=>`<button type="button" class="stile" data-cstyle="${x.id}" aria-pressed="${cv("style")===x.t}"><span class="im">${STYLE_IMG[x.id]?`<img src="${STYLE_IMG[x.id]}" alt="">`:"예시 준비 중"}</span>${esc(x.t)}</button>`).join("");
-    $("#sPick").hidden=false;$("#sPick").scrollIntoView({behavior:"smooth",block:"nearest"});
+    pkOpen("style");
   }else if(sec==="ratio"){
     cbot("마지막으로 몸 비율은요? 이모티콘처럼 단순하게 할지, 늘씬하게 할지 골라 주세요.");
     cQuick.innerHTML=chips(sb.sel.kind==="동물"?RATIO_A:RATIO_P,t=>cv("ratio")===t,"data-cv");
@@ -3227,6 +3234,15 @@ function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
   const row=(g)=>{const cur=sb.sel[g.k];const on=t=>g.m?(cur||[]).includes(t):cur===t;return `<div class="sbrow"><span class="sbl">${g.k==="kind"?"누구":esc(g.t)}</span><div class="sbc">${g.o.map(t=>`<button type="button" class="opt" data-sk="${g.k}" data-sv="${esc(t)}" aria-pressed="${on(t)}">${esc(t)}</button>`).join("")}</div></div>`};
   cQuick.innerHTML=`<div class="sbpanel">${row(SB_KIND)}${k?G.filter(g=>g.k!=="kind").map(row).join(""):""}</div><div class="sbact">${true?`<input class="sbsum" id="sbSum" value="${esc(sb.sum!=null?sb.sum:sbCompose())}" placeholder="골라도 되고 여기서 직접 고쳐도 돼요" aria-label="피사체 내용"><button type="button" class="opt sbdone" data-sbdone>다 골랐어요 →</button>`:""}<button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
 }
+/* 동작·장소·스타일: 팝업에서 고르고, 칸에서 고치고, [다음]으로 넘어가기 */
+let pk=null;
+function pkList(sec){if(sec==="act")return ACT_O.map(t=>({v:t}));if(sec==="place")return PLACE_O.map(t=>({v:t}));const animal=sb.sel.kind==="동물";return STYLES.filter(x=>animal?x.g==="동물":x.g==="인물").map(x=>({v:x.t,img:STYLE_IMG[x.id]}))}
+function pkOpen(sec){const curv={act:actLabel(),place:placeLabel(),style:cv("style")}[sec]||"";pk={sec,sel:curv?curv.split(/\s*,\s*/).filter(Boolean):[],sum:null,dirty:false,multi:sec==="act"};pkPaint()}
+function pkPaint(){const L=pkList(pk.sec),on=v=>pk.sel.includes(v),val=pk.sum!=null?pk.sum:pk.sel.join(", ");
+  const items=pk.sec==="style"?`<div class="pktiles">${L.map(x=>`<button type="button" class="pktile" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${x.img?`<img src="${x.img}" alt="">`:""}<span>${esc(x.v)}</span></button>`).join("")}</div>`:`<div class="sbc">${L.map(x=>`<button type="button" class="opt" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${esc(x.v)}</button>`).join("")}</div>`;
+  cQuick.innerHTML=`<div class="sbpanel">${items}</div><div class="sbact"><input class="sbsum" id="pkSum" value="${esc(val)}" placeholder="골라도 되고 여기서 직접 써도 돼요" aria-label="내용"><button type="button" class="opt sbdone" data-pkdone>다음 →</button></div><div class="sbact sbsub"><button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button></div>`}
+function pkCommit(){const v=($("#pkSum")||{}).value;const t=(v||"").trim();if(!t){toast("고르거나 써 주세요");return}const sec=pk.sec;pk=null;cme(t);
+  if(sec==="act")cSet("act",t==="기본 포즈(정면 전신)"?ACT_FULL:t.replace("기본 포즈(정면 전신)",ACT_FULL));else if(sec==="place")cSet("place",t==="투명 배경(PNG)"?PLACE_PNG:t);else cSet("style",t);cAdvance()}
 function actLabel(){const v=cv("act");return v===ACT_FULL?"기본 포즈(정면 전신)":v}
 function placeLabel(){const v=cv("place");return v===PLACE_PNG?"투명 배경(PNG)":v}
 const ACT_FULL="정면을 바라보고 똑바로 선 기본 포즈, 머리부터 발끝까지 전신";
@@ -3240,9 +3256,9 @@ function cAdvance(){
   cDone();
 }
 let cDoneOnly=false;
-function cDone(){cq=null;$("#sPick").hidden=true;cQuick.innerHTML=`<button type="button" class="opt" data-goscript>대본 프롬프트 만들기</button>`;
+function cDone(){cq=null;pk=null;$("#sPick").hidden=true;document.body.classList.remove("cfresh");cQuick.innerHTML=`<button type="button" class="opt" data-goscript>대본 프롬프트 만들기</button>`;
   cbot(`캐릭터 설정 완성! 순서대로 눌러 주세요.<div class="cdone"><a class="cd-btn" href="https://chatgpt.com/" target="_blank" rel="noopener" data-ccopy="cBase"><b>① 기본 이미지</b><span>복사하고 ChatGPT 열기</span></a><a class="cd-btn" href="https://chatgpt.com/" target="_blank" rel="noopener" data-ccopy="cSheet"><b>② 캐릭터 시트</b><span>그림이 나오면, 같은 대화창에 이어서</span></a><a class="cd-btn" href="https://www.miricanvas.com/ko/miricle/ai-character-maker" target="_blank" rel="noopener" data-ccopy="cBase" data-miricle><b>또는 미리캔버스</b><span>복사하고 미리캔버스 캐릭터 만들기 열기</span></a></div>바꾸고 싶은 건 왼쪽 줄을 누르면 다시 물어볼게요.`);renderCards()}
-function cSet(k,v){if(k!=="subj")document.body.classList.remove("cfresh");$("#c_"+k).value=v;renderChar();saveChar();renderCards();if($("#cBase").dataset.edited||$("#cSheet").dataset.edited)toast("직접 고친 프롬프트는 그대로 뒀어요. 바뀐 내용을 넣으려면 ‘피동장스로 다시 채우기’를 누르세요")}
+function cSet(k,v){$("#c_"+k).value=v;renderChar();saveChar();renderCards();if($("#cBase").dataset.edited||$("#cSheet").dataset.edited)toast("직접 고친 프롬프트는 그대로 뒀어요. 바뀐 내용을 넣으려면 ‘피동장스로 다시 채우기’를 누르세요")}
 function cPick(t){
   const q=cq;if(!q)return;
   if(q.sec==="subj"){
@@ -3303,6 +3319,9 @@ document.addEventListener("click",e=>{const t=e.target;let b;
     {const cur=$("#sbSum");if(cur&&sb.dirty){let v=cur.value;const on=k==="kind"?!!sb.sel.kind:(g.m?(sb.sel[k]||[]).includes(v0):sb.sel[k]===v0);
       if(on&&!v.includes(v0))v=v?v.replace(/[,\s]+$/,"")+", "+v0:v0;if(!on)v=v.split(/\s*,\s*/).filter(x=>x&&x!==v0).join(", ");sb.sum=v}else sb.sum=null}
     subjPanel();return}
+  if((b=t.closest("[data-pkv]"))&&pk){const v=b.dataset.pkv,i=pk.sel.indexOf(v);if(pk.multi){i>=0?pk.sel.splice(i,1):pk.sel.push(v)}else pk.sel=i>=0?[]:[v];
+    if(pk.dirty){let s0=$("#pkSum").value;const onn=pk.sel.includes(v);if(onn&&!s0.includes(v))s0=s0?s0.replace(/[,\s]+$/,"")+", "+v:v;if(!onn)s0=s0.split(/\s*,\s*/).filter(x=>x&&x!==v).join(", ");if(!pk.multi&&onn)s0=v;pk.sum=s0}else pk.sum=null;pkPaint();return}
+  if(t.closest("[data-pkdone]")&&pk){pkCommit();return}
   if(t.closest("[data-sbdone]")){const extra=$("#cSay").value.trim();$("#cSay").value="";const sv=($("#sbSum")||{}).value;const v=[(sv!=null?sv:sbCompose()).trim(),extra].filter(Boolean).join(", ");if(!v){toast("피사체를 고르거나 써 주세요");return}sb.sum=null;sb.dirty=false;cme(v);cSet("subj",v);if(extra)sb.sel.extra=extra;return cAdvance()}
   if(t.closest("[data-cback]")){const q=cq;if(!q)return;const O=["subj","act","place","style"],i=O.indexOf(q.sec);if(i<1)return;const pv=O[i-1];cme("← 이전 질문");cDoneOnly=false;
     if(pv==="subj"){const inp=$("#cSay");inp.value=cv("subj")||"";cAsk("subj","kind");setTimeout(()=>{inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}},50)}else cAsk(pv);
@@ -3314,8 +3333,8 @@ document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cask]"))){const k=b.dataset.cask;cDoneOnly=true;if(k==="subj"){cAsk("subj","kind")}else cAsk(k);return}
   if((b=t.closest("[data-cgo]"))){$("#charStage .cp-out").scrollIntoView({behavior:"smooth",block:"start"});return}
 });
-document.addEventListener("input",e=>{if(e.target.id==="sbSum"){sb.sum=e.target.value;sb.dirty=true}});
-document.addEventListener("keydown",e=>{if(e.target.id==="sbSum"&&e.key==="Enter"&&!e.isComposing){e.preventDefault();const d=document.querySelector("[data-sbdone]");if(d)d.click()}});
+document.addEventListener("input",e=>{if(e.target.id==="sbSum"){sb.sum=e.target.value;sb.dirty=true}if(e.target.id==="pkSum"&&pk){pk.sum=e.target.value;pk.dirty=true}});
+document.addEventListener("keydown",e=>{if((e.target.id==="sbSum"||e.target.id==="pkSum")&&e.key==="Enter"&&!e.isComposing){e.preventDefault();const d=document.querySelector(e.target.id==="sbSum"?"[data-sbdone]":"[data-pkdone]");if(d)d.click()}});
 $("#cComposer").addEventListener("submit",e=>{e.preventDefault();const v=$("#cSay").value;$("#cSay").value="";cFree(v)});
 $("#cRestart").addEventListener("click",()=>cStart(true));
 
