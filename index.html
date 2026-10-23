@@ -1230,7 +1230,7 @@ header.side #loginBtn[hidden],body.sidemini #loginBtn[hidden],#loginBtn[hidden]{
 .sbl{font-size:12.5px;font-weight:800;color:var(--accent-deep);padding-top:8px}
 .sbc{display:flex;flex-wrap:wrap;gap:6px}
 .sbact{display:flex;align-items:center;gap:6px;margin-top:8px;width:100%;justify-content:flex-end}
-.sbsum{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink);background:var(--bg);border-radius:10px;padding:8px 12px}
+.sbsum{flex:1;min-width:0;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--paper);border:1.5px solid #F3C6D8;border-radius:10px;padding:8px 12px;outline:0}.sbsum:focus{border-color:var(--accent)}
 .sbdone{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
 body.hm-survey [data-survey]{display:none!important}
 header.side .sn.snsv{color:var(--accent-deep)!important;text-decoration:none}
@@ -1311,6 +1311,7 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
 .gallery .cp-head{flex-direction:column;align-items:flex-start;gap:14px}
 .gtabs{padding:5px}.gtabs button{padding:10px 26px;font-size:16px}
 header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
+@media (min-width:901px){header.side .brand{margin-bottom:22px!important}}
 </style>
 
 <div class="wrap">
@@ -2970,7 +2971,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792766079"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792766140"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3133,7 +3134,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792766079";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792766140";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
@@ -3173,7 +3174,7 @@ function cAsk(sec,k){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
     cbot(`<b>피사체</b> · 누구를 그릴까요?<br>아래 내용을 함께 써 주면 더 정확하게 그려요.<ul class="subjhint"><li><b>외형</b> 나이, 성별, 얼굴 (예: 20대 여자, 큰 눈)</li><li><b>헤어</b> 머리 모양과 색 (예: 갈색 긴 생머리)</li><li><b>의상</b> 옷 (예: 분홍 원피스)</li><li><b>소품</b> 들고 있거나 달고 있는 것 (예: 작은 뿔, 천사 날개)</li><li><b>특징</b> 눈에 띄는 점 (예: 볼터치, 안경)</li></ul><span class="subjex">예) 갈색 긴 생머리에 분홍 원피스를 입고, 작은 뿔과 천사 날개가 있는 20대 여자 선생님</span>`);
-    sb.sel={};subjPanel();
+    sb.sel={};sb.sum=null;sb.dirty=false;subjPanel();
   }else if(sec==="act"){
     cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
     cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
@@ -3195,7 +3196,7 @@ function cAsk(sec,k){
 }
 function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
   const row=(g)=>{const cur=sb.sel[g.k];const on=t=>g.m?(cur||[]).includes(t):cur===t;return `<div class="sbrow"><span class="sbl">${g.k==="kind"?"누구":esc(g.t)}</span><div class="sbc">${g.o.map(t=>`<button type="button" class="opt" data-sk="${g.k}" data-sv="${esc(t)}" aria-pressed="${on(t)}">${esc(t)}</button>`).join("")}</div></div>`};
-  cQuick.innerHTML=`<div class="sbpanel">${row(SB_KIND)}${k?G.filter(g=>g.k!=="kind").map(row).join(""):""}</div><div class="sbact">${k?`<span class="sbsum">${esc(sbCompose())}</span><button type="button" class="opt sbdone" data-sbdone>다 골랐어요 →</button>`:""}<button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
+  cQuick.innerHTML=`<div class="sbpanel">${row(SB_KIND)}${k?G.filter(g=>g.k!=="kind").map(row).join(""):""}</div><div class="sbact">${true?`<input class="sbsum" id="sbSum" value="${esc(sb.sum!=null?sb.sum:sbCompose())}" placeholder="골라도 되고 여기서 직접 고쳐도 돼요" aria-label="피사체 내용"><button type="button" class="opt sbdone" data-sbdone>다 골랐어요 →</button>`:""}<button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
 }
 function actLabel(){const v=cv("act");return v===ACT_FULL?"기본 포즈(정면 전신)":v}
 function placeLabel(){const v=cv("place");return v===PLACE_PNG?"투명 배경(PNG)":v}
@@ -3268,10 +3269,12 @@ function charBase(){
 }
 document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cv]"))){cPick(b.dataset.cv);return}
-  if((b=t.closest("[data-sk]"))){const k=b.dataset.sk,v=b.dataset.sv,G=sbGroups(),g=G.find(x=>x.k===k)||SB_KIND;
+  if((b=t.closest("[data-sk]"))){const k=b.dataset.sk,v=b.dataset.sv,v0=v,G=sbGroups(),g=G.find(x=>x.k===k)||SB_KIND;
     if(k==="kind"){sb.sel=sb.sel.kind===v?{}:{kind:v}}else if(g.m){const a=(sb.sel[k]||[]).filter(x=>x!=="없음");const i=a.indexOf(v);if(v==="없음")sb.sel[k]=["없음"];else{i>=0?a.splice(i,1):a.push(v);sb.sel[k]=a}}else sb.sel[k]=sb.sel[k]===v?undefined:v;
+    {const cur=$("#sbSum");if(cur&&sb.dirty){let v=cur.value;const on=k==="kind"?!!sb.sel.kind:(g.m?(sb.sel[k]||[]).includes(v0):sb.sel[k]===v0);
+      if(on&&!v.includes(v0))v=v?v.replace(/[,\s]+$/,"")+", "+v0:v0;if(!on)v=v.split(/\s*,\s*/).filter(x=>x&&x!==v0).join(", ");sb.sum=v}else sb.sum=null}
     subjPanel();return}
-  if(t.closest("[data-sbdone]")){const extra=$("#cSay").value.trim();$("#cSay").value="";const v=[sbCompose(),extra].filter(Boolean).join(", ");cme(v);cSet("subj",v);if(extra)sb.sel.extra=extra;return cAdvance()}
+  if(t.closest("[data-sbdone]")){const extra=$("#cSay").value.trim();$("#cSay").value="";const sv=($("#sbSum")||{}).value;const v=[(sv!=null?sv:sbCompose()).trim(),extra].filter(Boolean).join(", ");if(!v){toast("피사체를 고르거나 써 주세요");return}sb.sum=null;sb.dirty=false;cme(v);cSet("subj",v);if(extra)sb.sel.extra=extra;return cAdvance()}
   if(t.closest("[data-cback]")){const q=cq;if(!q)return;const O=["subj","act","place","style"],i=O.indexOf(q.sec);if(i<1)return;const pv=O[i-1];cme("← 이전 질문");cDoneOnly=false;
     if(pv==="subj"){const inp=$("#cSay");inp.value=cv("subj")||"";cAsk("subj","kind");setTimeout(()=>{inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}},50)}else cAsk(pv);
     cq.back=true;return}
@@ -3282,6 +3285,8 @@ document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cask]"))){const k=b.dataset.cask;cDoneOnly=true;if(k==="subj"){cAsk("subj","kind")}else cAsk(k);return}
   if((b=t.closest("[data-cgo]"))){$("#charStage .cp-out").scrollIntoView({behavior:"smooth",block:"start"});return}
 });
+document.addEventListener("input",e=>{if(e.target.id==="sbSum"){sb.sum=e.target.value;sb.dirty=true}});
+document.addEventListener("keydown",e=>{if(e.target.id==="sbSum"&&e.key==="Enter"&&!e.isComposing){e.preventDefault();const d=document.querySelector("[data-sbdone]");if(d)d.click()}});
 $("#cComposer").addEventListener("submit",e=>{e.preventDefault();const v=$("#cSay").value;$("#cSay").value="";cFree(v)});
 $("#cRestart").addEventListener("click",()=>cStart(true));
 
