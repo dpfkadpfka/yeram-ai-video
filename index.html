@@ -3303,7 +3303,7 @@ const SITE_LINKS={blog:"https://blog.naver.com/dpfkadpfka2",kakao:"https://open.
 $$("[data-sns]").forEach(a=>{const u=SITE_LINKS[a.dataset.sns];if(u)a.href=u;else a.addEventListener("click",e=>{e.preventDefault();toast("링크를 준비하고 있어요")})});
 if(SITE_LINKS.blog){["#ftBlog"].forEach(q=>{const a=$(q);a.href=SITE_LINKS.blog;a.hidden=false})}
 const STAGE_TITLE={models:"AI 모델 비교",scene:"씬 나누기",shot:"컷 편집",start:"",char:"캐릭터 만들기",chat:"대본 프롬프트 만들기",split:"대본 프롬프트 만들기",gallery:"갤러리",my:"내 페이지",about:"만든 사람"};
-function setStage(x){if(x==="chat"||x==="split")chatStage=x;const prev=document.body.dataset.stage;document.body.dataset.stage=x;renderStepper();
+function setStage(x){if(x==="chat"||x==="split")chatStage=x;try{sessionStorage.setItem("ymStage",x)}catch(_){}const prev=document.body.dataset.stage;document.body.dataset.stage=x;renderStepper();
   const t=STAGE_TITLE[x];document.title=(t?t+" | ":"")+"예람쌤 AI 영상 제작소";
   if(prev!==x){document.body.classList.remove("stg-in");void document.body.offsetWidth;document.body.classList.add("stg-in")}}
 function chatOn(){return log.children.length>0}
@@ -3394,7 +3394,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781525"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781613"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3589,7 +3589,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781525";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781613";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -3773,6 +3773,10 @@ new MutationObserver(()=>{clearTimeout(sessT);sessT=setTimeout(saveSess,300)}).o
 addEventListener("pagehide",saveSess);
 (function boot(){const loc=local.load();if(loc&&!loc.owner)S=fix(loc);
   ["grade","subject","viewer","tone","imgStyle"].forEach(k=>{const t=topOf(k);if(t)cur[k]=t});if(S.lastColors)cur.colors={...S.lastColors};
-  renderAll();start();loadSess();initFirebase()})();
+  let keep="";try{keep=sessionStorage.getItem("ymStage")||""}catch(_){}
+  renderAll();start();loadSess();initFirebase();
+  /* 새로고침해도 보던 탭 그대로 (대화 내용은 처음부터) */
+  const SEL={chat:'#stepper [data-stepgo="2"]',split:'#stepper [data-stepgo="2"]',char:'#stepper [data-stepgo="1"]',shot:'#stepper [data-stepgo="3"]',scene:'#stepper [data-stepgo="4"]',gallery:".sn[data-gallery]",community:".sn[data-community]",models:".sn[data-models]",about:"[data-about]"}[keep];
+  if(SEL)setTimeout(()=>{const el=document.querySelector(SEL);if(el)el.click()},0)})();
 </script>
 </body></html>
