@@ -1461,6 +1461,12 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
  #say,#cSay{font-size:16px}
 }
 .cp-alt a[data-miricle]{color:#178C99!important;background:#E8F7F9;border-radius:6px;padding:1px 6px;text-decoration:none!important;font-weight:800}.cp-alt a[data-miricle]:hover{background:#D3F0F3}
+.comtabs{align-items:center}.ctsep{width:1px;height:18px;background:var(--line);margin:0 6px;flex:none}
+.comtabs button[data-ct="all"]{font-weight:800}
+.comtabs button[aria-selected="true"]{color:var(--accent-deep)!important;border-bottom:3px solid var(--accent)!important;font-weight:800}
+.comtabs button[aria-selected="true"] i{background:var(--accent);color:#fff}
+.comtabs button[aria-selected="false"]{color:var(--muted)}
+.post-c.review{background:#EAF7EF;color:#23824A}
 </style>
 
 <div class="wrap">
@@ -1712,12 +1718,12 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
   <section class="community" id="comSec" aria-label="커뮤니티">
     <div class="comwrap">
       <div class="commain">
-        <div class="combar"><div class="comtabs" role="tablist" id="comTabs"><button type="button" role="tab" data-ct="all" aria-selected="true">전체</button><button type="button" role="tab" data-ct="contest" aria-selected="false">공모전</button><button type="button" role="tab" data-ct="qna" aria-selected="false">질문</button><button type="button" role="tab" data-ct="tip" aria-selected="false">팁</button><button type="button" role="tab" data-ct="show" aria-selected="false">자랑</button></div><button type="button" class="btn primary comwbtn" id="comWrite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>글쓰기</button></div>
+        <div class="combar"><div class="comtabs" role="tablist" id="comTabs"><button type="button" role="tab" data-ct="all" aria-selected="true">전체</button><span class="ctsep" aria-hidden="true"></span><button type="button" role="tab" data-ct="contest" aria-selected="false">공모전</button><button type="button" role="tab" data-ct="review" aria-selected="false">수강 후기</button><button type="button" role="tab" data-ct="qna" aria-selected="false">질문</button></div><button type="button" class="btn primary comwbtn" id="comWrite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>글쓰기</button></div>
         <div class="comlist" id="comList"></div>
       </div>
       <aside class="comside">
         <a class="comcon" href="https://ai-radar.kr/contests/" target="_blank" rel="noopener" data-comcontest><span class="cc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><b>AI 공모전 모아보기</b><span class="cc-d">지금 접수 중인 AI·영상 공모전을 한곳에서 확인해요.</span><span class="cc-go">공모전 보러 가기 →</span><small>ai-radar.kr</small></a>
-        <div class="comguide"><b>이런 글을 나눠요</b><ul><li><span class="post-c contest">공모전</span>함께 나갈 공모전, 요강 공유</li><li><span class="post-c qna">질문</span>브루·프롬프트가 막힐 때</li><li><span class="post-c tip">팁</span>써 보니 좋았던 방법</li><li><span class="post-c show">자랑</span>완성한 영상·캐릭터</li></ul></div>
+        <div class="comguide"><b>이런 글을 나눠요</b><ul><li><span class="post-c contest">공모전</span>함께 나갈 공모전, 요강 공유</li><li><span class="post-c review">수강 후기</span>연수를 듣고 느낀 점</li><li><span class="post-c qna">질문</span>브루·프롬프트가 막힐 때</li></ul></div>
       </aside>
     </div>
   </section>
@@ -1828,7 +1834,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 <div class="modal" id="comModal" hidden role="dialog" aria-modal="true" aria-labelledby="comH">
   <div class="modal-card comcard"><h2 id="comH">글쓰기</h2>
     <form id="comForm" class="comform">
-      <div class="comcats" id="comCats"><label><input type="radio" name="comcat" value="contest" checked>공모전</label><label><input type="radio" name="comcat" value="qna">질문</label><label><input type="radio" name="comcat" value="tip">팁</label><label><input type="radio" name="comcat" value="show">자랑</label></div>
+      <div class="comcats" id="comCats"><label><input type="radio" name="comcat" value="review" checked>수강 후기</label><label><input type="radio" name="comcat" value="contest">공모전</label><label><input type="radio" name="comcat" value="qna">질문</label></div>
       <input class="tinput" id="comTitle" maxlength="80" placeholder="제목" required>
       <textarea class="tinput" id="comBody" rows="6" maxlength="3000" placeholder="내용을 써 주세요" required></textarea>
       <input class="tinput" id="comLink" type="url" placeholder="링크 (선택) 예: 공모전 안내 주소, 내 영상 주소">
@@ -3387,7 +3393,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792779000"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781085"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3531,7 +3537,7 @@ $("#cvWrap").innerHTML=CV.map(([n,a],i)=>`<section class="cvsec"><div class="cvs
   document.querySelectorAll(".pdrows li[data-pd]").forEach(li=>{const m=li.dataset.pd;li.addEventListener("mouseenter",()=>go(m,li));li.addEventListener("focus",()=>go(m,li));li.addEventListener("click",()=>li.classList.contains("on")?reset():go(m,li))});
   $(".pdrows").addEventListener("mouseleave",reset)})();
 /* 커뮤니티 */
-const COM_CAT={contest:"공모전",qna:"질문",tip:"팁",show:"자랑"};let comTab="all",comOpen=null,comItems=[];
+const COM_CAT={contest:"공모전",review:"수강 후기",qna:"질문",tip:"팁",show:"자랑"};let comTab="all",comOpen=null,comItems=[];
 const fmtD=t=>{try{const d=t&&t.toDate?t.toDate():new Date(t);return `${d.getMonth()+1}.${d.getDate()}`}catch(e){return ""}};
 const myNick=()=>(S.profile&&S.profile.nick)||(user()&&(user().displayName||(user().email||"").split("@")[0]))||"선생님";
 async function loadCom(){const box=$("#comList");box.innerHTML=`<p class="comempty">불러오는 중…</p>`;comItems=[];
@@ -3549,7 +3555,7 @@ document.addEventListener("click",async e=>{let b;
   if((b=e.target.closest("[data-ct]"))){comTab=b.dataset.ct;paintCom();return}
   if((b=e.target.closest("[data-popen]"))){comOpen=comOpen===b.dataset.popen?null:b.dataset.popen;paintCom();return}
   if((b=e.target.closest("[data-pdel]"))){const id=b.dataset.pdel;if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="한 번 더 누르면 삭제";return}try{await fb.fs.deleteDoc(fb.fs.doc(fb.db,"community",id));comItems=comItems.filter(x=>x.id!==id);comOpen=null;paintCom();toast("삭제했어요")}catch(err){toast("삭제하지 못했어요")}return}
-  if(e.target.closest("#comWrite")){if(!user()){toast("로그인하면 글을 쓸 수 있어요");openLogin&&openLogin();return}$("#comModal").hidden=false;$("#comTitle").focus();return}
+  if(e.target.closest("#comWrite")){if(!user()){toast("로그인하면 글을 쓸 수 있어요");openLogin&&openLogin();return}$("#comModal").hidden=false;$("#comTitle").focus();try{const c=document.querySelector(`[name="comcat"][value="${comTab==="all"?"review":comTab}"]`);if(c)c.checked=true}catch(_){}return}
   if(e.target.closest("#comCancel")){$("#comModal").hidden=true;return}});
 $("#comForm").addEventListener("submit",async e=>{e.preventDefault();if(!fb||!user()){toast("로그인이 필요해요");return}
   const d={cat:(document.querySelector('[name="comcat"]:checked')||{}).value||"qna",title:$("#comTitle").value.trim(),body:$("#comBody").value.trim(),link:$("#comLink").value.trim(),nick:myNick(),uid:user().uid,cmtN:0,createdAt:fb.fs.serverTimestamp()};
@@ -3570,7 +3576,7 @@ const PGH={
 PGH.gallery={eye:"둘러보기",t:"갤러리",d:"선생님들이 만든 캐릭터와 영상을 함께 봐요.",meta:[],help:[]};
 PGH.models={eye:"알아보기",t:"브루 AI 모델 비교",d:"같은 캐릭터로 브루의 이미지·영상 모델을 같은 조건에서 돌려 봤어요.",meta:[],
   help:[["1","탭 고르기","이미지, 비디오, 비디오 지시 따르기"],["2","마우스 올리기","칸에 올리면 아래에 자세한 설명이 떠요"],["3","눌러서 크게","칸을 누르면 크게 보고, 영상은 소리도 나와요"]]};
-PGH.community={eye:"함께하기",t:"커뮤니티",d:"공모전 소식, 궁금한 점, 만든 영상과 팁을 선생님들과 나눠요.",meta:[],help:[]};
+PGH.community={eye:"함께하기",t:"커뮤니티",d:"공모전 소식, 수강 후기, 궁금한 점을 선생님들과 나눠요.",meta:[],help:[]};
 PGH.split=PGH.chat;
 function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h.hidden=!P;if(!P)return;
   $("#pghEye").textContent=P.eye;$("#pghT").textContent=P.t;$("#pghD").textContent=P.d;
@@ -3582,7 +3588,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792779000";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781085";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
