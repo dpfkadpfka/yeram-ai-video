@@ -59,7 +59,7 @@ export default {
       const ratio = ["1:1", "16:9", "9:16", "4:3", "3:4"].includes(b.ratio) ? b.ratio : "1:1";
       const body = { contents: [{ role: "user", parts }], generationConfig: { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: ratio } } };
       const errs = [];
-      for (const m of ["gemini-3-pro-image-preview", "gemini-2.5-flash-image"]) {
+      for (const m of ["gemini-3-pro-image-preview", "gemini-3.1-flash-image-preview", "gemini-2.5-flash-image"]) {
         const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
         if (!r.ok) { errs.push(m + " " + r.status + " " + (await r.text()).slice(0, 200)); continue; }
         const d = await r.json();
@@ -68,7 +68,7 @@ export default {
         const idt = im.inlineData || im.inline_data;
         const fields = { uid: sv(who.uid), email: sv(who.email), name: sv(who.name), day: sv(day), at: { timestampValue: new Date().toISOString() }, kind: sv(kind), prompt: sv(prompt.slice(0, 1500)), model: sv(m), ref: { booleanValue: !!ref } };
         ctx.waitUntil(fetch(FS + "/imglog", { method: "POST", headers: ah, body: JSON.stringify({ fields }) }).catch(() => {}));
-        return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: used + 1, limit: admin ? null : LIMIT, model: m });
+        return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: used + 1, limit: admin ? null : LIMIT, model: m, ...(u.searchParams.get("dbg") === "1" ? { errs } : {}) });
       }
       return J({ error: "img", ...(u.searchParams.get("dbg") === "1" ? { errs } : {}) }, 502);
     }
