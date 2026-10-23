@@ -1178,6 +1178,9 @@ body.hm-char #stepper li:has([data-stepgo="1"]),body.hm-script #stepper li:has([
 body{min-height:100vh;display:flex;flex-direction:column}
 body>.wrap{flex:1 0 auto;width:100%;box-sizing:border-box;align-content:start}
 body>footer.ft{flex:none}
+.subjhint{margin:8px 0 6px;padding:10px 12px;list-style:none;background:var(--bg);border-radius:12px;display:grid;gap:4px;font-size:14px}
+.subjhint b{display:inline-block;min-width:36px;color:var(--accent-deep)}
+.subjex{display:block;font-size:13.5px;color:var(--muted)}
 /* 메뉴 묶음 이름 */
 @media (min-width:901px){
  header.side .sidenav .snlab{display:block!important;width:64px;height:auto;margin:18px auto 6px!important;padding:14px 0 0!important;border-top:1.5px solid #EADFE3;font-size:12px!important;font-weight:800;color:var(--accent-deep);letter-spacing:.5px;text-align:center;line-height:1.2}
@@ -2852,7 +2855,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792732304"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792732863"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3000,7 +3003,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792732304";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792732863";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
@@ -3039,7 +3042,7 @@ function cAsk(sec,k){
   if(sec==="subj"){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
-    cbot("<b>피사체</b> · 누구를 그릴까요?<br>골라도 되고, 생김새·옷까지 한 번에 써도 돼요. 예: 긴 생머리에 분홍 원피스를 입은 여자 선생님");
+    cbot(`<b>피사체</b> · 누구를 그릴까요?<br>아래 내용을 함께 써 주면 더 정확하게 그려요.<ul class="subjhint"><li><b>외형</b> 나이, 성별, 얼굴 (예: 20대 여자, 큰 눈)</li><li><b>헤어</b> 머리 모양과 색 (예: 갈색 긴 생머리)</li><li><b>의상</b> 옷 (예: 분홍 원피스)</li><li><b>소품</b> 들고 있거나 달고 있는 것 (예: 작은 뿔, 천사 날개)</li><li><b>특징</b> 눈에 띄는 점 (예: 볼터치, 안경)</li></ul><span class="subjex">예) 갈색 긴 생머리에 분홍 원피스를 입고, 작은 뿔과 천사 날개가 있는 20대 여자 선생님</span>`);
     cQuick.innerHTML=chips(SB_KIND.o,t=>sb.sel.kind===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
   }else if(sec==="act"){
     cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
@@ -3057,7 +3060,7 @@ function cAsk(sec,k){
     cbot("마지막으로 몸 비율은요? 이모티콘처럼 단순하게 할지, 늘씬하게 할지 골라 주세요.");
     cQuick.innerHTML=chips(sb.sel.kind==="동물"?RATIO_A:RATIO_P,t=>cv("ratio")===t,"data-cv");
   }
-  $("#cSay").placeholder=sec==="subj"&&k==="kind"?"예: 강아지를 키우는 할머니":"골라도 되고, 직접 써도 돼요";
+  $("#cSay").placeholder=sec==="subj"&&k==="kind"?"외형, 헤어, 의상, 소품, 특징을 써 주세요":"골라도 되고, 직접 써도 돼요";
   renderCards();
 }
 function actLabel(){const v=cv("act");return v===ACT_FULL?"기본 포즈(정면 전신)":v}
