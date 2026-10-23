@@ -966,9 +966,7 @@ body[data-stage="start"] .hero{min-height:calc(100vh - 150px);display:flex!impor
         </div>
       </div>
     </div>
-    <div class="scrollcue" aria-hidden="true"><span>아래로 내려 보세요</span><i></i></div>
-    <div class="mqhead mq-reveal"><h3 id="mqTitle">예람쌤이 만든 캐릭터</h3><p id="mqSub">같은 캐릭터를 여러 스타일로 바꿔 움직여 봤어요.</p></div>
-    <div class="mq mq-reveal" id="mq" aria-label="예람쌤이 만든 영상과 캐릭터"><div class="mq-row" data-dir="l"></div><div class="mq-row" data-dir="r"></div></div>
+            <div class="mq mq-reveal" id="mq" aria-label="예람쌤이 만든 영상과 캐릭터"><div class="mq-row" data-dir="l"></div><div class="mq-row" data-dir="r"></div></div>
   </section>
 
   <section class="charpage" id="charStage" aria-labelledby="charH">
@@ -2431,8 +2429,8 @@ const YT_CLIPS=new Set([]);
 function ytItem([id,sh]){const po=`https://i.ytimg.com/vi/${id}/${sh?"oar2":"hqdefault"}.jpg`;const inner=YT_CLIPS.has(id)?`<video src="yt/${id}.mp4" poster="${po}" muted autoplay loop playsinline preload="auto"></video>`:`<img src="${po}" alt="" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${id}/hqdefault.jpg'">`;return `<a class="mq-it yt ${sh?"v916":"v169"}" href="https://www.youtube.com/${sh?"shorts/":"watch?v="}${id}" target="_blank" rel="noopener" aria-label="유튜브에서 보기">${inner}<span class="ytplay" aria-hidden="true"></span></a>`}
 let HOME_MEDIA="char";try{HOME_MEDIA=localStorage.getItem("ymHomeMedia")||"char"}catch(e){}
 function renderMarquee(mode){HOME_MEDIA=mode==="yt"?"yt":"char";const rows=$$("#mq .mq-row");let A,B,fn;
-  if(HOME_MEDIA==="yt"){const L=YT_LONG.map(i=>[i,0]),S=YT_SHORT.map(i=>[i,1]);const half=Math.ceil(L.length/2);A=L.slice(0,half);B=L.slice(half);S.forEach((x,k)=>{(k%2?B:A).splice(2+k*3,0,x)});fn=ytItem;$("#mqTitle").textContent="예람쌤이 만든 영상";$("#mqSub").textContent="AI로 만든 교육 영상이에요. 누르면 유튜브에서 볼 수 있어요."}
-  else{const half=Math.ceil(MEDIA.length/2);A=MEDIA.slice(0,half);B=MEDIA.slice(half);fn=mqItem;$("#mqTitle").textContent="예람쌤이 만든 캐릭터";$("#mqSub").textContent="같은 캐릭터를 여러 스타일로 바꿔 움직여 봤어요."}
+  if(HOME_MEDIA==="yt"){const L=YT_LONG.map(i=>[i,0]),S=YT_SHORT.map(i=>[i,1]);const half=Math.ceil(L.length/2);A=L.slice(0,half);B=L.slice(half);S.forEach((x,k)=>{(k%2?B:A).splice(2+k*3,0,x)});fn=ytItem}
+  else{const half=Math.ceil(MEDIA.length/2);A=MEDIA.slice(0,half);B=MEDIA.slice(half);fn=mqItem}
   [A,B.length?B:A].forEach((L,i)=>{let X=L.slice();while(X.length<12)X=X.concat(L);const h=X.map(fn).join("");rows[i].innerHTML=h+h})}
 renderMarquee(HOME_MEDIA);
 (function(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});$$(".mq-reveal").forEach(el=>io.observe(el))})();
