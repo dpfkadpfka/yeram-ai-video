@@ -1467,6 +1467,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .comtabs button[aria-selected="true"] i{background:var(--accent);color:#fff}
 .comtabs button[aria-selected="false"]{color:var(--muted)}
 .post-c.review{background:#EAF7EF;color:#23824A}
+.post-c.free{background:#F3EFFA;color:#7A4FC2}
 </style>
 
 <div class="wrap">
@@ -1718,12 +1719,12 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
   <section class="community" id="comSec" aria-label="커뮤니티">
     <div class="comwrap">
       <div class="commain">
-        <div class="combar"><div class="comtabs" role="tablist" id="comTabs"><button type="button" role="tab" data-ct="all" aria-selected="true">전체</button><span class="ctsep" aria-hidden="true"></span><button type="button" role="tab" data-ct="contest" aria-selected="false">공모전</button><button type="button" role="tab" data-ct="review" aria-selected="false">수강 후기</button><button type="button" role="tab" data-ct="qna" aria-selected="false">질문</button></div><button type="button" class="btn primary comwbtn" id="comWrite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>글쓰기</button></div>
+        <div class="combar"><div class="comtabs" role="tablist" id="comTabs"><button type="button" role="tab" data-ct="all" aria-selected="true">전체</button><span class="ctsep" aria-hidden="true"></span><button type="button" role="tab" data-ct="review" aria-selected="false">수강 후기</button><button type="button" role="tab" data-ct="qna" aria-selected="false">질문</button><button type="button" role="tab" data-ct="free" aria-selected="false">자유 게시판</button></div><button type="button" class="btn primary comwbtn" id="comWrite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>글쓰기</button></div>
         <div class="comlist" id="comList"></div>
       </div>
       <aside class="comside">
         <a class="comcon" href="https://ai-radar.kr/contests/" target="_blank" rel="noopener" data-comcontest><span class="cc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><b>AI 공모전 모아보기</b><span class="cc-d">지금 접수 중인 AI·영상 공모전을 한곳에서 확인해요.</span><span class="cc-go">공모전 보러 가기 →</span><small>ai-radar.kr</small></a>
-        <div class="comguide"><b>이런 글을 나눠요</b><ul><li><span class="post-c contest">공모전</span>함께 나갈 공모전, 요강 공유</li><li><span class="post-c review">수강 후기</span>연수를 듣고 느낀 점</li><li><span class="post-c qna">질문</span>브루·프롬프트가 막힐 때</li></ul></div>
+        <div class="comguide"><b>이런 글을 나눠요</b><ul><li><span class="post-c review">수강 후기</span>연수를 듣고 느낀 점</li><li><span class="post-c qna">질문</span>프롬프트·영상 만들다 막힐 때</li><li><span class="post-c free">자유</span>공모전 소식, 만든 영상, 무엇이든</li></ul></div>
       </aside>
     </div>
   </section>
@@ -1834,7 +1835,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 <div class="modal" id="comModal" hidden role="dialog" aria-modal="true" aria-labelledby="comH">
   <div class="modal-card comcard"><h2 id="comH">글쓰기</h2>
     <form id="comForm" class="comform">
-      <div class="comcats" id="comCats"><label><input type="radio" name="comcat" value="review" checked>수강 후기</label><label><input type="radio" name="comcat" value="contest">공모전</label><label><input type="radio" name="comcat" value="qna">질문</label></div>
+      <div class="comcats" id="comCats"><label><input type="radio" name="comcat" value="review" checked>수강 후기</label><label><input type="radio" name="comcat" value="qna">질문</label><label><input type="radio" name="comcat" value="free">자유 게시판</label></div>
       <input class="tinput" id="comTitle" maxlength="80" placeholder="제목" required>
       <textarea class="tinput" id="comBody" rows="6" maxlength="3000" placeholder="내용을 써 주세요" required></textarea>
       <input class="tinput" id="comLink" type="url" placeholder="링크 (선택) 예: 공모전 안내 주소, 내 영상 주소">
@@ -3393,7 +3394,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781468"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781525"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3537,16 +3538,16 @@ $("#cvWrap").innerHTML=CV.map(([n,a],i)=>`<section class="cvsec"><div class="cvs
   document.querySelectorAll(".pdrows li[data-pd]").forEach(li=>{const m=li.dataset.pd;li.addEventListener("mouseenter",()=>go(m,li));li.addEventListener("focus",()=>go(m,li));li.addEventListener("click",()=>li.classList.contains("on")?reset():go(m,li))});
   $(".pdrows").addEventListener("mouseleave",reset)})();
 /* 커뮤니티 */
-const COM_CAT={contest:"공모전",review:"수강 후기",qna:"질문",tip:"팁",show:"자랑"};let comTab="all",comOpen=null,comItems=[];
+const COM_CAT={review:"수강 후기",qna:"질문",free:"자유",contest:"자유",tip:"자유",show:"자유"};const comCatOf=c=>["review","qna"].includes(c)?c:"free";let comTab="all",comOpen=null,comItems=[];
 const fmtD=t=>{try{const d=t&&t.toDate?t.toDate():new Date(t);return `${d.getMonth()+1}.${d.getDate()}`}catch(e){return ""}};
 const myNick=()=>(S.profile&&S.profile.nick)||(user()&&(user().displayName||(user().email||"").split("@")[0]))||"선생님";
 async function loadCom(){const box=$("#comList");box.innerHTML=`<p class="comempty">불러오는 중…</p>`;comItems=[];
   if(fb){try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,"community"),F.orderBy("createdAt","desc"),F.limit(100)));comItems=snap.docs.map(d=>({id:d.id,...d.data()}))}catch(e){box.innerHTML=`<p class="comempty">글을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>`;return}}
   paintCom()}
-function paintCom(){const L=comItems.filter(x=>comTab==="all"||x.cat===comTab),u=user();
+function paintCom(){const L=comItems.filter(x=>comTab==="all"||comCatOf(x.cat)===comTab),u=user();
   $$("#comTabs [data-ct]").forEach(b=>b.setAttribute("aria-selected",b.dataset.ct===comTab));
-  const N={all:comItems.length};comItems.forEach(x=>N[x.cat]=(N[x.cat]||0)+1);$$("#comTabs [data-ct]").forEach(b=>{const n=N[b.dataset.ct]||0;b.innerHTML=`${b.dataset.ct==="all"?"전체":COM_CAT[b.dataset.ct]}${n?`<i>${n}</i>`:""}`});
-  $("#comList").innerHTML=L.length?L.map(x=>{const mine=u&&(x.uid===u.uid||isAdmin());const op=comOpen===x.id;const nk=x.nick||"선생님";return `<article class="post${op?" open":""}" data-pid="${x.id}"><button type="button" class="post-h" data-popen="${x.id}"><span class="post-av">${esc(nk.slice(0,1))}</span><span class="post-main"><span class="post-top"><span class="post-c ${x.cat}">${COM_CAT[x.cat]||"글"}</span><span class="post-t">${esc(x.title||"")}</span></span>${!op&&x.body?`<span class="post-ex">${esc(x.body.replace(/\s+/g," ").slice(0,120))}</span>`:""}<span class="post-m">${esc(nk)} · ${fmtD(x.createdAt)}</span></span><span class="post-n${x.cmtN?"":" z"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>${x.cmtN||0}</span></button>${op?`<div class="post-bd"><p class="post-b">${esc(x.body||"")}</p>${x.link?`<a class="post-l" href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.link)}</a>`:""}<div class="cmts" id="cm_${x.id}"><p class="post-m">댓글 불러오는 중…</p></div><form class="cmtf" data-cform="${x.id}"><input class="tinput" placeholder="${u?"댓글 쓰기":"로그인하면 댓글을 쓸 수 있어요"}" maxlength="500" ${u?"":"disabled"}><button class="btn sm" ${u?"":"disabled"}>등록</button></form>${mine?`<div class="acts"><button type="button" data-pdel="${x.id}">삭제</button></div>`:""}</div>`:""}</article>`}).join(""):`<div class="comempty"><b>${comTab==="all"?"아직 글이 없어요":COM_CAT[comTab]+" 글이 아직 없어요"}</b><span>첫 글을 올려 주세요.</span></div>`;
+  const N={all:comItems.length};comItems.forEach(x=>{const c=comCatOf(x.cat);N[c]=(N[c]||0)+1});$$("#comTabs [data-ct]").forEach(b=>{const n=N[b.dataset.ct]||0;b.innerHTML=`${b.dataset.ct==="all"?"전체":b.dataset.ct==="free"?"자유 게시판":COM_CAT[b.dataset.ct]}${n?`<i>${n}</i>`:""}`});
+  $("#comList").innerHTML=L.length?L.map(x=>{const mine=u&&(x.uid===u.uid||isAdmin());const op=comOpen===x.id;const nk=x.nick||"선생님";return `<article class="post${op?" open":""}" data-pid="${x.id}"><button type="button" class="post-h" data-popen="${x.id}"><span class="post-av">${esc(nk.slice(0,1))}</span><span class="post-main"><span class="post-top"><span class="post-c ${comCatOf(x.cat)}">${COM_CAT[x.cat]||"자유"}</span><span class="post-t">${esc(x.title||"")}</span></span>${!op&&x.body?`<span class="post-ex">${esc(x.body.replace(/\s+/g," ").slice(0,120))}</span>`:""}<span class="post-m">${esc(nk)} · ${fmtD(x.createdAt)}</span></span><span class="post-n${x.cmtN?"":" z"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>${x.cmtN||0}</span></button>${op?`<div class="post-bd"><p class="post-b">${esc(x.body||"")}</p>${x.link?`<a class="post-l" href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.link)}</a>`:""}<div class="cmts" id="cm_${x.id}"><p class="post-m">댓글 불러오는 중…</p></div><form class="cmtf" data-cform="${x.id}"><input class="tinput" placeholder="${u?"댓글 쓰기":"로그인하면 댓글을 쓸 수 있어요"}" maxlength="500" ${u?"":"disabled"}><button class="btn sm" ${u?"":"disabled"}>등록</button></form>${mine?`<div class="acts"><button type="button" data-pdel="${x.id}">삭제</button></div>`:""}</div>`:""}</article>`}).join(""):`<div class="comempty"><b>${comTab==="all"?"아직 글이 없어요":COM_CAT[comTab]+" 글이 아직 없어요"}</b><span>첫 글을 올려 주세요.</span></div>`;
   if(comOpen)loadCmts(comOpen)}
 async function loadCmts(id){const box=$("#cm_"+id);if(!box||!fb)return;try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,"community",id,"comments"),F.orderBy("createdAt","asc"),F.limit(200)));
   box.innerHTML=snap.docs.length?snap.docs.map(d=>{const c=d.data();return `<div class="cmt"><b>${esc(c.nick||"")}</b>${esc(c.body||"")}<small>${fmtD(c.createdAt)}</small></div>`}).join(""):`<p class="post-m">첫 댓글을 남겨 주세요.</p>`}catch(e){box.innerHTML=`<p class="post-m">댓글을 불러오지 못했어요.</p>`}}
@@ -3576,7 +3577,7 @@ const PGH={
 PGH.gallery={eye:"둘러보기",t:"갤러리",d:"선생님들이 만든 캐릭터와 영상을 함께 봐요.",meta:[],help:[]};
 PGH.models={eye:"알아보기",t:"AI 모델 비교",d:"같은 캐릭터로 여러 AI 이미지·영상 모델을 같은 조건에서 돌려 봤어요.",meta:[],
   help:[["1","탭 고르기","이미지, 비디오, 비디오 지시 따르기"],["2","마우스 올리기","칸에 올리면 아래에 자세한 설명이 떠요"],["3","눌러서 크게","칸을 누르면 크게 보고, 영상은 소리도 나와요"]]};
-PGH.community={eye:"함께하기",t:"커뮤니티",d:"공모전 소식, 수강 후기, 궁금한 점을 선생님들과 나눠요.",meta:[],help:[]};
+PGH.community={eye:"함께하기",t:"커뮤니티",d:"수강 후기, 궁금한 점, 공모전 소식까지 선생님들과 나눠요.",meta:[],help:[]};
 PGH.split=PGH.chat;
 function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h.hidden=!P;if(!P)return;
   $("#pghEye").textContent=P.eye;$("#pghT").textContent=P.t;$("#pghD").textContent=P.d;
@@ -3588,7 +3589,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781468";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781525";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
