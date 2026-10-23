@@ -59,7 +59,7 @@ export default {
       const ratio = ["1:1", "16:9", "9:16", "4:3", "3:4"].includes(b.ratio) ? b.ratio : "1:1";
       const body = { contents: [{ role: "user", parts }], generationConfig: { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: ratio } } };
       const errs = [];
-      for (const m of ["gemini-2.5-flash-image", "gemini-3-pro-image-preview"]) {
+      for (const m of ["gemini-3-pro-image-preview", "gemini-2.5-flash-image"]) {
         const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
         if (!r.ok) { errs.push(m + " " + r.status + " " + (await r.text()).slice(0, 200)); continue; }
         const d = await r.json();
