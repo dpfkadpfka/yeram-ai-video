@@ -1440,6 +1440,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .qa{margin:6px 0;padding-left:18px;display:grid;gap:3px;font-size:14px}
 .pdtx{position:relative}.pddel{justify-self:start;margin-top:6px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:4px 10px;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer}.pddel:hover,.pddel[data-sure="1"]{border-color:#E05252;color:#E05252}
 .msg.thinking{color:var(--muted);animation:thk 1s infinite alternate}@keyframes thk{from{opacity:.4}to{opacity:1}}
+#galEmpty[hidden]{display:none}.gpane .gbar{justify-content:flex-end;gap:14px;align-items:center}
 </style>
 
 <div class="wrap">
@@ -1703,13 +1704,13 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
   <section class="gallery" id="galSec" aria-labelledby="galH">
     <div class="cp-head"><h2 id="galH">갤러리</h2><div class="gtabs" role="tablist"><button type="button" role="tab" data-gtab="chars" aria-selected="true">캐릭터</button><button type="button" role="tab" data-gtab="videos" aria-selected="false">영상</button></div></div>
     <div class="gpane" data-gpane="chars">
-      <div class="gbar"><div class="gfil" id="galFilter" hidden><button type="button" data-gf="all" aria-pressed="true">전체</button><button type="button" data-gf="mine" aria-pressed="false">내가 올린 것</button></div><button type="button" class="btn primary" data-upload>캐릭터 올리기</button></div>
+      <div class="gbar"><p class="hint" style="margin:0">선생님들이 만든 캐릭터예요. 눌러서 프롬프트를 볼 수 있어요.</p><div class="gfil" id="galFilter" hidden><button type="button" data-gf="all" aria-pressed="true">전체</button><button type="button" data-gf="mine" aria-pressed="false">내가 올린 것</button></div><button type="button" class="btn primary" data-upload>캐릭터 올리기</button></div>
       <div class="ggrid" id="galGrid"></div>
-      <p class="hint gempty" id="galEmpty" hidden>아직 올라온 캐릭터가 없어요. 첫 캐릭터를 올려 주세요!</p>
+      <div class="pdempty" id="galEmpty" hidden><b>아직 올라온 캐릭터가 없어요</b><span>오른쪽 위 [캐릭터 올리기]로 첫 캐릭터를 올려 주세요.</span></div>
       <div class="gmore"><button type="button" class="btn" id="galMore" hidden>더 보기</button></div>
     </div>
     <div class="gpane" data-gpane="videos" hidden>
-      <div class="gbar"><p class="hint" style="margin:0" id="padHint">브루로 완성한 영상을 올려 주세요.</p><a class="btn primary" id="padOpen" href="#" target="_blank" rel="noopener">영상 올리기</a></div>
+      <div class="gbar"><p class="hint" style="margin:0" id="padHint">선생님들이 만든 영상이에요. 눌러서 바로 볼 수 있어요.</p><a class="btn primary" id="padOpen" href="#" target="_blank" rel="noopener">영상 올리기</a></div>
       <div class="padwrap" id="padWrap"></div>
     </div>
   </section>
@@ -2660,7 +2661,7 @@ function onSay(text){
   text=text.trim(); if(!text)return;
   if(phase==="naming"){saveStyle(text);return}
   if(looksBrief(text)){absorbBrief(text);return}
-  if(phase==="ask"&&curStep&&AI_OK&&PAD_API){const OP=curStep.type==="text"?[]:optsFor(curStep.key);const exact=OP.find(o=>o.t===text);const exText=curStep.type==="text"&&text.length<40&&!/[?？]|뭐|어떻게|왜|조건|요강/.test(text);
+  if(phase==="ask"&&curStep&&AI_OK&&!aiBusy&&PAD_API){const OP=curStep.type==="text"?[]:optsFor(curStep.key);const exact=OP.find(o=>o.t===text);const exText=curStep.type==="text"&&text.length<40&&!/[?？]|뭐|어떻게|왜|조건|요강/.test(text);
     if(!exact&&!exText){aiSay(text).then(ok=>{if(!ok)onSayRule(text)});return}}
   return onSayRule(text)}
 function onSayRule(text){
@@ -3070,7 +3071,7 @@ function renderPad(force){
   if(!PADJ)loadPadJson();
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
-    W.classList.add("native");$("#padHint").textContent="선생님들이 만든 영상이에요. 내가 올린 영상은 카드에서 지울 수 있어요.";
+    W.classList.add("native");
     W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=/^—\s*/.test(last)?last.replace(/^—\s*/,""):(p.by||""),intro=(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${padMedia(p.url)}<div class="pdtx">${p.subject?`<b>${esc(p.subject)}</b>`:""}${intro?`<p>${esc(intro)}</p>`:""}${by?`<small>${esc(by)}</small>`:""}${can?`<button type="button" class="pddel" data-vdel="${esc(p.id)}">삭제</button>`:""}</div></article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
@@ -3353,7 +3354,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792777181"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792777229"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3547,7 +3548,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792777181";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792777229";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
