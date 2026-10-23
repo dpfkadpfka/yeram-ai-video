@@ -1771,7 +1771,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
           <h3 style="margin-top:18px">처음 시작할 때 기본값</h3>
           <p class="hint" style="margin:0 0 8px">새로 만들 때 이 값으로 미리 골라 둬요. 비워 두면 자주 고른 값을 써요.</p>
           <div class="defgrid">
-            <label class="flabel">영상 형식<select class="tinput" data-def="form"><option value="">자동</option><option value="short">숏폼</option><option value="long">롱폼</option></select></label>
+            <label class="flabel">영상 형식<select class="tinput" data-def="form"><option value="">자동</option><option value="short">세로</option><option value="long">가로</option></select></label>
             <label class="flabel">학년<select class="tinput" data-def="grade"></select></label>
             <label class="flabel">과목<select class="tinput" data-def="subject"></select></label>
             <label class="flabel">말투<select class="tinput" data-def="tone"></select></label>
@@ -1885,9 +1885,10 @@ const MODES=[{v:"edu",t:"수업·교육용",s:""},{v:"gen",t:"일반 영상",s:"
 const fmtSec=n=>{n=+n;if(n<=60)return n+"초";const m=Math.floor(n/60),r=n%60;return r?`${m}분 ${r}초`:`${m}분`};
 const SHORT_L=[15,30,60,90].map(n=>({v:String(n),t:fmtSec(n),s:""}));
 const LONG_L=[120,180,300,600].map(n=>({v:String(n),t:fmtSec(n),s:""}));
+const ALL_L=[15,30,60,90,120,180,300].map(n=>({v:String(n),t:fmtSec(n),s:""}));
 const LENGTHS=SHORT_L;
-const FORMS=[{v:"short",t:"숏폼",s:""},{v:"long",t:"롱폼",s:""}];
-const lengthsFor=()=>(cur.form==="long"?LONG_L:SHORT_L).map(o=>+o.v);
+const FORMS=[{v:"short",t:"세로 영상",s:""},{v:"long",t:"가로 영상",s:""}];
+const lengthsFor=()=>ALL_L.map(o=>+o.v);
 const GRADES=[{v:"any",t:"정하지 않음",s:""},{v:"초",t:"초등 전체",s:""},{v:"중",t:"중학생",s:""},{v:"고",t:"고등학생",s:""}].concat(["초1","초2","초3","초4","초5","초6","중1","중2","중3","고1","고2","고3"].map(g=>({v:g,t:g,s:""})));
 const SUBJECTS=[{v:"none",t:"과목 없음",s:""}].concat(["과학","사회","국어","수학","영어","도덕","실과·기술","음악","미술","체육","진로","안전","정보·AI","통합교과","창체"].map(s=>({v:s,t:s,s:""})));
 const VIEWERS=[
@@ -2125,7 +2126,7 @@ function genreList(mode){return (GENRES[mode||cur.mode]||[]).concat((S.add["genr
 function rawOpts(key){
   if(key==="genre") return genreList();
   if(key.startsWith("gf.")){const [,gv,k]=key.split(".");const g=findGenre(gv);const f=g&&(g.f||[]).find(x=>x.k===k);return f&&f.opts?f.opts:[]}
-  if(key==="length")return cur.form==="long"?LONG_L:SHORT_L;
+  if(key==="length")return ALL_L;
   return BASE_KEYS[key]||[];
 }
 function optsFor(key){
@@ -2212,11 +2213,11 @@ function levelRule(){
 function build(){
   const g=curGenre(); if(!g||!cur.length) return "";
   const L=[], chars=+cur.length*5;
-  if(cur.mode==="edu"){const w=who(),sb=cur.subject&&cur.subject!=="none"?cur.subject+" ":"";L.push(`${w?(/학생$/.test(w)?w+"이":w+" 학생이"):"학생들이"} 보는 ${secLabel()} 분량 ${sb}교육용 ${cur.form==="long"?"영상":"숏폼 영상"}의 내레이션 대본을 써 줘. 형식은 ‘${g.t}’이야.`)}
-  else L.push(`${secLabel()} 분량 ‘${g.t}’ ${cur.form==="long"?"유튜브 영상":"숏폼 영상"}의 내레이션 대본을 써 줘.`);
+  if(cur.mode==="edu"){const w=who(),sb=cur.subject&&cur.subject!=="none"?cur.subject+" ":"";L.push(`${w?(/학생$/.test(w)?w+"이":w+" 학생이"):"학생들이"} 보는 ${secLabel()} 분량 ${sb}교육용 ${+cur.length>90?"영상":"숏폼 영상"}의 내레이션 대본을 써 줘. 형식은 ‘${g.t}’이야.`)}
+  else L.push(`${secLabel()} 분량 ‘${g.t}’ ${+cur.length>90?"영상":"숏폼 영상"}의 내레이션 대본을 써 줘.`);
   L.push(`분량은 글자 수 설정(${chars}자)을 거의 꽉 채우되 넘기지 마.`);
   L.push(g.s);
-  if(cur.form==="long")L.push("긴 영상이니 도입 → 본론(3단락) → 정리 흐름으로 쓰고, 단락이 바뀔 때 ‘그럼 이번엔’처럼 말로 자연스럽게 넘어가 줘. 1분에 한 번쯤은 다시 궁금증을 만드는 문장을 넣어 줘.");
+  if(+cur.length>=120)L.push("긴 영상이니 도입 → 본론(3단락) → 정리 흐름으로 쓰고, 단락이 바뀔 때 ‘그럼 이번엔’처럼 말로 자연스럽게 넘어가 줘. 1분에 한 번쯤은 다시 궁금증을 만드는 문장을 넣어 줘.");
   (g.f||[]).forEach(f=>{const v=(cur.gf[g.v]||{})[f.k];if(!v)return;
     if(f.type==="text")L.push(f.tpl.replace("{v}",v));else{const o=optOf("gf."+g.v+"."+f.k,v);if(o)L.push(o.s)}});
   if(cur.focus)L.push(`이 영상에서 딱 하나 전할 것은 ‘${cur.focus}’이야. 여기에 집중해 줘.`);
@@ -2282,7 +2283,7 @@ function chipsHTML(key,recommend,noAdd){
   return sorted.map(o=>`<button type="button" class="opt${editing&&editing.key===key&&editing.v===o.v?" editing":""}" data-key="${esc(key)}" data-v="${esc(o.v)}" aria-pressed="${sel===o.v}">${esc(o.t)}${o.trend?'<span class="fire">요즘 인기</span>':rec.includes(o.v)?'<span class="fire">추천</span>':""}${fav===o.v?'<span class="fav">자주</span>':""}</button>`).join("")
    +(editMode&&!noAdd?`<button type="button" class="opt add" data-addkey="${esc(key)}">+ 추가</button>`:"");
 }
-function recFor(key){if(key==="tone"&&cur.form!=="long")return["shorts","eumseum","ssul"];const g=curGenre();if(!g)return[];if(key==="hook")return g.hooks||[];if(key==="ending")return[g.end];if(key==="speaker")return[g.sp];return[]}
+function recFor(key){if(key==="tone"&&(+cur.length||30)<=90)return["shorts","eumseum","ssul"];const g=curGenre();if(!g)return[];if(key==="hook")return g.hooks||[];if(key==="ending")return[g.end];if(key==="speaker")return[g.sp];return[]}
 function editorHTML(){
   if(!editing)return"";
   const {key,v}=editing, isNew=v==null, o=isNew?{t:"",s:""}:(key==="genre"?curGenre()&&optOf("genre",v):optOf(key,v))||{t:"",s:""};
@@ -2421,7 +2422,7 @@ function renderOut(keep){
 }
 
 /* ===================== 내 스타일 ===================== */
-function styleSummary(st){const g=findGenre(st.genre);return [st.form==="long"?"롱폼":"숏폼",g&&g.t,st.length&&fmtSec(st.length),label("hook",st.hook),label("tone",st.tone),st.imgUse==="yes"?label("imgStyle",st.imgStyle):""].filter(Boolean).join(" · ")}
+function styleSummary(st){const g=findGenre(st.genre);return [st.form==="long"?"가로":"세로",g&&g.t,st.length&&fmtSec(st.length),label("hook",st.hook),label("tone",st.tone),st.imgUse==="yes"?label("imgStyle",st.imgStyle):""].filter(Boolean).join(" · ")}
 function renderMine(){
   $("#styles").innerHTML=(S.styles||[]).length?S.styles.map(st=>`<div class="style-item"><span>${esc(st.title)}<small>${esc(styleSummary(st))}${st.uses?` · ${st.uses}번 사용`:""}</small></span><span style="display:flex;gap:4px;flex-shrink:0"><button class="btn sm primary" data-applystyle="${st.id}">이 스타일로</button><button class="x" data-delstyle="${st.id}" aria-label="스타일 지우기">×</button></span></div>`).join("")
    :`<p class="empty">아직 없어요. 프롬프트를 만든 뒤 챗봇의 ‘이 스타일 저장’을 누르거나 “이 스타일 저장해 줘”라고 말하면 돼요.</p>`;
@@ -2453,10 +2454,10 @@ function exPick(g){if(!g)return[];const pool=[...new Set((EX_POOL[g.v]||[]).conc
 const answered=new Set(); let curStep=null, phase="ask"; // ask | review | done
 function steps(){
   const g=curGenre(), A=[];
-  A.push({id:"form",key:"form",ask:()=>"대본 프롬프트를 같이 만들어 볼게요!\n숏폼이에요, 롱폼이에요?\n숏폼은 쇼츠·릴스(세로 9:16, 90초 이하), 롱폼은 유튜브·수업 영상(가로 16:9, 2분 이상)이에요."});
-  A.push({id:"mode",key:"mode",ask:()=>`좋아요, ${cur.form==="long"?"롱폼":"숏폼"}으로 할게요. 어떤 영상이에요?`});
+  A.push({id:"form",key:"form",ask:()=>"대본 프롬프트를 같이 만들어 볼게요!\n세로 영상이에요, 가로 영상이에요?\n세로는 쇼츠·릴스(9:16), 가로는 유튜브·수업 화면(16:9)이에요. 길이는 다음에 따로 골라요."});
+  A.push({id:"mode",key:"mode",ask:()=>`좋아요, ${cur.form==="long"?"가로":"세로"} 영상으로 할게요. 어떤 영상이에요?`});
   A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.mode==="contest"?"공모전 안내문이나 요강이 있으면 길어도 그대로 붙여 넣어 주세요. 형식·길이·주제를 알아서 채우고, 규정도 프롬프트에 넣을게요.\n없으면 분야를 골라 주세요.":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
-  A.push({id:"length",key:"length",ask:()=>cur.form==="long"?"영상 길이는요? 길수록 글자 수가 많아져서, 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요.":"영상 길이는요? 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요."});
+  A.push({id:"length",key:"length",ask:()=>false?"":"영상 길이는요? 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요."});
   A.push({id:"topic",key:"topic",type:"text",ask:()=>cur.contestTheme?`요강 주제가 ‘${cur.contestTheme}’라서, 그 안에서 어떤 이야기를 할지 한 줄로 정해 주세요.\n정하기 어려우면 [요강 주제 그대로]를 누르세요.`:(g?g.topicQ:"주제가 뭐예요?")+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>cur.contestTheme?themeEx(cur.contestTheme):exPick(g)});
   A.push({id:"focus",key:"focus",type:"text",skip:true,when:()=>cur.topic&&cur.topic.replace(/\s/g,"").length<7,
     ask:()=>`‘${cur.topic}’은(는) ${secLabel()}에 담기엔 조금 넓어요. 숏폼은 하나만 확실히 남기는 게 좋아요.\n이 영상에서 딱 하나 전할 것은 뭐예요?`});
@@ -2488,7 +2489,7 @@ function ask(st){
   }else{
     let rec=recFor(st.key), fav=topOf(st.key);
     if(fav&&getVal(st.key)!==fav&&!answered.has(st.id)&&S.history.length){/* 지난번 선택 제안 */}
-    const ICQ={form:[["short","숏폼","쇼츠·릴스 · 세로 9:16"],["long","롱폼","유튜브·수업 · 가로 16:9"]],mode:[["edu","수업·교육용","학년·교과에 맞춰"],["gen","일반 영상","장르를 골라서"],["contest","공모전 출품","아이디어까지 골라서"]]}[st.key];
+    const ICQ={form:[["short","세로 영상","쇼츠·릴스 · 9:16"],["long","가로 영상","유튜브·수업 화면 · 16:9"]],mode:[["edu","수업·교육용","학년·교과에 맞춰"],["gen","일반 영상","장르를 골라서"],["contest","공모전 출품","아이디어까지 골라서"]]}[st.key];
     if(ICQ){setQuick(`<div class="iconopts">${ICQ.map(([v,t,d])=>`<button type="button" class="iconopt" data-qkey="${st.key}" data-v="${v}"><img src="${ICON[v]||ICON.gen}" alt=""><span>${t}<small>${d}</small></span></button>`).join("")}</div>`);$("#say").placeholder="골라도 되고, 말로 답해도 돼요";return}
     setQuick(chipsHTML(st.key,rec,true).replace(/data-key=/g,"data-qkey=")+(st.skip?`<button type="button" class="opt" data-qskip>건너뛰기</button>`:""));
     $("#say").placeholder="골라도 되고, 말로 답해도 돼요";
@@ -2497,7 +2498,7 @@ function ask(st){
 function answerChoice(key,v){
   const st=curStep; setVal(key,v);
   const shown=key==="genre"?(findGenre(v)||{t:v}).t:label(key,v);
-  if(key==="form"){cur.imgRatio=v==="long"?"16:9":"9:16";if(cur.length&&(v==="long"?+cur.length<120:+cur.length>=120)){cur.length="";answered.delete("length")}}
+  if(key==="form"){cur.imgRatio=v==="long"?"16:9":"9:16"}
   if(key==="mode"){cur.genre="";answered.delete("genre");purgeGenreSteps()}
   if(key==="genre"){purgeGenreSteps();const g=findGenre(v);if(g){cur.hook=g.hooks[0];cur.ending=g.end;cur.speaker=g.sp}}
   if(st)answered.add(st.id);
@@ -2518,7 +2519,7 @@ function afterAnswer(key){
   if(key==="genre"&&g){ if(g.trend)bot(`좋아요! ‘${g.t}’은 요즘 쇼츠에서 빠르게 늘고 있는 포맷이에요. ${g.d} 흐름으로 짤게요.`); else if(g.tip)bot(""+g.tip);}
   if(key.startsWith("gf.")&&g&&g.v==="rank"&&(cur.gf.rank||{}).n==="7"&&+cur.length<=30)bot(`${secLabel()}에 7개는 빠듯해요. 항목당 4초도 안 돼요. 5개로 줄이거나 길이를 늘리는 걸 추천해요.`);
   if(key==="length"&&document.body.dataset.stage==="chat"){setStage("split");bot("기본 틀이 잡혔어요! 왼쪽 개요는 답할수록 채워지고, 칸을 눌러 바로 고칠 수도 있어요.")}
-  if(key==="length"&&cur.form!=="long"&&+cur.length>=90)bot("90초 이상이면 숏폼보다는 짧은 설명 영상에 가까워요. 중간에 한 번 더 궁금증을 만드는 문장을 넣으라고 해 둘게요."),addExtraOnce("중간쯤에 ‘그런데 여기서 반전이 있어요’처럼 한 번 더 궁금증을 만드는 문장을 넣어 줘.");
+  if(key==="length"&&+cur.length===90)bot("90초 이상이면 숏폼보다는 짧은 설명 영상에 가까워요. 중간에 한 번 더 궁금증을 만드는 문장을 넣으라고 해 둘게요."),addExtraOnce("중간쯤에 ‘그런데 여기서 반전이 있어요’처럼 한 번 더 궁금증을 만드는 문장을 넣어 줘.");
   if(key==="imgPal"&&cur.imgPal==="extract")botHTML(`색을 뽑을 이미지를 올려 주세요.<div class="fbopts"><label class="opt" aria-pressed="true">이미지 올리기<input type="file" accept="image/*" data-palfile></label></div>`);
   if(key==="imgPal"&&cur.imgPal==="pick")bot("왼쪽 개요의 ‘색 조합’ 줄에서 색을 눌러 고르세요. 채팅에 #FFAD60처럼 색 코드를 써도 순서대로 넣어 드려요.");
   const n=nextStep();
@@ -2593,8 +2594,6 @@ function understand(text){
   let secs=null;
   if(/1분 반/.test(t))secs=90;else if((m=t.match(/(\d+)\s*분\s*(?:(\d+)\s*초?)?/)))secs=+m[1]*60+(+m[2]||0);else if((m=t.match(/(\d+)\s*초/)))secs=+m[1];
   if(!hexes&&secs){
-    if(secs>=120&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9";changed.push("형식 → 롱폼")}
-    if(secs<=90&&cur.form==="long"){cur.form="short";cur.imgRatio="9:16";changed.push("형식 → 숏폼")}
     cur.length=String(Math.max(5,Math.min(1200,secs)));changed.push(`길이 → ${secLabel()}`)}
   if((m=t.match(/(초|중|고)\s*(등학교|학교)?\s*([1-6])\s*(학년)?/))){const g=m[1]+m[3];if(GRADES.some(x=>x.v===g)){cur.grade=g;changed.push(`학년 → ${g}`)}}
   SUBJECTS.forEach(s=>{if(t.includes(s.v+"로")||t.includes(s.v+" 교과")||t.includes("교과는 "+s.v)){cur.subject=s.v;changed.push(`교과 → ${s.v}`)}});
@@ -2638,9 +2637,9 @@ function absorbBrief(t){
   let form=null,sec=null;
   if(/숏폼|쇼츠|숏츠|릴스|세로\s*(형|영상)|9\s*:\s*16/.test(t))form="short";else if(/롱폼|가로\s*(형|영상)|16\s*:\s*9/.test(t))form="long";
   if((m=t.match(/(\d+)\s*초\s*(이내|이하|내외|미만|까지)/)))sec=+m[1];else if((m=t.match(/(\d+)\s*분\s*(이내|이하|내외|미만|까지)/)))sec=+m[1]*60;
-  if(!form&&sec)form=sec<=90?"short":"long";
-  if(form){cur.form=form;cur.imgRatio=form==="long"?"16:9":"9:16";answered.add("form");got.push("형식: "+(form==="long"?"롱폼":"숏폼"))}
-  if(sec){const L=(cur.form==="long"?LONG_L:SHORT_L).map(o=>+o.v);const pick=L.filter(x=>x<=sec).pop()||L[0];cur.length=String(pick);answered.add("length");got.push("길이: "+fmtSec(pick)+(pick!==sec?` (요강: ${fmtSec(sec)} 이내)`:""))}
+  
+  if(form){cur.form=form;cur.imgRatio=form==="long"?"16:9":"9:16";answered.add("form");got.push("화면: "+(form==="long"?"가로":"세로"))}
+  if(sec){const L=ALL_L.map(o=>+o.v);const pick=L.filter(x=>x<=sec).pop()||L[0];cur.length=String(pick);answered.add("length");got.push("길이: "+fmtSec(pick)+(pick!==sec?` (요강: ${fmtSec(sec)} 이내)`:""))}
   if(cur.mode==="contest"){const R={c_env:/환경|기후|탄소|생태|재활용|에너지/g,c_promo:/홍보|관광|지역|기관|브랜드|축제|명소/g,c_edu:/수업|교육\s*자료|교수|학습|에듀|교사/g,c_public:/공익|캠페인|예방|안전|인식\s*개선|저작권|윤리|폭력|금연|복지|인권|보호/g,c_ai:/AI\s*창작|AI\s*영상\s*창작|자유\s*창작|단편|뮤직비디오/g};
     const score=x=>{let b=null,bs=0;for(const k in R){const n=(x.match(R[k])||[]).length;if(n>bs){bs=n;b=k}}return b};
     const best=score(theme+" "+name)||score(t);const g=best&&findGenre(best);
@@ -2657,7 +2656,7 @@ function absorbBrief(t){
 function snapVals(){const o={};steps().forEach(st=>o[st.id]=getVal(st.key));return o}
 function markChanged(b){steps().forEach(st=>{const was=st.id in b?b[st.id]:(st.key.startsWith("gf.")?"":(DEF[st.key]||""));if(!answered.has(st.id)&&getVal(st.key)&&getVal(st.key)!==was)answered.add(st.id)})}
 function detectMode(t,ch){if(cur.mode)return;let v="";if(/공모전|출품|응모/.test(t))v="contest";else if(/수업|교육|학생|교과|학년/.test(t))v="edu";else if(/일반|브이로그|채널|홍보|광고/.test(t))v="gen";if(v){cur.mode=v;ch.push("용도 → "+label("mode",v))}}
-function detectForm(t,ch){if(/숏폼|쇼츠|숏츠|릴스|세로/.test(t)&&cur.form!=="short"){cur.form="short";cur.imgRatio="9:16";ch.push("형식 → 숏폼")}else if(/롱폼|가로 ?영상|유튜브 ?영상/.test(t)&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9";ch.push("형식 → 롱폼")}}
+function detectForm(t,ch){if(/숏폼|쇼츠|숏츠|릴스|세로/.test(t)&&cur.form!=="short"){cur.form="short";cur.imgRatio="9:16";ch.push("화면 → 세로")}else if(/롱폼|가로 ?영상|유튜브 ?영상/.test(t)&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9";ch.push("화면 → 가로")}}
 /* ===== 제미나이로 말 알아듣기 (Cloudflare Worker 경유, 실패하면 규칙 방식) ===== */
 let AI_OK=true,aiBusy=false;
 const AI_KEYS=["form","mode","genre","length","topic","focus","grade","subject","viewer","tone","must","msg"];
@@ -2694,7 +2693,7 @@ ${cur.brief?"공모전 요강:\n"+cur.brief.replace(/\s+/g," ").slice(0,2500)+"\
   if(set.form&&["short","long"].includes(set.form)&&set.form!==cur.form){cur.form=set.form;cur.imgRatio=set.form==="long"?"16:9":"9:16";done.push("형식 → "+label("form",set.form))}
   Object.keys(set).forEach(k=>{if(["mode","form"].includes(k)||!AI_KEYS.includes(k))return;let v=String(set[k]||"").trim();if(!v)return;
     if(k==="genre"){const g=genreList().find(o=>o.v===v);if(!g)return;cur.genre=v;cur.hook=g.hooks[0];cur.ending=g.end;cur.speaker=g.sp;done.push("장르 → "+g.t);return}
-    if(k==="length"){const n=parseInt(v,10);if(!n)return;cur.length=String(Math.max(5,Math.min(1200,n)));if(n>=120&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9"}done.push("길이 → "+secLabel());return}
+    if(k==="length"){const n=parseInt(v,10);if(!n)return;cur.length=String(Math.max(5,Math.min(1200,n)));done.push("길이 → "+secLabel());return}
     if(["topic","focus","must","msg"].includes(k)){setVal(k,v.slice(0,200));done.push(`${{topic:"주제",focus:"전할 것",must:"꼭 넣을 것",msg:"한 줄 메시지"}[k]} → ${v.slice(0,40)}`);return}
     if(optsFor(k).some(o=>o.v===v)){setVal(k,v);done.push(`${KEY_NAMES[k]||k} → ${label(k,v)}`)}});
   const AUTO=["form","mode","genre","length","topic","grade","subject"];steps().forEach(x=>{if(done.length&&!answered.has(x.id)&&set[x.key]!==undefined&&getVal(x.key)&&(AUTO.includes(x.key)||(st&&x.id===st.id)))answered.add(x.id)});
@@ -3347,8 +3346,8 @@ function renderStepper(){
   if(st==="char")B(1).setAttribute("aria-current","step");else if(hasChar)B(1).classList.add("done");
   B(1).querySelector("small").textContent=hasChar?"준비됨":"";
   if(st==="chat"||st==="split")B(2).setAttribute("aria-current","step");else if(on&&phase==="done")B(2).classList.add("done");
-  const fm=cur.form?(cur.form==="long"?"롱폼":"숏폼"):"";
-  const sub=on?[fm,phase==="done"?"완성":"진행 중"].filter(Boolean).join(" · "):"숏폼 · 롱폼";
+  const fm=cur.form?(cur.form==="long"?"가로":"세로"):"";
+  const sub=on?[fm,phase==="done"?"완성":"진행 중"].filter(Boolean).join(" · "):"세로 · 가로";
   B(2).querySelector("small").textContent=sub;
   const cs=$("#charStatus");if(cs){cs.classList.toggle("ok",hasChar);cs.textContent=hasChar?"준비됨":""}
   const ss=$("#scriptStatus");if(ss)ss.textContent=on?sub:"";
@@ -3425,7 +3424,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792782362"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792782565"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3600,7 +3599,7 @@ const PGH={
  char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",hi:"캐릭터는 이 네 가지만 정하면 돼요! 앞 글자만 따서 ‘피동장스’라고 불러요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 삽입 → AI 이미지"]],
   help:[["피","피사체","누구를 그릴지 · 머리, 옷, 생김새"],["동","동작","포즈와 표정 · 손 흔들기, 웃는 얼굴"],["장","장소","배경 · 흰 배경, 교실, 놀이터"],["스","스타일","그림체 · 3D 애니, 웹툰, 수채화"]],helpB:"피동장스"},
  chat:{eye:"프롬프트 만들기",t:"대본",d:"영상 형식과 주제를 고르면 브루에 넣을 대본 프롬프트를 만들어요.",hi:"대본은 이렇게 만들어요! 제가 하나씩 물어볼 테니 편하게 답해 주세요.",meta:[["결과물","대본 프롬프트 · 이미지 프롬프트"],["넣는 곳","브루 텍스트로 비디오 만들기 → AI 글쓰기"]],
-  help:[["1","형식 고르기","숏폼·롱폼과 영상 종류를 골라요"],["2","질문에 답하기","주제, 대상, 말투를 정해요"],["3","브루에 붙여 넣기","칸마다 복사해서 브루 AI 글쓰기에 넣어요"]]},
+  help:[["1","형식 고르기","세로·가로와 영상 종류를 골라요"],["2","질문에 답하기","주제, 대상, 말투를 정해요"],["3","브루에 붙여 넣기","칸마다 복사해서 브루 AI 글쓰기에 넣어요"]]},
  shot:{eye:"프롬프트 만들기",t:"컷 편집",d:"마음에 안 드는 컷 하나를 다시 만들 이미지·영상 프롬프트를 써 드려요.",hi:"마음에 안 드는 컷이 나왔나요? 그 장면만 다시 만들면 돼요!",meta:[["결과물","이미지 프롬프트 · 영상 프롬프트 (영문)"],["카메라","장면에 맞게 자동"]],
   help:[["1","장면 설명","바꾸고 싶은 컷을 한두 문장으로 써요"],["2","참고 이미지 · 모델","캐릭터 이미지를 넣고 쓸 모델을 골라요"],["3","다시 만들기","이미지 프롬프트로 그림을, 영상 프롬프트로 움직임을 만들어요"]]},
  scene:{eye:"프롬프트 만들기",t:"씬 나누기",d:"이야기를 길이에 맞춰 씬으로 나누고, 씬마다 이미지·영상 프롬프트를 만들어요.",hi:"긴 이야기도 걱정 마세요. 길이에 맞춰 씬으로 나눠 드릴게요!",meta:[["결과물","씬별 이미지 · 영상 프롬프트 (영문)"],["카메라","씬마다 자동"]],
@@ -3620,7 +3619,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792782362";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792782565";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
