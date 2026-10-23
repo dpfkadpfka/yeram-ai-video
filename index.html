@@ -2631,7 +2631,8 @@ async function aiSay(text){
   const st=curStep,now={};AI_KEYS.forEach(k=>{const v=getVal(k);if(v)now[k]=v});
   const sys=`너는 교사용 '대본 프롬프트 만들기' 챗봇의 이해 담당이야. 사용자의 말을 읽고 아래 칸에 넣을 값을 JSON으로만 답해.
 규칙:
-- 사용자가 분명히 말한 것만 채워. 추측하지 마.
+- 사용자가 분명히 말한 것만 채워. 추측하지 마. 말투·꼭 넣을 내용·마지막 메시지는 사용자가 직접 말했을 때만 채워.
+- 장르는 사용자의 말과 가장 가까운 것을 골라. 소개 영상(선생님·나·캐릭터 소개)은 intro야. 애매하면 장르를 비워 두고 reply로 어떤 영상인지 한 번 더 물어.
 - 선택 칸은 반드시 주어진 값(= 왼쪽 영문 v)만 써.
 - 사용자가 질문을 하면 intent를 "question"으로 하고, reply에 짧고 정확한 한국어 존댓말 답(2~3문장)을 써. 요강이 있으면 요강에 근거해서 답하고, 요강에 없으면 없다고 말해.
 - 지금 질문에 대한 답이 아니고 다른 칸 정보만 있으면 그 칸만 채워.
@@ -2656,7 +2657,7 @@ ${cur.brief?"공모전 요강:\n"+cur.brief.replace(/\s+/g," ").slice(0,2500)+"\
     if(k==="length"){const n=parseInt(v,10);if(!n)return;cur.length=String(Math.max(5,Math.min(1200,n)));if(n>=120&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9"}done.push("길이 → "+secLabel());return}
     if(["topic","focus","must","msg"].includes(k)){setVal(k,v.slice(0,200));done.push(`${{topic:"주제",focus:"전할 것",must:"꼭 넣을 것",msg:"한 줄 메시지"}[k]} → ${v.slice(0,40)}`);return}
     if(optsFor(k).some(o=>o.v===v)){setVal(k,v);done.push(`${KEY_NAMES[k]||k} → ${label(k,v)}`)}});
-  steps().forEach(x=>{if(done.length&&!answered.has(x.id)&&set[x.key]!==undefined&&getVal(x.key))answered.add(x.id)});
+  const AUTO=["form","mode","genre","length","topic","grade","subject"];steps().forEach(x=>{if(done.length&&!answered.has(x.id)&&set[x.key]!==undefined&&getVal(x.key)&&(AUTO.includes(x.key)||(st&&x.id===st.id)))answered.add(x.id)});
   if(set.mode)answered.add("mode");if(set.form)answered.add("form");
   renderAll();
   if(j.reply)bot(String(j.reply));else if(done.length&&!(st&&set[st.key]!==undefined&&done.length===1))bot("알아들었어요: "+done.join(", "));
@@ -2668,7 +2669,7 @@ function onSay(text){
   text=text.trim(); if(!text)return;
   if(phase==="naming"){saveStyle(text);return}
   if(looksBrief(text)){absorbBrief(text);return}
-  if(phase==="ask"&&curStep&&AI_OK&&!aiBusy&&PAD_API){const OP=curStep.type==="text"?[]:optsFor(curStep.key);const tt=text.replace(/\s/g,"");const exact=text.length<=12&&!/[?？]/.test(text)&&(OP.find(o=>text.includes(o.t)||o.t.includes(text))||OP.find(o=>String(o.t).split(/[·\s‘’'~/]+/).some(w=>w.length>=2&&tt.includes(w))));const exText=curStep.type==="text"&&text.length<40&&!/[?？]|뭐|어떻게|왜|조건|요강/.test(text);
+  if(phase==="ask"&&curStep&&AI_OK&&!aiBusy&&PAD_API){const OP=curStep.type==="text"?[]:optsFor(curStep.key);const tt=text.replace(/\s/g,"");const exact=text.length<=12&&!/[?？]/.test(text)&&OP.find(o=>text.includes(o.t)||o.t.includes(text));const exText=curStep.type==="text"&&text.length<40&&!/[?？]|뭐|어떻게|왜|조건|요강/.test(text);
     if(!exact&&!exText){aiSay(text).then(ok=>{if(!ok)onSayRule(text)});return}}
   return onSayRule(text)}
 function onSayRule(text){
@@ -3363,7 +3364,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792777834"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792777901"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3557,7 +3558,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792777834";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792777901";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
