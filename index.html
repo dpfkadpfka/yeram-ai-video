@@ -1088,6 +1088,46 @@ body[data-stage="char"]:not(.cfresh) .pgh,body[data-stage="split"] .pgh{max-widt
 .pgh-help b{display:block;font-size:15px;margin-bottom:2px}.pgh-help small{color:var(--muted);font-size:13.5px;line-height:1.5}
 .phead,.chead{display:none!important}
 @media (max-width:900px){.pgh{margin-bottom:16px;padding-bottom:14px}.pgh-t{font-size:24px}.pgh-d{font-size:14.5px}.pgh-act{width:100%}}
+/* 입력창 (범용 AI 시작 화면 느낌) */
+.cmp{width:100%;max-width:1000px;margin:6px auto 0;background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 60px -40px rgba(0,0,0,.35);padding:14px 14px 10px;transition:border-color .15s,box-shadow .15s}
+.cmp:focus-within{border-color:#F3C6D8;box-shadow:0 0 0 4px #FFF0F6,0 30px 60px -40px rgba(0,0,0,.35)}
+.cmp.drag{border-color:var(--accent);border-style:dashed}
+.cmp textarea{display:block;width:100%;box-sizing:border-box;border:0;outline:0;resize:none;background:none;font:inherit;font-size:16.5px;line-height:1.6;padding:6px 8px;min-height:84px;color:var(--ink)}
+.cmp textarea::placeholder{color:#A9A19C}
+.cmp-att{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:14px;padding:8px 10px;margin:0 4px 8px;width:fit-content;max-width:100%}
+.cmp-att[hidden]{display:none}
+.cmp-att img{width:44px;height:44px;border-radius:10px;object-fit:cover}
+.cmp-attl{font-size:13px;color:var(--muted);font-weight:600}
+.cmp-attx{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:4px 6px;border-radius:8px}.cmp-attx:hover{background:var(--line);color:var(--ink)}
+.cmp-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:6px}
+.cmp-plus{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;flex-shrink:0;background:var(--paper)}
+.cmp-plus:hover{background:var(--bg)}.cmp-plus svg{width:18px;height:18px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.cmp-send{margin-left:auto;width:40px;height:40px;border-radius:50%;border:0;background:var(--accent);display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.cmp-send:hover{background:var(--accent-deep)}.cmp-send svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pdd,.cmp .mpick{position:relative;flex:none}
+.pill,.cmp .mdd-b{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px!important;border:1px solid var(--line)!important;border-radius:999px!important;background:var(--paper)!important;font:inherit;font-size:14px!important;font-weight:700;color:var(--ink);cursor:pointer;width:auto!important;min-height:0!important;box-shadow:none!important}
+.pill:hover,.cmp .mdd-b:hover{background:var(--bg)!important}
+.pill[aria-expanded="true"],.cmp .mdd-b[aria-expanded="true"]{border-color:var(--accent)!important;background:#FFF4F8!important}
+.pill .pk{color:var(--muted);font-weight:600}
+.pnum{gap:4px;padding:0 6px 0 12px!important}
+.pnin{width:3.2ch;border:0;border-bottom:1.5px solid #E9A9C3;background:none;font:inherit;font-weight:800;font-size:14px;text-align:center;padding:2px 0;color:var(--ink);-moz-appearance:textfield}
+.pnin::-webkit-outer-spin-button,.pnin::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.pnin:focus{outline:0;border-bottom-color:var(--accent)}
+.pu{font-weight:700}
+.pchev{width:22px;height:22px;border:0;background:none;cursor:pointer;display:grid;place-items:center;padding:0}
+.pchev::after{content:"";width:6px;height:6px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translateY(-2px)}
+.cmp .mdd-b::after{width:6px;height:6px;margin-left:2px}
+.cmp .mdd-b img{width:16px;height:16px}
+.ppop,.cmp .mdd-l{position:absolute;z-index:40;left:0;right:auto;top:calc(100% + 8px);min-width:200px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px -18px rgba(0,0,0,.3);padding:6px}
+.ppop[hidden]{display:none}
+.plist{display:grid;gap:2px;max-height:320px;overflow:auto}
+.plist button{border:0;background:none;text-align:left;padding:9px 12px;border-radius:10px;font:inherit;font-size:14.5px;cursor:pointer;color:var(--ink)}
+.plist button:hover{background:var(--bg)}.plist button[aria-selected="true"]{background:#FFF4F8;color:var(--accent-deep);font-weight:800}
+.ppop .scopts{display:grid;gap:4px}.ppop .scopts button{justify-content:flex-start;width:100%}
+.psl{padding:14px 16px;min-width:240px;display:grid;gap:10px}.psl b{font-size:14px}.psl input{width:100%;accent-color:var(--accent)}
+.ptg{display:grid;gap:10px;padding:12px 14px}
+#shotStage .sclist,#shotStage .scres-h,#sceneStage .sclist,#sceneStage .scres-h{max-width:1000px;margin-left:auto;margin-right:auto}
+@media (max-width:600px){.cmp{border-radius:20px;padding:10px 10px 8px}.cmp textarea{font-size:16px;min-height:72px}.ppop,.cmp .mdd-l{position:fixed;left:12px!important;right:12px!important;top:auto;bottom:84px;min-width:0}}
 /* 3단계 한 장면 */
 body:not([data-stage="shot"]) #shotStage{display:none!important}
 body[data-stage="shot"] .main,body[data-stage="shot"] .startcard,body[data-stage="shot"] #charStage,body[data-stage="shot"] .phead-s{display:none!important}
@@ -1319,28 +1359,19 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
 
   <section class="scenepage" id="shotStage" aria-labelledby="shH">
     <div class="phead ph-scene" style="display:block"><div class="pico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSJub25lIiBzdHJva2U9IiMxRjFBMTciIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQwIDg4VjU2YTE2IDE2IDAgMCAxIDE2LTE2aDMyTTE2OCA0MGgzMmExNiAxNiAwIDAgMSAxNiAxNnYzMk0yMTYgMTY4djMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMk04OCAyMTZINTZhMTYgMTYgMCAwIDEtMTYtMTZ2LTMyIi8+PHBhdGggZD0iTTEwOCA5Nmw1NiAzMi01NiAzMnoiIGZpbGw9IiMxRjFBMTciLz48L3N2Zz4K)"></div><span class="pstep">3단계</span><h2 id="shH">컷 편집</h2><p>마음에 안 드는 컷이 나왔을 때, 그 장면만 설명하면 이미지·영상 프롬프트를 다시 써 드려요.</p></div>
-    <div class="card scin">
-      <label class="sch" for="shText">어떤 장면인가요?</label>
-      <textarea class="tinput sctext" id="shText" rows="4" placeholder="예) 선생님이 칠판 앞에서 아이들에게 손을 흔들며 인사한다. 창밖으로 벚꽃이 날린다."></textarea>
-      <div class="shref">
-        <div class="shref-l"><span class="scl">참고 이미지</span><small>캐릭터 이미지를 넣으면 그 그림체·색감을 읽어 프롬프트에 넣어요</small></div>
-        <label class="shdrop" id="shDrop"><input type="file" id="shFile" accept="image/*" hidden><img id="shPrev" alt="" hidden><span id="shPh">+ 이미지 넣기</span></label>
-        <div class="shpal" id="shPal" hidden></div>
-        <button type="button" class="ibtn shx" id="shRefX" hidden aria-label="참고 이미지 빼기">✕</button>
+    <div class="cmp" id="shDrop">
+      <div class="cmp-att" id="shAtt" hidden><img id="shPrev" alt="참고 이미지"><div class="shpal" id="shPal"></div><span class="cmp-attl">참고 이미지 · 그림체와 색감을 읽었어요</span><button type="button" class="cmp-attx" id="shRefX" aria-label="참고 이미지 빼기">✕</button><span id="shPh" hidden></span></div>
+      <textarea id="shText" rows="3" placeholder="어떤 컷으로 바꿀까요? 장면을 설명해 주세요" aria-label="어떤 컷으로 바꿀까요? 장면을 설명해 주세요"></textarea>
+      <div class="cmp-bar">
+        <label class="cmp-plus" title="참고 이미지 넣기" aria-label="참고 이미지 넣기"><input type="file" id="shFile" accept="image/*" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></label>
+        <div class="pdd"><button type="button" class="pill" data-pill="style"><span class="pk">스타일</span><span class="pv" id="shStyleV"></span></button><div class="ppop plist" data-sel="shStyle" hidden></div><select id="shStyle" hidden><option value="참고 이미지">참고 이미지 그대로</option><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="shRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sh="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
+        <div class="mpick" data-mp="img" data-for="shImgM"></div><input type="hidden" id="shImgM" value="GPT Image 2.5">
+        <div class="mpick" data-mp="vid" data-for="shVidM"></div><input type="hidden" id="shVidM" value="Veo 3.1">
+        <div class="pdd"><div class="pill pnum" role="group" aria-label="길이 길이"><span class="pk">길이</span><input type="number" class="pnin" id="shSecV" min="1" max="60" inputmode="numeric" aria-label="길이 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>영상 길이</b><input type="range" id="shSec" min="3" max="15" step="1" value="6" aria-label="영상 길이(초)"></div></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">소리</span><span class="pv" id="shSndV"></span></button><div class="ppop ptg" hidden><label class="scs-tg"><input type="checkbox" data-shtg="sfx" checked><span class="swi"></span>효과음</label><label class="scs-tg"><input type="checkbox" data-shtg="voice"><span class="swi"></span>목소리</label><label class="scs-tg"><input type="checkbox" data-shtg="bgm"><span class="swi"></span>배경음악</label></div></div>
+        <button type="button" class="cmp-send" id="shGo" aria-label="프롬프트 만들기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
-      <div class="scopt-grid">
-        <div class="scrow"><span class="scl">스타일</span><select class="tinput" id="shStyle"><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div>
-        <div class="scrow"><span class="scl">화면 비율</span><div class="scopts" data-sh="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div>
-        <div class="scrow"><span class="scl">이미지 모델</span><div class="mpick" data-mp="img" data-for="shImgM"></div><input type="hidden" id="shImgM" value="GPT Image 2.5"></div>
-        <div class="scrow"><span class="scl">영상 모델</span><div class="mpick" data-mp="vid" data-for="shVidM"></div><input type="hidden" id="shVidM" value="Veo 3.1"></div>
-        <div class="scrow"><span class="scl">영상 길이</span><div class="shsec"><input type="range" id="shSec" min="3" max="15" step="1" value="6" aria-label="영상 길이(초)"><output id="shSecV">6초</output></div></div>
-      </div>
-      <div class="scs-tgs" style="padding:0">
-        <label class="scs-tg"><input type="checkbox" data-shtg="sfx" checked><span class="swi"></span>효과음</label>
-        <label class="scs-tg"><input type="checkbox" data-shtg="voice"><span class="swi"></span>목소리</label>
-        <label class="scs-tg"><input type="checkbox" data-shtg="bgm"><span class="swi"></span>배경음악</label>
-      </div>
-      <button type="button" class="btn primary lg" id="shGo">프롬프트 만들기</button>
     </div>
     <div class="scres-h" id="shResH" hidden><h3>만든 컷</h3></div>
     <div class="sclist" id="shList"></div>
@@ -1348,30 +1379,21 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
 
   <section class="scenepage" id="sceneStage" aria-labelledby="scH">
     <div class="phead ph-scene" style="display:block"><div class="pico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE2LDEwNEgxMDIuMDlMMjEwLDc1LjUxYTgsOCwwLDAsMCw1LjY4LTkuODRsLTguMTYtMzBhMTUuOTMsMTUuOTMsMCwwLDAtMTkuNDItMTEuMTNMMzUuODEsNjQuNzRhMTUuNzUsMTUuNzUsMCwwLDAtOS43LDcuNCwxNS41MSwxNS41MSwwLDAsMC0xLjU1LDEyTDMyLDExMS41NmMwLC4xNCwwLC4yOSwwLC40NHY4OGExNiwxNiwwLDAsMCwxNiwxNkgyMDhhMTYsMTYsMCwwLDAsMTYtMTZWMTEyQTgsOCwwLDAsMCwyMTYsMTA0Wk0xOTIuMTYsNDBsNiwyMi4wNy0yMi42Miw2TDE0Ny40Miw1MS44M1ptLTY2LjY5LDE3LjYsMjguMTIsMTYuMjQtMzYuOTQsOS43NUw4OC41Myw2Ny4zN1ptLTc5LjQsNDQuNjItNi0yMi4wOCwyNi41LTdMOTQuNjksODkuNFpNMjA4LDIwMEg0OFYxMjBIMjA4djgwWiIvPjwvc3ZnPg==)"></div><span class="pstep">4단계</span><h2 id="scH">씬 나누기</h2><p>하고 싶은 이야기를 대략 쓰면 씬으로 나누고, 씬마다 이미지·영상 프롬프트를 만들어요.</p></div>
-    <div class="card scin">
-      <label class="sch" for="scStory">하고 싶은 이야기</label>
-      <textarea class="tinput sctext" id="scStory" rows="6" placeholder="무엇을 보여 주고 싶은지 대략 써 주세요. 영상 길이에 맞춰 씬을 나눠 드려요.&#10;예) 아침에 아이들이 교실로 뛰어 들어온다. 선생님이 창문을 열자 햇살이 들어온다. 아이들이 모둠별로 화분에 물을 준다. 새싹이 돋아난 걸 보고 다 같이 환호한다."></textarea>
-      <div class="shref">
-        <div class="shref-l"><span class="scl">참고 이미지</span><small>캐릭터 이미지를 넣으면 그 그림체·색감을 읽어 프롬프트에 넣어요</small></div>
-        <label class="shdrop" id="scDrop"><input type="file" id="scFile" accept="image/*" hidden><img id="scPrev" alt="" hidden><span id="scPh">+ 이미지 넣기</span></label>
-        <div class="shpal" id="scPal" hidden></div>
-        <button type="button" class="ibtn shx" id="scRefX" hidden aria-label="참고 이미지 빼기">✕</button>
-      </div>
-      <div class="scopt-grid">
-        <div class="scrow"><span class="scl">스타일</span><select class="tinput" id="scStyle"><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div>
-        <div class="scrow"><span class="scl">화면 비율</span><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div>
-        <div class="scrow"><span class="scl">이미지 모델</span><div class="mpick" data-mp="img" data-for="scImgM"></div><input type="hidden" id="scImgM" value="GPT Image 2.5"></div>
-        <div class="scrow"><span class="scl">영상 모델</span><div class="mpick" data-mp="vid" data-for="scVidM"></div><input type="hidden" id="scVidM" value="Veo 3.1"></div>
-        <div class="scrow"><span class="scl">전체 길이</span><div class="shsec"><input type="range" id="scTotal" min="15" max="180" step="15" value="30" aria-label="전체 영상 길이"><output id="scTotalV">30초</output></div></div>
-        <div class="scrow"><span class="scl">씬 길이</span><div class="shsec"><input type="range" id="scSec" min="3" max="15" step="1" value="6" aria-label="씬 하나 길이"><output id="scSecV">6초</output></div></div>
-        <input type="hidden" id="scChar" value="">
-      </div>
-      <div class="scs-tgs" style="padding:0">
-        <label class="scs-tg"><input type="checkbox" data-sctg="sfx" checked><span class="swi"></span>효과음</label>
-        <label class="scs-tg"><input type="checkbox" data-sctg="voice"><span class="swi"></span>목소리</label>
-        <label class="scs-tg"><input type="checkbox" data-sctg="bgm"><span class="swi"></span>배경음악</label>
+    <div class="cmp" id="scDrop">
+      <div class="cmp-att" id="scAtt" hidden><img id="scPrev" alt="참고 이미지"><div class="shpal" id="scPal"></div><span class="cmp-attl">참고 이미지 · 그림체와 색감을 읽었어요</span><button type="button" class="cmp-attx" id="scRefX" aria-label="참고 이미지 빼기">✕</button><span id="scPh" hidden></span></div>
+      <textarea id="scStory" rows="4" placeholder="하고 싶은 이야기를 대략 써 주세요. 길이에 맞춰 씬으로 나눠 드려요" aria-label="하고 싶은 이야기를 대략 써 주세요. 길이에 맞춰 씬으로 나눠 드려요"></textarea>
+      <div class="cmp-bar">
+        <label class="cmp-plus" title="참고 이미지 넣기" aria-label="참고 이미지 넣기"><input type="file" id="scFile" accept="image/*" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></label>
+        <div class="pdd"><button type="button" class="pill" data-pill="style"><span class="pk">스타일</span><span class="pv" id="scStyleV"></span></button><div class="ppop plist" data-sel="scStyle" hidden></div><select id="scStyle" hidden><option value="참고 이미지">참고 이미지 그대로</option><option value="참고 이미지">참고 이미지 그대로</option><option value="실사 영화">실사 영화</option><option value="3D 애니메이션">3D 애니메이션</option><option value="실사 3D">실사 3D</option><option value="일본 애니">일본 애니</option><option value="웹툰">웹툰</option><option value="디테일 일러스트">디테일 일러스트</option><option value="수채화">수채화</option><option value="클레이">클레이</option><option value="플랫 일러스트">플랫 일러스트</option><option value="치비">치비</option><option value="픽셀 아트">픽셀 아트</option></select></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">비율</span><span class="pv" id="scRatioV"></span></button><div class="ppop" hidden><div class="scopts" data-sc="ratio"><button type="button" data-v="16:9" aria-pressed="true">가로 16:9</button><button type="button" data-v="9:16" aria-pressed="false">세로 9:16</button><button type="button" data-v="1:1" aria-pressed="false">정사각 1:1</button></div></div></div>
+        <div class="mpick" data-mp="img" data-for="scImgM"></div><input type="hidden" id="scImgM" value="GPT Image 2.5">
+        <div class="mpick" data-mp="vid" data-for="scVidM"></div><input type="hidden" id="scVidM" value="Veo 3.1">
+        <div class="pdd"><div class="pill pnum" role="group" aria-label="전체 길이"><span class="pk">전체</span><input type="number" class="pnin" id="scTotalV" min="1" max="900" inputmode="numeric" aria-label="전체 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>전체 길이</b><input type="range" id="scTotal" min="15" max="180" step="15" value="30" aria-label="전체 영상 길이"></div></div><div class="pdd"><div class="pill pnum" role="group" aria-label="씬 길이"><span class="pk">씬</span><input type="number" class="pnin" id="scSecV" min="1" max="60" inputmode="numeric" aria-label="씬 길이(초)"><span class="pu">초</span><button type="button" class="pchev" aria-label="슬라이더로 고르기"></button></div><div class="ppop psl" hidden><b>씬 하나 길이</b><input type="range" id="scSec" min="3" max="15" step="1" value="6" aria-label="씬 하나 길이"></div></div>
+        <div class="pdd"><button type="button" class="pill"><span class="pk">소리</span><span class="pv" id="scSndV"></span></button><div class="ppop ptg" hidden><label class="scs-tg"><input type="checkbox" data-sctg="sfx" checked><span class="swi"></span>효과음</label><label class="scs-tg"><input type="checkbox" data-sctg="voice"><span class="swi"></span>목소리</label><label class="scs-tg"><input type="checkbox" data-sctg="bgm"><span class="swi"></span>배경음악</label></div></div>
+        <button type="button" class="cmp-send" id="scGo" aria-label="프롬프트 만들기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
     </div>
+        <input type="hidden" id="scChar" value="">
     <div class="scres-h" id="scResH" hidden><h3 id="scCount"></h3><div class="btnrow"><button type="button" class="btn sm" data-scall="img">이미지 프롬프트 전체 복사</button><button type="button" class="btn sm" data-scall="vid">영상 프롬프트 전체 복사</button><button type="button" class="btn sm primary" data-scall="en">전체 영어로 다듬기 (ChatGPT)</button></div></div>
     <div class="sclist" id="scList"></div>
   </section>
@@ -2823,7 +2845,8 @@ function openScene(){setStage("scene");window.scrollTo({top:0});const c=S.charac
 (function(){try{const d=JSON.parse(localStorage.getItem("ymScene3")||"null");if(d){Object.assign(SC3,d.SC3||{});$("#scStory").value=d.story||"";if(d.style&&STYLE_EN[d.style])$("#scStyle").value=d.style;$("#scChar").value=d.ch||"";if(d.im)$("#scImgM").value=d.im;if(d.vm)$("#scVidM").value=d.vm}}catch(e){}
   $$("#sceneStage .scopts").forEach(g=>[...g.querySelectorAll("button")].forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===String(SC3[g.dataset.sc]))));
   const fmtL=v=>v>=60?(v%60?`${Math.floor(v/60)}분 ${v%60}초`:`${v/60}분`):v+"초";
-  const paintSl=()=>{$("#scTotal").value=SC3.total;$("#scTotalV").textContent=fmtL(+SC3.total);$("#scSec").value=SC3.sec;$("#scSecV").textContent=SC3.sec+"초"};paintSl();
+  const paintSl=()=>{$("#scTotal").value=SC3.total;if(document.activeElement!==$("#scTotalV"))$("#scTotalV").value=SC3.total;$("#scSec").value=SC3.sec;if(document.activeElement!==$("#scSecV"))$("#scSecV").value=SC3.sec};paintSl();
+  [["#scTotalV","total"],["#scSecV","sec"]].forEach(([q,k])=>$(q).addEventListener("input",e=>{const v=parseInt(e.target.value,10);if(v>0){SC3[k]=String(v);paintSl();clearTimeout(renderScenes.t);renderScenes.t=setTimeout(renderScenes,250)}}));
   $("#scTotal").addEventListener("input",e=>{SC3.total=e.target.value;paintSl();clearTimeout(renderScenes.t);renderScenes.t=setTimeout(renderScenes,150)});
   $("#scSec").addEventListener("input",e=>{SC3.sec=e.target.value;paintSl();clearTimeout(renderScenes.t);renderScenes.t=setTimeout(renderScenes,150)});
   $$("[data-sctg]").forEach(x=>x.checked=!!SC3.tg[x.dataset.sctg])})();
@@ -2840,17 +2863,25 @@ const MODELS={img:[["GPT Image 2.5","data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iM
 const mLogo=n=>{const m=[...MODELS.img,...MODELS.vid].find(x=>x[0]===n);return m?m[1]:""};
 function paintPick(el){const inp=$("#"+el.dataset.for),L=MODELS[el.dataset.mp];if(!L.some(x=>x[0]===inp.value))inp.value=L[0][0];
   el.innerHTML=`<button type="button" class="mdd-b tinput" aria-haspopup="listbox" aria-expanded="false"><img src="${mLogo(inp.value)}" alt=""><span>${esc(inp.value)}</span></button><div class="mdd-l" role="listbox" hidden>${L.map(([n,l])=>`<button type="button" role="option" data-mv="${esc(n)}" aria-selected="${n===inp.value}"><img src="${l}" alt="">${esc(n)}</button>`).join("")}</div>`}
-const mddClose=()=>$$(".mpick").forEach(el=>{const l=el.querySelector(".mdd-l");if(l){l.hidden=true;el.querySelector(".mdd-b").setAttribute("aria-expanded","false")}});
+const mddClose=(keep)=>{$$(".mpick").forEach(el=>{const l=el.querySelector(".mdd-l");if(l&&l!==keep){l.hidden=true;el.querySelector(".mdd-b").setAttribute("aria-expanded","false")}});$$(".ppop").forEach(p=>{if(p!==keep){p.hidden=true;p.previousElementSibling.setAttribute("aria-expanded","false")}})};
+const STY_KO=v=>v==="참고 이미지"?"참고 이미지":v;
+function paintPills(){["sh","sc"].forEach(x=>{const sel=$("#"+x+"Style");if(!sel)return;$("#"+x+"StyleV").textContent=STY_KO(sel.value);
+  const pl=document.querySelector(`.plist[data-sel="${x}Style"]`);pl.innerHTML=[...sel.options].map(o=>`<button type="button" data-plv="${esc(o.value)}" aria-selected="${o.value===sel.value}">${esc(o.textContent)}</button>`).join("");
+  const R=x==="sh"?SH:SC3;$("#"+x+"RatioV").textContent=R.ratio;const T=R.tg;const on=[T.sfx&&"효과음",T.voice&&"목소리",T.bgm&&"음악"].filter(Boolean);$("#"+x+"SndV").textContent=on.length?on.join("·"):"없음"})}
 document.addEventListener("click",e=>{let b;
   if((b=e.target.closest(".mpick [data-mv]"))){const el=b.closest(".mpick"),inp=$("#"+el.dataset.for);inp.value=b.dataset.mv;paintPick(el);inp.dispatchEvent(new Event("change",{bubbles:true}));return}
-  if((b=e.target.closest(".mpick .mdd-b"))){const l=b.nextElementSibling,open=l.hidden;mddClose();l.hidden=!open;b.setAttribute("aria-expanded",open);return}
+  if((b=e.target.closest(".mpick .mdd-b"))){const l=b.nextElementSibling,open=l.hidden;mddClose(l);l.hidden=!open;b.setAttribute("aria-expanded",open);return}
+  if((b=e.target.closest(".plist [data-plv]"))){const pl=b.parentElement,sel=$("#"+pl.dataset.sel);sel.value=b.dataset.plv;sel.dispatchEvent(new Event("change",{bubbles:true}));paintPills();mddClose();return}
+  if(e.target.closest(".pnin"))return;
+  if((b=e.target.closest(".pdd>.pill"))){const p=b.nextElementSibling,open=p.hidden;mddClose(p);p.hidden=!open;b.setAttribute("aria-expanded",open);return}
+  if(e.target.closest(".ppop"))return;
   mddClose()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")mddClose()});
 /* 3단계: 한 장면 */
 const SH={ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false},ref:null,list:[]};
 try{const d=JSON.parse(localStorage.getItem("ymShot")||"null");if(d){Object.assign(SH,d.o||{});SH.list=d.list||[];["style","im","vm"].forEach(k=>{const el=$("#sh"+{style:"Style",im:"ImgM",vm:"VidM"}[k]);if(el&&d[k]!=null)el.value=d[k]})}}catch(e){}
 function shSave(){try{localStorage.setItem("ymShot",JSON.stringify({o:{ratio:SH.ratio,sec:SH.sec,tg:SH.tg,ref:SH.ref},list:SH.list,style:$("#shStyle").value,im:$("#shImgM").value,vm:$("#shVidM").value}))}catch(e){try{SH.list=SH.list.slice(0,20);localStorage.setItem("ymShot",JSON.stringify({o:{ratio:SH.ratio,sec:SH.sec,tg:SH.tg},list:SH.list.map(x=>({...x,th:""}))}))}catch(e2){}}}
-function shPaintRef(){const r=SH.ref;window._ref=r;["sh","sc"].forEach(x=>{$("#"+x+"Prev").hidden=!r;$("#"+x+"Ph").hidden=!!r;$("#"+x+"RefX").hidden=!r;$("#"+x+"Pal").hidden=!r;if(r){$("#"+x+"Prev").src=r.th;$("#"+x+"Pal").innerHTML=r.colors.map(c=>`<i style="background:${c}" title="${c}"></i>`).join("")}});if(document.body.dataset.stage==="scene")renderScenes()}
+function shPaintRef(){const r=SH.ref;window._ref=r;["sh","sc"].forEach(x=>{$("#"+x+"Att").hidden=!r;if(r){$("#"+x+"Prev").src=r.th;$("#"+x+"Pal").innerHTML=r.colors.map(c=>`<i style="background:${c}" title="${c}"></i>`).join("")}});if(document.body.dataset.stage==="scene")renderScenes();paintPills()}
 function readRef(file){const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),k=Math.min(1,160/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext("2d");x.drawImage(im,0,0,c.width,c.height);
   const d=x.getImageData(0,0,c.width,c.height).data,bk={};for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;const r=d[i],g=d[i+1],b=d[i+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mn>235||mx<20)continue;const key=(r>>5)+","+(g>>5)+","+(b>>5);const o=bk[key]||(bk[key]={n:0,r:0,g:0,b:0});o.n++;o.r+=r;o.g+=g;o.b+=b}
   const hex=v=>Math.round(v).toString(16).padStart(2,"0");const top=[];Object.values(bk).sort((a,b)=>b.n-a.n).map(o=>[o.r/o.n,o.g/o.n,o.b/o.n]).forEach(c=>{if(top.length<5&&top.every(t=>Math.hypot(t[0]-c[0],t[1]-c[1],t[2]-c[2])>60))top.push(c)});for(let i=0;i<top.length;i++)top[i]="#"+hex(top[i][0])+hex(top[i][1])+hex(top[i][2]);
@@ -2872,12 +2903,16 @@ document.addEventListener("click",e=>{let b;
   if((b=e.target.closest("[data-shdel]"))){SH.list.splice(+b.dataset.shdel,1);renderShots();shSave()}});
 document.addEventListener("change",e=>{const t=e.target.closest("[data-shtg]");if(t){SH.tg[t.dataset.shtg]=t.checked;shSave()}});
 ["#shStyle","#shImgM","#shVidM"].forEach(q=>$(q).addEventListener("change",shSave));
-const shSecPaint=()=>{$("#shSec").value=SH.sec;$("#shSecV").textContent=SH.sec+"초";$("#shSec").style.setProperty("--p",((SH.sec-3)/12*100)+"%")};
-$("#shSec").addEventListener("input",e=>{SH.sec=+e.target.value;shSecPaint();shSave()});shSecPaint();
+const shSecPaint=()=>{$("#shSec").value=SH.sec;if(document.activeElement!==$("#shSecV"))$("#shSecV").value=SH.sec;$("#shSec").style.setProperty("--p",((SH.sec-3)/12*100)+"%")};
+$("#shSec").addEventListener("input",e=>{SH.sec=+e.target.value;shSecPaint();shSave()});$("#shSecV").addEventListener("input",e=>{const v=parseInt(e.target.value,10);if(v>0){SH.sec=v;shSecPaint();shSave()}});shSecPaint();
+document.addEventListener("click",()=>setTimeout(paintPills));document.addEventListener("change",()=>setTimeout(paintPills));
+$("#shText").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();$("#shGo").click()}});
+$("#scGo").addEventListener("click",()=>{if(!$("#scStory").value.trim()){toast("하고 싶은 이야기를 먼저 써 주세요");$("#scStory").focus();return}renderScenes();setTimeout(()=>{const h=$("#scResH");if(h&&!h.hidden)h.scrollIntoView({behavior:"smooth",block:"start"})},50)});
+["sh","sc"].forEach(x=>{const d=$("#"+x+"Drop");d.addEventListener("dragenter",()=>d.classList.add("drag"));d.addEventListener("dragleave",e=>{if(!d.contains(e.relatedTarget))d.classList.remove("drag")});d.addEventListener("drop",()=>d.classList.remove("drag"))});
 function openShot(){setStage("shot");window.scrollTo({top:0});renderShots()}
 $$(".mpick").forEach(paintPick);
 $$("#shotStage .scopts").forEach(g=>[...g.querySelectorAll("button")].forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===String(SH[g.dataset.sh]))));
-$$("[data-shtg]").forEach(x=>x.checked=!!SH.tg[x.dataset.shtg]);shPaintRef();["#shStyle","#scStyle"].forEach(q=>{if(!SH.ref&&$(q).value==="참고 이미지")$(q).value="3D 애니메이션"});
+$$("[data-shtg]").forEach(x=>x.checked=!!SH.tg[x.dataset.shtg]);shPaintRef();paintPills();["#shStyle","#scStyle"].forEach(q=>{if(!SH.ref&&$(q).value==="참고 이미지")$(q).value="3D 애니메이션"});
 /* 페이지 머리 내용 */
 const PGH={
  char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 AI 이미지"]],
