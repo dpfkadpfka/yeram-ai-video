@@ -1,31 +1,64 @@
-// Cloudflare Worker: 패들렛 읽기(GET ?id=보드ID) / 글 올리기(POST ?id=보드ID {subject,body,url}) — API 키는 비밀값 PADLET_KEY에만
+// Cloudflare Worker: 패들렛 읽기 / 올리기 / 숨기기(삭제)
+// 비밀값 PADLET_KEY, KV 바인딩 HIDE (숨긴 글 목록)
 const ALLOW = "https://dpfkadpfka.github.io";
+const FB_KEY = "AIzaSyCZ-UaL2zBCzYYkjwzrdEUAA9dEVLg5uKM";
+const OWNER = ["dpfkadpfka@gmail.com"];
 const strip = s => String(s || "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>/gi, "\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').trim();
 const H = k => ({ "X-Api-Key": k, accept: "application/vnd.api+json", "content-type": "application/vnd.api+json" });
+async function sign(secret, msg) {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const s = await crypto.subtle.sign("HMAC", k, new TextEncoder().encode("del:" + msg));
+  return [...new Uint8Array(s)].slice(0, 16).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function isAdmin(idToken) {
+  if (!idToken) return false;
+  const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FB_KEY}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idToken }) });
+  if (!r.ok) return false;
+  const email = ((await r.json()).users || [{}])[0].email || "";
+  if (OWNER.includes(email.toLowerCase())) return true;
+  const c = await fetch("https://firestore.googleapis.com/v1/projects/yeram-ai-video/databases/(default)/documents/config/site").then(x => x.ok ? x.json() : {}).catch(() => ({}));
+  const L = ((c.fields || {}).admins?.arrayValue?.values || []).map(v => String(v.stringValue || "").toLowerCase());
+  return L.includes(email.toLowerCase());
+}
 export default {
   async fetch(req, env, ctx) {
     const cors = { "Access-Control-Allow-Origin": ALLOW, "Vary": "Origin", "Content-Type": "application/json; charset=utf-8" };
+    const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: cors });
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
-    const id = new URL(req.url).searchParams.get("id") || "";
-    if (!/^[a-z0-9]{10,}$/i.test(id)) return new Response('{"error":"id"}', { status: 400, headers: cors });
+    const u = new URL(req.url), id = u.searchParams.get("id") || "", act = u.searchParams.get("act") || "";
+    if (!/^[a-z0-9]{10,}$/i.test(id)) return J({ error: "id" }, 400);
     const key = new Request("https://cache.local/padlet/" + id), cache = caches.default;
+    if (req.method === "POST" && act === "del") {
+      const b = await req.json().catch(() => ({}));
+      const post = String(b.post || "");
+      if (!post) return J({ error: "post" }, 400);
+      const ok = (b.token && b.token === await sign(env.PADLET_KEY, post)) || await isAdmin(b.idToken);
+      if (!ok) return J({ error: "forbidden" }, 403);
+      await env.HIDE.put(post, "1");
+      ctx.waitUntil(cache.delete(key));
+      return J({ ok: true });
+    }
     if (req.method === "POST") {
       const b = await req.json().catch(() => ({}));
       const subject = String(b.subject || "").slice(0, 120), body = String(b.body || "").slice(0, 2000), url = String(b.url || "");
-      if (!subject || !/^https:\/\/res\.cloudinary\.com\//.test(url)) return new Response('{"error":"bad"}', { status: 400, headers: cors });
+      if (!subject || !/^https:\/\/res\.cloudinary\.com\//.test(url)) return J({ error: "bad" }, 400);
       const send = att => fetch(`https://api.padlet.dev/v1/boards/${id}/posts`, { method: "POST", headers: H(env.PADLET_KEY), body: JSON.stringify({ data: { type: "post", attributes: { content: { subject, body, attachment: att } } } }) });
       let r = await send({ url, caption: "" });
       if (!r.ok) r = await send({ attachment_url: url, attachment_caption: "" });
       ctx.waitUntil(cache.delete(key));
-      return new Response(JSON.stringify({ ok: r.ok, status: r.status, detail: r.ok ? "" : (await r.text()).slice(0, 300) }), { status: r.ok ? 200 : 502, headers: cors });
+      if (!r.ok) return J({ ok: false, status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
+      const d = await r.json().catch(() => ({}));
+      const pid = String(d?.data?.id || "");
+      return J({ ok: true, id: pid, token: pid ? await sign(env.PADLET_KEY, pid) : "" });
     }
     const hit = await cache.match(key);
     if (hit) return new Response(hit.body, { headers: cors });
     const r = await fetch(`https://api.padlet.dev/v1/boards/${id}?include=posts,sections`, { headers: H(env.PADLET_KEY) });
-    if (!r.ok) return new Response(JSON.stringify({ error: r.status }), { status: 502, headers: cors });
+    if (!r.ok) return J({ error: r.status }, 502);
+    const hidden = new Set(env.HIDE ? (await env.HIDE.list()).keys.map(k => k.name) : []);
     const j = await r.json(), inc = j.included || [];
     const sections = Object.fromEntries(inc.filter(x => x.type === "section").map(x => [x.id, x.attributes?.title || ""]));
-    const posts = inc.filter(x => x.type === "post").map(x => {
+    const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
       const a = x.attributes || {}, c = a.content || {}, at = c.attachment || {};
       return { id: x.id, subject: strip(c.subject), body: strip(c.body), url: at.url || "", caption: at.caption || "", color: a.color || "",
         section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: a.author?.name || a.authorName || "" };
