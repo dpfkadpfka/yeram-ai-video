@@ -1208,6 +1208,14 @@ body.cpre[data-stage="char"] .pgh{max-width:980px!important}
 @media (max-width:900px){.pdw{grid-template-columns:minmax(0,1fr)}.pdr{order:-1;border-left:0;border-bottom:1px solid var(--line);padding:20px 16px 36px}.pdimg{width:min(64%,230px)}.pdl{padding:24px 20px}.pdl h3{font-size:28px!important}.pdrows em{display:none}.pdrows li{grid-template-columns:24px minmax(0,1fr)}}
 /* 로그인 후 로그인 버튼 숨기기 */
 header.side #loginBtn[hidden],body.sidemini #loginBtn[hidden],#loginBtn[hidden]{display:none!important}
+/* 피사체 고르기 패널 */
+.sbpanel{display:grid;gap:8px;max-height:min(46vh,340px);overflow-y:auto;width:100%}
+.sbrow{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:start}
+.sbl{font-size:12.5px;font-weight:800;color:var(--accent-deep);padding-top:8px}
+.sbc{display:flex;flex-wrap:wrap;gap:6px}
+.sbact{display:flex;align-items:center;gap:6px;margin-top:8px;width:100%;justify-content:flex-end}
+.sbsum{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink);background:var(--bg);border-radius:10px;padding:8px 12px}
+.sbdone{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
 /* 메뉴 묶음 이름 */
 .snlab-li{list-style:none}
 @media (max-width:900px){.snlab-li{display:none!important}}
@@ -1898,7 +1906,7 @@ async function initFirebase(){
         $("#loginModal").hidden=true;
         try{const sn=await fs.getDoc(fs.doc(fb.db,"users",u.uid));const remote=sn.exists()?fix(JSON.parse(sn.data().data)):EMPTY();
           const loc=local.load();S=(loc&&!loc.owner&&(loc.history.length||loc.rules.length))?merge(remote,fix(loc)):remote;S.owner=u.uid;if(FRESH_SESS)S.character=null;
-          bot(`${u.displayName||"선생님"}님, 반가워요! 지금까지 쌓인 내 스타일을 불러왔어요.`);
+          
         }catch(e){toast("기록을 불러오지 못했어요.")}
       }else{
         const loc=local.load();S=(loc&&!loc.owner)?fix(loc):EMPTY();
@@ -2898,7 +2906,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792749393"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792750009"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3046,7 +3054,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792749393";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792750009";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
@@ -3086,7 +3094,7 @@ function cAsk(sec,k){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
     cbot(`<b>피사체</b> · 누구를 그릴까요?<br>아래 내용을 함께 써 주면 더 정확하게 그려요.<ul class="subjhint"><li><b>외형</b> 나이, 성별, 얼굴 (예: 20대 여자, 큰 눈)</li><li><b>헤어</b> 머리 모양과 색 (예: 갈색 긴 생머리)</li><li><b>의상</b> 옷 (예: 분홍 원피스)</li><li><b>소품</b> 들고 있거나 달고 있는 것 (예: 작은 뿔, 천사 날개)</li><li><b>특징</b> 눈에 띄는 점 (예: 볼터치, 안경)</li></ul><span class="subjex">예) 갈색 긴 생머리에 분홍 원피스를 입고, 작은 뿔과 천사 날개가 있는 20대 여자 선생님</span>`);
-    cQuick.innerHTML=chips(SB_KIND.o,t=>sb.sel.kind===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
+    sb.sel={};subjPanel();
   }else if(sec==="act"){
     cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
     cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
@@ -3105,6 +3113,10 @@ function cAsk(sec,k){
   }
   $("#cSay").placeholder=sec==="subj"&&k==="kind"?"외형, 헤어, 의상, 소품, 특징을 써 주세요":"골라도 되고, 직접 써도 돼요";
   renderCards();
+}
+function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
+  const row=(g)=>{const cur=sb.sel[g.k];const on=t=>g.m?(cur||[]).includes(t):cur===t;return `<div class="sbrow"><span class="sbl">${g.k==="kind"?"누구":esc(g.t)}</span><div class="sbc">${g.o.map(t=>`<button type="button" class="opt" data-sk="${g.k}" data-sv="${esc(t)}" aria-pressed="${on(t)}">${esc(t)}</button>`).join("")}</div></div>`};
+  cQuick.innerHTML=`<div class="sbpanel">${row(SB_KIND)}${k?G.filter(g=>g.k!=="kind").map(row).join(""):""}</div><div class="sbact">${k?`<span class="sbsum">${esc(sbCompose())}</span><button type="button" class="opt sbdone" data-sbdone>다 골랐어요 →</button>`:""}<button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
 }
 function actLabel(){const v=cv("act");return v===ACT_FULL?"기본 포즈(정면 전신)":v}
 function placeLabel(){const v=cv("place");return v===PLACE_PNG?"투명 배경(PNG)":v}
@@ -3177,6 +3189,10 @@ function charBase(){
 }
 document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cv]"))){cPick(b.dataset.cv);return}
+  if((b=t.closest("[data-sk]"))){const k=b.dataset.sk,v=b.dataset.sv,G=sbGroups(),g=G.find(x=>x.k===k)||SB_KIND;
+    if(k==="kind"){sb.sel=sb.sel.kind===v?{}:{kind:v}}else if(g.m){const a=(sb.sel[k]||[]).filter(x=>x!=="없음");const i=a.indexOf(v);if(v==="없음")sb.sel[k]=["없음"];else{i>=0?a.splice(i,1):a.push(v);sb.sel[k]=a}}else sb.sel[k]=sb.sel[k]===v?undefined:v;
+    subjPanel();return}
+  if(t.closest("[data-sbdone]")){const extra=$("#cSay").value.trim();$("#cSay").value="";const v=[sbCompose(),extra].filter(Boolean).join(", ");cme(v);cSet("subj",v);if(extra)sb.sel.extra=extra;return cAdvance()}
   if(t.closest("[data-cback]")){const q=cq;if(!q)return;const O=["subj","act","place","style"],i=O.indexOf(q.sec);if(i<1)return;const pv=O[i-1];cme("← 이전 질문");cDoneOnly=false;
     if(pv==="subj"){const inp=$("#cSay");inp.value=cv("subj")||"";cAsk("subj","kind");setTimeout(()=>{inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}},50)}else cAsk(pv);
     cq.back=true;return}
