@@ -1,0 +1,25 @@
+name: 패들렛 가져오기
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+  push:
+    paths: ["scripts/padlet.mjs", ".github/workflows/padlet.yml"]
+permissions:
+  contents: write
+concurrency: padlet
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/padlet.mjs
+        env:
+          PADLET_KEY: ${{ secrets.PADLET_KEY }}
+      - run: |
+          git config user.name "padlet-bot"
+          git config user.email "padlet-bot@users.noreply.github.com"
+          git add data/padlet.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "패들렛 게시물 갱신" && git pull --rebase && git push)
