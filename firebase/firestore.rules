@@ -71,6 +71,10 @@ service cloud.firestore {
         allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
       }
     }
+    // 반응 댓글 한꺼번에 읽기(카드 미리보기)
+    match /{path=**}/c/{cid} {
+      allow read: if true;
+    }
     // 갤러리 캐릭터·영상 반응(이모지)과 댓글
     match /rx/{key} {
       allow read: if true;

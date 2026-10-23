@@ -1526,6 +1526,78 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 @keyframes stkPop{0%{transform:scale(.3) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
 @keyframes stkTw{0%,100%{transform:scale(.7);opacity:.5}50%{transform:scale(1.15);opacity:1}}
 @media (prefers-reduced-motion:reduce){.stk,.stk-in .sp{animation:none}}
+
+.gcard2{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;align-self:start}
+.gcard2 .gi{display:block;width:100%;aspect-ratio:1;padding:0;border:0;background:var(--band);overflow:hidden;cursor:zoom-in}
+.gcard2 .gi img{width:100%;height:100%;object-fit:cover;transition:transform .25s}.gcard2 .gi:hover img{transform:scale(1.04)}
+.gcard2 .gm{padding:11px 13px 13px;display:grid;gap:2px}
+.gcard2 .gt{all:unset;cursor:pointer;font-weight:700;font-size:15px;overflow-wrap:anywhere}.gcard2 .gt:hover{color:var(--accent-strong)}
+.gcard2 small{color:var(--muted);font-size:12.5px}
+#galGrid{align-items:start}
+.rxcmts.mini{gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.rxcmts.mini .rxlist{max-height:none;overflow:visible;gap:6px}
+.rxcmts.mini .rxlist:empty{display:none}
+.rxcmts.mini .rxitem{padding:6px 10px;font-size:13px;border-radius:10px}
+.rxcmts.mini .rxform input{height:34px;font-size:14px;border-radius:999px;padding:0 12px;background:var(--bg)}
+.rxcmts.mini .rxform button{height:34px;width:34px;padding:0;border-radius:50%;font-size:15px}
+@media (max-width:760px){.rxcmts.mini .rxform input{font-size:16px}}
+.rxmore{all:unset;cursor:pointer;font-size:12.5px;color:var(--muted);font-weight:600}.rxmore:hover{color:var(--accent-strong)}
+.rxlogin{all:unset;cursor:pointer;font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.rxcmts:not(.mini) .rxlogin{font-size:14px}
+.gv-card{position:relative;padding-top:28px}
+.gvx{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:0;background:var(--bg);color:var(--ink);font-size:16px;cursor:pointer;display:grid;place-items:center;z-index:2}
+.gvx:hover{background:var(--band);color:var(--accent-strong)}
+.gvside{display:flex;flex-direction:column;gap:12px;min-width:0;padding-right:28px}
+.gvhead h2{margin:0}.gby{margin:4px 0 0;color:var(--muted);font-size:14.5px}
+.gvact{margin-top:auto;display:flex;gap:6px;justify-content:flex-end;padding-top:6px}
+.gva{border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;height:32px;padding:0 13px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.gva:hover{border-color:var(--accent);color:var(--accent-strong)}.gva.del:hover{border-color:#d9534f;color:#c0392b}.gva.save{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.gvcm{grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px}
+
+.pdhead{display:flex;align-items:flex-start;gap:6px;padding:12px 10px 8px 14px}
+.pdhead>b,.pdhead .gt{flex:1;min-width:0;font-weight:800;font-size:16px;line-height:1.35;overflow-wrap:anywhere}
+.pdhead .gt{all:unset;flex:1;min-width:0;cursor:pointer;font-weight:800;font-size:16px;line-height:1.35;overflow-wrap:anywhere}.pdhead .gt:hover{color:var(--accent-strong)}
+.pdcard .pdm,.gcard2 .gi{margin:0 12px;width:auto;border-radius:12px;overflow:hidden}
+.pdcard .pdtx{padding:10px 14px 4px}
+.pdcard .pdtx:empty{display:none}
+.pdcard>.rxbar{margin:8px 12px 0;padding-top:8px;border-top:1px solid var(--line)}
+.pdcard>.rxcmts.mini{margin:0 12px 12px;border-top:0;padding-top:2px}
+.kmenu{position:relative;flex:none}
+.kbtn{width:28px;height:28px;border:0;background:transparent;border-radius:8px;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;font-weight:700}
+.kbtn:hover{background:var(--bg);color:var(--ink)}
+.kpop{position:absolute;right:0;top:calc(100% + 4px);z-index:40;min-width:110px;display:grid;padding:5px;border-radius:12px;background:var(--paper);border:1px solid var(--line);box-shadow:0 14px 30px -14px rgba(0,0,0,.35)}
+.kpop[hidden]{display:none}
+.kpop button{all:unset;cursor:pointer;padding:8px 12px;border-radius:8px;font-size:13.5px;font-weight:600;white-space:nowrap}
+.kpop button:hover{background:var(--bg)}.kpop .kdel{color:#c0392b}
+.rxadd{border:0!important;width:34px;min-width:0;padding:0;justify-content:center;color:var(--muted)}
+.rxcm{border:0!important;display:inline-flex;align-items:center;gap:4px;padding:0 4px}
+.rxcm span:empty{display:none}
+.rxitem{background:transparent!important;padding:6px 0!important;border-radius:0!important}
+.rxitem+.rxitem{border-top:1px solid var(--line)}
+.rxitem .rxh{gap:6px}.rxitem .rxh i{font-style:normal;font-size:11.5px}
+.rxitem .rxh .kmenu{margin-left:auto}.rxitem .kbtn{width:22px;height:22px;font-size:15px}
+.rxitem .rxh>button{margin-left:auto}
+
+.pdhead{align-items:center!important;gap:9px!important;padding:12px 8px 6px 12px!important}
+.pav{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13.5px;text-shadow:0 1px 1px rgba(0,0,0,.15)}
+.pnm{flex:1;min-width:0;display:grid;line-height:1.25}.pnm b{font-size:13.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pnm i{font-style:normal;font-size:11.5px;color:var(--muted)}
+.ptl{margin:2px 14px 10px;font-size:17px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
+.ptl .gt{all:unset;cursor:pointer}.ptl .gt:hover{color:var(--accent-strong)}
+#gvModal{padding:0}
+.gv-card{max-width:min(1240px,96vw)!important;width:96vw;height:min(88vh,860px);max-height:none!important;padding:0!important;gap:0!important;grid-template-columns:minmax(0,1fr) 360px!important;overflow:hidden!important;border-radius:18px}
+.gvimg{background:#16121a;display:grid;place-items:center;min-height:0;overflow:hidden}
+.gvimg .gimg{width:100%;height:100%;object-fit:contain;border-radius:0!important;background:transparent!important;cursor:zoom-in}
+.gv-card .gvside{padding:18px 18px 16px!important;overflow-y:auto;display:flex;flex-direction:column;gap:12px;border-left:1px solid var(--line)}
+.gv-card .gvside .pdhead{padding:0 34px 0 0!important}
+.gv-card h2{font-size:21px;margin:0}
+.gvpr summary{cursor:pointer;font-size:13.5px;font-weight:700;color:var(--muted)}.gvpr pre{margin-top:8px!important}.gvpr .btnrow{margin-top:8px}
+.gv-card .gvside>.rxbar{padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0}
+.gv-card .rxcmts{flex:1;display:flex;flex-direction:column;min-height:0}.gv-card .rxcmts h3{display:none}
+.gv-card .rxcmts .rxlist{flex:1;max-height:none;align-content:start}
+.gv-card .rxcmts .rxform{margin-top:auto;padding-top:10px}
+.gvx{top:12px!important;right:12px!important;background:rgba(0,0,0,.06)!important}
+.gvact{display:flex;gap:6px;justify-content:flex-end;margin-top:8px}
+@media (max-width:760px){.gv-card{grid-template-columns:minmax(0,1fr)!important;height:auto;max-height:92vh!important;overflow-y:auto!important}.gvimg{max-height:55vh}.gv-card .gvside{border-left:0;overflow:visible}}
 </style>
 
 <div class="wrap">
@@ -1874,6 +1946,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <div class="row" id="hiAddYt" hidden><input class="tinput" id="hiYt" placeholder="유튜브 주소 붙여넣기 (영상·쇼츠 모두)" autocomplete="off"><button class="btn" type="button" id="hiYtAdd">추가</button></div>
       <div class="row"><button class="btn primary" type="submit">저장</button></div><small class="hint">그림을 누르면 빼기/넣기가 바뀌어요. 흐리게 보이는 건 홈 화면에 안 나와요.</small></form>
     <form class="padform" id="menuForm"><b>메뉴 편집</b><div class="mnlist" id="mnList"></div><div class="row"><button class="btn primary" type="submit">저장</button></div><small class="hint">▲▼로 순서를 바꾸고, 체크를 끄면 숨겨지고, 이름과 아이콘을 바꿀 수 있어요. 저장하면 모든 선생님 화면에 적용돼요.</small><div class="icopick" id="icoPick" hidden></div></form>
+    <form class="padform" id="galSetForm"><b>갤러리 표시</b><label class="row" style="gap:8px;align-items:center;font-size:15px"><input type="checkbox" id="showTime"> 올린 시간 표시 (작성자 이름은 항상 보여요)</label><div class="row"><button class="btn primary" type="submit">저장</button></div></form>
     <form class="padform" id="padForm"><label for="padUrl"><b>관리자</b> 이번 연수에 쓸 패들렛 주소</label><div class="row"><input class="tinput" id="padUrl" placeholder="https://padlet.com/..." autocomplete="off"><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 갤러리가 이 패들렛으로 바뀌어요.</small>
       <div class="admbox" id="admBox"><label for="admEmail"><b>관리자 권한 주기</b> 패들렛을 바꿀 수 있는 사람</label>
         <div class="row"><input class="tinput" id="admEmail" type="email" placeholder="함께 연수하는 선생님 구글 메일" autocomplete="off"><button class="btn" type="button" id="admAdd">추가</button></div>
@@ -2236,7 +2309,7 @@ async function initFirebase(){
       }else{
         const loc=local.load();S=(loc&&!loc.owner)?fix(loc):EMPTY();
       }
-      persist();renderAll();renderAcct();renderPad();
+      persist();renderAll();renderAcct();renderPad();if(typeof renderGal==="function"&&galItems.length)renderGal();
     });
     loadSiteConfig();
   }catch(e){fb=null;renderAcct()}
@@ -2839,14 +2912,16 @@ document.addEventListener("click",e=>{
   if(t.closest("[data-gclose]")||t.id==="gvModal"){$("#gvModal").hidden=true;return}
   if(t.closest("[data-gcopy]")){const it=galItems.find(x=>x.id===galOpenId);if(it&&it.prompt)copyText(it.prompt.base,t.closest("[data-gcopy]"));return}
   if(t.closest("[data-guse]")){const it=galItems.find(x=>x.id===galOpenId);if(it&&it.prompt){S.character=null;setStage("char");["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=it.prompt[k]||"");loadCharFromInputs();$("#gvModal").hidden=true;window.scrollTo({top:0});toast("이 프롬프트로 채웠어요. 고쳐서 써 보세요")}return}
-  if(t.closest("[data-gedit]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;const h=$("#gvCard h2"),dl=$("#gvCard dl");
+  if(t.closest("[data-gedit]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;const h=$("#gvCard h2"),dl=$("#gvCard .pnm b");
     h.outerHTML=`<input class="tinput" id="geTitle" maxlength="40" value="${esc(it.title||"")}" placeholder="제목">`;dl.outerHTML=`<input class="tinput" id="geName" maxlength="20" value="${esc(it.name||"")}" placeholder="만든 이 이름">`;
-    t.closest(".btnrow").innerHTML=`<button type="button" class="btn sm" data-gecancel>취소</button><button type="button" class="btn sm primary" data-gesave>저장</button>`;return}
+    $("#gvCard .gvhead").insertAdjacentHTML("beforeend",`<div class="gvact"><button type="button" class="gva" data-gecancel>취소</button><button type="button" class="gva save" data-gesave>저장</button></div>`);return}
   if(t.closest("[data-gecancel]")){openItem(galOpenId);return}
   if(t.closest("[data-gesave]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;const d={title:$("#geTitle").value.trim(),name:$("#geName").value.trim()};if(!d.title){toast("제목을 써 주세요");return}
     (async()=>{try{if(fb){await fb.fs.updateDoc(fb.fs.doc(fb.db,"gallery",it.id),d);fb.fs.updateDoc(fb.fs.doc(fb.db,"galleryFull",it.id),d).catch(()=>{})}else{const l=galLocal.find(x=>x.id===it.id);if(l)Object.assign(l,d);saveGalLocal()}
       Object.assign(it,d);renderGal();openItem(it.id);toast("고쳤어요")}catch(err){toast("고치지 못했어요. 관리자에게 알려 주세요")}})();return}
-  if(t.closest("[data-gdel]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;
+  if(t.closest("[data-gopenedit]")){openItem(t.closest("[data-gopenedit]").dataset.gopenedit).then(()=>{const e=$("#gvCard [data-gedit]");if(e)e.click()});return}
+  if(t.closest("[data-gdel]")){const gb=t.closest("[data-gdel]"),gc=gb.closest("[data-gid]");if(gc)galOpenId=gc.dataset.gid;const it=galItems.find(x=>x.id===galOpenId);if(!it)return;
+    if(gb.dataset.sure!=="1"){gb.dataset.sure="1";gb.dataset.t=gb.textContent;gb.textContent="한 번 더 누르면 삭제";setTimeout(()=>{if(gb.isConnected){gb.dataset.sure="";gb.textContent=gb.dataset.t}},3000);return}
     if(fb){fb.fs.deleteDoc(fb.fs.doc(fb.db,"gallery",it.id)).then(()=>fb.fs.deleteDoc(fb.fs.doc(fb.db,"galleryFull",it.id))).catch(()=>toast("지우지 못했어요"))}
     else{galLocal=galLocal.filter(x=>x.id!==it.id);saveGalLocal()}
     galItems=galItems.filter(x=>x.id!==it.id);renderGal();$("#gvModal").hidden=true;toast("지웠어요");return}
@@ -3192,7 +3267,7 @@ function renderPad(force){
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
     W.classList.add("native");
-    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${padMedia(p.url)}<div class="pdtx">${p.subject?`<b>${esc(p.subject)}</b>`:""}${intro?`<p>${esc(intro)}</p>`:""}${by?`<small>${esc(by)}</small>`:""}${rxHTML("v_"+p.id)}${can?`<span class="pdact"><button type="button" class="pddel pdedit" data-vedit="${esc(p.id)}">수정</button><button type="button" class="pddel" data-vdel="${esc(p.id)}">삭제</button></span>`:""}</div></article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
+    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}<h4 class="ptl">${esc(p.subject||"제목 없음")}</h4>${padMedia(p.url)}<div class="pdtx">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
@@ -3207,7 +3282,7 @@ async function vAuth(post){const tok=myVids()[post];let idToken="";try{if(!tok&&
 document.addEventListener("click",async e=>{let b;
   if((b=e.target.closest("[data-vedit]"))){const p=PADJ.posts.find(x=>String(x.id)===b.dataset.vedit);if(!p)return;const L=String(p.body||"").split("\n"),last=L[L.length-1]||"";
     const by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();
-    const box=b.closest(".pdtx");box.innerHTML=`<input class="tinput" data-ve="subject" maxlength="80" value="${esc(p.subject||"")}" placeholder="제목"><textarea class="tinput" data-ve="intro" rows="2" maxlength="300" placeholder="한 줄 소개">${esc(intro)}</textarea><input class="tinput" data-ve="by" maxlength="20" value="${esc(by)}" placeholder="올린 사람 이름"><span class="pdact"><button type="button" class="pddel" data-vcancel>취소</button><button type="button" class="pddel pdsave" data-vsave="${esc(p.id)}">저장</button></span>`;return}
+    const box=b.closest(".pdcard").querySelector(".pdtx");box.innerHTML=`<input class="tinput" data-ve="subject" maxlength="80" value="${esc(p.subject||"")}" placeholder="제목"><textarea class="tinput" data-ve="intro" rows="2" maxlength="300" placeholder="한 줄 소개">${esc(intro)}</textarea><input class="tinput" data-ve="by" maxlength="20" value="${esc(by)}" placeholder="올린 사람 이름"><span class="pdact"><button type="button" class="pddel" data-vcancel>취소</button><button type="button" class="pddel pdsave" data-vsave="${esc(p.id)}">저장</button></span>`;return}
   if(e.target.closest("[data-vcancel]")){renderPad();return}
   if((b=e.target.closest("[data-vsave]"))){const post=b.dataset.vsave,box=b.closest(".pdtx"),v=k=>box.querySelector(`[data-ve="${k}"]`).value.trim();const d={subject:v("subject"),intro:v("intro"),by:v("by")};if(!d.subject){toast("제목을 써 주세요");return}
     b.disabled=true;b.textContent="저장 중…";
@@ -3301,7 +3376,7 @@ $("#homeItemsForm").addEventListener("submit",async e=>{e.preventDefault();
   const cfg={hide:HI.hide,del:HI.del||[],yt:HI.yt,chars:HI.chars.map(c=>c.v?{id:c.id,img:c.img,v:1}:c)};
   try{if(fb){await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{homeHide:cfg.hide,homeDel:cfg.del,homeYt:cfg.yt,homeChars:cfg.chars,updatedAt:fb.fs.serverTimestamp()},{merge:true})}}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.");return}
   HOME_CFG=cfg;try{localStorage.setItem("ymHomeCfg",JSON.stringify(cfg))}catch(_){}renderMarquee(HOME_MEDIA);toast("홈 화면 그림을 저장했어요")});
-async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());applyHidden(x.hideMenus||[]);if(x.menuCfg)applyMenuCfg(x.menuCfg);
+async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};if(!!x.showTime!==SHOW_TIME){SHOW_TIME=!!x.showTime;try{renderPad();if(galItems.length)renderGal()}catch(_){}}try{$("#showTime").checked=SHOW_TIME}catch(_){}SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());applyHidden(x.hideMenus||[]);if(x.menuCfg)applyMenuCfg(x.menuCfg);
     if(x.cldCloud){CLD.cloud=x.cldCloud;if(x.cldPreset)CLD.preset=x.cldPreset}if(x.padApi&&x.padApi!==PAD_API){PAD_API=x.padApi;padJT=0;if(document.body.dataset.stage==="gallery")loadPadJson()}try{HOME_CFG={hide:x.homeHide||[],del:x.homeDel||[],yt:x.homeYt||[],chars:x.homeChars||[]};loadHV();try{localStorage.setItem("ymHomeCfg",JSON.stringify(HOME_CFG))}catch(_){}renderMarquee(x.homeMedia||HOME_MEDIA)}catch(_){}if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
 function canManageAdmins(){return fb?isOwner():true}
 function renderAdmins(){$("#admBox").hidden=!canManageAdmins();$("#admList").innerHTML=SITE_ADMINS.length?SITE_ADMINS.map(e=>`<li>${esc(e)}<button type="button" class="x" data-admdel="${esc(e)}" aria-label="${esc(e)} 관리자 빼기">×</button></li>`).join(""):`<li class="hint" style="border:0;background:none;padding:4px 0">아직 추가한 관리자가 없어요.</li>`}
@@ -3345,20 +3420,20 @@ async function galLoad(reset){
   renderGal();
 }
 function renderGal(){
-  $("#galGrid").innerHTML=galItems.map(it=>`<button type="button" class="gcard" data-gopen="${esc(it.id)}"><span class="gi"><img src="${esc(it.thumb)}" alt="${esc(it.title||"")}" loading="lazy"></span><span class="gm"><b>${esc(it.title||"제목 없음")}</b><small>${it.style?`<span class="gtag">${esc(it.style)}</span>`:""}${esc(it.name||"")}</small><span class="gx" data-rxs="g_${esc(it.id)}">${rxSum("g_"+it.id)}</span></span></button>`).join("");loadRx();
+  $("#galGrid").innerHTML=galItems.map(it=>`<article class="pdcard gcard2" data-gid="${esc(it.id)}">${authorRow(it.name,it.createdAt,canDelete(it)?kMenu(`<button type="button" data-gopenedit="${esc(it.id)}">수정</button><button type="button" class="kdel" data-gdel>삭제</button>`):"")}<h4 class="ptl"><button type="button" class="gt" data-gopen="${esc(it.id)}">${esc(it.title||"제목 없음")}</button></h4><button type="button" class="gi" data-gopen="${esc(it.id)}" aria-label="크게 보기"><img src="${esc(it.thumb)}" alt="" loading="lazy"></button>${rxHTML("g_"+it.id)}${cmtBox("g_"+it.id,1)}</article>`).join("");loadRx();
   $("#galEmpty").hidden=galItems.length>0;$("#galMore").hidden=!galLast;
 }
 function promptText(pr){return pr?["[피사체] "+(pr.subj||""),"[동작] "+(pr.act||""),"[장소] "+(pr.place||""),"[스타일] "+(pr.style||""),"","① 기본 이미지","",pr.base||"","","② 캐릭터 시트","",pr.sheet||""].join("\n"):""}
 async function openItem(id){
   const it=galItems.find(x=>x.id===id);if(!it)return;galOpenId=id;
   let img=it.img||it.thumb;
-  $("#gvCard").innerHTML=`<img class="gimg" id="gvImg" src="${esc(img)}" alt="" data-zoom><div style="display:grid;gap:12px;align-content:start">
-    <h2>${esc(it.title||"제목 없음")}</h2>
-    <dl><dt>만든 이</dt><dd>${esc(it.name||"")}</dd>${it.style?`<dt>스타일</dt><dd>${esc(it.style)}</dd>`:""}</dl>
-    ${it.prompt?`<pre id="gvPrompt">${esc(promptText(it.prompt))}</pre><div class="btnrow"><button type="button" class="btn sm" data-gcopy>프롬프트 복사</button><button type="button" class="btn sm primary" data-guse>이걸로 캐릭터 만들기</button></div>`:""}
+  $("#gvCard").innerHTML=`<button type="button" class="gvx" data-gclose aria-label="닫기">✕</button><div class="gvimg"><img class="gimg" id="gvImg" src="${esc(img)}" alt="" data-zoom></div><div class="gvside">
+    ${authorRow(it.name,it.createdAt,canDelete(it)?kMenu(`<button type="button" data-gedit>수정</button><button type="button" class="kdel" data-gdel>삭제</button>`):"")}
+    <div class="gvhead"><h2>${esc(it.title||"제목 없음")}</h2></div>
+    ${it.prompt?`<details class="gvpr"><summary>캐릭터 프롬프트 보기</summary><pre id="gvPrompt">${esc(promptText(it.prompt))}</pre><div class="btnrow"><button type="button" class="btn sm" data-gcopy>프롬프트 복사</button><button type="button" class="btn sm primary" data-guse>이걸로 캐릭터 만들기</button></div></details>`:""}
     ${rxHTML("g_"+it.id)}
-    <div class="btnrow">${canDelete(it)?`<button type="button" class="btn sm" data-gedit>수정</button><button type="button" class="btn sm" data-gdel>지우기</button>`:""}${fb?`<button type="button" class="btn sm ghost" data-greport>신고</button>`:""}<button type="button" class="btn sm" data-gclose>닫기</button></div>${cmtBox("g_"+it.id)}</div>`;
-  $("#gvModal").hidden=false;loadCmt("g_"+it.id);
+    ${cmtBox("g_"+it.id)}</div>`;
+  $("#gvModal").hidden=false;paintCmt("g_"+it.id);
   if(fb&&!it.img){try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"galleryFull",id));if(d.exists()){it.img=d.data().img;const el=$("#gvImg");if(el)el.src=it.img}}catch(e){}}
 }
 function openUpload(){
@@ -3487,7 +3562,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792783305"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792783594"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3682,7 +3757,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792783305";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792783594";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -3879,13 +3954,21 @@ addEventListener("pagehide",saveSess);
 /* ===================== 반응(이모지)·댓글 ===================== */
 const RX=[["heart","❤️"],["like","👍"],["lol","😆"],["wow","😮"],["clap","👏"],["fire","🔥"]];
 const RXD={};let rxLoaded=0;
+const IC_SMILE='<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M20.5 11.5a8.5 8.5 0 1 1-7.4-8.43"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><circle cx="9" cy="10" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r=".9" fill="currentColor" stroke="none"/><path d="M19 2.5v5M16.5 5h5"/></svg>';
+const IC_BUBBLE='<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3.5c4.7 0 8.5 3.3 8.5 7.4s-3.8 7.4-8.5 7.4c-1 0-2-.15-2.9-.43L4.5 19.5l1.3-3.6C4.4 14.6 3.5 12.9 3.5 10.9c0-4.1 3.8-7.4 8.5-7.4z"/></svg>';
+let SHOW_TIME=false;
+function relT(v){const t=v&&v.toDate?v.toDate():v&&v.seconds?new Date(v.seconds*1000):v?new Date(v):null;if(!t||isNaN(t))return "";const m=(Date.now()-t)/6e4;if(m<1)return "방금";if(m<60)return Math.floor(m)+"분 전";if(m<1440)return Math.floor(m/60)+"시간 전";if(m<43200)return Math.floor(m/1440)+"일 전";if(m<525600)return Math.floor(m/43200)+"개월 전";return Math.floor(m/525600)+"년 전"}
+const AVC=["#F6A6C1","#FFC857","#8BD3C7","#A5B4FC","#FDBA74","#86EFAC","#F9A8D4","#93C5FD"];
+function avatar(n){n=String(n||"?").trim()||"?";let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return `<span class="pav" style="background:${AVC[h%AVC.length]}">${esc([...n][0])}</span>`}
+function authorRow(name,at,menu){return `<div class="pdhead">${avatar(name)}<span class="pnm"><b>${esc(name||"익명")}</b>${SHOW_TIME&&at&&relT(at)?`<i>${relT(at)}</i>`:""}</span>${menu||""}</div>`}
+const kMenu=html=>`<span class="kmenu"><button type="button" class="kbtn" data-kmenu aria-label="더 보기">⋮</button><span class="kpop" hidden>${html}</span></span>`;
 function myRx(){try{return JSON.parse(localStorage.getItem("ymRx")||"{}")}catch(_){return {}}}
 function saveMyRx(m){try{localStorage.setItem("ymRx",JSON.stringify(m))}catch(_){}}
-async function loadRx(){if(!fb||rxLoaded)return;rxLoaded=1;try{const F=fb.fs;const sn=await F.getDocs(F.collection(fb.db,"rx"));sn.forEach(d=>{RXD[d.id]=d.data()});paintAllRx()}catch(e){rxLoaded=0}}
+async function loadRx(){loadAllCmt();if(!fb||rxLoaded)return;rxLoaded=1;try{const F=fb.fs;const sn=await F.getDocs(F.collection(fb.db,"rx"));sn.forEach(d=>{RXD[d.id]=d.data()});paintAllRx()}catch(e){rxLoaded=0}}
 function rxInner(key){const c=RXD[key]||{},mine=myRx()[key]||[];
   return RX.filter(([k])=>c[k]>0).map(([k,e])=>`<button type="button" class="rxc${mine.includes(k)?" on":""}" data-rxk="${k}" aria-pressed="${mine.includes(k)}">${e}<b>${c[k]}</b></button>`).join("")
-   +`<span class="rxpw"><button type="button" class="rxadd" data-rxadd aria-label="이모지 반응 남기기" title="반응 남기기">☺<small>+</small></button><span class="rxpick" hidden>${RX.map(([k,e])=>`<button type="button" data-rxk="${k}" aria-label="${e}">${e}</button>`).join("")}</span></span>`
-   +`<button type="button" class="rxcm" data-rxcm>💬 댓글${c.c>0?" "+c.c:""}</button>`}
+   +`<span class="rxpw"><button type="button" class="rxadd" data-rxadd aria-label="이모지 반응 남기기" title="반응 남기기">${IC_SMILE}</button><span class="rxpick" hidden>${RX.map(([k,e])=>`<button type="button" data-rxk="${k}" aria-label="${e}">${e}</button>`).join("")}</span></span>`
+   +`<button type="button" class="rxcm" data-rxcm aria-label="댓글">${IC_BUBBLE}<span>${c.c>0?c.c:""}</span></button>`}
 function rxHTML(key){return `<div class="rxbar" data-rx="${esc(key)}">${rxInner(key)}</div>`}
 function rxSum(key){const c=RXD[key]||{},t=RX.reduce((a,[k])=>a+(c[k]||0),0);const top=RX.filter(([k])=>c[k]>0).sort((a,b)=>c[b[0]]-c[a[0]]).slice(0,3).map(x=>x[1]).join("");return [t?`${top} ${t}`:"",c.c>0?`💬 ${c.c}`:""].filter(Boolean).join(" · ")}
 function paintAllRx(){$$("[data-rx]").forEach(el=>{el.innerHTML=rxInner(el.dataset.rx)});$$("[data-rxs]").forEach(el=>{el.textContent=rxSum(el.dataset.rxs)})}
@@ -3895,20 +3978,27 @@ async function toggleRx(key,k){if(!fb){toast("잠시 뒤 다시 눌러 주세요
   c[k]=(c[k]||0)+d;m[key]=on?mine.filter(x=>x!==k):mine.concat(k);saveMyRx(m);paintAllRx();
   try{const F=fb.fs;await F.setDoc(F.doc(fb.db,"rx",key),{[k]:F.increment(d)},{merge:true})}
   catch(e){c[k]=Math.max(0,(c[k]||0)-d);m[key]=mine;saveMyRx(m);paintAllRx();toast("반응을 남기지 못했어요")}}
-function cmtBox(key){return `<div class="rxcmts" data-cbox="${esc(key)}"><h3>댓글</h3><div class="rxlist"><p class="rxempty">불러오는 중…</p></div>${user()?`<form class="rxform" data-rxform="${esc(key)}"><input maxlength="300" placeholder="따뜻한 한마디를 남겨 주세요" aria-label="댓글"><button type="submit">등록</button></form>`:`<button type="button" class="btn sm rxlogin" data-rxlogin>로그인하고 댓글 쓰기</button>`}</div>`}
-const CMTS={};
-async function loadCmt(key){const box=document.querySelector(`[data-cbox="${CSS.escape(key)}"] .rxlist`);if(!box)return;if(!fb){box.innerHTML='<p class="rxempty">댓글을 불러오지 못했어요.</p>';return}
-  try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"rx",key,"c"),F.orderBy("at","asc"),F.limit(200)));CMTS[key]=sn.docs.map(d=>({id:d.id,...d.data()}));paintCmt(key)}
-  catch(e){box.innerHTML='<p class="rxempty">댓글을 불러오지 못했어요.</p>'}}
-function paintCmt(key){const box=document.querySelector(`[data-cbox="${CSS.escape(key)}"] .rxlist`);if(!box)return;const u=user(),L=CMTS[key]||[];
-  box.innerHTML=L.length?L.map(x=>{const t=x.at&&x.at.toDate?x.at.toDate():null;return `<div class="rxitem"><span class="rxh"><b>${esc(x.nick||"선생님")}</b>${t?`${t.getMonth()+1}.${t.getDate()} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`:"방금"}${u&&(x.uid===u.uid||isAdmin())?`<button type="button" data-rxdel="${esc(x.id)}">삭제</button>`:""}</span><p>${esc(x.body)}</p></div>`}).join(""):'<p class="rxempty">첫 댓글을 남겨 주세요.</p>';
-  box.scrollTop=box.scrollHeight}
-function openCmtModal(key){$("#rxCard").innerHTML=`${cmtBox(key)}<div class="btnrow" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn sm" data-rxclose>닫기</button></div>`;$("#rxModal").hidden=false;loadCmt(key);setTimeout(()=>{const i=$("#rxCard input");if(i)i.focus()},50)}
+function cmtBox(key,mini){return `<div class="rxcmts${mini?" mini":""}" data-cbox="${esc(key)}">${mini?"":"<h3>댓글</h3>"}<div class="rxlist">${cmtItems(key,mini)}</div>${user()?`<form class="rxform" data-rxform="${esc(key)}"><input maxlength="300" placeholder="${mini?"댓글 추가":"따뜻한 한마디를 남겨 주세요"}" aria-label="댓글"><button type="submit">${mini?"↑":"등록"}</button></form>`:`<button type="button" class="rxlogin" data-rxlogin>로그인하고 댓글 쓰기</button>`}</div>`}
+const CMTS={};let cmtLoaded=0;
+function cmtTime(x){const t=x.at&&x.at.toDate?x.at.toDate():null;return t?`${t.getMonth()+1}.${t.getDate()}`:"방금"}
+function cmtItems(key,mini,all){const u=user(),L=(CMTS[key]||[]);if(!L.length)return mini?"":'<p class="rxempty">첫 댓글을 남겨 주세요.</p>';
+  const show=mini&&!all&&L.length>2?L.slice(-2):L;
+  return (show.length<L.length?`<button type="button" class="rxmore" data-rxmore>댓글 ${L.length}개 모두 보기</button>`:"")+show.map(x=>`<div class="rxitem"><span class="rxh"><b>${esc(x.nick||"선생님")}</b>${SHOW_TIME?`<i>${relT(x.at)||"방금"}</i>`:""}${u&&(x.uid===u.uid||isAdmin())?kMenu(`<button type="button" class="kdel" data-rxdel="${esc(x.id)}">삭제</button>`):""}</span><p>${esc(x.body)}</p></div>`).join("")}
+function sortC(k){(CMTS[k]||[]).sort((a,b)=>((a.at&&a.at.seconds)||9e9)-((b.at&&b.at.seconds)||9e9))}
+async function loadAllCmt(){if(!fb||cmtLoaded)return;cmtLoaded=1;try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collectionGroup(fb.db,"c"),F.limit(1500)));
+  for(const k in CMTS)delete CMTS[k];sn.forEach(d=>{const p=d.ref.parent.parent;if(!p||d.ref.parent.parent.parent.id!=="rx")return;(CMTS[p.id]=CMTS[p.id]||[]).push({id:d.id,...d.data()})});Object.keys(CMTS).forEach(sortC);
+  $$("[data-cbox]").forEach(el=>paintCmt(el.dataset.cbox))}catch(e){cmtLoaded=0}}
+async function loadCmt(key){if(!fb)return;try{const F=fb.fs;const sn=await F.getDocs(F.collection(fb.db,"rx",key,"c"));CMTS[key]=sn.docs.map(d=>({id:d.id,...d.data()}));sortC(key);paintCmt(key)}catch(e){}}
+function paintCmt(key){document.querySelectorAll(`[data-cbox="${CSS.escape(key)}"]`).forEach(box=>{const l=box.querySelector(".rxlist");if(!l)return;const mini=box.classList.contains("mini");l.innerHTML=cmtItems(key,mini,box.dataset.all==="1");if(!mini)l.scrollTop=l.scrollHeight})}
+function openCmtModal(key){$("#rxCard").innerHTML=`${cmtBox(key)}<div class="btnrow" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn sm" data-rxclose>닫기</button></div>`;$("#rxModal").hidden=false;paintCmt(key);setTimeout(()=>{const i=$("#rxCard input");if(i)i.focus()},50)}
 document.addEventListener("click",async e=>{const t=e.target;let b;
   if(!t.closest(".rxpw"))$$(".rxpick").forEach(p=>p.hidden=true);
+  if(!t.closest(".kmenu"))$$(".kpop").forEach(p=>p.hidden=true);
+  if((b=t.closest("[data-kmenu]"))){const p=b.nextElementSibling,was=p.hidden;$$(".kpop").forEach(x=>x.hidden=true);p.hidden=!was;return}
   if((b=t.closest("[data-rxadd]"))){const p=b.nextElementSibling;const was=p.hidden;$$(".rxpick").forEach(x=>x.hidden=true);p.hidden=!was;return}
   if((b=t.closest("[data-rxk]"))){const bar=b.closest("[data-rx]");if(bar){toggleRx(bar.dataset.rx,b.dataset.rxk)}return}
-  if((b=t.closest("[data-rxcm]"))){const key=b.closest("[data-rx]").dataset.rx;const inl=document.querySelector(`#gvCard [data-cbox="${CSS.escape(key)}"]`);if(inl){inl.scrollIntoView({behavior:"smooth",block:"nearest"});const i=inl.querySelector("input");if(i)i.focus({preventScroll:true})}else openCmtModal(key);return}
+  if((b=t.closest("[data-rxmore]"))){const box=b.closest("[data-cbox]");box.dataset.all="1";paintCmt(box.dataset.cbox);return}
+  if((b=t.closest("[data-rxcm]"))){const key=b.closest("[data-rx]").dataset.rx;const scope=b.closest("#gvCard,.pdcard,.gcard2");const inl=scope&&scope.querySelector(`[data-cbox="${CSS.escape(key)}"]`);if(inl){inl.dataset.all="1";paintCmt(key);inl.scrollIntoView({behavior:"smooth",block:"nearest"});const i=inl.querySelector("input");if(i)i.focus({preventScroll:true});else{const lg=inl.querySelector("[data-rxlogin]");if(lg)lg.focus()}}else openCmtModal(key);return}
   if(t.closest("[data-rxclose]")||t.id==="rxModal"){$("#rxModal").hidden=true;return}
   if(t.closest("[data-rxlogin]")){openLogin();return}
   if((b=t.closest("[data-rxdel]"))){const key=b.closest("[data-cbox]").dataset.cbox,id=b.dataset.rxdel;if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="한 번 더 누르면 삭제";return}
@@ -3921,5 +4011,8 @@ document.addEventListener("submit",async e=>{const f=e.target.closest("[data-rxf
     const c=RXD[key]=RXD[key]||{};c.c=(c.c||0)+1;paintAllRx();F.setDoc(F.doc(fb.db,"rx",key),{c:F.increment(1)},{merge:true}).catch(()=>{})}
   catch(err){toast("댓글을 올리지 못했어요")}btn.disabled=false});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rxModal").hidden)$("#rxModal").hidden=true});
+
+document.addEventListener("submit",async e=>{if(e.target.id!=="galSetForm")return;e.preventDefault();const v=$("#showTime").checked;
+  try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{showTime:v,updatedAt:fb.fs.serverTimestamp()},{merge:true});SHOW_TIME=v;renderPad();if(galItems.length)renderGal();toast("저장했어요")}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.")}});
 </script>
 </body></html>
