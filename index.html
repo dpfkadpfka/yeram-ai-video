@@ -2849,10 +2849,10 @@ new MutationObserver(()=>{const st=document.body.dataset.stage;$$(".sn[data-snav
 $("#fsSlot").appendChild($("#fsPop"));
 $("#fsBtn").addEventListener("click",e=>{e.stopPropagation();const o=document.body.classList.toggle("fsopen");$("#fsBtn").setAttribute("aria-expanded",o)});
 document.addEventListener("click",e=>{if(document.body.classList.contains("fsopen")&&!e.target.closest("#fsPop,#fsBtn")){document.body.classList.remove("fsopen");$("#fsBtn").setAttribute("aria-expanded",false)}});
-document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style")&&cv("ratio"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792732304"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3000,7 +3000,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792732304";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
@@ -3039,18 +3039,18 @@ function cAsk(sec,k){
   if(sec==="subj"){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
-    cbot(esc(k==="kind"?"누구를 그릴까요?":SBQ[k]));
-    cQuick.innerHTML=chips(g.o,on,"data-cv")+(k!=="kind"?(g.m?`<button type="button" class="opt" data-cnext aria-pressed="true">다음 →</button>`:`<button type="button" class="opt" data-cnext>건너뛰기</button>`):"");
+    cbot("<b>피사체</b> · 누구를 그릴까요?<br>골라도 되고, 생김새·옷까지 한 번에 써도 돼요. 예: 긴 생머리에 분홍 원피스를 입은 여자 선생님");
+    cQuick.innerHTML=chips(SB_KIND.o,t=>sb.sel.kind===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
   }else if(sec==="act"){
-    cbot("동작은요? 처음 만드는 기본 이미지는 <b>정면 전신 기본 포즈</b>를 추천해요. 캐릭터 시트와 영상 장면에 쓰기 좋아요.");
-    cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv");
+    cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
+    cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
   }else if(sec==="place"){
-    cbot("배경은요? 기본은 흰 배경이에요. 투명 배경을 고르면 PNG 파일로 달라고 써 둘게요.");
-    cQuick.innerHTML=chips(PLACE_O,t=>placeLabel()===t,"data-cv");
+    cbot("<b>장소</b> · 배경은요? 기본은 흰 배경이에요. 투명 배경을 고르면 PNG 파일로 달라고 써 둘게요.");
+    cQuick.innerHTML=chips(PLACE_O,t=>placeLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
   }else if(sec==="style"){
-    cbot("그림체는요? 왼쪽에서 그림을 눌러 골라 주세요. 원하는 게 없으면 여기에 직접 써도 돼요. 예: 동화책 같은 연필 그림");
+    cbot("<b>스타일</b> · 그림체는요? 왼쪽에서 그림을 눌러 골라 주세요. 원하는 게 없으면 여기에 직접 써도 돼요. 예: 동화책 같은 연필 그림");
     const animal=sb.sel.kind==="동물", list=STYLES.filter(x=>animal?x.g==="동물":x.g==="인물");
-    cQuick.innerHTML="";
+    cQuick.innerHTML=`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
     $("#sPickGrid").innerHTML=list.map(x=>`<button type="button" class="stile" data-cstyle="${x.id}" aria-pressed="${cv("style")===x.t}"><span class="im">${STYLE_IMG[x.id]?`<img src="${STYLE_IMG[x.id]}" alt="">`:"예시 준비 중"}</span>${esc(x.t)}</button>`).join("");
     $("#sPick").hidden=false;$("#sPick").scrollIntoView({behavior:"smooth",block:"nearest"});
   }else if(sec==="ratio"){
@@ -3067,10 +3067,9 @@ const PLACE_PNG="투명 배경(PNG 파일, 배경 없이 캐릭터만)";
 function nextSub(k){const G=sbGroups();const i=G.findIndex(x=>x.k===k);return G[i+1]&&G[i+1].k}
 function cAdvance(){
   const q=cq;if(!q)return;
-  if(q.sec==="subj"){const n=nextSub(q.k);if(n)return cAsk("subj",n);if(!cv("act"))return cAsk("act");}
-  if(q.sec==="style")return cAsk("ratio");
+  if(q.sec==="subj"&&!cDoneOnly&&!cv("act"))return cAsk("act");
   if(cDoneOnly){cDoneOnly=false;return cDone()}
-  if(!cv("act"))return cAsk("act");if(!cv("place"))return cAsk("place");if(!cv("style"))return cAsk("style");if(!cv("ratio"))return cAsk("ratio");
+  if(!cv("act"))return cAsk("act");if(!cv("place"))return cAsk("place");if(!cv("style"))return cAsk("style");
   cDone();
 }
 let cDoneOnly=false;
@@ -3083,8 +3082,7 @@ function cPick(t){
     const G=sbGroups(),g=G.find(x=>x.k===q.k);
     if(g.m){const a=sb.sel[g.k]||[];if(t==="없음")sb.sel[g.k]=a.includes("없음")?[]:["없음"];else{const b=a.filter(x=>x!=="없음");const i=b.indexOf(t);i>=0?b.splice(i,1):b.push(t);sb.sel[g.k]=b}
       cSet("subj",sbCompose());cQuick.querySelectorAll("[data-cv]").forEach(x=>x.setAttribute("aria-pressed",(sb.sel[g.k]||[]).includes(x.dataset.cv)));return}
-    if(g.k==="kind"&&sb.sel.kind!==t)sb.sel={};
-    sb.sel[g.k]=t;cme(t);cSet("subj",sbCompose());return cAdvance();
+    sb.sel={kind:t};cme(t);cSet("subj",sbCompose());return cAdvance();
   }
   if(q.sec==="act"){cme(t);cSet("act",t==="기본 포즈(정면 전신)"?ACT_FULL:t);return cAdvance()}
   if(q.sec==="place"){cme(t);cSet("place",t==="투명 배경(PNG)"?PLACE_PNG:t);return cAdvance()}
@@ -3093,7 +3091,8 @@ function cPick(t){
 function cFree(text){
   text=text.trim();if(!text)return;cme(text);
   const q=cq;if(!q){cbot("바꾸고 싶은 칸을 왼쪽에서 누르면 다시 물어볼게요.");return}
-  if(q.sec==="subj"){if(q.k==="kind"){sb.sel={kind:"",free:text};cSet("subj",text);cbot("좋아요, 그대로 쓸게요.");cq={sec:"subj",k:"__end"};return cAsk("act")}
+  if(q.sec==="subj"){sb.sel={kind:"",free:text};cSet("subj",text);return cAdvance()}
+  if(false){
     const g=sbGroups().find(x=>x.k===q.k);sb.sel[q.k]=g.m?[...(sb.sel[q.k]||[]),text]:text;cSet("subj",sbCompose());return cAdvance()}
   if(q.sec==="style"){cSet("style",text);return cAdvance()}
   cSet(q.sec,text);cAdvance();
@@ -3112,9 +3111,9 @@ function cStart(fresh){document.body.classList.add("cfresh");if(!cv("subj")||fre
   if(fresh){["cBase","cSheet"].forEach(id=>delete $("#"+id).dataset.edited);sb={sel:{},step:0};["subj","act","place","style","ratio"].forEach(k=>$("#c_"+k).value="");S.character=null;renderChar()}
   const nick=S.profile&&S.profile.nick;
   if(cv("subj")){cbot(`${nick?esc(nick)+", ":""}전에 만들던 캐릭터가 있어요. 이어서 볼까요, 새로 만들까요?`);cQuick.innerHTML=`<button type="button" class="opt" data-cresume>이어서 보기</button><button type="button" class="opt" data-cnew>새로 만들기</button>`}
-  else{cbot(`${nick?esc(nick)+", ":""}캐릭터를 같이 만들어 볼게요! 피사체 → 동작 → 장소 → 스타일 → 비율 순서로 물어볼게요.`);cAsk("subj","kind")}
+  else{cbot(`${nick?esc(nick)+", ":""}캐릭터를 같이 만들어 볼게요! 피사체 → 동작 → 장소 → 스타일, 네 가지만 물어볼게요. 모르겠으면 건너뛰어도 돼요.`);cAsk("subj","kind")}
 }
-function cAdvance0(){if(!cv("act"))return cAsk("act");if(!cv("place"))return cAsk("place");if(!cv("style"))return cAsk("style");if(!cv("ratio"))return cAsk("ratio");cDone()}
+function cAdvance0(){if(!cv("act"))return cAsk("act");if(!cv("place"))return cAsk("place");if(!cv("style"))return cAsk("style");cDone()}
 /* 기존 함수 덮어쓰기 */
 function loadChar(){loadCharFeed();document.body.classList.toggle("cfresh",!(S.character&&S.character.act)||!!document.querySelector("[data-cresume]"));const c=S.character||{};sb=c.sb?JSON.parse(JSON.stringify(c.sb)):{sel:{},step:0};["subj","act","place","style","ratio"].forEach(k=>$("#c_"+k).value=c[k]||"");renderChar();renderCards();if(!cLog.children.length)cStart(false)}
 function loadCharFromInputs(){sb={sel:{free:cv("subj")},step:0};renderChar();renderCards();saveChar();cLog.innerHTML="";cbot("갤러리 프롬프트로 채웠어요. 바꾸고 싶은 칸은 왼쪽에서 그 칸을 누르세요.");cDone()}
@@ -3131,6 +3130,8 @@ function charBase(){
 }
 document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cv]"))){cPick(b.dataset.cv);return}
+  if(t.closest("[data-cskip]")){const q=cq;if(!q)return;cme("건너뛰기");const D={subj:"생김새는 자유롭게 정한 귀여운 캐릭터",act:ACT_FULL,place:"흰 배경",style:"3D 애니메이션"};
+    if(!cv(q.sec)){if(q.sec==="subj")sb.sel={kind:"",free:D.subj};cSet(q.sec,D[q.sec])}return cAdvance()}
   if(t.closest("[data-cnext]")){const q=cq;if(q&&q.sec==="subj"){const g=sbGroups().find(x=>x.k===q.k);const v=sb.sel[q.k];if(v&&(!Array.isArray(v)||v.length))cme(Array.isArray(v)?v.join(", "):v);else cme("건너뛰기")}cAdvance();return}
   if((b=t.closest("[data-cstyle]"))){const st=STYLES.find(x=>x.id===b.dataset.cstyle);cme(st.t);cSet("style",st.t);cAdvance();return}
   if((b=t.closest("[data-cask]"))){const k=b.dataset.cask;cDoneOnly=true;if(k==="subj"){cAsk("subj","kind")}else cAsk(k);return}
