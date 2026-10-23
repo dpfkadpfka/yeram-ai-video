@@ -703,7 +703,14 @@ body[data-stage="split"] .outcol,body:not(.cfresh) .cmain{animation:sideIn .45s 
 .padwrap{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--paper);height:min(calc(100vh - 220px),900px);min-height:520px}
 .padwrap iframe{width:100%;height:100%;border:0;display:block}
 a.btn{color:var(--ink);text-decoration:none}
-.admcard{max-width:560px;text-align:left}
+.admcard{max-width:640px;text-align:left;max-height:calc(100vh - 40px);overflow-y:auto}
+.hitabs{display:flex;gap:6px}.hitabs button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.hitabs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-deep);background:#fff}
+.higrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;max-height:300px;overflow-y:auto;padding:2px}
+.hit{position:relative;border:2px solid var(--accent);border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;padding:0;aspect-ratio:1}
+.hit img{width:100%;height:100%;object-fit:cover;display:block}
+.hit.off{border-color:var(--line)}.hit.off img{opacity:.25;filter:grayscale(1)}
+.hit .ck{position:absolute;right:4px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center}.hit.off .ck{background:#bbb}
+.hit .del{position:absolute;left:4px;top:4px;border:0;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;font-size:11px;padding:1px 6px;cursor:pointer}
 .padform{display:grid;gap:8px;padding:14px 16px;border:1px solid var(--accent);border-radius:14px;background:var(--accent-soft)}
 .padform .row{display:flex;gap:8px;flex-wrap:wrap}.padform .row input{flex:1;min-width:240px}
 .admbox{display:grid;gap:8px;border-top:1px dashed var(--accent);padding-top:12px;margin-top:4px}
@@ -1235,6 +1242,13 @@ header.side .sn.snsv .ico{color:var(--accent)}
 header.side .sidenav .snlab,.snlab-li{display:none!important}
 #galFilter[hidden]{display:none!important}
 .gbar{justify-content:flex-end}
+/* 갤러리·모델 비교도 같은 제목 영역 */
+body[data-stage="gallery"] .pgh{max-width:1240px}
+.gallery .cp-head h2{display:none}
+body[data-stage="models"] .pgh{max-width:1240px}
+body[data-stage="models"] .modelspage{margin:0 -32px 0!important}
+body[data-stage="models"] #modelsFrame{height:calc(100vh - 170px)}
+@media (max-width:900px){body[data-stage="models"] .modelspage{margin:0 -16px!important}body[data-stage="models"] #modelsFrame{margin-top:0;height:calc(100vh - 260px)}}
 /* 메뉴 묶음 이름 */
 .snlab-li{list-style:none}
 @media (max-width:900px){.snlab-li{display:none!important}}
@@ -1623,6 +1637,12 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 <div class="modal" id="adminModal" hidden role="dialog" aria-modal="true" aria-labelledby="admH">
   <div class="modal-card admcard"><h2 id="admH">관리자 설정</h2>
     <form class="padform" id="homeForm"><label for="homeMedia"><b>홈 화면</b> 아래쪽에 흘러갈 것</label><div class="row"><select class="tinput" id="homeMedia"><option value="char">캐릭터 홈 (움직이는 캐릭터)</option><option value="yt">썸네일 홈 (유튜브 영상)</option></select><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 홈이 바뀌어요.</small></form>
+    <form class="padform" id="homeItemsForm"><b>홈 화면에 흐를 그림 고르기</b>
+      <div class="hitabs"><button type="button" data-hit="char" aria-pressed="true">캐릭터 홈</button><button type="button" data-hit="yt" aria-pressed="false">썸네일 홈</button></div>
+      <div class="higrid" id="hiGrid"></div>
+      <div class="row" id="hiAddChar"><label class="btn"><input type="file" id="hiFile" accept="image/*" multiple hidden>+ 캐릭터 이미지 올리기</label></div>
+      <div class="row" id="hiAddYt" hidden><input class="tinput" id="hiYt" placeholder="유튜브 주소 붙여넣기 (영상·쇼츠 모두)" autocomplete="off"><button class="btn" type="button" id="hiYtAdd">추가</button></div>
+      <div class="row"><button class="btn primary" type="submit">저장</button></div><small class="hint">그림을 누르면 빼기/넣기가 바뀌어요. 흐리게 보이는 건 홈 화면에 안 나와요.</small></form>
     <form class="padform" id="menuForm"><b>메뉴 보이기</b><div class="mnchk">
       <label><input type="checkbox" data-mn="char">캐릭터</label><label><input type="checkbox" data-mn="script">대본</label><label><input type="checkbox" data-mn="shot">컷 편집</label><label><input type="checkbox" data-mn="scene">씬 나누기</label><label><input type="checkbox" data-mn="gallery">갤러리</label><label><input type="checkbox" data-mn="models">모델 비교</label><label><input type="checkbox" data-mn="survey">만족도 조사</label>
     </div><div class="row"><button class="btn primary" type="submit">저장</button></div><small class="hint">체크를 끄면 모든 선생님 화면에서 그 메뉴가 숨겨져요. 연수 때 씬 나누기를 끄는 식으로 쓰면 돼요.</small></form>
@@ -2750,13 +2770,33 @@ try{applyHidden(JSON.parse(localStorage.getItem("ymHideMenus")||"[]"))}catch(e){
 $("#menuForm").addEventListener("submit",async e=>{e.preventDefault();const h=$$("[data-mn]").filter(c=>!c.checked).map(c=>c.dataset.mn);
   try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{hideMenus:h,updatedAt:fb.fs.serverTimestamp()},{merge:true})}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.");return}
   applyHidden(h);$("#adminModal").hidden=true;toast(h.length?"메뉴 "+h.length+"개를 숨겼어요":"모든 메뉴를 보여요")});
-async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());applyHidden(x.hideMenus||[]);if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
+/* 관리자: 홈 화면 그림 고르기 */
+let hiTab="char",HI=null;
+function hiPaint(){const H=new Set(HI.hide);let items;
+  if(hiTab==="char")items=MEDIA.map(m=>({k:"c:"+mKey(m),img:m[2]||m[0]})).concat(HI.chars.map(c=>({k:"x:"+c.id,img:c.img,del:c.id})));
+  else items=YT_LONG.map(i=>({k:"yt:"+i,img:`https://i.ytimg.com/vi/${i}/hqdefault.jpg`})).concat(YT_SHORT.map(i=>({k:"yt:"+i,img:`https://i.ytimg.com/vi/${i}/hqdefault.jpg`}))).concat(HI.yt.map(x=>({k:"yt:"+x.id,img:`https://i.ytimg.com/vi/${x.id}/hqdefault.jpg`,dely:x.id})));
+  $("#hiGrid").innerHTML=items.map(it=>`<button type="button" class="hit${H.has(it.k)?" off":""}" data-hk="${esc(it.k)}"><img src="${it.img}" alt="" loading="lazy"><span class="ck">${H.has(it.k)?"":"✓"}</span>${it.del?`<span class="del" data-hdel="${it.del}">삭제</span>`:it.dely?`<span class="del" data-hdely="${it.dely}">삭제</span>`:""}</button>`).join("");
+  $("#hiAddChar").hidden=hiTab!=="char";$("#hiAddYt").hidden=hiTab!=="yt";$$("[data-hit]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.hit===hiTab))}
+function hiOpen(){HI=JSON.parse(JSON.stringify(HOME_CFG));HI.hide=HI.hide||[];HI.yt=HI.yt||[];HI.chars=HI.chars||[];hiTab=HOME_MEDIA==="yt"?"yt":"char";hiPaint()}
+document.addEventListener("click",e=>{let b;if(!HI||!e.target.closest("#homeItemsForm"))return;
+  if((b=e.target.closest("[data-hit]"))){hiTab=b.dataset.hit;hiPaint();return}
+  if((b=e.target.closest("[data-hdel]"))){e.stopPropagation();HI.chars=HI.chars.filter(c=>c.id!==b.dataset.hdel);hiPaint();return}
+  if((b=e.target.closest("[data-hdely]"))){e.stopPropagation();HI.yt=HI.yt.filter(c=>c.id!==b.dataset.hdely);hiPaint();return}
+  if((b=e.target.closest("[data-hk]"))){const k=b.dataset.hk,i=HI.hide.indexOf(k);i>=0?HI.hide.splice(i,1):HI.hide.push(k);hiPaint();return}});
+$("#hiYtAdd").addEventListener("click",()=>{const v=$("#hiYt").value.trim();const m=v.match(/(?:shorts\/|v=|youtu\.be\/|embed\/)([\w-]{11})/)||v.match(/^([\w-]{11})$/);if(!m){toast("유튜브 주소를 확인해 주세요");return}
+  if(!HI.yt.some(x=>x.id===m[1]))HI.yt.push({id:m[1],s:/shorts\//.test(v)?1:0});$("#hiYt").value="";hiPaint()});
+$("#hiFile").addEventListener("change",e=>{[...e.target.files].forEach(f=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),k=Math.min(1,360/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);let d=c.toDataURL("image/webp",.75);if(!/^data:image\/webp/.test(d))d=c.toDataURL("image/jpeg",.8);HI.chars.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),img:d});hiPaint()};im.src=fr.result};fr.readAsDataURL(f)});e.target.value=""});
+$("#homeItemsForm").addEventListener("submit",async e=>{e.preventDefault();const cfg={hide:HI.hide,yt:HI.yt,chars:HI.chars};
+  try{if(fb){await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{homeHide:cfg.hide,homeYt:cfg.yt,homeChars:cfg.chars,updatedAt:fb.fs.serverTimestamp()},{merge:true})}}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.");return}
+  HOME_CFG=cfg;try{localStorage.setItem("ymHomeCfg",JSON.stringify(cfg))}catch(_){}renderMarquee(HOME_MEDIA);toast("홈 화면 그림을 저장했어요")});
+async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());applyHidden(x.hideMenus||[]);
+    try{HOME_CFG={hide:x.homeHide||[],yt:x.homeYt||[],chars:x.homeChars||[]};try{localStorage.setItem("ymHomeCfg",JSON.stringify(HOME_CFG))}catch(_){}renderMarquee(x.homeMedia||HOME_MEDIA)}catch(_){}if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
 function canManageAdmins(){return fb?isOwner():true}
 function renderAdmins(){$("#admBox").hidden=!canManageAdmins();$("#admList").innerHTML=SITE_ADMINS.length?SITE_ADMINS.map(e=>`<li>${esc(e)}<button type="button" class="x" data-admdel="${esc(e)}" aria-label="${esc(e)} 관리자 빼기">×</button></li>`).join(""):`<li class="hint" style="border:0;background:none;padding:4px 0">아직 추가한 관리자가 없어요.</li>`}
 async function saveAdmins(){try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{admins:SITE_ADMINS,updatedAt:fb.fs.serverTimestamp()},{merge:true});else localStorage.setItem("ymAdmins",JSON.stringify(SITE_ADMINS));renderAdmins();return true}catch(e){toast("저장하지 못했어요. 다시 시도해 주세요.");return false}}
 $("#admAdd").addEventListener("click",async()=>{const e=$("#admEmail").value.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){toast("메일 주소를 확인해 주세요");return}if(SITE_ADMINS.includes(e)){toast("이미 관리자예요");return}SITE_ADMINS.push(e);if(await saveAdmins()){$("#admEmail").value="";toast(e+" 님을 관리자로 추가했어요")}});
 document.addEventListener("click",async e=>{const b=e.target.closest("[data-admdel]");if(!b)return;SITE_ADMINS=SITE_ADMINS.filter(x=>x!==b.dataset.admdel);if(await saveAdmins())toast("관리자에서 뺐어요")});
-function openAdmin(){if(fb&&!isAdmin()){toast("관리자만 열 수 있어요");return}$("#acctMenu").hidden=true;$("#padUrl").value=PADLET;renderAdmins();$("#adminModal").hidden=false;$("#padUrl").focus()}
+function openAdmin(){if(fb&&!isAdmin()){toast("관리자만 열 수 있어요");return}$("#acctMenu").hidden=true;$("#padUrl").value=PADLET;renderAdmins();hiOpen();$("#adminModal").hidden=false;$("#padUrl").focus()}
 $("#adminBtn").addEventListener("click",openAdmin);
 $("#padCancel").addEventListener("click",()=>{$("#adminModal").hidden=true});
 if(location.hash==="#admin")setTimeout(openAdmin,300);
@@ -2909,10 +2949,13 @@ const YT_LONG=["lLCQx4B0wzc", "YUx7EBj27AE", "ItmOTUFOIHs", "ALrpC1dBvPg", "Pd_c
 const YT_CLIPS=new Set(["lLCQx4B0wzc", "YUx7EBj27AE", "ItmOTUFOIHs", "ALrpC1dBvPg", "Pd_cgRjCXvE", "PqN-gY8R-88", "E39-uZX-mjo", "2G2ntfQvSFw", "vQTBE_GjeKQ", "YpudMInPMAw", "FSPZeSVhlVo", "Za8LXbWtBDU", "HQ6cUodb4ac", "MBqL_ew2aSg", "5fhQrTffAr0", "OD4YgFoTfN4"]);
 function ytItem([id,sh]){const po=`https://i.ytimg.com/vi/${id}/${sh?"oar2":"hqdefault"}.jpg`;const inner=YT_CLIPS.has(id)?`<video src="yt/${id}.mp4" poster="${po}" muted autoplay loop playsinline preload="auto"></video>`:`<img src="${po}" alt="" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${id}/hqdefault.jpg'">`;return `<a class="mq-it yt ${sh?"v916":"v169"}" href="https://www.youtube.com/${sh?"shorts/":"watch?v="}${id}" target="_blank" rel="noopener" aria-label="유튜브에서 보기">${inner}<span class="ytplay" aria-hidden="true"></span></a>`}
 let HOME_MEDIA="char";try{HOME_MEDIA=localStorage.getItem("ymHomeMedia")||"char"}catch(e){}
-function renderMarquee(mode){HOME_MEDIA=mode==="yt"?"yt":"char";const rows=$$("#mq .mq-row");let A,B,fn;
-  if(HOME_MEDIA==="yt"){const L=YT_LONG.map(i=>[i,0]),S=YT_SHORT.map(i=>[i,1]);const half=Math.ceil(L.length/2);A=L.slice(0,half);B=L.slice(half);S.forEach((x,k)=>{(k%2?B:A).splice(2+k*3,0,x)});fn=ytItem}
-  else{const half=Math.ceil(MEDIA.length/2);A=MEDIA.slice(0,half);B=MEDIA.slice(half);fn=mqItem}
-  [A,B.length?B:A].forEach((L,i)=>{let X=L.slice();while(X.length<12)X=X.concat(L);const h=X.map(fn).join("");rows[i].innerHTML=h+h})}
+let HOME_CFG={hide:[],yt:[],chars:[]};
+const mKey=m=>m[0].replace(/^mq\//,"").replace(/\.\w+$/,"");
+try{const c=JSON.parse(localStorage.getItem("ymHomeCfg")||"null");if(c)HOME_CFG=Object.assign(HOME_CFG,c)}catch(e){}
+function renderMarquee(mode){HOME_MEDIA=mode==="yt"?"yt":"char";const rows=$$("#mq .mq-row");let A,B,fn;const H=new Set(HOME_CFG.hide||[]);
+  if(HOME_MEDIA==="yt"){const L=YT_LONG.concat((HOME_CFG.yt||[]).filter(x=>!x.s).map(x=>x.id)).filter(i=>!H.has("yt:"+i)).map(i=>[i,0]),S=YT_SHORT.concat((HOME_CFG.yt||[]).filter(x=>x.s).map(x=>x.id)).filter(i=>!H.has("yt:"+i)).map(i=>[i,1]);const half=Math.ceil(L.length/2);A=L.slice(0,half);B=L.slice(half);S.forEach((x,k)=>{(k%2?B:A).splice(2+k*3,0,x)});fn=ytItem}
+  else{const M=MEDIA.filter(m=>!H.has("c:"+mKey(m))).concat((HOME_CFG.chars||[]).filter(c=>!H.has("x:"+c.id)).map(c=>[c.img,"v11"]));const half=Math.ceil(M.length/2);A=M.slice(0,half);B=M.slice(half);fn=mqItem}
+  [A,B.length?B:A].forEach((L,i)=>{if(!L.length){rows[i].innerHTML="";return}let X=L.slice();while(X.length<12)X=X.concat(L);const h=X.map(fn).join("");rows[i].innerHTML=h+h})}
 renderMarquee(HOME_MEDIA);
 (function(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});$$(".mq-reveal").forEach(el=>io.observe(el))})();
 /* 왼쪽 메뉴 접기 */
@@ -2927,7 +2970,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792765841"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792766079"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3076,6 +3119,10 @@ const PGH={
   help:[["1","장면 설명","바꾸고 싶은 컷을 한두 문장으로 써요"],["2","참고 이미지 · 모델","캐릭터 이미지를 넣고 쓸 모델을 골라요"],["3","다시 만들기","이미지 프롬프트로 그림을, 영상 프롬프트로 움직임을 만들어요"]]},
  scene:{eye:"프롬프트 만들기",t:"씬 나누기",d:"이야기를 길이에 맞춰 씬으로 나누고, 씬마다 이미지·영상 프롬프트를 만들어요.",hi:"긴 이야기도 걱정 마세요. 길이에 맞춰 씬으로 나눠 드릴게요!",meta:[["결과물","씬별 이미지 · 영상 프롬프트 (영문)"],["카메라","씬마다 자동"]],
   help:[["1","이야기 쓰기","보여 주고 싶은 내용을 대략 써요"],["2","길이 맞추기","전체 길이와 씬 길이로 씬 개수가 정해져요"],["3","씬마다 복사","하나씩 복사하거나 전체 복사해요"]]}};
+PGH.gallery={eye:"둘러보기",t:"갤러리",d:"선생님들이 만든 캐릭터와 영상을 함께 봐요.",meta:[],
+  help:[["1","캐릭터 올리기","만든 캐릭터 이미지를 끌어다 놓고 제목을 써요"],["2","다른 캐릭터 보기","눌러서 프롬프트를 보고 가져다 써요"],["3","영상은 영상 탭","완성한 영상은 패들렛에 올려요"]]};
+PGH.models={eye:"알아보기",t:"브루 AI 모델 비교",d:"같은 캐릭터로 브루의 이미지·영상 모델을 같은 조건에서 돌려 봤어요.",meta:[],
+  help:[["1","탭 고르기","이미지, 비디오, 비디오 지시 따르기"],["2","마우스 올리기","칸에 올리면 아래에 자세한 설명이 떠요"],["3","눌러서 크게","칸을 누르면 크게 보고, 영상은 소리도 나와요"]]};
 PGH.split=PGH.chat;
 function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h.hidden=!P;if(!P)return;
   $("#pghEye").textContent=P.eye;$("#pghT").textContent=P.t;$("#pghD").textContent=P.d;
@@ -3086,7 +3133,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792765841";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792766079";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();

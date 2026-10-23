@@ -26,6 +26,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:16p
 .wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 220px;display:flex;flex-direction:column;gap:20px}
 p{margin:0}
 header{display:flex;flex-direction:column;gap:8px}
+.embed .wrap>header{display:none}.embed .wrap{padding-top:4px}
 h1{font-family:var(--f-title);font-weight:800;font-size:clamp(28px,3.6vw,38px);line-height:1.15;margin:0;letter-spacing:-.01em}
 h1 .hl{background:linear-gradient(transparent 60%,var(--mark) 60%);padding:0 3px}
 .sub{color:var(--muted);font-size:16px}
@@ -105,6 +106,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </style>
 
 <div class="wrap">
+  <script>if(window.self!==window.top)document.documentElement.classList.add("embed")</script>
   <header>
     <h1>브루 <span class="hl">AI 모델</span> 비교</h1>
     <p class="sub">예람쌤 캐릭터 하나로 브루의 모든 모델을 같은 조건에서 돌려 봤어요. 칸에 <b>마우스를 올리면</b> 아래에 자세한 설명이 떠요.</p>
