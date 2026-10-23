@@ -1827,7 +1827,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <label class="vdrop" id="vDrop"><input type="file" id="vFile" accept="video/*" hidden><span class="vd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span><b id="vDropT">영상 파일을 끌어다 놓거나 눌러서 고르세요</b><small>mp4 · 100MB 이하</small><video id="vPrev" muted playsinline hidden></video></label>
       <input class="tinput" id="vTitle" maxlength="80" placeholder="제목 (예: 북극곰 털은 무슨 색일까?)" required>
       <textarea class="tinput" id="vBody" rows="3" maxlength="500" placeholder="한 줄 소개 (선택) 예: 3학년 과학, 브루 AI 이미지로 만들었어요"></textarea>
-      <input class="tinput" id="vName" maxlength="20" placeholder="이름 (선택) 예: 김예람 선생님">
+      <input class="tinput" id="vName" maxlength="20" placeholder="올린 사람 이름 (예: 김예람 선생님)" required>
       <div class="vprog" id="vProg" hidden><i></i><span>올리는 중… 0%</span></div>
       <div class="row"><button type="button" class="btn ghost" id="vCancel">취소</button><button type="submit" class="btn primary" id="vSubmit">올리기</button></div>
     </form></div></div>
@@ -3109,7 +3109,7 @@ function renderPad(force){
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
     W.classList.add("native");
-    W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=/^—\s*/.test(last)?last.replace(/^—\s*/,""):(p.by||""),intro=(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${padMedia(p.url)}<div class="pdtx">${p.subject?`<b>${esc(p.subject)}</b>`:""}${intro?`<p>${esc(intro)}</p>`:""}${by?`<small>${esc(by)}</small>`:""}${can?`<button type="button" class="pddel" data-vdel="${esc(p.id)}">삭제</button>`:""}</div></article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
+    W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${padMedia(p.url)}<div class="pdtx">${p.subject?`<b>${esc(p.subject)}</b>`:""}${intro?`<p>${esc(intro)}</p>`:""}${by?`<small>${esc(by)}</small>`:""}${can?`<button type="button" class="pddel" data-vdel="${esc(p.id)}">삭제</button>`:""}</div></article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
@@ -3143,9 +3143,9 @@ $("#vupForm").addEventListener("submit",async e=>{e.preventDefault();const f=$("
       x.onload=()=>{try{const j=JSON.parse(x.responseText);j.secure_url?res(j.secure_url):rej(j.error&&j.error.message)}catch(err){rej("응답 오류")}};x.onerror=()=>rej("네트워크");x.send(fd)});
     tx.textContent="갤러리에 등록하는 중…";
     const name=$("#vName").value.trim(),body=[$("#vBody").value.trim(),name?"— "+name:""].filter(Boolean).join("\n");
-    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?id="+padId(PADLET),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({subject:title,body,url})});
+    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?id="+padId(PADLET),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({subject:title,body,url,by:name,intro:$("#vBody").value.trim()})});
     if(!r.ok)throw "등록 실패";const rj=await r.json().catch(()=>({}));const nid=rj.id||("new"+Date.now());if(rj.id&&rj.token){const m=myVids();m[rj.id]=rj.token;try{localStorage.setItem("ymMyVids",JSON.stringify(m))}catch(_){}}
-    PADJ=PADJ||{board:{id:padId(PADLET)},posts:[]};PADJ.posts.unshift({id:nid,subject:title,body,url,by:name,at:new Date().toISOString()});renderPad();
+    PADJ=PADJ||{board:{id:padId(PADLET)},posts:[]};PADJ.posts.unshift({id:nid,subject:title,body,url,by:name,intro:$("#vBody").value.trim(),at:new Date().toISOString()});renderPad();
     $("#vupModal").hidden=true;toast("올렸어요! 갤러리에 바로 보여요");padJT=0;setTimeout(loadPadJson,4000)
   }catch(err){toast("올리지 못했어요. 잠시 뒤 다시 해 주세요"+(err&&typeof err==="string"?` (${err})`:""));btn.disabled=false;P.hidden=true}});
 const MENU_KEYS=["char","script","shot","scene","gallery","models","community","survey"];
@@ -3393,7 +3393,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781384"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792781468"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3588,7 +3588,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781384";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792781468";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
