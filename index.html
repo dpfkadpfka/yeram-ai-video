@@ -1439,6 +1439,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .vprog{position:relative;height:30px;border-radius:999px;background:var(--bg,#F2EFED);overflow:hidden}.vprog i{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent-soft);transition:width .2s}.vprog span{position:relative;display:block;text-align:center;line-height:30px;font-size:13px;font-weight:700;color:var(--accent-deep)}
 .qa{margin:6px 0;padding-left:18px;display:grid;gap:3px;font-size:14px}
 .pdtx{position:relative}.pddel{justify-self:start;margin-top:6px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:4px 10px;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer}.pddel:hover,.pddel[data-sure="1"]{border-color:#E05252;color:#E05252}
+.msg.thinking{color:var(--muted);animation:thk 1s infinite alternate}@keyframes thk{from{opacity:.4}to{opacity:1}}
 </style>
 
 <div class="wrap">
@@ -2609,10 +2610,60 @@ function snapVals(){const o={};steps().forEach(st=>o[st.id]=getVal(st.key));retu
 function markChanged(b){steps().forEach(st=>{const was=st.id in b?b[st.id]:(st.key.startsWith("gf.")?"":(DEF[st.key]||""));if(!answered.has(st.id)&&getVal(st.key)&&getVal(st.key)!==was)answered.add(st.id)})}
 function detectMode(t,ch){if(cur.mode)return;let v="";if(/공모전|출품|응모/.test(t))v="contest";else if(/수업|교육|학생|교과|학년/.test(t))v="edu";else if(/일반|브이로그|채널|홍보|광고/.test(t))v="gen";if(v){cur.mode=v;ch.push("용도 → "+label("mode",v))}}
 function detectForm(t,ch){if(/숏폼|쇼츠|숏츠|릴스|세로/.test(t)&&cur.form!=="short"){cur.form="short";cur.imgRatio="9:16";ch.push("형식 → 숏폼")}else if(/롱폼|가로 ?영상|유튜브 ?영상/.test(t)&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9";ch.push("형식 → 롱폼")}}
+/* ===== 제미나이로 말 알아듣기 (Cloudflare Worker 경유, 실패하면 규칙 방식) ===== */
+let AI_OK=true,aiBusy=false;
+const AI_KEYS=["form","mode","genre","length","topic","focus","grade","subject","viewer","tone","must","msg"];
+function aiSchema(){const L=[];
+  AI_KEYS.forEach(k=>{if(k==="genre"){["edu","gen","contest"].forEach(m=>L.push(`genre (mode=${m}일 때): `+genreList(m).map(o=>`${o.v}=${o.t}`).join(", ")));return}
+    if(["topic","focus","must","msg"].includes(k)){L.push(`${k}: 자유 글 (${{topic:"영상 주제 한 줄",focus:"딱 하나 전할 것",must:"꼭 들어갈 사실·내용",msg:"마지막에 기억할 한 문장"}[k]})`);return}
+    if(k==="length"){L.push("length: 초 단위 숫자 문자열 (예: \"30\", \"90\", \"300\")");return}
+    const O=optsFor(k);if(O.length)L.push(`${k}: `+O.map(o=>`${o.v}=${o.t}`).join(", "))});return L.join("\n")}
+async function aiSay(text){
+  if(aiBusy)return true;aiBusy=true;me(text);const think=bot("…");think.classList.add("thinking");
+  const st=curStep,now={};AI_KEYS.forEach(k=>{const v=getVal(k);if(v)now[k]=v});
+  const sys=`너는 교사용 '대본 프롬프트 만들기' 챗봇의 이해 담당이야. 사용자의 말을 읽고 아래 칸에 넣을 값을 JSON으로만 답해.
+규칙:
+- 사용자가 분명히 말한 것만 채워. 추측하지 마.
+- 선택 칸은 반드시 주어진 값(= 왼쪽 영문 v)만 써.
+- 사용자가 질문을 하면 intent를 "question"으로 하고, reply에 짧고 정확한 한국어 존댓말 답(2~3문장)을 써. 요강이 있으면 요강에 근거해서 답하고, 요강에 없으면 없다고 말해.
+- 지금 질문에 대한 답이 아니고 다른 칸 정보만 있으면 그 칸만 채워.
+- reply는 질문이거나 사용자가 헷갈려 할 때만. 그 외에는 빈 문자열.
+출력 형식: {"set":{"칸":"값"},"intent":"answer|question|other","reply":""}
+칸 목록:
+${aiSchema()}`;
+  const prompt=`지금 챗봇이 물은 질문(칸 ${st?st.key:"없음"}): ${st?st.ask():""}
+지금까지 정해진 값: ${JSON.stringify(now)}
+${cur.brief?"공모전 요강:\n"+cur.brief.replace(/\s+/g," ").slice(0,2500)+"\n":""}사용자의 말: ${text}`;
+  let j=null;
+  try{const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),9000);
+    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=ai",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({system:sys,prompt,json:true}),signal:ctl.signal});clearTimeout(to);
+    if(r.ok){const d=await r.json();j=JSON.parse(String(d.text||"").replace(/^```(json)?|```$/g,"").trim())}}catch(_){}
+  think.remove();aiBusy=false;
+  if(!j||typeof j!=="object"){AI_OK=false;setTimeout(()=>AI_OK=true,60000);log.lastElementChild&&log.lastElementChild.classList.contains("me")&&log.lastElementChild.remove();return false}
+  const done=[];const set=j.set||{};
+  if(set.mode&&MODES.some(o=>o.v===set.mode)&&set.mode!==cur.mode){cur.mode=set.mode;cur.genre="";purgeGenreSteps();done.push("용도 → "+label("mode",set.mode))}
+  if(set.form&&["short","long"].includes(set.form)&&set.form!==cur.form){cur.form=set.form;cur.imgRatio=set.form==="long"?"16:9":"9:16";done.push("형식 → "+label("form",set.form))}
+  Object.keys(set).forEach(k=>{if(["mode","form"].includes(k)||!AI_KEYS.includes(k))return;let v=String(set[k]||"").trim();if(!v)return;
+    if(k==="genre"){const g=genreList().find(o=>o.v===v);if(!g)return;cur.genre=v;cur.hook=g.hooks[0];cur.ending=g.end;cur.speaker=g.sp;done.push("장르 → "+g.t);return}
+    if(k==="length"){const n=parseInt(v,10);if(!n)return;cur.length=String(Math.max(5,Math.min(1200,n)));if(n>=120&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9"}done.push("길이 → "+secLabel());return}
+    if(["topic","focus","must","msg"].includes(k)){setVal(k,v.slice(0,200));done.push(`${{topic:"주제",focus:"전할 것",must:"꼭 넣을 것",msg:"한 줄 메시지"}[k]} → ${v.slice(0,40)}`);return}
+    if(optsFor(k).some(o=>o.v===v)){setVal(k,v);done.push(`${KEY_NAMES[k]||k} → ${label(k,v)}`)}});
+  steps().forEach(x=>{if(done.length&&!answered.has(x.id)&&set[x.key]!==undefined&&getVal(x.key))answered.add(x.id)});
+  if(set.mode)answered.add("mode");if(set.form)answered.add("form");
+  renderAll();
+  if(j.reply)bot(String(j.reply));else if(done.length&&!(st&&set[st.key]!==undefined&&done.length===1))bot("알아들었어요: "+done.join(", "));
+  if(answered.has("length")&&document.body.dataset.stage==="chat")setStage("split");
+  const n=nextStep();if(!n){review();return true}
+  if(st&&n.id===st.id){if(!j.reply)ask(st)}else ask(n);
+  return true}
 function onSay(text){
   text=text.trim(); if(!text)return;
   if(phase==="naming"){saveStyle(text);return}
   if(looksBrief(text)){absorbBrief(text);return}
+  if(phase==="ask"&&curStep&&AI_OK&&PAD_API){const OP=curStep.type==="text"?[]:optsFor(curStep.key);const exact=OP.find(o=>o.t===text);const exText=curStep.type==="text"&&text.length<40&&!/[?？]|뭐|어떻게|왜|조건|요강/.test(text);
+    if(!exact&&!exText){aiSay(text).then(ok=>{if(!ok)onSayRule(text)});return}}
+  return onSayRule(text)}
+function onSayRule(text){
   if(isQuestion(text)){me(text);if(!answerQ(text)){bot(curStep&&phase==="ask"?"그건 제가 정확히 알려 드리기 어려워요. 지금 질문은 이거예요:\n"+curStep.ask():"그건 제가 정확히 알려 드리기 어려워요.")}return}
   if(/스타일/.test(text)&&/(저장|지정|만들어|기억|남겨)/.test(text)){me(text);startSaveStyle();return}
   if(phase==="pickstyle"){const st=(S.styles||[]).find(x=>text.includes(x.title));if(st){me(text);applyStyle(st.id);return}me(text);phase="ask";ask(nextStep());return}
@@ -3302,7 +3353,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792776985"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792777181"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3496,7 +3547,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792776985";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792777181";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
