@@ -1144,6 +1144,10 @@ body[data-stage="char"]:not(.cfresh) .pgh,body[data-stage="split"] .pgh{max-widt
 .mdlpop-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}.mdlpop-h b{font-size:16px}
 .mdlpop iframe{flex:1;width:100%;border:0}
 @media (max-width:600px){.mdlpop{padding:0}.mdlpop-c{height:100%;border-radius:0}}
+/* 관리자: 메뉴 숨기기 */
+body.hm-char [data-stepgo="1"],body.hm-char [data-gochar],body.hm-script [data-stepgo="2"],body.hm-script [data-goscript],body.hm-shot [data-stepgo="3"],body.hm-scene [data-stepgo="4"],body.hm-gallery .sn[data-gallery],body.hm-gallery .snlab-g,body.hm-models .sn[data-models],body.hm-models .snlab-m{display:none!important}
+body.hm-char #stepper li:has([data-stepgo="1"]),body.hm-script #stepper li:has([data-stepgo="2"]),body.hm-shot #stepper li:has([data-stepgo="3"]),body.hm-scene #stepper li:has([data-stepgo="4"]){display:none!important}
+.mnchk{display:flex;flex-wrap:wrap;gap:8px 16px;margin:10px 0}.mnchk label{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600;cursor:pointer}.mnchk input{width:18px;height:18px;accent-color:var(--accent)}
 /* 메뉴 묶음 이름 */
 @media (min-width:901px){
  header.side .sidenav .snlab{display:block!important;width:60px;height:auto;margin:10px auto 2px!important;padding:12px 0 2px!important;border-top:1px solid var(--line);font-size:11px!important;font-weight:800;color:#A49C97;letter-spacing:0;text-align:center;line-height:1.2}
@@ -1219,9 +1223,9 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
         <li><button type="button" data-stepgo="3" class="sn mk" data-tip="마음에 안 드는 컷 하나를 다시 만들 프롬프트"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSJub25lIiBzdHJva2U9IiMxRjFBMTciIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQwIDg4VjU2YTE2IDE2IDAgMCAxIDE2LTE2aDMyTTE2OCA0MGgzMmExNiAxNiAwIDAgMSAxNiAxNnYzMk0yMTYgMTY4djMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMk04OCAyMTZINTZhMTYgMTYgMCAwIDEtMTYtMTZ2LTMyIi8+PHBhdGggZD0iTTEwOCA5Nmw1NiAzMi01NiAzMnoiIGZpbGw9IiMxRjFBMTciLz48L3N2Zz4K)" aria-hidden="true"></span><i>3</i><span><b>컷 편집</b><small></small></span></button></li>
         <li><button type="button" data-stepgo="4" class="sn mk" data-tip="이야기를 씬으로 나눠 씬마다 이미지·영상 프롬프트"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE2LDEwNEgxMDIuMDlMMjEwLDc1LjUxYTgsOCwwLDAsMCw1LjY4LTkuODRsLTguMTYtMzBhMTUuOTMsMTUuOTMsMCwwLDAtMTkuNDItMTEuMTNMMzUuODEsNjQuNzRhMTUuNzUsMTUuNzUsMCwwLDAtOS43LDcuNCwxNS41MSwxNS41MSwwLDAsMC0xLjU1LDEyTDMyLDExMS41NmMwLC4xNCwwLC4yOSwwLC40NHY4OGExNiwxNiwwLDAsMCwxNiwxNkgyMDhhMTYsMTYsMCwwLDAsMTYtMTZWMTEyQTgsOCwwLDAsMCwyMTYsMTA0Wk0xOTIuMTYsNDBsNiwyMi4wNy0yMi42Miw2TDE0Ny40Miw1MS44M1ptLTY2LjY5LDE3LjYsMjguMTIsMTYuMjQtMzYuOTQsOS43NUw4OC41Myw2Ny4zN1ptLTc5LjQsNDQuNjItNi0yMi4wOCwyNi41LTdMOTQuNjksODkuNFpNMjA4LDIwMEg0OFYxMjBIMjA4djgwWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><i>4</i><span><b>씬 나누기</b><small></small></span></button></li>
       </ol>
-      <span class="snlab">둘러보기</span>
+      <span class="snlab snlab-g">둘러보기</span>
       <button type="button" data-gallery class="sn" data-snav="gallery" data-tip="선생님들이 만든 영상과 캐릭터를 함께 봐요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE2LDQwSDcyQTE2LDE2LDAsMCwwLDU2LDU2VjcySDQwQTE2LDE2LDAsMCwwLDI0LDg4VjIwMGExNiwxNiwwLDAsMCwxNiwxNkgxODRhMTYsMTYsMCwwLDAsMTYtMTZWMTg0aDE2YTE2LDE2LDAsMCwwLDE2LTE2VjU2QTE2LDE2LDAsMCwwLDIxNiw0MFpNNzIsNTZIMjE2djYyLjc1bC0xMC4wNy0xMC4wNmExNiwxNiwwLDAsMC0yMi42MywwbC0yMCwyMC00NC00NGExNiwxNiwwLDAsMC0yMi42MiwwTDcyLDEwOS4zN1pNMTg0LDIwMEg0MFY4OEg1NnY4MGExNiwxNiwwLDAsMCwxNiwxNkgxODRabTMyLTMySDcyVjEzMmwzNi0zNiw0OS42Niw0OS42NmE4LDgsMCwwLDAsMTEuMzEsMEwxOTQuNjMsMTIwLDIxNiwxNDEuMzhWMTY4Wk0xNjAsODRhMTIsMTIsMCwxLDEsMTIsMTJBMTIsMTIsMCwwLDEsMTYwLDg0WiIvPjwvc3ZnPg==)" aria-hidden="true"></span><span>갤러리</span></button>
-      <span class="snlab">알아보기</span>
+      <span class="snlab snlab-m">알아보기</span>
       <button type="button" data-models class="sn" data-snav="models" data-tip="브루 이미지·영상 모델을 같은 조건으로 비교해 봤어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjM5LjQzLDEzM2wtMzItODBoMGE4LDgsMCwwLDAtOS4xNi00Ljg0TDEzNiw2MlY0MGE4LDgsMCwwLDAtMTYsMFY2NS41OEw1NC4yNiw4MC4xOUE4LDgsMCwwLDAsNDguNTcsODVoMHYuMDZMMTYuNTcsMTY1YTcuOTIsNy45MiwwLDAsMC0uNTcsM2MwLDIzLjMxLDI0LjU0LDMyLDQwLDMyczQwLTguNjksNDAtMzJhNy45Miw3LjkyLDAsMCwwLS41Ny0zTDY2LjkyLDkzLjc3LDEyMCw4MlYyMDhIMTA0YTgsOCwwLDAsMCwwLDE2aDQ4YTgsOCwwLDAsMCwwLTE2SDEzNlY3OC40MkwxODcsNjcuMSwxNjAuNTcsMTMzYTcuOTIsNy45MiwwLDAsMC0uNTcsM2MwLDIzLjMxLDI0LjU0LDMyLDQwLDMyczQwLTguNjksNDAtMzJBNy45Miw3LjkyLDAsMCwwLDIzOS40MywxMzNaTTU2LDE4NGMtNy41MywwLTIyLjc2LTMuNjEtMjMuOTMtMTQuNjRMNTYsMTA5LjU0bDIzLjkzLDU5LjgyQzc4Ljc2LDE4MC4zOSw2My41MywxODQsNTYsMTg0Wm0xNDQtMzJjLTcuNTMsMC0yMi43Ni0zLjYxLTIzLjkzLTE0LjY0TDIwMCw3Ny41NGwyMy45Myw1OS44MkMyMjIuNzYsMTQ4LjM5LDIwNy41MywxNTIsMjAwLDE1MloiLz48L3N2Zz4=)" aria-hidden="true"></span><span>모델 비교</span></button>
     </nav>
     <div class="acct">
@@ -1523,6 +1527,9 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
 <div class="modal" id="adminModal" hidden role="dialog" aria-modal="true" aria-labelledby="admH">
   <div class="modal-card admcard"><h2 id="admH">관리자 설정</h2>
     <form class="padform" id="homeForm"><label for="homeMedia"><b>홈 화면</b> 아래쪽에 흘러갈 것</label><div class="row"><select class="tinput" id="homeMedia"><option value="char">캐릭터 홈 (움직이는 캐릭터)</option><option value="yt">썸네일 홈 (유튜브 영상)</option></select><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 홈이 바뀌어요.</small></form>
+    <form class="padform" id="menuForm"><b>메뉴 보이기</b><div class="mnchk">
+      <label><input type="checkbox" data-mn="char">캐릭터</label><label><input type="checkbox" data-mn="script">대본</label><label><input type="checkbox" data-mn="shot">컷 편집</label><label><input type="checkbox" data-mn="scene">씬 나누기</label><label><input type="checkbox" data-mn="gallery">갤러리</label><label><input type="checkbox" data-mn="models">모델 비교</label>
+    </div><div class="row"><button class="btn primary" type="submit">저장</button></div><small class="hint">체크를 끄면 모든 선생님 화면에서 그 메뉴가 숨겨져요. 연수 때 씬 나누기를 끄는 식으로 쓰면 돼요.</small></form>
     <form class="padform" id="padForm"><label for="padUrl"><b>관리자</b> 이번 연수에 쓸 패들렛 주소</label><div class="row"><input class="tinput" id="padUrl" placeholder="https://padlet.com/..." autocomplete="off"><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 갤러리가 이 패들렛으로 바뀌어요.</small>
       <div class="admbox" id="admBox"><label for="admEmail"><b>관리자 권한 주기</b> 패들렛을 바꿀 수 있는 사람</label>
         <div class="row"><input class="tinput" id="admEmail" type="email" placeholder="함께 연수하는 선생님 구글 메일" autocomplete="off"><button class="btn" type="button" id="admAdd">추가</button></div>
@@ -2637,7 +2644,13 @@ function renderPad(force){
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)$("#padWrap").innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">${canEditPad()?"패들렛을 준비하고 있어요.":"패들렛을 준비하고 있어요."}</p>`;
 }
-async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
+const MENU_KEYS=["char","script","shot","scene","gallery","models"];
+function applyHidden(h){h=h||[];MENU_KEYS.forEach(k=>document.body.classList.toggle("hm-"+k,h.includes(k)));$$("[data-mn]").forEach(c=>c.checked=!h.includes(c.dataset.mn));try{localStorage.setItem("ymHideMenus",JSON.stringify(h))}catch(e){}}
+try{applyHidden(JSON.parse(localStorage.getItem("ymHideMenus")||"[]"))}catch(e){}
+$("#menuForm").addEventListener("submit",async e=>{e.preventDefault();const h=$$("[data-mn]").filter(c=>!c.checked).map(c=>c.dataset.mn);
+  try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{hideMenus:h,updatedAt:fb.fs.serverTimestamp()},{merge:true})}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.");return}
+  applyHidden(h);$("#adminModal").hidden=true;toast(h.length?"메뉴 "+h.length+"개를 숨겼어요":"모든 메뉴를 보여요")});
+async function loadSiteConfig(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","site"));const x=d.exists()?d.data():{};SITE_ADMINS=(x.admins||[]).map(e=>String(e).toLowerCase());applyHidden(x.hideMenus||[]);if(x.homeMedia&&x.homeMedia!==HOME_MEDIA){renderMarquee(x.homeMedia);try{localStorage.setItem("ymHomeMedia",x.homeMedia)}catch(e){}}const hm=$("#homeMedia");if(hm)hm.value=HOME_MEDIA;const u=x.padlet||PADLET_DEFAULT;if(u!==PADLET){PADLET=u;renderPad(true)}else renderPad()}catch(e){}}
 function canManageAdmins(){return fb?isOwner():true}
 function renderAdmins(){$("#admBox").hidden=!canManageAdmins();$("#admList").innerHTML=SITE_ADMINS.length?SITE_ADMINS.map(e=>`<li>${esc(e)}<button type="button" class="x" data-admdel="${esc(e)}" aria-label="${esc(e)} 관리자 빼기">×</button></li>`).join(""):`<li class="hint" style="border:0;background:none;padding:4px 0">아직 추가한 관리자가 없어요.</li>`}
 async function saveAdmins(){try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{admins:SITE_ADMINS,updatedAt:fb.fs.serverTimestamp()},{merge:true});else localStorage.setItem("ymAdmins",JSON.stringify(SITE_ADMINS));renderAdmins();return true}catch(e){toast("저장하지 못했어요. 다시 시도해 주세요.");return false}}
@@ -2938,7 +2951,7 @@ $$("#shotStage .scopts").forEach(g=>[...g.querySelectorAll("button")].forEach(b=
 $$("[data-shtg]").forEach(x=>x.checked=!!SH.tg[x.dataset.shtg]);shPaintRef();paintPills();["#shStyle","#scStyle"].forEach(q=>{if(!SH.ref&&$(q).value==="참고 이미지")$(q).value="3D 애니메이션"});
 /* 페이지 머리 내용 */
 const PGH={
- char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",hi:"캐릭터는 이 네 가지만 정하면 돼요! 앞 글자만 따서 ‘피동장스’라고 불러요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 AI 이미지"]],
+ char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",hi:"캐릭터는 이 네 가지만 정하면 돼요! 앞 글자만 따서 ‘피동장스’라고 불러요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","ChatGPT 등 쓰는 AI · 미리캔버스 캐릭터 만들기"]],
   help:[["피","피사체","누구를 그릴지 · 머리, 옷, 생김새"],["동","동작","포즈와 표정 · 손 흔들기, 웃는 얼굴"],["장","장소","배경 · 흰 배경, 교실, 놀이터"],["스","스타일","그림체 · 3D 애니, 웹툰, 수채화"]],helpB:"피동장스"},
  chat:{eye:"프롬프트 만들기",t:"대본",d:"영상 형식과 주제를 고르면 브루에 넣을 대본 프롬프트를 만들어요.",hi:"대본은 이렇게 만들어요! 제가 하나씩 물어볼 테니 편하게 답해 주세요.",meta:[["결과물","대본 프롬프트 · 이미지 프롬프트"],["넣는 곳","브루 텍스트로 비디오 만들기 → AI 글쓰기"]],
   help:[["1","형식 고르기","숏폼·롱폼과 영상 종류를 골라요"],["2","질문에 답하기","주제, 대상, 말투를 정해요"],["3","브루에 붙여 넣기","칸마다 복사해서 브루 AI 글쓰기에 넣어요"]]},
