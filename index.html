@@ -1620,6 +1620,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .pdr.vmode .an{display:none}
 .admx{width:40px!important;height:40px!important;border-radius:50%!important;background:var(--ink)!important;color:var(--paper)!important;border:0!important;font-size:17px!important;font-weight:700}.admx:hover{background:var(--accent)!important}
 .pdr .pdtag{display:none!important}
+.pdrows li{grid-template-columns:28px minmax(0,1fr)!important;align-items:start!important}.pdrows li .pk2{margin-top:2px}.pdrows li>div>span{line-height:1.55;white-space:normal}
 </style>
 
 <div class="wrap">
@@ -1730,10 +1731,10 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
             <h3>피동장스</h3>
             <p class="pd-lead">네 가지만 정하면 어떤 AI에서도 같은 캐릭터를 다시 그릴 수 있어요.</p>
             <ol class="pdrows">
-              <li data-pd="subj" tabindex="0"><span class="pk2">피</span><div><b>피사체</b><span>누구를 그릴지 · 외형, 헤어, 의상, 소품</span></div><em>갈색 긴 생머리 여자 선생님</em></li>
-              <li data-pd="act" tabindex="0"><span class="pk2">동</span><div><b>동작</b><span>포즈와 표정</span></div><em>정면 전신 기본 포즈</em></li>
-              <li data-pd="place" tabindex="0"><span class="pk2">장</span><div><b>장소</b><span>배경</span></div><em>흰 배경</em></li>
-              <li data-pd="style" tabindex="0"><span class="pk2">스</span><div><b>스타일</b><span>그림체</span></div><em>3D 애니메이션</em></li>
+              <li data-pd="subj" tabindex="0"><span class="pk2">피</span><div><b>피사체</b><span>누구를 그릴지 정해요. 사람인지 동물인지, 나이·성별, 머리 모양과 색, 옷과 소품까지 적을수록 매번 같은 캐릭터가 나와요.</span></div></li>
+              <li data-pd="act" tabindex="0"><span class="pk2">동</span><div><b>동작</b><span>어떤 자세와 표정인지 정해요. 처음엔 정면 전신 기본 포즈로 만들어 두면, 나중에 손 흔들기·점프처럼 동작만 바꿔 쓰기 좋아요.</span></div></li>
+              <li data-pd="place" tabindex="0"><span class="pk2">장</span><div><b>장소</b><span>어디에 있는지 정해요. 캐릭터 기본 이미지는 흰 배경이 좋고, 교실·바닷가·우주처럼 배경만 바꿔 장면을 만들어요.</span></div></li>
+              <li data-pd="style" tabindex="0"><span class="pk2">스</span><div><b>스타일</b><span>어떤 그림체로 그릴지 정해요. 3D 애니메이션, 2D 치비, 종이공예처럼 같은 캐릭터도 그림체에 따라 느낌이 확 달라져요.</span></div></li>
             </ol>
             <div class="pd-go"><button type="button" class="btn primary lg" id="pdGo">채팅 시작하기</button><small>하나씩 물어볼게요. 모르면 건너뛰어도 돼요.</small></div>
           </div>
@@ -3584,7 +3585,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792785231"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792785267"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3780,7 +3781,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792785231";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792785267";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
