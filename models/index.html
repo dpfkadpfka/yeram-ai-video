@@ -252,7 +252,7 @@ const tabs=[...document.querySelectorAll('.tab')];
 const vids=()=>[...document.querySelectorAll('#vidGrid video,#hardGrid video')];
 function show(id){tabs.forEach(t=>{const on=t.id===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});
   document.getElementById('info').hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));
-  vids().forEach(v=>v.pause());const g=id==='t-vid'?vg:id==='t-hard'?hg:null;if(g)g.querySelectorAll('video').forEach(v=>{v.currentTime=0;v.play().catch(()=>{})});
+  document.querySelectorAll('video').forEach(v=>{v.pause();v.muted=true});document.querySelectorAll('.tile.snd').forEach(x=>x.classList.remove('snd'));const g=id==='t-vid'?vg:id==='t-hard'?hg:null;if(g)g.querySelectorAll('video').forEach(v=>{v.currentTime=0;v.play().catch(()=>{})});
   try{localStorage.setItem('tab',id)}catch(e){}}
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.id)));
 let saved=null;try{saved=localStorage.getItem('tab')}catch(e){}
@@ -280,4 +280,4 @@ function toggleSound(t){const v=t.querySelector('video');if(!v)return;const on=v
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('tile'))toggleSound(e.target);});
 </script>
 
-</body></html>
+<script>document.addEventListener("visibilitychange",()=>{if(document.hidden)document.querySelectorAll("video").forEach(v=>v.pause())});window.ymPauseAll=()=>{document.querySelectorAll("video").forEach(v=>{v.pause();v.muted=true});document.querySelectorAll(".tile.snd").forEach(x=>x.classList.remove("snd"))};</script></body></html>
