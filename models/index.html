@@ -7,6 +7,7 @@
  .name{font-size:16px!important}
 }
 .tag .best{display:inline-block;margin-left:6px;background:var(--accent,#E65588);color:#fff;font-size:11.5px;font-weight:800;padding:2px 8px;border-radius:999px;vertical-align:middle}
+.cap.ask{display:grid;gap:6px}.cap.ask b{font-size:13px;color:var(--muted);font-weight:700}.cap.ask q{quotes:none;font-weight:700;line-height:1.55}.cap.ask small{font-size:12.5px;color:var(--muted)}
 </style></head><body>
 <title>AI 모델 비교</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -126,21 +127,17 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <button class="tab" role="tab" id="t-vid" aria-selected="false" aria-controls="p-vid">비디오 <i>11</i></button>
     <button class="tab" role="tab" id="t-hard" aria-selected="false" aria-controls="p-hard">비디오 지시 따르기 <i>9</i></button>
     <span class="spacer"></span>
-    <span class="hint">★ = 품질 별 · 🪙 = 크레딧</span>
   </div>
 
   <section id="p-img" role="tabpanel" aria-labelledby="t-img" style="display:flex;flex-direction:column;gap:16px">
-    <p class="cond"><b>조건</b> 원본 캐릭터 첨부 → "3D 애니메이션 캐릭터로 바꾸고 뿔·날개·원피스·윙크 포즈 유지, 단색 연회색 배경, 전신" · 1:1 · 첫 칸이 원본이에요. FLUX.2 klein·SDXL은 첨부가 안 돼서 캐릭터를 글로 묘사해 만들었어요.</p>
     <div class="grid img" id="imgGrid"></div>
   </section>
 
   <section id="p-hard" role="tabpanel" aria-labelledby="t-hard" hidden style="display:flex;flex-direction:column;gap:16px">
-    <p class="cond"><b>조건</b> 과학실 시작 이미지(첫 칸) → 칠판에 분필로 '과학' 쓰기 → 비커를 쳐서 파란 액체 쏟기 → "어머, 큰일 났다!" 외치며 입 가리기 → 카메라가 돌며 얼굴 클로즈업 · <b>6초 · 720p · 소리 켬</b> · 9개 모델. 마우스를 올리면 다섯 가지 지시를 지켰는지(✓/✗) 나와요.</p>
     <div class="grid vid" id="hardGrid"></div>
   </section>
 
   <section id="p-vid" role="tabpanel" aria-labelledby="t-vid" hidden style="display:flex;flex-direction:column;gap:16px">
-    <p class="cond"><b>조건</b> 같은 시작 이미지(첫 칸) → 손 흔들며 "안녕하세요, 예람쌤이에요!" 말한 뒤 한 바퀴 돌기 · <b>4초 · 720p · 소리 켬</b> (5초 고정 모델 2개 제외). 영상은 무음으로 함께 반복돼요. <b>칸을 누르면 그 영상만 소리가 켜져요.</b></p>
     <div class="grid vid" id="vidGrid"></div>
   </section>
 
@@ -238,16 +235,16 @@ const byQ=(a,b)=>(STAR[b.co||b.id]||0)-(STAR[a.co||a.id]||0)||(+a.cr)-(+b.cr);VI
 const rowI=m=>`<tr><td class="n">${m.n}</td><td class="s">${stars(m)}</td><td class="c">🪙 ${m.cr}</td><td>${(ST[m.id]||[])[0]?ST[m.id][0][1]:''}</td></tr>`;
 const rowV=m=>`<tr><td class="n">${m.n}</td><td class="s">${stars(m)}</td><td class="c">🪙 ${m.cr}</td><td>${m.spec.split(' · ')[0]}</td><td>${m.spec.includes('소리 O')?'O':'X'}</td><td>${(ST[m.id]||[])[0]?ST[m.id][0][1]:''}</td></tr>`;
 const ig=document.getElementById('imgGrid');
-ig.innerHTML=`<div class="tile" tabindex="0" data-src="ref_original.jpg" data-name="원본 (첨부한 캐릭터)"><img class="m" src="ref_original.jpg" alt="원본 캐릭터"><div class="tag"><span class="name">원본</span></div><div class="cap"><span class="co"><span>예람쌤 기본 캐릭터</span></span>모든 모델에 첨부한 2D 원본 그림</div></div>`+
+ig.innerHTML=`<div class="tile" tabindex="0" data-src="ref_original.jpg" data-name="원본 (첨부한 캐릭터)"><img class="m" src="ref_original.jpg" alt="원본 캐릭터"><div class="tag"><span class="name">원본</span></div><div class="cap ask"><b>이 그림을 첨부하고 요청</b><q>3D 애니메이션 캐릭터로 바꿔 줘. 뿔·날개·원피스·윙크 포즈는 그대로, 연회색 배경, 전신</q><small>1:1 · FLUX.2 klein·SDXL은 첨부가 안 돼 글로 묘사</small></div></div>`+
 IMG.map(m=>m.f?`<div class="tile" tabindex="0" data-id="${m.id}" data-src="${m.f}" data-name="${m.n}"><img class="m" src="${m.f}" alt="${m.n} 결과" loading="lazy">${tag(m)}${ov(m)}</div>`
  :`<div class="tile empty" tabindex="0" data-id="${m.id}"><div class="m" style="aspect-ratio:1/1">캐릭터 첨부가 안 돼서<br>결과 없음</div>${tag(m)}${ov(m)}</div>`).join('');
 
 const vg=document.getElementById('vidGrid');
-vg.innerHTML=`<div class="tile" tabindex="0" data-src="start_frame.jpg" data-name="원본"><img class="m" src="start_frame.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap">모든 비디오 모델의 첫 장면</div></div>`+
+vg.innerHTML=`<div class="tile" tabindex="0" data-src="start_frame.jpg" data-name="원본"><img class="m" src="start_frame.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap ask"><b>이 장면에서 시작</b><q>손 흔들며 “안녕하세요, 예람쌤이에요!” 말하고 한 바퀴 돌기</q><small>4초 · 720p · 소리 켬 · 칸을 누르면 소리가 나요</small></div></div>`+
 VID.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
 const hg=document.getElementById('hardGrid');
-hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="원본"><img class="m" src="h00_start.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap">빈 칠판 · 파란 비커 · 분필</div></div>`+
+hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="원본"><img class="m" src="h00_start.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap ask"><b>이 장면에서 시작, 5가지 지시</b><q>① 칠판에 ‘과학’ 쓰기 ② 비커를 쳐서 파란 액체 쏟기 ③ “어머, 큰일 났다!” 외치기 ④ 입 가리기 ⑤ 카메라가 돌며 얼굴 클로즈업</q><small>6초 · 720p · 마우스를 올리면 지켰는지 ✓/✗</small></div></div>`+
 HARD.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
 // 탭
