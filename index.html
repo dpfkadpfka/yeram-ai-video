@@ -1628,7 +1628,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .gv-card{grid-template-rows:minmax(0,1fr);max-height:calc(100vh - 32px)}
 .gvimg{height:100%;min-height:0}
 .gvimg video,.gvimg iframe,.gvimg img{width:100%;height:100%;max-height:100%;object-fit:contain}
-.pdm .pdplay{position:absolute;inset:0;margin:auto;width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.45);pointer-events:none;transition:opacity .2s}.pdm .pdplay::after{content:"";position:absolute;left:18px;top:14px;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent}.pdcard:hover .pdplay{opacity:0}
+.pdm .pdplay{position:absolute;inset:0;margin:auto;width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.45);pointer-events:none;transition:opacity .2s}.pdm .pdplay::after{content:"";position:absolute;left:18px;top:14px;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent}
 .gvimg{position:relative!important;overflow:hidden!important;min-height:0}.gvimg>video,.gvimg>iframe,.gvimg>img{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:contain!important}
 @media (max-width:760px){.gvimg{height:55vh}}
 .pd-lead{max-width:none!important;word-break:keep-all}
@@ -3637,7 +3637,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792786581"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792786592"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3835,7 +3835,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792786581";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792786592";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4098,7 +4098,7 @@ document.addEventListener("submit",async e=>{if(e.target.id!=="galSetForm")retur
 function vInfo(p){const L=String(p.body||"").split("\n"),last=L[L.length-1]||"";return {by:p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro:p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim()}}
 function openVid(id){const p=(PADJ&&PADJ.posts||[]).find(x=>String(x.id)===String(id));if(!p)return;const {by,intro}=vInfo(p),u=p.url||"",key="v_"+p.id;
   const yt=u.match(/(?:youtu\.be\/|v=|shorts\/)([\w-]{11})/);
-  const media=yt?`<iframe src="https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:/\.(png|jpe?g|gif|webp|avif)(\?|#|$)/i.test(u)?`<img class="gimg" src="${esc(u)}" alt="">`:`<video src="${esc(u)}" controls autoplay playsinline></video>`;
+  const media=yt?`<iframe src="https://www.youtube.com/embed/${yt[1]}?rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:/\.(png|jpe?g|gif|webp|avif)(\?|#|$)/i.test(u)?`<img class="gimg" src="${esc(u)}" alt="">`:`<video src="${esc(u)}#t=0.1" controls preload="metadata" playsinline></video>`;
   const can=!!(myVids()[p.id]||(fb&&isAdmin()));
   $("#gvCard").innerHTML=`<button type="button" class="gvx" data-gclose aria-label="닫기">✕</button><div class="gvimg">${media}</div><div class="gvside">
     ${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit2="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}
@@ -4113,7 +4113,7 @@ document.addEventListener("click",e=>{const t=e.target;let b;
 document.addEventListener("click",e=>{const t=e.target;const c=t.closest("[data-open]");if(!c)return;
   if(t.closest("button,a,input,textarea,form,.rxbar,.rxcmts,.kmenu"))return;
   const [k,id]=c.dataset.open.split(":");if(k==="v")openVid(id);else openItem(id)});
-document.addEventListener("mouseover",e=>{const c=e.target.closest(".pdcard[data-open]");if(!c)return;const v=c.querySelector(".pdm video");if(v&&v.paused)v.play().catch(()=>{})});
+
 document.addEventListener("mouseout",e=>{const c=e.target.closest(".pdcard[data-open]");if(!c||c.contains(e.relatedTarget))return;const v=c.querySelector(".pdm video");if(v)v.pause()});
 
 /* 관리자: 왼쪽 탭 + 오른쪽 아래 저장 하나 */
