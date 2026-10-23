@@ -1216,6 +1216,12 @@ header.side #loginBtn[hidden],body.sidemini #loginBtn[hidden],#loginBtn[hidden]{
 .sbact{display:flex;align-items:center;gap:6px;margin-top:8px;width:100%;justify-content:flex-end}
 .sbsum{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink);background:var(--bg);border-radius:10px;padding:8px 12px}
 .sbdone{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
+body.hm-survey [data-survey]{display:none!important}
+header.side .sn.snsv{color:var(--accent-deep)!important;text-decoration:none}
+header.side .sn.snsv .ico{color:var(--accent)}
+@media (min-width:901px) and (max-height:980px){header.side .sn .ico{margin:5px 0 3px!important}header.side .sidenav .snlab{margin:6px auto 2px!important;padding-top:7px!important}}
+@media (min-width:901px){header.side .sidenav{overflow-y:auto;min-height:0;flex:1 1 auto;scrollbar-width:none}header.side .acct{flex:none}header.side .sidenav::-webkit-scrollbar{display:none}}
+@media (min-width:901px) and (max-height:860px){header.side .sidenav{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 28px),transparent);padding-bottom:20px}}
 /* 메뉴 묶음 이름 */
 .snlab-li{list-style:none}
 @media (max-width:900px){.snlab-li{display:none!important}}
@@ -1298,6 +1304,7 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
       <button type="button" data-gallery class="sn" data-snav="gallery" data-tip="선생님들이 만든 영상과 캐릭터를 함께 봐요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE2LDQwSDcyQTE2LDE2LDAsMCwwLDU2LDU2VjcySDQwQTE2LDE2LDAsMCwwLDI0LDg4VjIwMGExNiwxNiwwLDAsMCwxNiwxNkgxODRhMTYsMTYsMCwwLDAsMTYtMTZWMTg0aDE2YTE2LDE2LDAsMCwwLDE2LTE2VjU2QTE2LDE2LDAsMCwwLDIxNiw0MFpNNzIsNTZIMjE2djYyLjc1bC0xMC4wNy0xMC4wNmExNiwxNiwwLDAsMC0yMi42MywwbC0yMCwyMC00NC00NGExNiwxNiwwLDAsMC0yMi42MiwwTDcyLDEwOS4zN1pNMTg0LDIwMEg0MFY4OEg1NnY4MGExNiwxNiwwLDAsMCwxNiwxNkgxODRabTMyLTMySDcyVjEzMmwzNi0zNiw0OS42Niw0OS42NmE4LDgsMCwwLDAsMTEuMzEsMEwxOTQuNjMsMTIwLDIxNiwxNDEuMzhWMTY4Wk0xNjAsODRhMTIsMTIsMCwxLDEsMTIsMTJBMTIsMTIsMCwwLDEsMTYwLDg0WiIvPjwvc3ZnPg==)" aria-hidden="true"></span><span>갤러리</span></button>
       <span class="snlab snlab-m">알아보기</span>
       <button type="button" data-models class="sn" data-snav="models" data-tip="브루 이미지·영상 모델을 같은 조건으로 비교해 봤어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjM5LjQzLDEzM2wtMzItODBoMGE4LDgsMCwwLDAtOS4xNi00Ljg0TDEzNiw2MlY0MGE4LDgsMCwwLDAtMTYsMFY2NS41OEw1NC4yNiw4MC4xOUE4LDgsMCwwLDAsNDguNTcsODVoMHYuMDZMMTYuNTcsMTY1YTcuOTIsNy45MiwwLDAsMC0uNTcsM2MwLDIzLjMxLDI0LjU0LDMyLDQwLDMyczQwLTguNjksNDAtMzJhNy45Miw3LjkyLDAsMCwwLS41Ny0zTDY2LjkyLDkzLjc3LDEyMCw4MlYyMDhIMTA0YTgsOCwwLDAsMCwwLDE2aDQ4YTgsOCwwLDAsMCwwLTE2SDEzNlY3OC40MkwxODcsNjcuMSwxNjAuNTcsMTMzYTcuOTIsNy45MiwwLDAsMC0uNTcsM2MwLDIzLjMxLDI0LjU0LDMyLDQwLDMyczQwLTguNjksNDAtMzJBNy45Miw3LjkyLDAsMCwwLDIzOS40MywxMzNaTTU2LDE4NGMtNy41MywwLTIyLjc2LTMuNjEtMjMuOTMtMTQuNjRMNTYsMTA5LjU0bDIzLjkzLDU5LjgyQzc4Ljc2LDE4MC4zOSw2My41MywxODQsNTYsMTg0Wm0xNDQtMzJjLTcuNTMsMC0yMi43Ni0zLjYxLTIzLjkzLTE0LjY0TDIwMCw3Ny41NGwyMy45Myw1OS44MkMyMjIuNzYsMTQ4LjM5LDIwNy41MywxNTIsMjAwLDE1MloiLz48L3N2Zz4=)" aria-hidden="true"></span><span>모델 비교</span></button>
+      <a class="sn snsv" data-survey href="https://forms.gle/SZLSbbdfzNCVSs8u8" target="_blank" rel="noopener" data-tip="수업이 끝나면 꼭 참여해 주세요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNNDAsODhINzNhMzIsMzIsMCwwLDAsNjIsMGg4MWE4LDgsMCwwLDAsMC0xNkgxMzVhMzIsMzIsMCwwLDAtNjIsMEg0MGE4LDgsMCwwLDAsMCwxNlptNjQtMjRBMTYsMTYsMCwxLDEsODgsODAsMTYsMTYsMCwwLDEsMTA0LDY0Wk0yMTYsMTY4SDE5OWEzMiwzMiwwLDAsMC02MiwwSDQwYTgsOCwwLDAsMCwwLDE2aDk3YTMyLDMyLDAsMCwwLDYyLDBoMTdhOCw4LDAsMCwwLDAtMTZabS00OCwyNGExNiwxNiwwLDEsMSwxNi0xNkExNiwxNiwwLDAsMSwxNjgsMTkyWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><span>만족도 조사</span></a>
     </nav>
     <div class="acct">
       <button type="button" class="sn fsbtn" id="fsBtn" data-tip="글자 크기를 키우거나 줄여요" aria-expanded="false"><span class="gi" aria-hidden="true">가</span><span>글자 크기</span></button>
@@ -1603,7 +1610,7 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
   <div class="modal-card admcard"><h2 id="admH">관리자 설정</h2>
     <form class="padform" id="homeForm"><label for="homeMedia"><b>홈 화면</b> 아래쪽에 흘러갈 것</label><div class="row"><select class="tinput" id="homeMedia"><option value="char">캐릭터 홈 (움직이는 캐릭터)</option><option value="yt">썸네일 홈 (유튜브 영상)</option></select><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 홈이 바뀌어요.</small></form>
     <form class="padform" id="menuForm"><b>메뉴 보이기</b><div class="mnchk">
-      <label><input type="checkbox" data-mn="char">캐릭터</label><label><input type="checkbox" data-mn="script">대본</label><label><input type="checkbox" data-mn="shot">컷 편집</label><label><input type="checkbox" data-mn="scene">씬 나누기</label><label><input type="checkbox" data-mn="gallery">갤러리</label><label><input type="checkbox" data-mn="models">모델 비교</label>
+      <label><input type="checkbox" data-mn="char">캐릭터</label><label><input type="checkbox" data-mn="script">대본</label><label><input type="checkbox" data-mn="shot">컷 편집</label><label><input type="checkbox" data-mn="scene">씬 나누기</label><label><input type="checkbox" data-mn="gallery">갤러리</label><label><input type="checkbox" data-mn="models">모델 비교</label><label><input type="checkbox" data-mn="survey">만족도 조사</label>
     </div><div class="row"><button class="btn primary" type="submit">저장</button></div><small class="hint">체크를 끄면 모든 선생님 화면에서 그 메뉴가 숨겨져요. 연수 때 씬 나누기를 끄는 식으로 쓰면 돼요.</small></form>
     <form class="padform" id="padForm"><label for="padUrl"><b>관리자</b> 이번 연수에 쓸 패들렛 주소</label><div class="row"><input class="tinput" id="padUrl" placeholder="https://padlet.com/..." autocomplete="off"><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 갤러리가 이 패들렛으로 바뀌어요.</small>
       <div class="admbox" id="admBox"><label for="admEmail"><b>관리자 권한 주기</b> 패들렛을 바꿀 수 있는 사람</label>
@@ -2723,7 +2730,7 @@ function renderPad(force){
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)$("#padWrap").innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">${canEditPad()?"패들렛을 준비하고 있어요.":"패들렛을 준비하고 있어요."}</p>`;
 }
-const MENU_KEYS=["char","script","shot","scene","gallery","models"];
+const MENU_KEYS=["char","script","shot","scene","gallery","models","survey"];
 function applyHidden(h){h=h||[];MENU_KEYS.forEach(k=>document.body.classList.toggle("hm-"+k,h.includes(k)));$$("[data-mn]").forEach(c=>c.checked=!h.includes(c.dataset.mn));try{localStorage.setItem("ymHideMenus",JSON.stringify(h))}catch(e){}}
 try{applyHidden(JSON.parse(localStorage.getItem("ymHideMenus")||"[]"))}catch(e){}
 $("#menuForm").addEventListener("submit",async e=>{e.preventDefault();const h=$$("[data-mn]").filter(c=>!c.checked).map(c=>c.dataset.mn);
@@ -2906,7 +2913,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792750264"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792752005"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3054,7 +3061,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792750264";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792752005";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
