@@ -1,0 +1,254 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>브루 AI 모델 비교</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* 레이아웃: 예람쌤 AI 영상 제작소와 같은 톤. 탭(밑줄형) → 조건 안내 → 결과 그리드(칸 아래 특징) → 마우스 올리면 하단 설명창 */
+:root{
+  --bg:#F7F5F4; --paper:#ffffff; --ink:#1F1A17; --muted:#6F6762; --line:#EDE8E5;
+  --band:#FCE6EE; --accent:#E8558A; --accent-deep:#C23D72; --accent-strong:#C23D72; --accent-ink:#ffffff; --accent-soft:#FDE9F0;
+  --mark:#FFD3E2; --mark-ink:#7A2346; --shadow:rgba(232,85,138,.45);
+  --ok:#1f7a4d; --bad:#c23b2e;
+  --f-title:"Freesentation","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --f-ui:"Freesentation","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#181215; --paper:#221A1E; --ink:#F5ECEF; --muted:#BBA8B0; --line:#3A2D33;
+  --band:#2A1C23; --accent:#F27BA3; --accent-deep:#9E2E5C; --accent-strong:#F7A8C3; --accent-ink:#2A0E19; --accent-soft:#3A1D29;
+  --mark:#5A2440; --mark-ink:#FFE1EC; --shadow:rgba(0,0,0,.5); --ok:#7fd6a6; --bad:#ff8f86; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#181215; --paper:#221A1E; --ink:#F5ECEF; --muted:#BBA8B0; --line:#3A2D33;
+  --band:#2A1C23; --accent:#F27BA3; --accent-deep:#9E2E5C; --accent-strong:#F7A8C3; --accent-ink:#2A0E19; --accent-soft:#3A1D29;
+  --mark:#5A2440; --mark-ink:#FFE1EC; --shadow:rgba(0,0,0,.5); --ok:#7fd6a6; --bad:#ff8f86; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.6}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 220px;display:flex;flex-direction:column;gap:20px}
+p{margin:0}
+header{display:flex;flex-direction:column;gap:8px}
+h1{font-family:var(--f-title);font-weight:800;font-size:clamp(28px,3.6vw,38px);line-height:1.15;margin:0;letter-spacing:-.01em}
+h1 .hl{background:linear-gradient(transparent 60%,var(--mark) 60%);padding:0 3px}
+.sub{color:var(--muted);font-size:16px}
+.sub b{color:var(--accent-strong)}
+
+/* 탭: 제작소의 단계 표시와 같은 밑줄형 */
+.bar{display:flex;align-items:stretch;gap:0;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tab{flex:0 1 auto;font:inherit;font-weight:700;font-size:17px;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:none;padding:12px 18px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .12s,border-color .12s}
+.tab i{font-style:normal;min-width:26px;height:24px;padding:0 7px;border-radius:999px;display:grid;place-items:center;background:var(--line);color:var(--ink);font-weight:800;font-size:13px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--accent-strong);border-bottom-color:var(--accent)}
+.tab[aria-selected="true"] i{background:var(--accent);color:var(--accent-ink)}
+.spacer{flex:1}
+.hint{align-self:center;font-size:13.5px;color:var(--muted);padding-left:12px}
+@media (max-width:700px){.hint{display:none}.tab{font-size:15px;padding:10px 10px}}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+
+.cond{font-size:15px;color:var(--ink);background:var(--band);border-radius:14px;padding:12px 16px;line-height:1.65}
+.cond b{color:var(--accent-strong)}
+
+/* 결과 칸 */
+.grid{display:grid;gap:16px}
+.grid.img{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.grid.vid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.tile{position:relative;border-radius:20px;overflow:hidden;background:var(--paper);border:1.5px solid var(--line);cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+@media (hover:hover){.tile:hover{transform:translateY(-4px) scale(1.04);z-index:3;border-color:var(--accent);box-shadow:0 18px 32px -16px var(--shadow)}}
+.tile.sel{border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.tile{transition:none}.tile:hover{transform:none}}
+.tile .m{display:block;width:100%;object-fit:cover;background:var(--bg)}
+.grid.img .m{aspect-ratio:1/1}
+.grid.vid .m{aspect-ratio:16/9;background:#000}
+.tile.snd::after{content:"🔊 소리 켜짐";position:absolute;right:10px;top:46px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px}
+.tag{position:absolute;left:10px;top:10px;right:10px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;pointer-events:none}
+.name{background:rgb(255 255 255 / .94);color:#1F1A17;font-family:var(--f-title);font-weight:800;font-size:15px;padding:3px 11px;border-radius:999px;box-shadow:0 2px 6px rgb(0 0 0 / .12)}
+.badge.ref{font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:#1F1A17;color:#fff}
+.stars{background:rgb(255 255 255 / .94);color:#E8558A;font-size:14px;letter-spacing:1px;padding:3px 9px;border-radius:999px;box-shadow:0 2px 6px rgb(0 0 0 / .12);white-space:nowrap}
+.cap{padding:12px 14px 14px;font-size:14.5px;line-height:1.5;color:var(--ink)}
+.cap .co{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--muted);padding-bottom:8px;margin-bottom:8px;border-bottom:1px dashed var(--line)}
+.cap .cr{font-size:15px;font-weight:800;color:var(--accent-strong);white-space:nowrap}
+.st{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin:0}
+.st dt{font-size:12px;font-weight:700;color:var(--accent-strong);background:var(--accent-soft);border-radius:6px;padding:1px 7px;align-self:start;white-space:nowrap}
+.st dd{margin:0}
+
+/* 하단 설명창 */
+#info{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:0 max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));pointer-events:none}
+#info .in{pointer-events:auto;max-width:1280px;margin:0 auto;background:var(--paper);border:1.5px solid var(--accent);border-radius:20px;box-shadow:0 16px 40px -18px var(--shadow);padding:14px 16px;display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr) minmax(0,1fr) auto;gap:16px;align-items:start}
+#info h3{margin:0;font-family:var(--f-title);font-weight:800;font-size:20px}
+#info .meta2{font-size:13.5px;color:var(--muted)}
+#info .bx{border-radius:14px;padding:10px 14px;font-size:14.5px}
+#info .bx.t{background:var(--bg)} #info .bx.r{background:var(--accent-soft)}
+#info .bx b{display:block;font-size:13px;color:var(--muted);margin-bottom:4px} #info .bx.r b{color:var(--accent-strong)}
+#info ul{margin:0;padding-left:18px}
+#info .x{font:inherit;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:5px 12px;cursor:pointer}
+#info .x:hover{border-color:var(--accent);color:var(--accent-strong)}
+@media (max-width:820px){#info .in{grid-template-columns:1fr auto}#info .bx{grid-column:1 / -1}}
+
+.foot{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:12px}
+.foot a{color:var(--muted)}
+#lb{display:none!important}
+@media (max-width:500px){.grid.img{grid-template-columns:1fr 1fr}.grid.vid{grid-template-columns:1fr}.name{font-size:13px}.cap{font-size:13.5px}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>브루 <span class="hl">AI 모델</span> 비교</h1>
+    <p class="sub">예람쌤 캐릭터 하나로 브루의 모든 모델을 같은 조건에서 돌려 봤어요. 칸에 <b>마우스를 올리면</b> 아래에 자세한 설명이 떠요.</p>
+  </header>
+
+  <div class="bar" role="tablist">
+    <button class="tab" role="tab" id="t-img" aria-selected="true" aria-controls="p-img">이미지 <i>8</i></button>
+    <button class="tab" role="tab" id="t-vid" aria-selected="false" aria-controls="p-vid">비디오 <i>11</i></button>
+    <button class="tab" role="tab" id="t-hard" aria-selected="false" aria-controls="p-hard">비디오 어려운 테스트 <i>9</i></button>
+    <span class="spacer"></span>
+    <span class="hint">★ = 브루 품질 별 · 🪙 = 브루 크레딧</span>
+  </div>
+
+  <section id="p-img" role="tabpanel" aria-labelledby="t-img" style="display:flex;flex-direction:column;gap:16px">
+    <p class="cond"><b>조건</b> 원본 캐릭터 첨부 → "3D 애니메이션 캐릭터로 바꾸고 뿔·날개·원피스·윙크 포즈 유지, 단색 연회색 배경, 전신" · 1:1 · 첫 칸이 원본이에요. FLUX.2 klein·SDXL은 첨부가 안 돼서 캐릭터를 글로 묘사해 만들었어요.</p>
+    <div class="grid img" id="imgGrid"></div>
+  </section>
+
+  <section id="p-hard" role="tabpanel" aria-labelledby="t-hard" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="cond"><b>조건</b> 과학실 시작 이미지(첫 칸) → 칠판에 분필로 '과학' 쓰기 → 비커를 쳐서 파란 액체 쏟기 → "어머, 큰일 났다!" 외치며 입 가리기 → 카메라가 돌며 얼굴 클로즈업 · <b>6초 · 720p · 소리 켬</b> · 9개 모델. 마우스를 올리면 다섯 가지 지시를 지켰는지(✓/✗) 나와요.</p>
+    <div class="grid vid" id="hardGrid"></div>
+  </section>
+
+  <section id="p-vid" role="tabpanel" aria-labelledby="t-vid" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="cond"><b>조건</b> 같은 시작 이미지(첫 칸) → 손 흔들며 "안녕하세요, 예람쌤이에요!" 말한 뒤 한 바퀴 돌기 · <b>4초 · 720p · 소리 켬</b> (5초 고정 모델 2개 제외). 영상은 무음으로 함께 반복돼요. <b>칸을 누르면 그 영상만 소리가 켜져요.</b></p>
+    <div class="grid vid" id="vidGrid"></div>
+  </section>
+
+  <div class="foot">
+    <span>이론 출처:</span>
+    <a href="https://carat.im/en/curated/gpt-image-2-5-guide">GPT Image 2.5</a>
+    <a href="https://artlist.io/blog/nano-banana-2-1-what-changed/">Nano Banana 2.1</a>
+    <a href="https://www.techrepublic.com/article/news-meta-muse-image-explained/">Muse Image</a>
+    <a href="https://www.mindstudio.ai/blog/what-is-bytedance-seedream-4-5">Seedream 4.5</a>
+    <a href="https://technode.com/2026/07/31/bytedance-launches-seedance-2-5-video-generation-model/">Seedance 2.5</a>
+    <a href="https://help.artlist.io/hc/en-us/articles/37430797266973-Seedance-2-0-Family">Seedance 2.0</a>
+    <a href="https://datanorth.ai/news/google-releases-gemini-omni-1-1-flash">Gemini Omni</a>
+    <a href="https://www.atlascloud.ai/blog/kling-3.0-review-features-pricing-ai-alternatives">Kling v3</a>
+    <a href="https://the-decoder.com/googles-veo-3-1-lite-cuts-video-generation-costs-by-more-than-half/">Veo 3.1 Lite</a>
+    <a href="https://www.byteplus.com/blog/seedance-1-5-pro">Seedance 1.5 Pro</a>
+  </div>
+</div>
+
+<div id="info" hidden><div class="in" id="infoIn"></div></div>
+<div id="lb" hidden><p id="lbName"></p><div class="box" id="lbBox"></div><button type="button" id="lbClose">닫기</button></div>
+
+<script>
+const CO={flare:'OpenAI · 미국',sunburst:'OpenAI · 미국',gpt2:'OpenAI · 미국',nb:'Google · 미국',muse:'Meta · 미국',seedream:'ByteDance · 중국',flux:'Black Forest Labs · 독일',sdxl:'Stability AI · 영국',s25:'ByteDance · 중국',s20:'ByteDance · 중국',s20f:'ByteDance · 중국',s20m:'ByteDance · 중국',s15:'ByteDance · 중국',s1f:'ByteDance · 중국',gem:'Google · 미국',kling:'Kuaishou · 중국',veo:'Google · 미국',veof:'Google · 미국',veol:'Google · 미국'};
+const IMG=[
+ {id:'flare',n:'GPT Image 2.5 Flare',f:'i_gpt_image_2_5_flare.jpg',cr:'30',spec:'1920px',th:['기본용, Sunburst보다 2배 빠름','2보다 인물 일관성 좋아짐'],rs:['치비 비율·윙크·날개·포즈 그대로','Sunburst와 거의 같음'],v:['ok','이론대로']},
+ {id:'sunburst',n:'GPT Image 2.5 Sunburst',f:'i_gpt_image_2_5_sunburst.jpg',cr:'30',spec:'1920px',th:['품질 우선 모델','편집 점수가 Flare보다 높음'],rs:['원본 충실, 머리카락 결 조금 더 촘촘','Flare보다 낫다고 보긴 어려움'],v:['warn','차이 미미']},
+ {id:'nb',n:'Nano Banana 2.1',f:'i_nano_banana_2_1.jpg',cr:'30',spec:'4096px',th:['Pro급 품질에 빠른 속도','여러 번 고쳐도 얼굴·옷 유지'],rs:['해상도 가장 큼, 차분하고 사실적인 조명','흰 날개가 분홍빛으로 바뀜'],v:['warn','일부 다름']},
+ {id:'muse',n:'Muse Image',f:'i_muse_image.jpg',cr:'5',spec:'1600px',th:['계획 후 그리는 방식','결과물이 평범하다는 평'],rs:['5크레딧인데 원본 충실도가 GPT 2.5급','해상도는 가장 작음'],v:['ok','기대 이상']},
+ {id:'gpt2',n:'GPT Image 2',f:'i_gpt_image_2.jpg',cr:'30',spec:'1920px',th:['이전 세대, 글자 표현 강점','세션마다 스타일이 달라질 수 있음'],rs:['머리가 작아지고 팔다리가 길어짐','원본 2등신 느낌 약해짐'],v:['bad','비율 바뀜']},
+ {id:'seedream',n:'Seedream 4.5',f:'i_seedream_4_5.jpg',cr:'20',spec:'4096px',th:['캐릭터 일관성 강점, 저렴','질감이 플라스틱 같다는 평'],rs:['얼굴은 크고 선명','"전신" 지시를 어기고 무릎 위까지만'],v:['bad','지시 어김']},
+ {id:'flux',n:'FLUX.2 klein',f:'c_flux_2_klein.jpg',cr:'1',spec:'1024px · 캐릭터 첨부 불가 → 글 묘사로 생성',th:['가볍고 아주 빠른 모델'],rs:['첨부가 안 돼서 캐릭터를 글로 자세히 묘사해 생성','뿔·윙크·날개·허리 손·손 흔들기·맨발까지 묘사대로 그림','1크레딧인데 원본과 꽤 비슷함'],v:['ok','']},
+ {id:'sdxl',n:'SDXL',f:'c_sdxl.jpg',cr:'1',spec:'1024px · 캐릭터 첨부 불가 → 글 묘사로 생성 · 10/31 종료',th:['2023년 오래된 모델'],rs:['FLUX와 같은 묘사 프롬프트로 생성','뿔 대신 천사 고리, 윙크·손 흔들기 없음, 샌들','묘사를 많이 놓침'],v:['bad','']}
+];
+const VID=[
+ {id:'s25',n:'Seedance 2.5',f:'v01_seedance_2_5',cr:'360',spec:'4~30초 · 720/1080p · 소리 O · 참고 이미지·비디오·오디오',th:['한 번에 최대 30초','다국어 음성, 참고 자료 최대 50개'],rs:['한 바퀴 돌고 정면 복귀, 캐릭터 유지','손 흔들기는 작게 지나감'],v:['ok','이론대로']},
+ {id:'s20',n:'Seedance 2.0',f:'v02_seedance_2_0',cr:'240',spec:'4~15초 · 720/1080p · 소리 O · 참고 이미지·비디오·오디오',th:['대사·효과음 함께 생성','8개 이상 언어 립싱크'],rs:['말하기·흔들기를 길게 보여 줌','회전은 마지막에 시작해 못 끝냄'],v:['warn','동작 누락']},
+ {id:'s20f',n:'Seedance 2.0 Fast',f:'v03_seedance_2_0_fast',cr:'200',spec:'4~15초 · 720p만 · 소리 O · 참고 이미지·비디오·오디오',th:['2.0의 빠른 버전','품질은 2.0보다 낮다고 알려짐'],rs:['흔들기·말하기·한 바퀴 모두 수행','캐릭터 유지'],v:['ok','기대 이상']},
+ {id:'s20m',n:'Seedance 2.0 Mini',f:'v06_seedance_2_0_mini',cr:'120',spec:'4~15초 · 720p만 · 소리 O · 참고 이미지·비디오·오디오',th:['가장 싸고 빠른 Seedance','품질 낮음'],rs:['동작은 다 수행','배경 회색이 시작 이미지보다 어두워짐'],v:['warn','배경 톤 바뀜']},
+ {id:'gem',n:'Gemini Omni 1.1 Flash',f:'v04_gemini_omni_1_1_flash',cr:'140',spec:'3~10초 · 720/1080p · 소리 O · 참고 이미지·비디오',th:['물리 표현 강점','복잡한 동작에서 얼굴 흔들린다는 평'],rs:['회전·머리카락 움직임이 가장 큼','얼굴 흔들림은 안 보임'],v:['ok','약점 재현 안 됨']},
+ {id:'kling',n:'Kling v3',f:'v05_kling_v3',cr:'240',spec:'3~15초 · 720/1080p · 소리 O · 참고 비디오',th:['한국어 포함 5개 언어 립싱크','동작이 자연스러움'],rs:['인사는 또렷','뒤돌아선 채로 끝남'],v:['warn','동작 누락']},
+ {id:'veo',n:'Veo 3.1',f:'v07_veo_3_1',cr:'640',spec:'4·6·8초 · 720/1080p · 소리 O · 시작·종료 이미지만',th:['고음질 음성(대사·효과음·환경음)','Google 최상위 모델'],rs:['인사 장면 자연스러움','옆모습에서 끝남, 가장 비쌈'],v:['warn','값 대비 아쉬움']},
+ {id:'veof',n:'Veo 3.1 Fast',f:'v10_veo_3_1_fast',cr:'200',spec:'4·6·8초 · 720/1080p · 소리 O · 시작·종료 이미지만',th:['Veo 3.1의 싸고 빠른 시안용','품질 낮음'],rs:['흔들기·말하기·한 바퀴 수행','첫 시도 오류(크레딧 안 빠짐), 재시도 성공'],v:['ok','기대 이상']},
+ {id:'veol',n:'Veo 3.1 Lite',f:'v08_veo_3_1_lite',cr:'120',spec:'4·6·8초 · 720/1080p · 소리 O · 시작·종료 이미지만',th:['Fast의 절반 이하 가격','4K 불가'],rs:['한 바퀴 완료, 캐릭터 유지','손 흔들기는 작음'],v:['ok','기대 이상']},
+ {id:'s15',n:'Seedance 1.5 Pro',f:'v09_seedance_1_5_pro',cr:'50',spec:'5초 고정 · 720p · 소리 X · 시작 이미지만 · 10/31 종료',th:['원래 자체 음성·한국어 립싱크 지원'],rs:['브루에선 소리 꺼짐 고정 → 무음','회전은 끝에 겨우 시작, 첫 시도 오류'],v:['bad','브루에선 음성 X']},
+ {id:'s1f',n:'Seedance 1 Pro Fast',f:'v11_seedance_1_pro_fast',cr:'10',spec:'5초 고정 · 480p · 소리 X · 10/31 종료',th:['음성 없음','첫 프레임 지정 가능하다고 알려짐'],rs:['브루에선 시작 이미지 버튼 비활성','글로만 만들어 다른 캐릭터가 나옴'],v:['bad','시작 이미지 X']}
+];
+const CK=['한글 글씨','액체','입 가리기','카메라','일관성'];
+const HARD=[
+ {id:'h_s25',co:'s25',n:'Seedance 2.5',f:'h01_seedance_2_5',cr:'540',spec:'6초 · 720p · 소리 O',ck:[1,1,1,1,1],th:['최신 Seedance, 긴 영상·다국어 음성'],rs:['칠판에 "과학"을 정확히 씀','비커가 넘어지고 액체가 책상에 퍼짐','입 가리기 후 앞으로 다가가며 끝남. 지시 5개 모두 수행'],v:['ok','모두 성공']},
+ {id:'h_s20',co:'s20',n:'Seedance 2.0',f:'h02_seedance_2_0',cr:'360',spec:'6초 · 720p · 소리 O',ck:[0,1,1,1,1],th:['대사·효과음 동시 생성'],rs:['처음엔 "과학"으로 쓰다가 중간에 "과햑"으로 바뀜','액체가 책상 가장자리로 흘러내림','카메라가 돌며 얼굴 클로즈업까지 가장 제대로 수행'],v:['ok','모두 성공']},
+ {id:'h_s20f',co:'s20f',n:'Seedance 2.0 Fast',f:'h03_seedance_2_0_fast',cr:'300',spec:'6초 · 720p · 소리 O',ck:[1,1,1,1,1],th:['2.0보다 품질 낮다고 알려짐'],rs:['"과학"을 정확히 씀(칠판 오른쪽 끝)','액체·입 가리기·클로즈업 모두 수행','2.0과 비교해 눈에 띄는 품질 차이 없음'],v:['ok','모두 성공']},
+ {id:'h_s20m',co:'s20m',n:'Seedance 2.0 Mini',f:'h04_seedance_2_0_mini',cr:'180',spec:'6초 · 720p · 소리 O',ck:[0,1,1,1,1],th:['가장 싸고 빠른 Seedance'],rs:['글씨가 "과햑"처럼 틀리게 나옴','액체·입 가리기·클로즈업은 수행','한글 글자는 상위 모델과 차이가 남'],v:['warn','글씨 틀림']},
+ {id:'h_gem',co:'gem',n:'Gemini Omni 1.1 Flash',f:'h05_gemini_omni_1_1_flash',cr:'210',spec:'6초 · 720p · 소리 O',ck:[0,1,1,1,1],th:['물리 표현 강점'],rs:['처음엔 "과학"으로 쓰다가 끝에 "과햑"으로 바뀜','액체가 퍼지는 모양이 자연스러움','클로즈업은 약한 편'],v:['ok','모두 성공']},
+ {id:'h_kling',co:'kling',n:'Kling v3',f:'h06_kling_v3',cr:'360',spec:'6초 · 720p · 소리 O',ck:[0,1,1,0,1],th:['화면 속 글자가 강하다고 알려짐'],rs:['글씨가 "물과흑"처럼 틀림','글 쓰는 뒷모습에 시간을 대부분 씀','액체는 끝에 조금, 카메라 이동 거의 없음'],v:['bad','이론과 다름']},
+ {id:'h_veo',co:'veo',n:'Veo 3.1',f:'h07_veo_3_1',cr:'960',spec:'6초 · 720p · 소리 O',ck:[0,1,1,1,1],th:['Google 최상위, 고음질 음성'],rs:['글씨가 "잔미"처럼 틀림','액체·입 가리기·얼굴 클로즈업은 자연스러움','6초에 960크레딧으로 가장 비쌀'],v:['warn','한글 실패']},
+ {id:'h_veof',co:'veof',n:'Veo 3.1 Fast',f:'h08_veo_3_1_fast',cr:'300',spec:'6초 · 720p · 소리 O',ck:[0,1,1,1,0],th:['Veo 3.1의 싼 시안용'],rs:['글씨가 "러미"처럼 틀림','중간에 칠판 글씨가 사라짐(장면 일관성 깨짐)','액체·입 가리기·클로즈업은 수행'],v:['bad','글씨 사라짐']},
+ {id:'h_veol',co:'veol',n:'Veo 3.1 Lite',f:'h09_veo_3_1_lite',cr:'180',spec:'6초 · 720p · 소리 O',ck:[0,1,1,1,1],th:['Fast의 절반 이하 가격'],rs:['글씨가 "장런"처럼 틀림','액체·입 가리기·클로즈업은 수행','Veo 3개 모두 한글 글씨에서 틀림'],v:['warn','한글 실패']}
+];
+HARD.forEach(m=>CO[m.id]=CO[m.co]);
+const ul=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+const ALL={};IMG.concat(VID,HARD).forEach(m=>ALL[m.id]=m);
+const ST={
+ flare:[['잘하는 것','일상적인 그림을 빠르게'],['속도·가격','Sunburst보다 약 2배 빠름 · 같은 가격'],['특징','속도 우선판 (품질은 GPT Image 2와 비슷)']],
+ sunburst:[['잘하는 것','디테일, 작은 글자, 고쳐 그리기'],['속도·가격','Flare보다 느림 · 같은 가격'],['특징','품질 우선판 (OpenAI 최고 품질)']],
+ nb:[['잘하는 것','여러 번 고쳐도 같은 얼굴 유지'],['속도·가격','빠름 · 보통'],['특징','참고 그림 최대 14장, 4K까지']],
+ muse:[['잘하는 것','카드·초대장 같은 디자인'],['속도·가격','보통 · 매우 쌈'],['특징','그리기 전에 구도를 먼저 계획']],
+ gpt2:[['잘하는 것','그림 속 글자'],['속도·가격','느림 · 보통'],['특징','GPT Image 2.5의 이전 버전']],
+ seedream:[['잘하는 것','같은 캐릭터를 반복해 그리기'],['속도·가격','보통 · 쌈'],['특징','4K까지 크게']],
+ flux:[['잘하는 것','빠른 시안'],['속도·가격','매우 빠름 · 매우 쌈'],['특징','그림 첨부 안 됨']],
+ sdxl:[['잘하는 것','다양한 그림체'],['속도·가격','빠름 · 매우 쌈'],['특징','2023년 모델, 첨부 안 됨, 10/31 종료']],
+ s25:[['잘하는 것','긴 영상 (한 번에 30초)'],['소리','대사·효과음'],['특징','참고 자료 최대 50개']],
+ s20:[['잘하는 것','대사와 입모양 (8개 언어 이상)'],['소리','대사·효과음·음악'],['특징','최대 15초']],
+ s20f:[['잘하는 것','2.0 기능을 더 빠르게'],['소리','대사·효과음'],['특징','720p만']],
+ s20m:[['잘하는 것','싸고 빠른 시안'],['소리','대사·효과음'],['특징','720p만, 가장 싼 Seedance']],
+ gem:[['잘하는 것','물·머리카락 같은 물리 표현'],['소리','대사·효과음'],['특징','이어 붙여 최대 40초']],
+ kling:[['잘하는 것','자연스러운 몸동작'],['소리','한국어 입모양 지원'],['특징','여러 장면을 한 번에 (멀티샷)']],
+ veo:[['잘하는 것','소리 품질 (대사·효과음·주변 소리)'],['소리','대사·효과음·환경음'],['특징','4·6·8초만, 가장 비쌈']],
+ veof:[['잘하는 것','Veo 3.1을 싸게 시안으로'],['소리','대사·효과음·환경음'],['특징','4·6·8초만']],
+ veol:[['잘하는 것','가장 싼 Veo'],['소리','대사·효과음·환경음'],['특징','4·6·8초만, 4K 안 됨']],
+ s15:[['잘하는 것','여러 사람 대화'],['소리','원래 되지만 브루에선 꺼짐'],['특징','5초 고정, 10/31 종료']],
+ s1f:[['잘하는 것','아주 싼 시안'],['소리','없음'],['특징','시작 이미지 안 됨, 10/31 종료']]
+};
+const stOf=m=>ST[m.co||m.id]||[];
+const stHtml=m=>`<dl class="st">${stOf(m).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+const ov=m=>`<div class="cap"><span class="co"><span>${CO[m.id]}</span><span class="cr" title="브루 크레딧">🪙 ${m.cr}</span></span>${stHtml(m)}</div>`;
+const detail=m=>`<div><h3>${m.n}</h3><p class="meta2"><span style="color:var(--accent);font-size:15px;letter-spacing:1px">${stars(m)}</span> 브루 품질<br>${CO[m.id]} · ${m.cr}크레딧<br>${m.spec.replace(/ ?· ?별 \d개/,'').replace(/^별 \d개 ?·? ?/,'')}</p></div><div class="bx t"><b>알려진 특징</b>${stHtml(m)}</div><div class="bx r"><b>실제 결과</b>${m.ck?`<p style="margin-bottom:4px">${m.ck.map((c,i)=>`<span style="white-space:nowrap;margin-right:8px;color:${c?'var(--ok)':'var(--bad)'}">${c?'✓':'✗'} ${CK[i]}</span>`).join('')}</p>`:''}${ul(m.rs)}</div>`;
+const STAR={flare:5,sunburst:5,nb:5,muse:4,gpt2:4,seedream:3,flux:2,sdxl:1,s25:5,s20:5,s20f:5,s20m:4,gem:5,kling:5,veo:4,veof:4,veol:3,s15:3,s1f:1};
+const stars=m=>{const n=STAR[m.co||m.id]||0;return '★'.repeat(n)+'☆'.repeat(5-n);};
+const tag=(m)=>`<div class="tag"><span class="name">${m.n}</span><span class="stars" title="브루 품질 별 ${STAR[m.co||m.id]}개">${stars(m)}</span></div>`;
+
+const ig=document.getElementById('imgGrid');
+ig.innerHTML=`<div class="tile" tabindex="0" data-src="ref_original.jpg" data-name="원본 (첨부한 캐릭터)"><img class="m" src="ref_original.jpg" alt="원본 캐릭터"><div class="tag"><span class="name">원본</span><span class="badge ref">기준</span></div><div class="cap"><span class="co"><span>예람쌤 기본 캐릭터</span></span>모든 모델에 첨부한 2D 원본 그림</div></div>`+
+IMG.map(m=>m.f?`<div class="tile" tabindex="0" data-id="${m.id}" data-src="${m.f}" data-name="${m.n}"><img class="m" src="${m.f}" alt="${m.n} 결과" loading="lazy">${tag(m)}${ov(m)}</div>`
+ :`<div class="tile empty" tabindex="0" data-id="${m.id}"><div class="m" style="aspect-ratio:1/1">캐릭터 첨부가 안 돼서<br>결과 없음</div>${tag(m)}${ov(m)}</div>`).join('');
+
+const vg=document.getElementById('vidGrid');
+vg.innerHTML=`<div class="tile" tabindex="0" data-src="start_frame.jpg" data-name="시작 이미지 (Nano Banana 2.1)"><img class="m" src="start_frame.jpg" alt="시작 이미지"><div class="tag"><span class="name">시작 이미지</span><span class="badge ref">기준</span></div><div class="cap"><span class="co"><span>Nano Banana 2.1로 생성</span></span>모든 비디오 모델의 첫 장면</div></div>`+
+VID.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
+
+const hg=document.getElementById('hardGrid');
+hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="시작 이미지 (과학실)"><img class="m" src="h00_start.jpg" alt="과학실 시작 이미지"><div class="tag"><span class="name">시작 이미지</span><span class="badge ref">기준</span></div><div class="cap"><span class="co">Nano Banana 2.1로 생성</span>빈 칠판 · 파란 비커 · 분필</div></div>`+
+HARD.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
+
+// 탭
+const tabs=[...document.querySelectorAll('.tab')];
+const vids=()=>[...document.querySelectorAll('#vidGrid video,#hardGrid video')];
+function show(id){tabs.forEach(t=>{const on=t.id===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});
+  document.getElementById('info').hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));
+  vids().forEach(v=>v.pause());const g=id==='t-vid'?vg:id==='t-hard'?hg:null;if(g)g.querySelectorAll('video').forEach(v=>{v.currentTime=0;v.play().catch(()=>{})});
+  try{localStorage.setItem('tab',id)}catch(e){}}
+tabs.forEach(t=>t.addEventListener('click',()=>show(t.id)));
+let saved=null;try{saved=localStorage.getItem('tab')}catch(e){}
+if(saved==='t-vid'||saved==='t-hard')show(saved);
+
+// 아래 설명창
+const info=document.getElementById('info'),infoIn=document.getElementById('infoIn');
+function showInfo(t){const m=ALL[t&&t.dataset.id];if(!m)return;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');infoIn.innerHTML=detail(m)+'<button class="x" type="button" id="infoX">닫기</button>';info.hidden=false;}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('.tile');if(t)showInfo(t);});
+document.addEventListener('focusin',e=>{const t=e.target.closest('.tile');if(t)showInfo(t);});
+
+// 크게 보기 (터치에선 첫 탭 = 설명, 두 번째 탭 = 크게)
+const lb=document.getElementById('lb'),box=document.getElementById('lbBox');
+function openLb(t){const m=ALL[t.dataset.id];const med=t.dataset.video?`<video src="${t.dataset.video}" controls autoplay playsinline></video>`:`<img src="${t.dataset.src}" alt="">`;box.innerHTML=`<div>${med}</div>`+(m?`<div class="side"><p style="font-size:13px;color:#615c6e">${CO[m.id]} · ${m.cr}크레딧 · ${m.spec}</p><div><b style="font-size:12px;color:#615c6e">이론상</b>${ul(m.th)}</div><div><b style="font-size:12px;color:#b8336a">실제 결과</b>${ul(m.rs)}</div></div>`:'');document.getElementById('lbName').textContent=t.dataset.name;lb.hidden=false;}
+function closeLb(){lb.hidden=true;box.innerHTML='';}
+const touch=matchMedia('(hover:none)').matches;
+document.addEventListener('click',e=>{
+  if(e.target.closest('#infoX')){info.hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));return;}
+  if(e.target.closest('#lbClose')||e.target===lb){closeLb();return;}
+  const t=e.target.closest('.tile');if(!t||!t.dataset.name)return;
+  if(touch&&!t.classList.contains('sel')&&t.dataset.id){showInfo(t);return;}
+  toggleSound(t);
+});
+function toggleSound(t){const v=t.querySelector('video');if(!v)return;const on=v.muted;document.querySelectorAll('.tile video').forEach(x=>{x.muted=true;x.closest('.tile').classList.remove('snd');});if(on){v.muted=false;v.currentTime=0;v.play().catch(()=>{});t.classList.add('snd');}}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('tile'))toggleSound(e.target);});
+</script>
+
+</body></html>
