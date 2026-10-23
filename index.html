@@ -1132,13 +1132,21 @@ body[data-stage="char"]:not(.cfresh) .pgh,body[data-stage="split"] .pgh{max-widt
 .ppop,.cmp .mdd-l{position:absolute;z-index:40;left:0;right:auto;top:calc(100% + 8px);min-width:200px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px -18px rgba(0,0,0,.3);padding:6px}
 .ppop[hidden]{display:none}
 .plist{display:grid;gap:2px;max-height:320px;overflow:auto}
+.plist.sgrid{grid-template-columns:repeat(3,96px);gap:8px;padding:10px;max-height:min(440px,60vh)}
+.plist.sgrid button{display:grid;gap:5px;padding:5px;border-radius:12px;text-align:center;font-size:13px;font-weight:700;border:1.5px solid transparent}
+.plist.sgrid button[aria-selected="true"]{border-color:var(--accent);background:#FFF4F8}
+.sg-im{display:block;width:100%;aspect-ratio:1;border-radius:9px;overflow:hidden;background:var(--bg)}
+.sg-im img{width:100%;height:100%;object-fit:cover;display:block}
+.sg-ph{width:100%;height:100%;display:grid;place-content:center;justify-items:center;gap:2px;color:var(--accent-deep);font-size:22px;font-weight:800}
+.sg-ph small{font-size:11px;font-weight:700;color:var(--muted)}
+.sg-ph.film{background:#2b2724;color:#fff}.sg-ph.film svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.6}.sg-ph.film small{color:#cfc8c3}
 .plist button{border:0;background:none;text-align:left;padding:9px 12px;border-radius:10px;font:inherit;font-size:14.5px;cursor:pointer;color:var(--ink)}
 .plist button:hover{background:var(--bg)}.plist button[aria-selected="true"]{background:#FFF4F8;color:var(--accent-deep);font-weight:800}
 .ppop .scopts{display:grid;gap:4px}.ppop .scopts button{justify-content:flex-start;width:100%}
 .psl{padding:14px 16px;min-width:240px;display:grid;gap:10px}.psl b{font-size:14px}.psl input{width:100%;accent-color:var(--accent)}
 .ptg{display:grid;gap:10px;padding:12px 14px}
 #shotStage .sclist,#shotStage .scres-h,#sceneStage .sclist,#sceneStage .scres-h{max-width:1000px;margin-left:auto;margin-right:auto}
-@media (max-width:600px){.cmp{border-radius:20px;padding:10px 10px 8px}.cmp textarea{font-size:16px;min-height:72px}.ppop,.cmp .mdd-l{position:fixed;left:12px!important;right:12px!important;top:auto;bottom:84px;min-width:0}}
+@media (max-width:600px){.plist.sgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.cmp{border-radius:20px;padding:10px 10px 8px}.cmp textarea{font-size:16px;min-height:72px}.ppop,.cmp .mdd-l{position:fixed;left:12px!important;right:12px!important;top:auto;bottom:84px;min-width:0}}
 .mdlpop{position:fixed;inset:0;z-index:200;background:rgba(20,16,14,.45);display:grid;place-items:center;padding:24px}
 .mdlpop[hidden]{display:none}
 .mdlpop-c{width:min(1200px,100%);height:min(88vh,1000px);background:var(--paper);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 80px -30px rgba(0,0,0,.5);animation:hbIn .25s ease-out}
@@ -2909,14 +2917,15 @@ const mLogo=n=>{const m=[...MODELS.img,...MODELS.vid].find(x=>x[0]===n);return m
 function paintPick(el){const inp=$("#"+el.dataset.for),L=MODELS[el.dataset.mp];if(!L.some(x=>x[0]===inp.value))inp.value=L[0][0];
   el.innerHTML=`<button type="button" class="mdd-b tinput" aria-haspopup="listbox" aria-expanded="false"><img src="${mLogo(inp.value)}" alt=""><span>${esc(inp.value)}</span></button><div class="mdd-l" role="listbox" hidden>${L.map(([n,l])=>`<button type="button" role="option" data-mv="${esc(n)}" aria-selected="${n===inp.value}"><img src="${l}" alt="">${esc(n)}</button>`).join("")}</div>`}
 const mddClose=(keep)=>{$$(".mpick").forEach(el=>{const l=el.querySelector(".mdd-l");if(l&&l!==keep){l.hidden=true;el.querySelector(".mdd-b").setAttribute("aria-expanded","false")}});$$(".ppop").forEach(p=>{if(p!==keep){p.hidden=true;p.previousElementSibling.setAttribute("aria-expanded","false")}})};
+const SC_STY_IMG={"3D 애니메이션":"us3d","실사 3D":"real3d","일본 애니":"anime","웹툰":"webtoon","디테일 일러스트":"detail","수채화":"water","클레이":"clay","플랫 일러스트":"flat","치비":"chibi","픽셀 아트":"pixel"};
 const STY_KO=v=>v==="참고 이미지"?"참고 이미지":v;
 function paintPills(){["sh","sc"].forEach(x=>{const sel=$("#"+x+"Style");if(!sel)return;$("#"+x+"StyleV").textContent=STY_KO(sel.value);
-  const pl=document.querySelector(`.plist[data-sel="${x}Style"]`);pl.innerHTML=[...sel.options].map(o=>`<button type="button" data-plv="${esc(o.value)}" aria-selected="${o.value===sel.value}">${esc(o.textContent)}</button>`).join("");
+  const pl=document.querySelector(`.plist[data-sel="${x}Style"]`);pl.classList.add("sgrid");pl.innerHTML=[...sel.options].map(o=>{const k=SC_STY_IMG[o.value],ref=o.value==="참고 이미지";const im=ref?(SH.ref?`<img src="${SH.ref.th}" alt="">`:`<span class="sg-ph">+<small>이미지 넣기</small></span>`):k&&STYLE_IMG[k]?`<img src="${STYLE_IMG[k]}" alt="">`:`<span class="sg-ph film"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 5v4M13 5v4M18 5v4"/></svg><small>실제 영상</small></span>`;return `<button type="button" data-plv="${esc(o.value)}" aria-selected="${o.value===sel.value}"><span class="sg-im">${im}</span>${esc(ref?"참고 이미지":o.textContent)}</button>`}).join("");
   const R=x==="sh"?SH:SC3;$("#"+x+"RatioV").textContent=R.ratio;const T=R.tg;const on=[T.sfx&&"효과음",T.voice&&"목소리",T.bgm&&"음악"].filter(Boolean);$("#"+x+"SndV").textContent=on.length?on.join("·"):"없음"})}
 document.addEventListener("click",e=>{let b;
   if((b=e.target.closest(".mpick [data-mv]"))){const el=b.closest(".mpick"),inp=$("#"+el.dataset.for);inp.value=b.dataset.mv;paintPick(el);inp.dispatchEvent(new Event("change",{bubbles:true}));return}
   if((b=e.target.closest(".mpick .mdd-b"))){const l=b.nextElementSibling,open=l.hidden;mddClose(l);l.hidden=!open;b.setAttribute("aria-expanded",open);return}
-  if((b=e.target.closest(".plist [data-plv]"))){const pl=b.parentElement,sel=$("#"+pl.dataset.sel);sel.value=b.dataset.plv;sel.dispatchEvent(new Event("change",{bubbles:true}));paintPills();mddClose();return}
+  if((b=e.target.closest(".plist [data-plv]"))){const pl=b.parentElement,sel=$("#"+pl.dataset.sel);if(b.dataset.plv==="참고 이미지"&&!SH.ref){mddClose();$("#"+pl.dataset.sel.replace("Style","File")).click();return}sel.value=b.dataset.plv;sel.dispatchEvent(new Event("change",{bubbles:true}));paintPills();mddClose();return}
   if(e.target.closest(".pnin"))return;
   if((b=e.target.closest(".pdd>.pill"))){const p=b.nextElementSibling,open=p.hidden;mddClose(p);p.hidden=!open;b.setAttribute("aria-expanded",open);return}
   if(e.target.closest(".ppop"))return;
