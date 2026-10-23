@@ -34,7 +34,7 @@ export default {
       // 1순위: Vertex AI (구글 클라우드 크레딧, 서비스 계정 VERTEX_SA), 2순위: AI Studio 무료 키
       let vtok = "", sa = null; const errs = [];
       if (env.VERTEX_SA) { try { sa = JSON.parse(env.VERTEX_SA); vtok = await vertexToken(sa); } catch (e) { vtok = ""; errs.push("vtok " + String(e && e.message || e).slice(0, 200)); } }
-      if (vtok) for (const m of ["gemini-3.1-flash-lite-preview", "gemini-3-flash-preview", "gemini-2.5-flash-lite", "gemini-2.0-flash-lite-001"]) tries.push([m, `https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, vtok]);
+      if (vtok) for (const m of ["gemini-3-flash-preview", "gemini-2.5-flash-lite", "gemini-2.0-flash-lite-001"]) tries.push([m, `https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, vtok]);
       if (env.GEMINI_KEY) for (const m of ["gemini-flash-lite-latest", "gemini-flash-latest"]) tries.push([m, `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${env.GEMINI_KEY}`, ""]);
       let lastErr = "";
       for (const [m, url, tok] of tries) {
