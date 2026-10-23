@@ -1598,6 +1598,22 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .gvx{top:12px!important;right:12px!important;background:rgba(0,0,0,.06)!important}
 .gvact{display:flex;gap:6px;justify-content:flex-end;margin-top:8px}
 @media (max-width:760px){.gv-card{grid-template-columns:minmax(0,1fr)!important;height:auto;max-height:92vh!important;overflow-y:auto!important}.gvimg{max-height:55vh}.gv-card .gvside{border-left:0;overflow:visible}}
+
+.pdcard{overflow:visible!important}
+.pdmw{position:relative;margin:0 12px}
+.pdmw .pdm{margin:0!important}
+.pdexp{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:9px;border:0;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.85;transition:opacity .15s,transform .15s}
+.pdexp:hover{opacity:1;transform:scale(1.08)}
+.pdtx[data-vopen]{cursor:pointer}
+.gvimg video,.gvimg iframe{width:100%;height:100%;border:0;display:block;background:#000}
+.gvintro{margin:8px 0 0;font-size:15px;line-height:1.6;white-space:pre-line;color:var(--ink)}
+.rxcmts{grid-template-columns:minmax(0,1fr)}
+.rxform{min-width:0}.rxform input{width:100%}
+.rxbar{position:relative}
+.rxpw{position:static}
+.rxpick{left:0;right:auto;bottom:calc(100% + 4px);display:grid!important;grid-template-columns:repeat(6,30px);gap:2px;padding:5px;border-radius:16px}
+.rxpick[hidden]{display:none!important}
+.rxpick button{width:30px;height:30px;font-size:19px}
 </style>
 
 <div class="wrap">
@@ -2909,7 +2925,7 @@ document.addEventListener("click",e=>{
   if((b=t.closest("[data-gf]"))){galFilter=b.dataset.gf;$$("#galFilter button").forEach(x=>x.setAttribute("aria-pressed",x===b));galLoad(true);return}
   if(t.id==="galMore"){galLoad(false);return}
   if((b=t.closest("[data-gopen]"))){openItem(b.dataset.gopen);return}
-  if(t.closest("[data-gclose]")||t.id==="gvModal"){$("#gvModal").hidden=true;return}
+  if(t.closest("[data-gclose]")||t.id==="gvModal"){$("#gvModal").hidden=true;$$("#gvCard video").forEach(v=>v.pause());const f=$("#gvCard iframe");if(f)f.remove();return}
   if(t.closest("[data-gcopy]")){const it=galItems.find(x=>x.id===galOpenId);if(it&&it.prompt)copyText(it.prompt.base,t.closest("[data-gcopy]"));return}
   if(t.closest("[data-guse]")){const it=galItems.find(x=>x.id===galOpenId);if(it&&it.prompt){S.character=null;setStage("char");["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=it.prompt[k]||"");loadCharFromInputs();$("#gvModal").hidden=true;window.scrollTo({top:0});toast("이 프롬프트로 채웠어요. 고쳐서 써 보세요")}return}
   if(t.closest("[data-gedit]")){const it=galItems.find(x=>x.id===galOpenId);if(!it)return;const h=$("#gvCard h2"),dl=$("#gvCard .pnm b");
@@ -3267,7 +3283,7 @@ function renderPad(force){
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
     W.classList.add("native");
-    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}<h4 class="ptl">${esc(p.subject||"제목 없음")}</h4>${padMedia(p.url)}<div class="pdtx">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
+    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard">${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}<h4 class="ptl"><button type="button" class="gt" data-vopen="${esc(p.id)}">${esc(p.subject||"제목 없음")}</button></h4><div class="pdmw">${padMedia(p.url)}<button type="button" class="pdexp" data-vopen="${esc(p.id)}" aria-label="크게 보기" title="크게 보기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><div class="pdtx" data-vopen="${esc(p.id)}">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
@@ -3562,7 +3578,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792784594"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792784691"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3757,7 +3773,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792784594";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792784691";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4015,5 +4031,20 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rxModal").hidd
 
 document.addEventListener("submit",async e=>{if(e.target.id!=="galSetForm")return;e.preventDefault();const v=$("#showTime").checked;
   try{if(fb)await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{showTime:v,updatedAt:fb.fs.serverTimestamp()},{merge:true});SHOW_TIME=v;renderPad();if(galItems.length)renderGal();toast("저장했어요")}catch(err){toast("저장하지 못했어요. 관리자 계정으로 로그인했는지 확인해 주세요.")}});
+
+function vInfo(p){const L=String(p.body||"").split("\n"),last=L[L.length-1]||"";return {by:p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro:p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim()}}
+function openVid(id){const p=(PADJ&&PADJ.posts||[]).find(x=>String(x.id)===String(id));if(!p)return;const {by,intro}=vInfo(p),u=p.url||"",key="v_"+p.id;
+  const yt=u.match(/(?:youtu\.be\/|v=|shorts\/)([\w-]{11})/);
+  const media=yt?`<iframe src="https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:/\.(png|jpe?g|gif|webp|avif)(\?|#|$)/i.test(u)?`<img class="gimg" src="${esc(u)}" alt="">`:`<video src="${esc(u)}" controls autoplay playsinline></video>`;
+  const can=!!(myVids()[p.id]||(fb&&isAdmin()));
+  $("#gvCard").innerHTML=`<button type="button" class="gvx" data-gclose aria-label="닫기">✕</button><div class="gvimg">${media}</div><div class="gvside">
+    ${authorRow(by,p.at,can?kMenu(`<button type="button" data-vedit2="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):"")}
+    <div class="gvhead"><h2>${esc(p.subject||"제목 없음")}</h2>${intro?`<p class="gvintro">${esc(intro)}</p>`:""}</div>
+    ${rxHTML(key)}${cmtBox(key)}</div>`;
+  $("#gvModal").hidden=false;paintCmt(key)}
+document.addEventListener("click",e=>{const t=e.target;let b;
+  if((b=t.closest("[data-vopen]"))&&!t.closest("a,video,input,textarea")){openVid(b.dataset.vopen);return}
+  if((b=t.closest("[data-vedit2]"))){$("#gvModal").hidden=true;const c=document.querySelector(`.pdcard [data-vedit="${CSS.escape(b.dataset.vedit2)}"]`);if(c){c.closest(".pdcard").scrollIntoView({block:"center"});c.click()}return}
+});
 </script>
 </body></html>
