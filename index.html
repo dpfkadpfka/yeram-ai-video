@@ -1392,6 +1392,44 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 /* 이력: 촘촘하게 */
 .ab-cv{gap:10px}.cvsec{padding:18px 24px;gap:20px;border-radius:18px}.cvsec-h h3{font-size:19px}.cvsec-h p{font-size:13px;margin-top:3px}
 .cvl li{padding:6px 0;font-size:14.5px;line-height:1.45;gap:12px}.cvl .cy{font-size:13px;flex-basis:86px}.cvl li b{font-weight:800;color:var(--ink)}
+/* 커뮤니티 v2: 목록 + 오른쪽 사이드 */
+.community{max-width:980px!important;display:block!important}
+.comside .comcon{display:flex!important;flex-direction:column;align-items:flex-start;justify-content:flex-start}.comside .comcon>*{max-width:100%}
+.comwrap{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:24px;align-items:start}
+.commain{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.combar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px 0 8px;border-bottom:1px solid var(--line)}
+.comtabs{display:flex;gap:2px;overflow-x:auto}
+.comtabs button{border:0;background:none;padding:16px 12px 14px;font:inherit;font-size:15px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.comtabs button:hover{color:var(--ink)}
+.comtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.comtabs i{font-style:normal;font-size:12px;font-weight:700;color:var(--muted);background:var(--bg,#F5F3F1);border-radius:999px;padding:1px 7px}
+.comwbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px!important;font-size:14px}.comwbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.comlist{display:block!important;gap:0!important}
+.post{border:0!important;border-radius:0!important;border-bottom:1px solid var(--line)!important;background:none!important;padding:0!important;box-shadow:none!important}
+.post:last-child{border-bottom:0!important}
+.post-h{display:grid!important;grid-template-columns:38px minmax(0,1fr) auto;gap:14px;align-items:start;width:100%;padding:16px 20px!important;border:0;background:none;text-align:left;font:inherit;cursor:pointer;transition:background .15s}
+.post-h:hover{background:#FCFAF9}
+.post-av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:15px}
+.post-main{display:grid;gap:4px;min-width:0}
+.post-top{display:flex;align-items:center;gap:8px;min-width:0}
+.post-t{font-size:16px!important;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-ex{font-size:14px;color:var(--ink-2,#5b524d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-m{font-size:12.5px!important;color:var(--muted)!important;margin:0!important}
+.post-n{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--ink-2,#5b524d);padding-top:9px}.post-n svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8}.post-n.z{color:var(--muted);opacity:.6}
+.post-c{flex:none;font-size:11.5px!important;font-weight:800;padding:2px 8px!important;border-radius:6px!important}
+.post-bd{padding:0 20px 18px 72px;display:grid;gap:12px}
+.post-b{margin:0;font-size:15px;line-height:1.7;white-space:pre-line}
+.post.open .post-h{padding-bottom:10px!important}
+.post-bd .cmts{background:var(--bg,#F7F5F3);border:0;border-radius:12px;padding:12px 14px}
+.comside{display:grid;gap:14px;position:sticky;top:20px}
+.comcon{display:grid!important;gap:6px;padding:20px!important;border-radius:18px!important;border:1px solid var(--line);background:linear-gradient(160deg,#FFF3F7,#fff 60%)!important;text-decoration:none;color:var(--ink);transition:transform .2s,box-shadow .2s}
+.comcon:hover{transform:translateY(-2px);box-shadow:0 16px 30px -22px rgba(230,85,136,.6)}
+.comcon .cc-ic{width:40px;height:40px;border-radius:12px;background:var(--accent);display:grid;place-items:center;margin-bottom:4px}.comcon .cc-ic svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.comcon b{font-size:17px}.comcon .cc-d{font-size:13.5px;color:var(--ink-2,#5b524d);line-height:1.55}.comcon .cc-go{margin-top:6px;font-size:14px;font-weight:800;color:var(--accent-deep)}.comcon small{font-size:12px;color:var(--muted)}
+.comguide{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 20px}.comguide b{font-size:15px}
+.comguide ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:9px}.comguide li{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-2,#5b524d)}
+.comempty{display:grid;gap:4px;place-items:center;padding:64px 16px!important;color:var(--muted)}.comempty b{color:var(--ink);font-size:16px}
+@media (max-width:900px){.comwrap{grid-template-columns:minmax(0,1fr)}.comside{position:static;order:-1;grid-template-columns:minmax(0,1fr)}.comguide{display:none}.post-bd{padding-left:20px}.post-ex{display:none}}
 </style>
 
 <div class="wrap">
@@ -1641,9 +1679,16 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
   </section>
 
   <section class="community" id="comSec" aria-label="커뮤니티">
-    <a class="comcon" href="https://ai-radar.kr/contests/" target="_blank" rel="noopener" data-comcontest><div><b>AI 공모전 모아보기</b><span>지금 접수 중인 AI·영상 공모전을 한곳에서 봐요 · ai-radar.kr</span></div><span class="comgo">열기</span></a>
-    <div class="combar"><div class="gtabs" role="tablist" id="comTabs"><button type="button" role="tab" data-ct="all" aria-selected="true">전체</button><button type="button" role="tab" data-ct="contest" aria-selected="false">공모전</button><button type="button" role="tab" data-ct="qna" aria-selected="false">질문</button><button type="button" role="tab" data-ct="tip" aria-selected="false">팁</button><button type="button" role="tab" data-ct="show" aria-selected="false">자랑</button></div><button type="button" class="btn primary" id="comWrite">글쓰기</button></div>
-    <div class="comlist" id="comList"></div>
+    <div class="comwrap">
+      <div class="commain">
+        <div class="combar"><div class="comtabs" role="tablist" id="comTabs"><button type="button" role="tab" data-ct="all" aria-selected="true">전체</button><button type="button" role="tab" data-ct="contest" aria-selected="false">공모전</button><button type="button" role="tab" data-ct="qna" aria-selected="false">질문</button><button type="button" role="tab" data-ct="tip" aria-selected="false">팁</button><button type="button" role="tab" data-ct="show" aria-selected="false">자랑</button></div><button type="button" class="btn primary comwbtn" id="comWrite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>글쓰기</button></div>
+        <div class="comlist" id="comList"></div>
+      </div>
+      <aside class="comside">
+        <a class="comcon" href="https://ai-radar.kr/contests/" target="_blank" rel="noopener" data-comcontest><span class="cc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><b>AI 공모전 모아보기</b><span class="cc-d">지금 접수 중인 AI·영상 공모전을 한곳에서 확인해요.</span><span class="cc-go">공모전 보러 가기 →</span><small>ai-radar.kr</small></a>
+        <div class="comguide"><b>이런 글을 나눠요</b><ul><li><span class="post-c contest">공모전</span>함께 나갈 공모전, 요강 공유</li><li><span class="post-c qna">질문</span>브루·프롬프트가 막힐 때</li><li><span class="post-c tip">팁</span>써 보니 좋았던 방법</li><li><span class="post-c show">자랑</span>완성한 영상·캐릭터</li></ul></div>
+      </aside>
+    </div>
   </section>
   <section class="gallery" id="galSec" aria-labelledby="galH">
     <div class="cp-head"><h2 id="galH">갤러리</h2><div class="gtabs" role="tablist"><button type="button" role="tab" data-gtab="chars" aria-selected="true">캐릭터</button><button type="button" role="tab" data-gtab="videos" aria-selected="false">영상</button></div></div>
@@ -3183,7 +3228,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792775210"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792775304"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3334,7 +3379,8 @@ async function loadCom(){const box=$("#comList");box.innerHTML=`<p class="comemp
   paintCom()}
 function paintCom(){const L=comItems.filter(x=>comTab==="all"||x.cat===comTab),u=user();
   $$("#comTabs [data-ct]").forEach(b=>b.setAttribute("aria-selected",b.dataset.ct===comTab));
-  $("#comList").innerHTML=L.length?L.map(x=>{const mine=u&&(x.uid===u.uid||isAdmin());const op=comOpen===x.id;return `<article class="post" data-pid="${x.id}"><button type="button" class="post-h" data-popen="${x.id}"><span class="post-c ${x.cat}">${COM_CAT[x.cat]||"글"}</span><span class="post-t">${esc(x.title||"")}</span><span class="post-m">${esc(x.nick||"")} · ${fmtD(x.createdAt)}${x.cmtN?` · 댓글 ${x.cmtN}`:""}</span></button>${op?`<p class="post-b">${esc(x.body||"")}</p>${x.link?`<a class="post-l" href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.link)}</a>`:""}<div class="cmts" id="cm_${x.id}"><p class="post-m">댓글 불러오는 중…</p></div><form class="cmtf" data-cform="${x.id}"><input class="tinput" placeholder="${u?"댓글 쓰기":"로그인하면 댓글을 쓸 수 있어요"}" maxlength="500" ${u?"":"disabled"}><button class="btn sm" ${u?"":"disabled"}>등록</button></form>${mine?`<div class="acts"><button type="button" data-pdel="${x.id}">삭제</button></div>`:""}`:""}</article>`}).join(""):`<p class="comempty">아직 글이 없어요. 첫 글을 올려 주세요!</p>`;
+  const N={all:comItems.length};comItems.forEach(x=>N[x.cat]=(N[x.cat]||0)+1);$$("#comTabs [data-ct]").forEach(b=>{const n=N[b.dataset.ct]||0;b.innerHTML=`${b.dataset.ct==="all"?"전체":COM_CAT[b.dataset.ct]}${n?`<i>${n}</i>`:""}`});
+  $("#comList").innerHTML=L.length?L.map(x=>{const mine=u&&(x.uid===u.uid||isAdmin());const op=comOpen===x.id;const nk=x.nick||"선생님";return `<article class="post${op?" open":""}" data-pid="${x.id}"><button type="button" class="post-h" data-popen="${x.id}"><span class="post-av">${esc(nk.slice(0,1))}</span><span class="post-main"><span class="post-top"><span class="post-c ${x.cat}">${COM_CAT[x.cat]||"글"}</span><span class="post-t">${esc(x.title||"")}</span></span>${!op&&x.body?`<span class="post-ex">${esc(x.body.replace(/\s+/g," ").slice(0,120))}</span>`:""}<span class="post-m">${esc(nk)} · ${fmtD(x.createdAt)}</span></span><span class="post-n${x.cmtN?"":" z"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>${x.cmtN||0}</span></button>${op?`<div class="post-bd"><p class="post-b">${esc(x.body||"")}</p>${x.link?`<a class="post-l" href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.link)}</a>`:""}<div class="cmts" id="cm_${x.id}"><p class="post-m">댓글 불러오는 중…</p></div><form class="cmtf" data-cform="${x.id}"><input class="tinput" placeholder="${u?"댓글 쓰기":"로그인하면 댓글을 쓸 수 있어요"}" maxlength="500" ${u?"":"disabled"}><button class="btn sm" ${u?"":"disabled"}>등록</button></form>${mine?`<div class="acts"><button type="button" data-pdel="${x.id}">삭제</button></div>`:""}</div>`:""}</article>`}).join(""):`<div class="comempty"><b>${comTab==="all"?"아직 글이 없어요":COM_CAT[comTab]+" 글이 아직 없어요"}</b><span>첫 글을 올려 주세요.</span></div>`;
   if(comOpen)loadCmts(comOpen)}
 async function loadCmts(id){const box=$("#cm_"+id);if(!box||!fb)return;try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,"community",id,"comments"),F.orderBy("createdAt","asc"),F.limit(200)));
   box.innerHTML=snap.docs.length?snap.docs.map(d=>{const c=d.data();return `<div class="cmt"><b>${esc(c.nick||"")}</b>${esc(c.body||"")}<small>${fmtD(c.createdAt)}</small></div>`}).join(""):`<p class="post-m">첫 댓글을 남겨 주세요.</p>`}catch(e){box.innerHTML=`<p class="post-m">댓글을 불러오지 못했어요.</p>`}}
@@ -3377,7 +3423,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792775210";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792775304";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
