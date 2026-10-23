@@ -2588,6 +2588,11 @@ function absorbBrief(t){
   if(answered.has("length")&&document.body.dataset.stage==="chat")setStage("split");
   const n=nextStep();if(n)ask(n);else review();
 }
+/* 한 번에 여러 정보를 말하면: 알아들은 칸은 채우고 다시 묻지 않기 */
+function snapVals(){const o={};steps().forEach(st=>o[st.id]=getVal(st.key));return o}
+function markChanged(b){steps().forEach(st=>{const was=st.id in b?b[st.id]:(st.key.startsWith("gf.")?"":(DEF[st.key]||""));if(!answered.has(st.id)&&getVal(st.key)&&getVal(st.key)!==was)answered.add(st.id)})}
+function detectMode(t,ch){if(cur.mode)return;let v="";if(/공모전|출품|응모/.test(t))v="contest";else if(/수업|교육|학생|교과|학년/.test(t))v="edu";else if(/일반|브이로그|채널|홍보|광고/.test(t))v="gen";if(v){cur.mode=v;ch.push("용도 → "+label("mode",v))}}
+function detectForm(t,ch){if(/숏폼|쇼츠|숏츠|릴스|세로/.test(t)&&cur.form!=="short"){cur.form="short";cur.imgRatio="9:16";ch.push("형식 → 숏폼")}else if(/롱폼|가로 ?영상|유튜브 ?영상/.test(t)&&cur.form!=="long"){cur.form="long";cur.imgRatio="16:9";ch.push("형식 → 롱폼")}}
 function onSay(text){
   text=text.trim(); if(!text)return;
   if(phase==="naming"){saveStyle(text);return}
@@ -2598,12 +2603,14 @@ function onSay(text){
     if(curStep.type==="text"){
       if(/(바꿔|변경|로 해 ?줘|으로 해 ?줘)/.test(text)){const c=understand(text);if(c.length){me(text);renderAll();bot("바꿨어요: "+c.join(", ")+"\n이어서 물어볼게요.");ask(curStep);return}}
       answerText(text);return}
-    // 선택 질문에 말로 답한 경우
-    const o=optsFor(curStep.key).find(o=>text.includes(o.t)||o.t.includes(text));
+    // 선택 질문에 말로 답한 경우: 함께 말한 다른 정보도 먼저 채우기
+    const b0=snapVals(),pre=text.length>6?understand(text):[];if(text.length>6){detectForm(text,pre);detectMode(text,pre)}markChanged(b0);
+    const OP=optsFor(curStep.key);let o=OP.find(o=>text.includes(o.t)||o.t.includes(text));
+    if(!o){const tt=text.replace(/\s/g,"");let bs=0;OP.forEach(x=>{const n=String(x.t).split(/[·\s‘’'~/]+/).filter(w=>w.length>=2&&tt.includes(w)).length;if(n>bs){bs=n;o=x}})}
     if(o){answerChoice(curStep.key,o.v);return}
-    const ch=understand(text);
+    const ch=pre;
     me(text);
-    if(ch.length){bot("반영했어요: "+ch.join(", "));renderAll();if(getVal(curStep.key)){answered.add(curStep.id);const n=nextStep();n?ask(n):review()}return}
+    if(ch.length){bot("반영했어요: "+ch.join(", "));renderAll();if(getVal(curStep.key))answered.add(curStep.id);const n=nextStep();if(n&&n.id!==curStep.id)ask(n);else if(!n)review();else ask(curStep);return}
     if(/공모전/.test(text)&&(curStep.key==="mode"||curStep.key==="genre")){cur.mode="contest";cur.genre="";answered.add("mode");renderAll();bot("공모전 출품용으로 바꿨어요.");const n=nextStep();n?ask(n):review();return}
     {const key=curStep.key,v="my_"+Date.now().toString(36);let o;
       if(key==="genre")o={v,t:text,d:"직접 쓴 장르",hooks:["fact","daily","whatif"],end:"sum",sp:"narrator",topicQ:"어떤 내용으로 만들까요?",ex:[],s:`장르: ${text}. 이 장르에 어울리는 흐름으로 써 줘.`};
@@ -3272,7 +3279,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792775656"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792776049"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3467,7 +3474,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792775656";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792776049";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
