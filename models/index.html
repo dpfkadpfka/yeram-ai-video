@@ -251,7 +251,7 @@ if(saved==='t-vid'||saved==='t-hard')show(saved);
 // 아래 설명창
 const info=document.getElementById('info'),infoIn=document.getElementById('infoIn');
 function showInfo(t){const m=ALL[t&&t.dataset.id];if(!m)return;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');infoIn.innerHTML=detail(m)+'<button class="x" type="button" id="infoX">닫기</button>';info.hidden=false;}
-document.addEventListener('mouseover',e=>{const t=e.target.closest('.tile');if(t)showInfo(t);});
+let infoMute=null;document.addEventListener('mouseover',e=>{const t=e.target.closest('.tile');if(!t)return;if(t===infoMute)return;infoMute=null;showInfo(t);});
 document.addEventListener('focusin',e=>{const t=e.target.closest('.tile');if(t)showInfo(t);});
 
 // 크게 보기 (터치에선 첫 탭 = 설명, 두 번째 탭 = 크게)
@@ -260,7 +260,7 @@ function openLb(t){const m=ALL[t.dataset.id];const med=t.dataset.video?`<video s
 function closeLb(){lb.hidden=true;box.innerHTML='';}
 const touch=matchMedia('(hover:none)').matches;
 document.addEventListener('click',e=>{
-  if(e.target.closest('#infoX')){info.hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));return;}
+  if(e.target.closest('#infoX')){infoMute=document.querySelector('.tile.sel');info.hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));return;}
   if(e.target.closest('#lbClose')||e.target===lb){closeLb();return;}
   const t=e.target.closest('.tile');if(!t||!t.dataset.name)return;
   if(touch&&!t.classList.contains('sel')&&t.dataset.id){showInfo(t);return;}
