@@ -32,16 +32,16 @@ export default {
       const body = { systemInstruction: { parts: [{ text: String(b.system || "").slice(0, 8000) }] }, contents: [{ role: "user", parts: [{ text: String(b.prompt || "").slice(0, 12000) }] }], generationConfig: { temperature: 0.2, responseMimeType: b.json ? "application/json" : "text/plain" } };
       const tries = [];
       // 1순위: Vertex AI (구글 클라우드 크레딧, 서비스 계정 VERTEX_SA), 2순위: AI Studio 무료 키
-      let vtok = "", sa = null;
-      if (env.VERTEX_SA) { try { sa = JSON.parse(env.VERTEX_SA); vtok = await vertexToken(sa); } catch (e) { vtok = ""; } }
+      let vtok = "", sa = null; const errs = [];
+      if (env.VERTEX_SA) { try { sa = JSON.parse(env.VERTEX_SA); vtok = await vertexToken(sa); } catch (e) { vtok = ""; errs.push("vtok " + String(e && e.message || e).slice(0, 200)); } }
       if (vtok) for (const m of ["gemini-2.5-flash-lite", "gemini-2.5-flash"]) tries.push([m, `https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, vtok]);
       if (env.GEMINI_KEY) for (const m of ["gemini-flash-lite-latest", "gemini-flash-latest"]) tries.push([m, `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${env.GEMINI_KEY}`, ""]);
       let lastErr = "";
       for (const [m, url, tok] of tries) {
         const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json", ...(tok ? { authorization: "Bearer " + tok } : {}) }, body: JSON.stringify(body) });
-        if (!r.ok) { lastErr = r.status + " " + (await r.text()).slice(0, 200); continue; }
+        if (!r.ok) { lastErr = r.status + " " + (await r.text()).slice(0, 200); errs.push(m + " " + lastErr); continue; }
         const d = await r.json();
-        return J({ text: d?.candidates?.[0]?.content?.parts?.map(p => p.text).join("") || "", model: m, via: url.includes("aiplatform") ? "vertex" : "studio" });
+        return J({ text: d?.candidates?.[0]?.content?.parts?.map(p => p.text).join("") || "", model: m, via: url.includes("aiplatform") ? "vertex" : "studio", ...(u.searchParams.get("dbg") === "1" ? { errs } : {}) });
       }
       if (u.searchParams.get("dbg") === "1") return J({ error: "ai", lastErr }, 502);
       return J({ error: "ai" }, 502);
@@ -120,7 +120,7 @@ async function vertexToken(sa) {
   const jwt = head + "." + claim + "." + b64u(sig);
   const r = await fetch("https://oauth2.googleapis.com/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: "grant_type=" + encodeURIComponent("urn:ietf:params:oauth:grant-type:jwt-bearer") + "&assertion=" + jwt });
   const d = await r.json();
-  if (!d.access_token) throw new Error("token");
+  if (!d.access_token) throw new Error("token " + JSON.stringify(d).slice(0, 150));
   VTOK = { t: d.access_token, exp: now + (d.expires_in || 3600) };
   return VTOK.t;
 }
