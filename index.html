@@ -1174,6 +1174,9 @@ body.hm-char #stepper li:has([data-stepgo="1"]),body.hm-script #stepper li:has([
 /* 글자 크기: 계정 메뉴 안으로 */
 .fsbtn{display:none!important}
 #acctMenu .fsz{display:grid!important;position:static!important;left:auto!important;bottom:auto!important;width:auto!important;box-shadow:none!important;border:0!important;margin:2px 2px 8px;background:var(--bg)}
+/* 하단 고정 (내용이 짧아도 맨 아래) */
+.wrap{display:flex!important;flex-direction:column;min-height:100vh;box-sizing:border-box}
+.wrap>footer.ft{margin-top:auto!important}
 /* 메뉴 묶음 이름 */
 @media (min-width:901px){
  header.side .sidenav .snlab{display:block!important;width:64px;height:auto;margin:18px auto 6px!important;padding:14px 0 0!important;border-top:1.5px solid #EADFE3;font-size:12px!important;font-weight:800;color:var(--accent-deep);letter-spacing:.5px;text-align:center;line-height:1.2}
