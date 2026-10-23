@@ -1209,8 +1209,10 @@ body.cpre[data-stage="char"] .pgh{max-width:980px!important}
 /* 로그인 후 로그인 버튼 숨기기 */
 header.side #loginBtn[hidden],body.sidemini #loginBtn[hidden],#loginBtn[hidden]{display:none!important}
 /* 메뉴 묶음 이름 */
+.snlab-li{list-style:none}
+@media (max-width:900px){.snlab-li{display:none!important}}
 @media (min-width:901px){
- header.side .sidenav .snlab{display:block!important;width:64px;height:auto;margin:18px auto 6px!important;padding:14px 0 0!important;border-top:1.5px solid #EADFE3;font-size:12px!important;font-weight:800;color:var(--accent-deep);letter-spacing:.5px;text-align:center;line-height:1.2}
+ header.side .sidenav .snlab{display:block!important;width:64px;height:auto;margin:10px auto 4px!important;padding:10px 0 0!important;border-top:1.5px solid #EADFE3;font-size:12px!important;font-weight:800;color:var(--accent-deep);letter-spacing:.5px;text-align:center;line-height:1.2}
  header.side .stepper{border:0!important;padding:4px 0 0!important;margin:0!important}
 }
 /* 3단계 한 장면 */
@@ -1278,10 +1280,11 @@ header.side .stepper li:not(:last-child)::after{display:none!important}
       <button type="button" data-home class="sn" data-snav="start"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE5LjMxLDEwOC42OGwtODAtODBhMTYsMTYsMCwwLDAtMjIuNjIsMGwtODAsODBBMTUuODcsMTUuODcsMCwwLDAsMzIsMTIwdjk2YTgsOCwwLDAsMCw4LDhoNjRhOCw4LDAsMCwwLDgtOFYxNjBoMzJ2NTZhOCw4LDAsMCwwLDgsOGg2NGE4LDgsMCwwLDAsOC04VjEyMEExNS44NywxNS44NywwLDAsMCwyMTkuMzEsMTA4LjY4Wk0yMDgsMjA4SDE2MFYxNTJhOCw4LDAsMCwwLTgtOEgxMDRhOCw4LDAsMCwwLTgsOHY1Nkg0OFYxMjBsODAtODAsODAsODBaIi8+PC9zdmc+)" aria-hidden="true"></span><span>홈</span></button>
       <span class="snlab">만들기</span>
       <ol class="stepper" id="stepper" aria-label="만들기">
-        <li><button type="button" data-stepgo="1" class="sn mk" data-tip="질문에 답하며 내 캐릭터 이미지 프롬프트를 만들어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTYwLDQwYTMyLDMyLDAsMSwwLTMyLDMyQTMyLDMyLDAsMCwwLDE2MCw0MFpNMTI4LDU2YTE2LDE2LDAsMSwxLDE2LTE2QTE2LDE2LDAsMCwxLDEyOCw1NlpNMjMxLjUsODcuNzFBMTkuNjIsMTkuNjIsMCwwLDAsMjEyLDcySDQ0YTIwLDIwLDAsMCwwLTguMzgsMzguMTZsLjEzLDAsNTAuNzUsMjIuMzUtMjEsNzkuNzJBMjAsMjAsMCwwLDAsMTAyLDIyOC44bDI2LTQ0Ljg3LDI2LDQ0Ljg3YTIwLDIwLDAsMCwwLDM2LjQtMTYuNTJsLTIxLTc5LjcyLDUwLjc1LTIyLjM1LjEzLDBBMTkuNjQsMTkuNjQsMCwwLDAsMjMxLjUsODcuNzFabS0xNy44LDcuOS01Ni45MywyNS4wNmE4LDgsMCwwLDAtNC41MSw5LjM2TDE3NS4xMywyMTdhNyw3LDAsMCwwLC40OSwxLjM1LDQsNCwwLDAsMS01LDUuNDUsNCw0LDAsMCwxLTIuMjUtMi4wNyw2LjMxLDYuMzEsMCwwLDAtLjM0LS42M0wxMzQuOTIsMTY0YTgsOCwwLDAsMC0xMy44NCwwTDg4LDIyMS4wNWE2LjMxLDYuMzEsMCwwLDAtLjM0LjYzLDQsNCwwLDAsMS0yLjI1LDIuMDcsNCw0LDAsMCwxLTUtNS40NSw3LDcsMCwwLDAsLjQ5LTEuMzVMMTAzLjc0LDEzMGE4LDgsMCwwLDAtNC41MS05LjM2TDQyLjMsOTUuNjFBNCw0LDAsMCwxLDQ0LDg4SDIxMmE0LDQsMCwwLDEsMS43Myw3LjYxWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><i>1</i><span><b>캐릭터</b><small></small></span></button></li>
         <li><button type="button" data-stepgo="2" class="sn mk" data-tip="브루에 넣을 대본·이미지 프롬프트를 만들어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTY4LDE1MmE4LDgsMCwwLDEtOCw4SDk2YTgsOCwwLDAsMSwwLTE2aDY0QTgsOCwwLDAsMSwxNjgsMTUyWm0tOC00MEg5NmE4LDgsMCwwLDAsMCwxNmg2NGE4LDgsMCwwLDAsMC0xNlptNTYtNjRWMjE2YTE2LDE2LDAsMCwxLTE2LDE2SDU2YTE2LDE2LDAsMCwxLTE2LTE2VjQ4QTE2LDE2LDAsMCwxLDU2LDMySDkyLjI2YTQ3LjkyLDQ3LjkyLDAsMCwxLDcxLjQ4LDBIMjAwQTE2LDE2LDAsMCwxLDIxNiw0OFpNOTYsNjRoNjRhMzIsMzIsMCwwLDAtNjQsMFpNMjAwLDQ4SDE3My4yNUE0Ny45Myw0Ny45MywwLDAsMSwxNzYsNjR2OGE4LDgsMCwwLDEtOCw4SDg4YTgsOCwwLDAsMS04LThWNjRhNDcuOTMsNDcuOTMsMCwwLDEsMi43NS0xNkg1NlYyMTZIMjAwWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><i>2</i><span><b>대본</b><small></small></span></button></li>
         <li><button type="button" data-stepgo="3" class="sn mk" data-tip="마음에 안 드는 컷 하나를 다시 만들 프롬프트"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSJub25lIiBzdHJva2U9IiMxRjFBMTciIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQwIDg4VjU2YTE2IDE2IDAgMCAxIDE2LTE2aDMyTTE2OCA0MGgzMmExNiAxNiAwIDAgMSAxNiAxNnYzMk0yMTYgMTY4djMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMk04OCAyMTZINTZhMTYgMTYgMCAwIDEtMTYtMTZ2LTMyIi8+PHBhdGggZD0iTTEwOCA5Nmw1NiAzMi01NiAzMnoiIGZpbGw9IiMxRjFBMTciLz48L3N2Zz4K)" aria-hidden="true"></span><i>3</i><span><b>컷 편집</b><small></small></span></button></li>
         <li><button type="button" data-stepgo="4" class="sn mk" data-tip="이야기를 씬으로 나눠 씬마다 이미지·영상 프롬프트"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE2LDEwNEgxMDIuMDlMMjEwLDc1LjUxYTgsOCwwLDAsMCw1LjY4LTkuODRsLTguMTYtMzBhMTUuOTMsMTUuOTMsMCwwLDAtMTkuNDItMTEuMTNMMzUuODEsNjQuNzRhMTUuNzUsMTUuNzUsMCwwLDAtOS43LDcuNCwxNS41MSwxNS41MSwwLDAsMC0xLjU1LDEyTDMyLDExMS41NmMwLC4xNCwwLC4yOSwwLC40NHY4OGExNiwxNiwwLDAsMCwxNiwxNkgyMDhhMTYsMTYsMCwwLDAsMTYtMTZWMTEyQTgsOCwwLDAsMCwyMTYsMTA0Wk0xOTIuMTYsNDBsNiwyMi4wNy0yMi42Miw2TDE0Ny40Miw1MS44M1ptLTY2LjY5LDE3LjYsMjguMTIsMTYuMjQtMzYuOTQsOS43NUw4OC41Myw2Ny4zN1ptLTc5LjQsNDQuNjItNi0yMi4wOCwyNi41LTdMOTQuNjksODkuNFpNMjA4LDIwMEg0OFYxMjBIMjA4djgwWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><i>4</i><span><b>씬 나누기</b><small></small></span></button></li>
+        <li class="snlab-li"><span class="snlab">그리기</span></li>
+        <li><button type="button" data-stepgo="1" class="sn mk" data-tip="질문에 답하며 내 캐릭터 이미지 프롬프트를 만들어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTYwLDQwYTMyLDMyLDAsMSwwLTMyLDMyQTMyLDMyLDAsMCwwLDE2MCw0MFpNMTI4LDU2YTE2LDE2LDAsMSwxLDE2LTE2QTE2LDE2LDAsMCwxLDEyOCw1NlpNMjMxLjUsODcuNzFBMTkuNjIsMTkuNjIsMCwwLDAsMjEyLDcySDQ0YTIwLDIwLDAsMCwwLTguMzgsMzguMTZsLjEzLDAsNTAuNzUsMjIuMzUtMjEsNzkuNzJBMjAsMjAsMCwwLDAsMTAyLDIyOC44bDI2LTQ0Ljg3LDI2LDQ0Ljg3YTIwLDIwLDAsMCwwLDM2LjQtMTYuNTJsLTIxLTc5LjcyLDUwLjc1LTIyLjM1LjEzLDBBMTkuNjQsMTkuNjQsMCwwLDAsMjMxLjUsODcuNzFabS0xNy44LDcuOS01Ni45MywyNS4wNmE4LDgsMCwwLDAtNC41MSw5LjM2TDE3NS4xMywyMTdhNyw3LDAsMCwwLC40OSwxLjM1LDQsNCwwLDAsMS01LDUuNDUsNCw0LDAsMCwxLTIuMjUtMi4wNyw2LjMxLDYuMzEsMCwwLDAtLjM0LS42M0wxMzQuOTIsMTY0YTgsOCwwLDAsMC0xMy44NCwwTDg4LDIyMS4wNWE2LjMxLDYuMzEsMCwwLDAtLjM0LjYzLDQsNCwwLDAsMS0yLjI1LDIuMDcsNCw0LDAsMCwxLTUtNS40NSw3LDcsMCwwLDAsLjQ5LTEuMzVMMTAzLjc0LDEzMGE4LDgsMCwwLDAtNC41MS05LjM2TDQyLjMsOTUuNjFBNCw0LDAsMCwxLDQ0LDg4SDIxMmE0LDQsMCwwLDEsMS43Myw3LjYxWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><i>1</i><span><b>캐릭터</b><small></small></span></button></li>
       </ol>
       <span class="snlab snlab-g">둘러보기</span>
       <button type="button" data-gallery class="sn" data-snav="gallery" data-tip="선생님들이 만든 영상과 캐릭터를 함께 봐요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjE2LDQwSDcyQTE2LDE2LDAsMCwwLDU2LDU2VjcySDQwQTE2LDE2LDAsMCwwLDI0LDg4VjIwMGExNiwxNiwwLDAsMCwxNiwxNkgxODRhMTYsMTYsMCwwLDAsMTYtMTZWMTg0aDE2YTE2LDE2LDAsMCwwLDE2LTE2VjU2QTE2LDE2LDAsMCwwLDIxNiw0MFpNNzIsNTZIMjE2djYyLjc1bC0xMC4wNy0xMC4wNmExNiwxNiwwLDAsMC0yMi42MywwbC0yMCwyMC00NC00NGExNiwxNiwwLDAsMC0yMi42MiwwTDcyLDEwOS4zN1pNMTg0LDIwMEg0MFY4OEg1NnY4MGExNiwxNiwwLDAsMCwxNiwxNkgxODRabTMyLTMySDcyVjEzMmwzNi0zNiw0OS42Niw0OS42NmE4LDgsMCwwLDAsMTEuMzEsMEwxOTQuNjMsMTIwLDIxNiwxNDEuMzhWMTY4Wk0xNjAsODRhMTIsMTIsMCwxLDEsMTIsMTJBMTIsMTIsMCwwLDEsMTYwLDg0WiIvPjwvc3ZnPg==)" aria-hidden="true"></span><span>갤러리</span></button>
@@ -2895,7 +2898,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792749112"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792749393"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art"};
@@ -3043,7 +3046,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792749112";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792749393";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 const mdlClose=()=>{$("#mdlPop").hidden=true;document.body.style.overflow=""};
 $("#mdlPopX").addEventListener("click",mdlClose);$("#mdlPop").addEventListener("click",e=>{if(e.target.id==="mdlPop")mdlClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#mdlPop").hidden)mdlClose()});
 new MutationObserver(paintPgh).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});paintPgh();
@@ -3086,14 +3089,14 @@ function cAsk(sec,k){
     cQuick.innerHTML=chips(SB_KIND.o,t=>sb.sel.kind===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
   }else if(sec==="act"){
     cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
-    cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
+    cQuick.innerHTML=chips(ACT_O,t=>actLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
   }else if(sec==="place"){
     cbot("<b>장소</b> · 배경은요? 기본은 흰 배경이에요. 투명 배경을 고르면 PNG 파일로 달라고 써 둘게요.");
-    cQuick.innerHTML=chips(PLACE_O,t=>placeLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
+    cQuick.innerHTML=chips(PLACE_O,t=>placeLabel()===t,"data-cv")+`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
   }else if(sec==="style"){
     cbot("<b>스타일</b> · 그림체는요? 왼쪽에서 그림을 눌러 골라 주세요. 원하는 게 없으면 여기에 직접 써도 돼요. 예: 동화책 같은 연필 그림");
     const animal=sb.sel.kind==="동물", list=STYLES.filter(x=>animal?x.g==="동물":x.g==="인물");
-    cQuick.innerHTML=`<button type="button" class="opt optskip" data-cskip>건너뛰기</button>`;
+    cQuick.innerHTML=`<button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt optskip" data-cback>← 이전 질문</button>`;
     $("#sPickGrid").innerHTML=list.map(x=>`<button type="button" class="stile" data-cstyle="${x.id}" aria-pressed="${cv("style")===x.t}"><span class="im">${STYLE_IMG[x.id]?`<img src="${STYLE_IMG[x.id]}" alt="">`:"예시 준비 중"}</span>${esc(x.t)}</button>`).join("");
     $("#sPick").hidden=false;$("#sPick").scrollIntoView({behavior:"smooth",block:"nearest"});
   }else if(sec==="ratio"){
@@ -3174,6 +3177,9 @@ function charBase(){
 }
 document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cv]"))){cPick(b.dataset.cv);return}
+  if(t.closest("[data-cback]")){const q=cq;if(!q)return;const O=["subj","act","place","style"],i=O.indexOf(q.sec);if(i<1)return;const pv=O[i-1];cme("← 이전 질문");cDoneOnly=false;
+    if(pv==="subj"){const inp=$("#cSay");inp.value=cv("subj")||"";cAsk("subj","kind");setTimeout(()=>{inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}},50)}else cAsk(pv);
+    cq.back=true;return}
   if(t.closest("[data-cskip]")){const q=cq;if(!q)return;cme("건너뛰기");const D={subj:"생김새는 자유롭게 정한 귀여운 캐릭터",act:ACT_FULL,place:"흰 배경",style:"3D 애니메이션"};
     if(!cv(q.sec)){if(q.sec==="subj")sb.sel={kind:"",free:D.subj};cSet(q.sec,D[q.sec])}return cAdvance()}
   if(t.closest("[data-cnext]")){const q=cq;if(q&&q.sec==="subj"){const g=sbGroups().find(x=>x.k===q.k);const v=sb.sel[q.k];if(v&&(!Array.isArray(v)||v.length))cme(Array.isArray(v)?v.join(", "):v);else cme("건너뛰기")}cAdvance();return}
