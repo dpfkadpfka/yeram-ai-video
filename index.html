@@ -988,6 +988,17 @@ body.cpre[data-stage="char"] .cchat{display:none!important}
 .pdintro .hint{margin:0 0 18px}
 @keyframes stgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (max-width:900px){.pdlist{grid-template-columns:minmax(0,1fr)}.pdintro{padding:22px 16px}}
+
+/* 만들기(실습) 두 메뉴를 한 묶음 상자로 */
+@media (min-width:901px){
+ header.side .stepper{background:#FBEFF4;border:1px solid #F6D9E5;border-radius:16px;padding:22px 0 6px!important;width:76px!important;position:relative;margin:4px auto!important}
+ header.side .stepper::before{content:"실습";position:absolute;top:6px;left:0;right:0;text-align:center;font-size:11px;font-weight:800;color:var(--accent-deep);letter-spacing:.5px}
+ header.side .stepper .sn{width:68px!important}
+ header.side .stepper .sn:hover::before{background:#F6DCE7}
+ header.side .stepper .sn[aria-current="step"]::before{background:#fff}
+ header.side .stepper li:first-child::after{display:none}
+ .snlab{display:none!important}
+}
 </style>
 
 <div class="wrap">
