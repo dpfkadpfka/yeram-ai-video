@@ -2454,7 +2454,7 @@ async function initFirebase(){
     auth.onAuthStateChanged(fb.auth,async u=>{
       fb.user=u;
       if(u){
-        $("#loginModal").hidden=true;
+        $("#loginModal").hidden=true;if(window._afterLogin){const f=window._afterLogin;window._afterLogin=null;setTimeout(f,300)}
         try{const sn=await fs.getDoc(fs.doc(fb.db,"users",u.uid));const remote=sn.exists()?fix(JSON.parse(sn.data().data)):EMPTY();
           const loc=local.load();S=(loc&&!loc.owner&&(loc.history.length||loc.rules.length))?merge(remote,fix(loc)):remote;S.owner=u.uid;if(FRESH_SESS)S.character=null;
           
@@ -3715,7 +3715,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792840662"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792841229"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3913,7 +3913,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792840662";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792841229";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4299,5 +4299,17 @@ document.addEventListener("click",e=>{if(e.target.closest("[data-gen]"))setTimeo
 /* 소개: 예람쌤 연수 홍보 */
 const TRAININGS=[{t:"AI 시대, 교사를 위한 디자인·영상 콘텐츠 제작 실전 과정",sub:"생성형 AI × 캔바 × 캡컷",img:"https://edu.tsherpa.co.kr/Files/20261022124647/Course/20261022124628666.jpg",org:"T셀파 원격교육연수원",meta:["직무연수 15시간","디지털역량","유·초·중등"],who:"김예람 · 최서원 선생님",url:"https://edu.tsherpa.co.kr/Product/Detail/2016?BoardDetail.BoardNo=&CourseType=0"}];
 $("#trList").innerHTML=TRAININGS.map(x=>`<a class="trc" href="${esc(x.url)}" target="_blank" rel="noopener" data-popwin><span class="trc-im"><img src="${esc(x.img)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg')"></span><span class="trc-tx"><small class="trc-org">${esc(x.org)}</small><b>${esc(x.t)}</b><span class="trc-sub">${esc(x.sub)}</span><span class="trc-meta">${x.meta.map(m=>`<i>${esc(m)}</i>`).join("")}</span><span class="trc-who">강사 ${esc(x.who)}</span><span class="trc-go">연수 보러 가기 →</span></span></a>`).join("");
+
+/* 구글 로그인 안내: 도구를 시작할 때 먼저 로그인하게 */
+const LG0={h:$("#lgH").textContent,p:$("#loginModal .modal-card > p").textContent,c:$("#lgClose").textContent};
+function gateLogin(msg,after){if(fb&&user()){after&&after();return}
+  $("#lgH").textContent="구글로 로그인하고 시작해요";
+  $("#loginModal .modal-card > p").innerHTML=msg||"로그인해야 <b>AI 이미지 생성</b>을 쓸 수 있고, 만든 캐릭터·대본이 계정에 저장돼요.";
+  $("#lgClose").textContent="로그인 없이 둘러보기";window._afterLogin=after||null;openLogin()}
+$("#lgClose").addEventListener("click",()=>{window._afterLogin=null;setTimeout(()=>{$("#lgH").textContent=LG0.h;$("#loginModal .modal-card > p").textContent=LG0.p;$("#lgClose").textContent=LG0.c},200)});
+// 캐릭터 '채팅 시작하기'는 로그인 후에만
+document.addEventListener("click",e=>{const b=e.target.closest("#pdGo");if(!b||!fb||user())return;e.preventDefault();e.stopImmediatePropagation();gateLogin("캐릭터를 만들고 마지막에 <b>AI로 바로 그리려면</b> 구글 로그인이 필요해요. 로그인하면 바로 채팅이 시작돼요.",()=>$("#pdGo").click())},true);
+// 대본·컷·씬 화면에 들어오면 한 번 안내
+(function(){let shown=false;const ss=window.setStage;window.setStage=function(x){const r=ss.apply(this,arguments);if(!shown&&fb&&!user()&&["chat","split","shot","scene"].includes(x)){shown=true;setTimeout(()=>{if(!user())gateLogin()},400)}return r}})();
 </script>
 </body></html>
