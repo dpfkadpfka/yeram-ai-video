@@ -101,6 +101,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 #info ul{margin:0;padding-left:18px}
 #info .x{font:inherit;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:5px 12px;cursor:pointer}
 #info .x:hover{border-color:var(--accent);color:var(--accent-strong)}
+#info.pop{right:auto;bottom:auto;width:330px;padding:0;pointer-events:none}
+#info.pop .in{display:block;padding:14px 16px;border-radius:16px;box-shadow:0 18px 44px -16px rgb(0 0 0 / .28);animation:pvin .14s ease-out}
+@keyframes pvin{from{opacity:0;transform:translateY(4px)}}
+#info.pop .pv-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}#info.pop .pv-h b{font-size:14px;color:var(--accent-strong)}#info.pop .pv-h span{font-size:12px;color:var(--muted);text-align:right}
+#info.pop .pv-ck{display:flex;flex-wrap:wrap;gap:4px 6px;margin-bottom:8px}#info.pop .pv-ck span{font-size:12.5px;font-weight:700;border-radius:999px;padding:2px 8px}
+#info.pop .pv-ck .ok{background:#E8F6EE;color:#1F7A47}#info.pop .pv-ck .no{background:#FCEBEB;color:#B3261E}
+#info.pop ul{font-size:14px;line-height:1.6;display:grid;gap:2px}
 @media (max-width:820px){#info .in{grid-template-columns:1fr auto}#info .bx{grid-column:1 / -1}}
 
 .foot{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:12px}
@@ -123,7 +130,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <script>if(window.self!==window.top)document.documentElement.classList.add("embed")</script>
   <header>
     <h1><span class="hl">AI 모델</span> 비교</h1>
-    <p class="sub">예람쌤 캐릭터 하나로 여러 AI 이미지·영상 모델을 같은 조건에서 돌려 봤어요. 칸에 <b>마우스를 올리면</b> 아래에 자세한 설명이 떠요.</p>
+    <p class="sub">예람쌤 캐릭터 하나로 여러 AI 이미지·영상 모델을 같은 조건에서 돌려 봤어요. 칸에 <b>마우스를 올리면</b> 옆에 실제 결과가 떠요.</p>
   </header>
 
   <div class="bar" role="tablist">
@@ -264,8 +271,15 @@ if(saved==='t-vid'||saved==='t-hard')show(saved);
 
 // 아래 설명창
 const info=document.getElementById('info'),infoIn=document.getElementById('infoIn');
-function showInfo(t){const m=ALL[t&&t.dataset.id];if(!m)return;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');infoIn.innerHTML=detail(m)+'<button class="x" type="button" id="infoX">닫기</button>';info.hidden=false;}
-let infoMute=null;document.addEventListener('mouseover',e=>{const t=e.target.closest('.tile');if(!t)return;if(t===infoMute)return;infoMute=null;showInfo(t);});
+const POP=()=>!matchMedia('(hover:none)').matches&&innerWidth>820;
+const specOf=m=>m.spec.replace(/ ?· ?별 \d개/,'').replace(/^별 \d개 ?·? ?/,'');
+const pop=m=>`<div class="pv-h"><b>실제 결과</b><span>${specOf(m)}</span></div>${m.ck?`<div class="pv-ck">${m.ck.map((c,i)=>`<span class="${c?'ok':'no'}">${c?'✓':'✗'} ${CK[i]}</span>`).join('')}</div>`:''}${ul(m.rs)}`;
+function showInfo(t){const m=ALL[t&&t.dataset.id];if(!m){hideInfo();return}document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');
+  if(POP()){info.classList.add('pop');infoIn.innerHTML=pop(m);info.hidden=false;const r=t.getBoundingClientRect(),w=info.offsetWidth,h=info.offsetHeight;let x=r.right+12;if(x+w>innerWidth-8)x=r.left-w-12;if(x<8)x=Math.max(8,innerWidth-w-8);let y=Math.min(Math.max(8,r.top),innerHeight-h-8);info.style.left=x+'px';info.style.top=y+'px';return}
+  info.classList.remove('pop');info.style.left=info.style.top='';infoIn.innerHTML=detail(m)+'<button class="x" type="button" id="infoX">닫기</button>';info.hidden=false;}
+function hideInfo(){if(!info.classList.contains('pop'))return;info.hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'))}
+let infoMute=null;document.addEventListener('mouseover',e=>{const t=e.target.closest('.tile');if(!t){hideInfo();return}if(t===infoMute)return;infoMute=null;showInfo(t);});
+addEventListener('scroll',()=>hideInfo(),{passive:true});
 document.addEventListener('focusin',e=>{const t=e.target.closest('.tile');if(t)showInfo(t);});
 
 // 크게 보기 (터치에선 첫 탭 = 설명, 두 번째 탭 = 크게)
