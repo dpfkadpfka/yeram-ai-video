@@ -205,6 +205,8 @@ body[data-stage="split"] .outcol,body[data-stage="chat"] .outcol{animation:slide
 .slot-n{font-weight:600;display:flex;align-items:center;gap:8px}
 .num{font-size:12.5px;font-weight:700;background:var(--ink);color:var(--paper);border-radius:6px;padding:0 7px}
 .slot .val{padding:10px 12px;font-weight:600;overflow-wrap:anywhere}
+.gen-need{margin:2px 0 0;font-size:12.5px;color:var(--muted);text-align:right}.rc-gen.locked{opacity:.45}
+#toast .tlink{margin-left:8px;border:0;background:none;color:inherit;font-weight:800;text-decoration:underline;cursor:pointer;font:inherit;pointer-events:auto}
 .aiw{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.aibtn{gap:6px;border:1.5px solid var(--accent);color:var(--accent);background:transparent;font-weight:800}.aibtn:hover{background:var(--accent);color:#fff}.aibtn svg{width:17px;height:17px;fill:currentColor}.aibtn[disabled]{opacity:.6;pointer-events:none}
 .aibox{border:1.5px solid var(--accent);border-radius:14px;padding:12px 14px;display:grid;gap:8px}.aibox-h{display:flex;align-items:center;gap:8px}.aibox-h .btnrow{margin-left:auto}
 .aibox textarea{min-height:200px!important;border:0;background:transparent;padding:0!important}.aifix{display:flex;gap:6px}.aifix .tinput{flex:1;min-width:0}.aiuse{margin:0}
@@ -1855,7 +1857,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
           <div class="rc-tx"><h3><span class="rc-n">2</span>캐릭터 시트<span class="rc-ratio">16:9</span></h3><p>기본 이미지를 참고 이미지로 함께 넣으면 여러 각도·표정이 한 장에 나와요.</p></div></div>
         <div class="rc-pr"><textarea id="cSheet" spellcheck="false" aria-label="캐릭터 시트 프롬프트" placeholder="오른쪽 예람쌤 질문에 답하면 여기에 프롬프트가 만들어져요"></textarea>
           <div class="rc-tools"><button type="button" class="linkbtn" data-pclear="cSheet">지우기</button><button type="button" class="linkbtn" data-applyall>피동장스로 다시 채우기</button></div></div>
-        <div class="rc-act"><button type="button" class="rc-sm" data-ccopy="cSheet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>프롬프트 복사</button><button type="button" class="rc-sm rc-gen" data-gen="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span class="gl">AI 생성하기</span><em class="gq" data-gq="sheet">5/5</em></button></div><div class="genbox" id="gen_sheet" hidden><div class="gen-main"><img alt="만든 그림" data-zoom></div><div class="gen-thumbs"></div><div class="gen-act"><span class="gen-left"></span><button type="button" class="btn sm" data-gendl="sheet">다운로드</button><button type="button" class="btn sm primary" data-genup="sheet">갤러리에 올리기</button></div></div>
+        <div class="rc-act"><button type="button" class="rc-sm" data-ccopy="cSheet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>프롬프트 복사</button><button type="button" class="rc-sm rc-gen" data-gen="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span class="gl">AI 생성하기</span><em class="gq" data-gq="sheet">5/5</em></button></div><p class="gen-need" id="sheetNeed">시트는 ① 기본 이미지를 AI로 먼저 만들어야 생성할 수 있어요. 고른 기본 이미지를 참고해서 그려요.</p><div class="genbox" id="gen_sheet" hidden><div class="gen-main"><img alt="만든 그림" data-zoom></div><div class="gen-thumbs"></div><div class="gen-act"><span class="gen-left"></span><button type="button" class="btn sm" data-gendl="sheet">다운로드</button><button type="button" class="btn sm primary" data-genup="sheet">갤러리에 올리기</button></div></div>
       </article>
     </div>
     <p class="cp-alt"><span>참고</span>브루 대신 미리캔버스에서 만들고 싶다면, 기본 이미지 프롬프트를 <a href="https://www.miricanvas.com/ko/miricle/ai-character-maker" target="_blank" rel="noopener" data-ccopy="cBase" data-miricle>미리캔버스 AI 캐릭터 만들기</a>에 붙여 넣어도 돼요.</p>
@@ -2109,7 +2111,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 <div class="modal" id="adminModal" hidden role="dialog" aria-modal="true" aria-labelledby="admH">
   <div class="modal-card admcard"><div class="admtop"><h2 id="admH">관리자 설정</h2><button type="button" class="admx" id="admX" aria-label="닫기">✕</button></div><div class="admbody"><nav class="admnav" id="admNav"></nav><div class="admpanes">
     <form class="padform" id="homeForm" data-admtab="홈 화면"><label for="homeMedia"><b>홈 화면</b> 아래쪽에 흘러갈 것</label><div class="row"><select class="tinput" id="homeMedia"><option value="char">캐릭터 홈 (움직이는 캐릭터)</option><option value="yt">썸네일 홈 (유튜브 영상)</option></select><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 홈이 바뀌어요.</small></form>
-    <form class="padform" id="homeItemsForm" data-admtab="홈 그림"><b>홈 화면에 흐를 그림 고르기</b>
+    <form class="padform" id="homeItemsForm" data-admtab="홈 화면"><b>홈 화면에 흐를 그림 고르기</b>
       <div class="hitabs"><button type="button" data-hit="char" aria-pressed="true">캐릭터 홈</button><button type="button" data-hit="yt" aria-pressed="false">썸네일 홈</button></div>
       <div class="higrid" id="hiGrid"></div>
       <div class="row" id="hiAddChar"><label class="btn"><input type="file" id="hiFile" accept="image/*,video/*" multiple hidden>+ 캐릭터 영상·이미지 올리기</label><small class="hint" style="margin:0">영상은 6초 안쪽으로 작게 줄여서 저장해요.</small></div>
@@ -2492,7 +2494,8 @@ async function initFirebase(){
 /* ===================== 도우미 ===================== */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),2200)}
+function toastLink(m,lb,fn){const t=$("#toast");t.innerHTML="";t.append(m+" ");const a=document.createElement("button");a.type="button";a.className="tlink";a.textContent=lb;a.onclick=()=>{t.classList.remove("on");fn()};t.append(a);t.style.pointerEvents="auto";t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),5000)}
+function toast(m){const t=$("#toast");t.style.pointerEvents="";t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),2200)}
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 /* 학습: 자주 고른 값 */
@@ -3638,7 +3641,8 @@ $("#upForm").addEventListener("submit",async e=>{
     if(fb){const F=fb.fs;const ref=await F.addDoc(F.collection(fb.db,"gallery"),{...meta,uid:user().uid,createdAt:F.serverTimestamp()});
       await F.setDoc(F.doc(fb.db,"galleryFull",ref.id),{img,uid:user().uid});}
     else{galLocal.unshift({...meta,img,id:uid(),uid:"local"});saveGalLocal()}
-    $("#upModal").hidden=true;toast("갤러리에 올렸어요");galFilter="all";$$("#galFilter button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.gf==="all"));openGallery("chars");loadCharFeed();
+    $("#upModal").hidden=true;galFilter="all";$$("#galFilter button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.gf==="all"));
+    if(document.body.dataset.stage==="gallery"){toast("갤러리에 올렸어요");openGallery("chars")}else toastLink("갤러리에 올렸어요","갤러리 보기",()=>openGallery("chars"));loadCharFeed();
   }catch(err){toast("올리지 못했어요. 이미지가 너무 크면 다른 파일로 해 보세요.")}
   btn.disabled=false;btn.textContent="올리기";
 });
@@ -3740,7 +3744,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792842042"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792855063"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4001,7 +4005,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792842042";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792855063";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4286,11 +4290,12 @@ document.addEventListener("mouseout",e=>{const c=e.target.closest(".pdcard[data-
 
 /* 관리자: 왼쪽 탭 + 오른쪽 아래 저장 하나 */
 (function(){const forms=$$("#adminModal form[data-admtab]");let cur=forms[0];
-  $("#admNav").innerHTML=forms.map((f,i)=>`<button type="button" data-admgo="${f.id}" aria-selected="${i===0}">${f.dataset.admtab}</button>`).join("");
-  const show=id=>{forms.forEach(f=>f.classList.toggle("on",f.id===id));$$("[data-admgo]").forEach(b=>b.setAttribute("aria-selected",b.dataset.admgo===id));cur=document.getElementById(id)};show(forms[0].id);
+  const tabs=[...new Set(forms.map(f=>f.dataset.admtab))];
+  $("#admNav").innerHTML=tabs.map((t,i)=>`<button type="button" data-admgo="${t}" aria-selected="${i===0}">${t}</button>`).join("");
+  let curs=[];const show=t=>{forms.forEach(f=>f.classList.toggle("on",f.dataset.admtab===t));$$("[data-admgo]").forEach(b=>b.setAttribute("aria-selected",b.dataset.admgo===t));curs=forms.filter(f=>f.dataset.admtab===t);cur=curs[0]};show(tabs[0]);
   $("#admNav").addEventListener("click",e=>{const b=e.target.closest("[data-admgo]");if(b)show(b.dataset.admgo)});
   forms.forEach(f=>{["input","change"].forEach(ev=>f.addEventListener(ev,()=>f.dataset.dirty="1"));f.addEventListener("click",e=>{if(e.target.closest("button:not([type=submit]),[data-hit],.hiitem,[data-mn],[data-pickico]"))f.dataset.dirty="1"})});
-  $("#admSave").addEventListener("click",async()=>{const list=forms.filter(f=>f.dataset.dirty==="1"||f===cur);const btn=$("#admSave");btn.disabled=true;
+  $("#admSave").addEventListener("click",async()=>{const list=forms.filter(f=>f.dataset.dirty==="1"||curs.includes(f));const btn=$("#admSave");btn.disabled=true;
     const T=window.toast;const msgs=[];window.toast=m=>msgs.push(m);
     try{for(const f of list){f.requestSubmit();delete f.dataset.dirty}await new Promise(r=>setTimeout(r,1800))}finally{window.toast=T;btn.disabled=false}
     const bad=msgs.find(m=>/못했|주세요|넣어/.test(m));T(bad||"저장했어요")});
@@ -4321,7 +4326,7 @@ document.addEventListener("click",async e=>{let b=e.target.closest("[data-vdl]")
 /* ===================== 바로 그리기 (나노바나나 · Vertex AI) ===================== */
 const GEN={base:[],sheet:[]},GSEL={base:0,sheet:0},GUSED={};
 function isGoogle(){const u=user();return !!(u&&(u.providerData||[]).some(p=>p.providerId==="google.com"))}
-function paintGen(kind){const box=$("#gen_"+kind),L=GEN[kind];if(!box)return;box.hidden=!L.length&&!box.classList.contains("busy");if(!L.length)return;const i=Math.min(GSEL[kind],L.length-1);
+function paintGen(kind){try{const nb=!GEN.base.length;$("#sheetNeed").hidden=!nb;document.querySelectorAll('[data-gen="sheet"]').forEach(b=>b.classList.toggle("locked",nb))}catch(_){}const box=$("#gen_"+kind),L=GEN[kind];if(!box)return;box.hidden=!L.length&&!box.classList.contains("busy");if(!L.length)return;const i=Math.min(GSEL[kind],L.length-1);
   box.querySelector(".gen-main img").src=L[i];
   box.querySelector(".gen-thumbs").innerHTML=L.map((x,j)=>`<button type="button" class="gthumb${j===i?" on":""}" data-gsel="${kind}:${j}"><img src="${x}" alt=""></button>`).join("");
   const u=GUSED[kind];box.querySelector(".gen-left").textContent=u&&u.limit?`오늘 ${u.used}/${u.limit}장`:"";}
@@ -4361,10 +4366,10 @@ async function loadImgLog(){const box=$("#imgLog");if(!fb||!box)return;box.inner
 document.addEventListener("click",e=>{if(e.target.closest('[data-admgo="imgLogForm"]'))loadImgLog()});
 
 /* 오른쪽 위 바로가기 링크 (관리자에서 켜고 끄기) */
-const VREW_IC="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCAyOCAyOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNOC4yMzExOSAyMy45OTY2SDE5Ljc2ODJDMjIuMTA1NiAyMy45OTY2IDI0LjAwMDQgMjIuMTAyNSAyNC4wMDA0IDE5Ljc2NjFWOC4yMzM4NkMyNC4wMDA0IDUuODk3NDcgMjIuMTA1NiA0LjAwMzQyIDE5Ljc2ODIgNC4wMDM0Mkg4LjIzMTE5QzUuODkzODMgNC4wMDM0MiAzLjk5OTAyIDUuODk3NDcgMy45OTkwMiA4LjIzMzg2VjE5Ljc2NjFDMy45OTkwMiAyMi4xMDI1IDUuODkzODMgMjMuOTk2NiA4LjIzMTE5IDIzLjk5NjZaIiBmaWxsPSIjMTRBMUM4Ii8+CiAgPHBhdGggZD0iTTguMTk2NzEgMTAuMTE4OEg5LjYxMjAxQzkuODEzOSAxMC4xMTg4IDkuOTQxODEgMTAuMTkyNyAxMC4wMzM3IDEwLjM3NzZMMTIuOTY5IDE3LjQzNzZDMTMuMDk2OSAxNy42OTY0IDEyLjk2OSAxNy44ODEzIDEyLjY5NDIgMTcuODgxM0gxMS4yNzg5QzExLjA3NyAxNy44ODEzIDEwLjk0OTEgMTcuODA3MyAxMC44NTcxIDE3LjYyMjRMNy45MjE4OSAxMC41NjI1QzcuNzkzOTkgMTAuMzAzNyA3LjkyMTg5IDEwLjExODggOC4xOTY3MSAxMC4xMTg4WiIgZmlsbD0id2hpdGUiLz4KICA8cGF0aCBkPSJNMjAuMDc4NCAxMC41NjI1TDE3LjE0MzEgMTcuNjIyNEMxNy4wNTExIDE3LjgwNzMgMTYuOTIzMiAxNy44ODEzIDE2LjcyMTQgMTcuODgxM0gxNS4zMDYxQzE1LjAzMTMgMTcuODgxMyAxNC45MDM0IDE3LjY5NjQgMTUuMDMxMyAxNy40Mzc2TDE3Ljk2NjUgMTAuMzc3NkMxOC4wNTg1IDEwLjE5MjcgMTguMTg2NCAxMC4xMTg4IDE4LjM4ODMgMTAuMTE4OEgxOS44MDM2QzIwLjA3ODQgMTAuMTE4OCAyMC4yMDczIDEwLjMwMzcgMjAuMDc4NCAxMC41NjI1WiIgZmlsbD0id2hpdGUiLz4KICA8L3N2Zz4=";
-let EXT_LINKS=[{name:"브루",url:"https://vrew.ai/ko/",icon:"vrew",on:true},{name:"브이스토리",url:"https://vstory.io/ko/?school=true",icon:"vrew",on:true}];
+const VREW_IC="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCAyOCAyOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNOC4yMzExOSAyMy45OTY2SDE5Ljc2ODJDMjIuMTA1NiAyMy45OTY2IDI0LjAwMDQgMjIuMTAyNSAyNC4wMDA0IDE5Ljc2NjFWOC4yMzM4NkMyNC4wMDA0IDUuODk3NDcgMjIuMTA1NiA0LjAwMzQyIDE5Ljc2ODIgNC4wMDM0Mkg4LjIzMTE5QzUuODkzODMgNC4wMDM0MiAzLjk5OTAyIDUuODk3NDcgMy45OTkwMiA4LjIzMzg2VjE5Ljc2NjFDMy45OTkwMiAyMi4xMDI1IDUuODkzODMgMjMuOTk2NiA4LjIzMTE5IDIzLjk5NjZaIiBmaWxsPSIjMTRBMUM4Ii8+CiAgPHBhdGggZD0iTTguMTk2NzEgMTAuMTE4OEg5LjYxMjAxQzkuODEzOSAxMC4xMTg4IDkuOTQxODEgMTAuMTkyNyAxMC4wMzM3IDEwLjM3NzZMMTIuOTY5IDE3LjQzNzZDMTMuMDk2OSAxNy42OTY0IDEyLjk2OSAxNy44ODEzIDEyLjY5NDIgMTcuODgxM0gxMS4yNzg5QzExLjA3NyAxNy44ODEzIDEwLjk0OTEgMTcuODA3MyAxMC44NTcxIDE3LjYyMjRMNy45MjE4OSAxMC41NjI1QzcuNzkzOTkgMTAuMzAzNyA3LjkyMTg5IDEwLjExODggOC4xOTY3MSAxMC4xMTg4WiIgZmlsbD0id2hpdGUiLz4KICA8cGF0aCBkPSJNMjAuMDc4NCAxMC41NjI1TDE3LjE0MzEgMTcuNjIyNEMxNy4wNTExIDE3LjgwNzMgMTYuOTIzMiAxNy44ODEzIDE2LjcyMTQgMTcuODgxM0gxNS4zMDYxQzE1LjAzMTMgMTcuODgxMyAxNC45MDM0IDE3LjY5NjQgMTUuMDMxMyAxNy40Mzc2TDE3Ljk2NjUgMTAuMzc3NkMxOC4wNTg1IDEwLjE5MjcgMTguMTg2NCAxMC4xMTg4IDE4LjM4ODMgMTAuMTE4OEgxOS44MDM2QzIwLjA3ODQgMTAuMTE4OCAyMC4yMDczIDEwLjMwMzcgMjAuMDc4NCAxMC41NjI1WiIgZmlsbD0id2hpdGUiLz4KICA8L3N2Zz4=",VSTORY_IC="data:image/svg+xml,"+encodeURIComponent('<svg viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#14A1C8"/><path d="M43.5281 73.7846L62.3783 26.0818C62.81 24.9835 63.8748 24.2656 65.0548 24.2656H75.48C76.4944 24.2656 77.1923 25.285 76.8182 26.2254L57.968 73.9282C57.5363 75.0266 56.4715 75.7444 55.2915 75.7444H44.8664C43.8519 75.7444 43.154 74.7251 43.5281 73.7846Z" fill="#fff"/><path d="M34.9439 24.2578H24.5187C23.5043 24.2578 22.8064 25.2772 23.1805 26.2176L40.2824 69.4983C40.5198 70.1013 41.3832 70.1013 41.6206 69.4983L47.7865 53.9061C48.0527 53.2313 48.0527 52.4775 47.7865 51.8027L37.6203 26.0812C37.1886 24.9829 36.1238 24.265 34.9439 24.265V24.2578Z" fill="#fff"/></svg>');
+let EXT_LINKS=[{name:"브루",url:"https://vrew.ai/ko/",icon:"vrew",on:true},{name:"브이스토리",url:"https://vstory.io/ko/?school=true",icon:"vstory",on:true}];
 const LINK_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>';
-function renderExt(){const L=EXT_LINKS.filter(x=>x.on&&x.url);$("#extLinks").innerHTML=L.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">${x.icon==="vrew"?`<img src="${VREW_IC}" alt="">`:`<i>${LINK_IC}</i>`}<span>${esc(x.name)}</span></a>`).join("");$("#extLinks").hidden=!L.length}
+function renderExt(){const L=EXT_LINKS.filter(x=>x.on&&x.url);$("#extLinks").innerHTML=L.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">${/vstory/i.test(x.url)||x.icon==="vstory"?`<img src="${VSTORY_IC}" alt="">`:x.icon==="vrew"?`<img src="${VREW_IC}" alt="">`:`<i>${LINK_IC}</i>`}<span>${esc(x.name)}</span></a>`).join("");$("#extLinks").hidden=!L.length}
 function renderLkEdit(){$("#lkList").innerHTML=EXT_LINKS.map((x,i)=>`<div class="lkrow"><input type="checkbox" data-lk="${i}" data-f="on"${x.on?" checked":""} aria-label="보이기"><input class="tinput" data-lk="${i}" data-f="name" value="${esc(x.name)}" placeholder="이름"><input class="tinput" data-lk="${i}" data-f="url" value="${esc(x.url)}" placeholder="https://"><select class="tinput" data-lk="${i}" data-f="icon"><option value="vrew"${x.icon==="vrew"?" selected":""}>브루 로고</option><option value="link"${x.icon!=="vrew"?" selected":""}>링크 아이콘</option></select><button type="button" class="x" data-lkdel="${i}" aria-label="빼기">✕</button></div>`).join("")}
 document.addEventListener("input",e=>{const el=e.target.closest("[data-lk]");if(!el)return;const x=EXT_LINKS[+el.dataset.lk];x[el.dataset.f]=el.type==="checkbox"?el.checked:el.value.trim()});
 document.addEventListener("change",e=>{const el=e.target.closest("[data-lk]");if(!el)return;const x=EXT_LINKS[+el.dataset.lk];x[el.dataset.f]=el.type==="checkbox"?el.checked:el.value.trim()});
