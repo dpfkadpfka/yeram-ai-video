@@ -12,6 +12,14 @@ try {
 const m = url.match(/padlet\.com\/(?:embed\/)?(?:[^\/]+\/)?(?:[^\/?#]*-)?([a-z0-9]{10,})/i);
 if (!m) { console.log("보드 ID를 찾지 못함:", url); process.exit(0); }
 const id = m[1];
+// 1순위: Worker 목록(지운 글 숨김·수정 내용 반영)
+try {
+  const w = await fetch("https://bold-morning-576f.dpfkadpfka.workers.dev/?id=" + id);
+  if (w.ok) { const wj = await w.json(); if (Array.isArray(wj.posts)) {
+    const out = { board: { id, url, title: wj.board?.title || "" }, posts: wj.posts }, file = "data/padlet.json", txt = JSON.stringify(out, null, 1);
+    const prev = existsSync(file) ? readFileSync(file, "utf8") : ""; if (prev !== txt) { writeFileSync(file, txt); console.log("저장(Worker):", wj.posts.length, "개"); } else console.log("변화 없음");
+    process.exit(0); } }
+} catch (e) { console.log("Worker 실패, 패들렛 API로", e.message); }
 const res = await fetch(`https://api.padlet.dev/v1/boards/${id}?include=posts,sections`, { headers: { "X-Api-Key": KEY, accept: "application/vnd.api+json" } });
 if (!res.ok) { console.log("API 오류", res.status, await res.text()); process.exit(1); }
 const j = await res.json();

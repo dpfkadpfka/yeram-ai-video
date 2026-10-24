@@ -10,6 +10,18 @@ async function sign(secret, msg) {
   const s = await crypto.subtle.sign("HMAC", k, new TextEncoder().encode("del:" + msg));
   return [...new Uint8Array(s)].slice(0, 16).map(b => b.toString(16).padStart(2, "0")).join("");
 }
+// 숨김·메타를 KV 키 하나("idx")에 모아 둠 (KV list 하루 한도 초과 방지)
+async function getIdx(env) {
+  let x = null; try { x = JSON.parse(await env.HIDE.get("idx") || "null"); } catch (e) {}
+  if (x && x.hidden && x.meta) return x;
+  x = { hidden: [], meta: {} };
+  try { // 처음 한 번만 옛 키에서 옮기기
+    for (const k of (await env.HIDE.list({ prefix: "h:" })).keys) x.hidden.push(k.name.slice(2));
+    for (const k of (await env.HIDE.list({ prefix: "m:" })).keys) { try { x.meta[k.name.slice(2)] = JSON.parse(await env.HIDE.get(k.name)); } catch (e) {} }
+  } catch (e) {}
+  await env.HIDE.put("idx", JSON.stringify(x)).catch(() => {});
+  return x;
+}
 async function lookupUser(idToken) {
   if (!idToken) return null;
   const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FB_KEY}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idToken }) });
@@ -112,10 +124,10 @@ export default {
       if (!post) return J({ error: "post" }, 400);
       const ok = (b.token && b.token === await sign(env.PADLET_KEY, post)) || await isAdmin(b.idToken);
       if (!ok) return J({ error: "forbidden" }, 403);
-      let old = {}; try { old = JSON.parse(await env.HIDE.get("m:" + post) || "{}") } catch (e) {}
+      const X = await getIdx(env); const old = X.meta[post] || {};
       const m = { ...old, subject: String(b.subject || "").slice(0, 120), intro: String(b.intro || "").slice(0, 300), by: String(b.by || "").slice(0, 30) };
       if (["t2v", "i2v", ""].includes(b.kind)) m.kind = b.kind;
-      await env.HIDE.put("m:" + post, JSON.stringify(m));
+      X.meta[post] = m; await env.HIDE.put("idx", JSON.stringify(X));
       ctx.waitUntil(cache.delete(key));
       return J({ ok: true });
     }
@@ -125,7 +137,7 @@ export default {
       if (!post) return J({ error: "post" }, 400);
       const ok = (b.token && b.token === await sign(env.PADLET_KEY, post)) || await isAdmin(b.idToken);
       if (!ok) return J({ error: "forbidden" }, 403);
-      await env.HIDE.put("h:" + post, "1");
+      const X = await getIdx(env); if (!X.hidden.includes(post)) X.hidden.push(post); await env.HIDE.put("idx", JSON.stringify(X));
       ctx.waitUntil(cache.delete(key));
       return J({ ok: true });
     }
@@ -140,16 +152,15 @@ export default {
       if (!r.ok) return J({ ok: false, status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
       const d = await r.json().catch(() => ({}));
       const pid = String(d?.data?.id || "");
-      if (pid && env.HIDE) await env.HIDE.put("m:" + pid, JSON.stringify({ by, intro, kind }));
+      if (pid && env.HIDE) { const X = await getIdx(env); X.meta[pid] = { by, intro, kind }; await env.HIDE.put("idx", JSON.stringify(X)); }
       return J({ ok: true, id: pid, token: pid ? await sign(env.PADLET_KEY, pid) : "" });
     }
     const hit = await cache.match(key);
     if (hit) return new Response(hit.body, { headers: cors });
     const r = await fetch(`https://api.padlet.dev/v1/boards/${id}?include=posts,sections`, { headers: H(env.PADLET_KEY) });
     if (!r.ok) return J({ error: r.status }, 502);
-    const hidden = new Set(env.HIDE ? (await env.HIDE.list({ prefix: "h:" })).keys.map(k => k.name.slice(2)) : []);
-    const meta = {};
-    if (env.HIDE) { const ks = (await env.HIDE.list({ prefix: "m:" })).keys; await Promise.all(ks.map(async k => { try { meta[k.name.slice(2)] = JSON.parse(await env.HIDE.get(k.name)) } catch (e) {} })); }
+    let X = { hidden: [], meta: {} }; try { if (env.HIDE) X = await getIdx(env); } catch (e) {}
+    const hidden = new Set(X.hidden), meta = X.meta;
     const j = await r.json(), inc = j.included || [];
     const sections = Object.fromEntries(inc.filter(x => x.type === "section").map(x => [x.id, x.attributes?.title || ""]));
     const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
