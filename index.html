@@ -1209,6 +1209,20 @@ body.cpre[data-stage="char"] .pgh{max-width:980px!important}
 .pd-eye{display:block;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.2px}
 .pdl h3{margin:6px 0 8px!important;font-size:34px!important;font-weight:800;letter-spacing:-1px;color:var(--ink)}
 .pd-lead{margin:0 0 26px;color:var(--muted);font-size:15.5px;line-height:1.6;max-width:36ch}
+.pdrw{position:relative}
+.gtabs{display:flex!important;background:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:0!important;gap:0!important;width:100%}
+.gtabs button{flex:0 1 auto;border:0!important;border-bottom:3px solid transparent!important;margin-bottom:-1px;border-radius:0!important;background:none!important;box-shadow:none!important;padding:12px 18px!important;font-size:17px!important;font-weight:700;color:var(--muted)!important;transition:color .12s,border-color .12s}
+.gtabs button:hover{color:var(--ink)!important}
+.gtabs button[aria-selected="true"]{color:var(--accent-strong,var(--accent-deep))!important;border-bottom-color:var(--accent)!important}
+.pdcue{position:absolute;right:18px;top:0;z-index:3;display:flex;align-items:center;gap:6px;pointer-events:none;animation:pdcue 6.4s ease-in-out infinite}
+.pdcue svg{width:22px;height:22px;fill:var(--ink);stroke:#fff;stroke-width:1.6;stroke-linejoin:round;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.pdcue i{font-style:normal;font-size:12px;font-weight:800;color:#fff;background:var(--ink);border-radius:999px;padding:3px 9px;white-space:nowrap}
+@keyframes pdcue{0%,21%{transform:translateY(37px)}25%,46%{transform:translateY(135px)}50%,71%{transform:translateY(231px)}75%,96%{transform:translateY(328px)}100%{transform:translateY(37px)}}
+.pdrw:not(.seen) .pdrows li[data-pd]{animation:pdping 6.4s infinite}
+.pdrw:not(.seen) .pdrows li[data-pd]:nth-child(2){animation-delay:1.6s}.pdrw:not(.seen) .pdrows li[data-pd]:nth-child(3){animation-delay:3.2s}.pdrw:not(.seen) .pdrows li[data-pd]:nth-child(4){animation-delay:4.8s}
+@keyframes pdping{0%,3%{background:transparent}8%,20%{background:color-mix(in srgb,var(--accent) 9%,transparent)}25%,100%{background:transparent}}
+.pdrw.seen .pdcue{opacity:0;transition:opacity .3s;animation:none}
+@media (hover:none){.pdcue i{font-size:0}.pdcue i::after{content:"눌러 보세요";font-size:12px}}
 .pdrows{list-style:none;margin:0 0 28px;padding:0;border-top:1px solid var(--line)}
 .pdrows li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 2px;border-bottom:1px solid var(--line)}
 .pk2{font-size:18px;font-weight:800;color:var(--accent-deep)}
@@ -1869,12 +1883,12 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
             <span class="pd-eye">캐릭터 프롬프트의 기본 틀</span>
             <h3>피동장스</h3>
             <p class="pd-lead">네 가지만 정하면 어떤 AI에서도 같은 캐릭터를 다시 그릴 수 있어요.</p>
-            <ol class="pdrows">
+            <div class="pdrw"><span class="pdcue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 7.5-6.2 1.6L10 18.5Z"/></svg><i>올려 보세요</i></span><ol class="pdrows">
               <li data-pd="subj" tabindex="0"><div><b><em class="pk3">피</em>사체</b><span>누구를 그릴지<br><small>외형 · 헤어 · 옷 · 소품</small></span></div></li>
               <li data-pd="act" tabindex="0"><div><b><em class="pk3">동</em>작</b><span>무엇을 하는지<br><small>포즈 · 표정</small></span></div></li>
               <li data-pd="place" tabindex="0"><div><b><em class="pk3">장</em>소</b><span>어디에 있는지<br><small>배경 · 분위기</small></span></div></li>
               <li data-pd="style" tabindex="0"><div><b><em class="pk3">스</em>타일</b><span>어떤 그림체인지<br><small>3D · 2D · 종이공예 등</small></span></div></li>
-            </ol>
+            </ol></div>
           </div>
           <figure class="pdr">
             <div class="pdimg"><span class="pdtag" id="pdTag"></span><div class="pdbg" id="pdBg"></div><img id="pdImg" src="pd/base.webp?v=2" alt="피동장스로 만든 예시 캐릭터"><video id="pdVid" muted loop playsinline preload="none" hidden></video><span class="an a1">헤어</span><span class="an a2">소품</span><span class="an a3">의상</span></div>
@@ -2033,7 +2047,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
   <section class="gallery" id="galSec" aria-labelledby="galH">
     <div class="cp-head"><h2 id="galH">갤러리</h2><div class="gtabs" role="tablist"><button type="button" role="tab" data-gtab="chars" aria-selected="true">캐릭터</button><button type="button" role="tab" data-gtab="videos" aria-selected="false">영상</button></div></div>
     <div class="gpane" data-gpane="chars">
-      <div class="gbar"><p class="hint" style="margin:0">선생님들이 만든 캐릭터예요.</p><div class="gfil" id="galFilter" hidden><button type="button" data-gf="all" aria-pressed="true">전체</button><button type="button" data-gf="mine" aria-pressed="false">내가 올린 것</button></div><button type="button" class="btn primary" data-upload>캐릭터 올리기</button></div>
+      <div class="gbar"><span></span><div class="gfil" id="galFilter" hidden><button type="button" data-gf="all" aria-pressed="true">전체</button><button type="button" data-gf="mine" aria-pressed="false">내가 올린 것</button></div><button type="button" class="btn primary" data-upload>캐릭터 올리기</button></div>
       <div class="ggrid" id="galGrid"></div>
       <div class="pdempty" id="galEmpty" hidden><b>아직 올라온 캐릭터가 없어요</b><span>오른쪽 위 [캐릭터 올리기]로 첫 캐릭터를 올려 주세요.</span></div>
       <div class="gmore"><button type="button" class="btn gmore-b" id="galMore" hidden>불러오는 중…</button></div>
@@ -2764,27 +2778,27 @@ function exPick(g){if(!g)return[];const pool=[...new Set((EX_POOL[g.v]||[]).conc
 const answered=new Set(); let curStep=null, phase="ask"; // ask | review | done
 function steps(){
   const g=curGenre(), A=[];
-  A.push({id:"form",key:"form",ask:()=>"대본 프롬프트를 같이 만들어 볼게요!\n세로 영상이에요, 가로 영상이에요?\n세로는 쇼츠·릴스(9:16), 가로는 유튜브·수업 화면(16:9)이에요. 길이는 다음에 따로 골라요."});
-  A.push({id:"mode",key:"mode",ask:()=>`좋아요, ${cur.form==="long"?"가로":"세로"} 영상으로 할게요. 어떤 영상이에요?`});
-  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.mode==="contest"?"공모전 안내문이나 요강이 있으면 길어도 그대로 붙여 넣어 주세요. 형식·길이·주제를 알아서 채우고, 규정도 프롬프트에 넣을게요.\n없으면 분야를 골라 주세요.":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요? ‘요즘 인기’ 표시는 요즘 쇼츠·릴스에서 많이 늘고 있는 포맷이에요."});
-  A.push({id:"length",key:"length",ask:()=>false?"":"영상 길이는요? 브루 ‘글자 수 설정’도 여기에 맞춰 알려 드릴게요."});
-  A.push({id:"topic",key:"topic",type:"text",ask:()=>cur.contestTheme?`요강 주제가 ‘${cur.contestTheme}’라서, 그 안에서 어떤 이야기를 할지 한 줄로 정해 주세요.\n정하기 어려우면 [요강 주제 그대로]를 누르세요.`:(g?g.topicQ:"주제가 뭐예요?")+"\n아래 예시를 눌러도 되고, 직접 써도 돼요.",ex:()=>cur.contestTheme?themeEx(cur.contestTheme):exPick(g)});
+  A.push({id:"form",key:"form",ask:()=>"세로 영상이에요, 가로 영상이에요?"});
+  A.push({id:"mode",key:"mode",ask:()=>"어떤 영상이에요?"});
+  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식의 수업 영상이에요?":cur.mode==="contest"?"공모전 요강을 붙여 넣어 주세요.\n없으면 분야를 골라요.":cur.form==="long"?"어떤 장르예요?":"어떤 장르예요?"});
+  A.push({id:"length",key:"length",ask:()=>false?"":"영상 길이는요?"});
+  A.push({id:"topic",key:"topic",type:"text",ask:()=>cur.contestTheme?`요강 주제가 ‘${cur.contestTheme}’예요. 어떤 이야기를 할까요?`:(g?g.topicQ:"주제가 뭐예요?"),ex:()=>cur.contestTheme?themeEx(cur.contestTheme):exPick(g)});
   A.push({id:"focus",key:"focus",type:"text",skip:true,when:()=>cur.topic&&cur.topic.replace(/\s/g,"").length<7,
     ask:()=>`‘${cur.topic}’은(는) ${secLabel()}에 담기엔 조금 넓어요. 숏폼은 하나만 확실히 남기는 게 좋아요.\n이 영상에서 딱 하나 전할 것은 뭐예요?`});
-  if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"누가 보나요? 정하지 않으면 초·중·고 누구나 알아듣게 써 달라고 할게요."});A.push({id:"subject",key:"subject",ask:()=>"교과는요? 정해진 과목이 없으면 ‘과목 없음’을 고르세요."})}
+  if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"누가 보나요?"});A.push({id:"subject",key:"subject",ask:()=>"교과는요?"})}
   if(cur.mode==="gen")A.push({id:"viewer",key:"viewer",ask:()=>"주로 누가 볼까요?"});
-  A.push({id:"tone",key:"tone",ask:()=>cur.mode==="contest"?"말투는요?\n공모전이면 공익광고·광고 카피 말투가 잘 어울려요. 고른 말투로 대본 전체를 써 달라고 할게요.":"말투는요? 고른 말투로 대본 전체를 써 달라고 할게요."});
+  A.push({id:"tone",key:"tone",ask:()=>cur.mode==="contest"?"말투는요?\n공모전은 공익광고·광고 카피가 잘 어울려요.":"말투는요?"});
   if(g)(g.f||[]).forEach(f=>A.push({id:"gf."+f.k,key:"gf."+g.v+"."+f.k,type:f.type==="text"?"text":"choice",skip:true,ask:()=>f.q,ph:f.ph}));
-  A.push({id:"must",key:"must",type:"text",skip:true,ask:()=>"대본에 꼭 들어가야 할 내용이 있나요? 알고 있는 사실이나 정보를 쉼표로 적어 주면, AI가 틀린 내용을 덜 써요.",ph:"예: 털은 투명하다, 빛이 흩어져 하얗게 보인다, 피부는 검다"});
-  A.push({id:"msg",key:"msg",type:"text",skip:true,ask:()=>"보는 사람이 영상을 다 보고 딱 하나 기억했으면 하는 말은요?",ph:"예: 북극곰 털은 사실 투명하다"});
-  A.push({id:"imgUse",key:"imgUse",ask:()=>"대본 내용은 다 정했어요!\n브루 다음 단계 ‘비디오 꾸미기’의 이미지 프롬프트도 만들까요?"});
+  A.push({id:"must",key:"must",type:"text",skip:true,ask:()=>"꼭 넣을 내용이 있나요? 쉼표로 적어 주세요.",ph:"예: 털은 투명하다, 빛이 흩어져 하얗게 보인다, 피부는 검다"});
+  A.push({id:"msg",key:"msg",type:"text",skip:true,ask:()=>"마지막에 기억할 한마디는요?",ph:"예: 북극곰 털은 사실 투명하다"});
+  A.push({id:"imgUse",key:"imgUse",ask:()=>"이미지 프롬프트도 만들까요?"});
   if(cur.imgUse==="yes"){
-    A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?\n첨부한다면 그 이미지에 캐릭터가 들어 있는지가 중요해요. 첨부하면 그림체·색감·배경을 참고 이미지에 맞추라고 쓸게요."});
-    if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요. 생김새·옷·색을 넣으면 장면마다 비슷하게 나와요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
-    A.push({id:"imgRatio",key:"imgRatio",ask:()=>"이미지 비율은요?\n1:1을 고르면 세로 화면 가운데에 정사각형 장면을 두고, 위아래에 제목·자막 넣을 자리를 비워 둬요."});
-    A.push({id:"imgPad",key:"imgPad",when:()=>cur.imgRatio==="9:16sq",ask:()=>"정사각형 바깥(위아래)은 어떻게 채울까요?"});
-    if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요? 영상으로 움직일 그림이라 장면 분위기에 맞게 골라 주세요."});
-    A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요? 로고·학교 상징·캐릭터 이미지를 올리면 거기서 색 코드를 뽑아 드려요."})}
+    A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?"});
+    if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
+    A.push({id:"imgRatio",key:"imgRatio",ask:()=>"이미지 비율은요?"});
+    A.push({id:"imgPad",key:"imgPad",when:()=>cur.imgRatio==="9:16sq",ask:()=>"정사각형 위아래는요?"});
+    if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요?"});
+    A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요?"})}
   }
   return A.filter(s=>!s.when||s.when());
 }
@@ -3744,7 +3758,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792855063"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792855219"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3889,7 +3903,8 @@ $("#cvWrap").innerHTML=CV.map(([n,a],i)=>`<section class="cvsec"><div class="cvs
     fig.classList.add("vmode");img.style.visibility="hidden";vid.hidden=false;vid.poster="pd/"+m+".jpg";if(!vid.src.includes("pd/"+m+".mp4"))vid.src="pd/"+m+".mp4?v=5";try{vid.currentTime=0;vid.play().catch(()=>{})}catch(e){}
     cap.textContent=PV[m][0];setTag(PV[m][1]||PL[0])}
   document.querySelectorAll(".pdrows li[data-pd]").forEach(li=>{const m=li.dataset.pd;li.addEventListener("mouseenter",()=>go(m,li));li.addEventListener("focus",()=>go(m,li));li.addEventListener("click",()=>li.classList.contains("on")?reset():go(m,li))});
-  $(".pdrows").addEventListener("mouseleave",reset)})();
+  $(".pdrows").addEventListener("mouseleave",reset);
+  const seen=()=>document.querySelector(".pdrw").classList.add("seen");document.querySelectorAll(".pdrows li[data-pd]").forEach(li=>{li.addEventListener("mouseenter",seen);li.addEventListener("click",seen)})})();
 /* 커뮤니티 */
 const COM_CAT={review:"수강 후기",qna:"질문",free:"자유",contest:"자유",tip:"자유",show:"자유"};const comCatOf=c=>["review","qna"].includes(c)?c:"free";let comTab="all",comOpen=null,comItems=[];
 const fmtD=t=>{try{const d=t&&t.toDate?t.toDate():new Date(t);return `${d.getMonth()+1}.${d.getDate()}`}catch(e){return ""}};
@@ -4005,7 +4020,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792855063";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792855219";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
