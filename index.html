@@ -205,6 +205,12 @@ body[data-stage="split"] .outcol,body[data-stage="chat"] .outcol{animation:slide
 .slot-n{font-weight:600;display:flex;align-items:center;gap:8px}
 .num{font-size:12.5px;font-weight:700;background:var(--ink);color:var(--paper);border-radius:6px;padding:0 7px}
 .slot .val{padding:10px 12px;font-weight:600;overflow-wrap:anywhere}
+.aiw{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.aibtn{gap:6px;border:1.5px solid var(--accent);color:var(--accent);background:transparent;font-weight:800}.aibtn:hover{background:var(--accent);color:#fff}.aibtn svg{width:17px;height:17px;fill:currentColor}.aibtn[disabled]{opacity:.6;pointer-events:none}
+.aibox{border:1.5px solid var(--accent);border-radius:14px;padding:12px 14px;display:grid;gap:8px}.aibox-h{display:flex;align-items:center;gap:8px}.aibox-h .btnrow{margin-left:auto}
+.aibox textarea{min-height:200px!important;border:0;background:transparent;padding:0!important}.aifix{display:flex;gap:6px}.aifix .tinput{flex:1;min-width:0}.aiuse{margin:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;gap:2px}.seg button{border:0;background:none;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer}.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.imgst{margin:0;color:var(--accent)!important;font-weight:700}
+#imgSlot .slot-h{flex-wrap:wrap}
 .slot textarea{display:block;width:100%;border:0;background:var(--paper);padding:10px 12px;min-height:260px;resize:vertical;font-size:15px;line-height:1.7}
 .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .note{font-size:13.5px;color:var(--warn);background:var(--warn-soft);padding:6px 12px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -1290,6 +1296,10 @@ body[data-stage="community"] .pgh{max-width:980px}
 .post-l{font-size:14px;font-weight:700;color:var(--accent-deep);word-break:break-all}
 .post .acts{display:flex;gap:10px;justify-content:flex-end}.post .acts button{border:0;background:none;color:var(--muted);font:inherit;font-size:13px;cursor:pointer}
 .cmts{display:grid;gap:6px;border-top:1px solid var(--line);padding-top:10px}
+.compriv{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer}.compriv input{width:18px;height:18px;accent-color:var(--accent)}.compriv span{display:grid}.compriv small{color:var(--muted);font-size:12px}
+.post-lock{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;color:var(--muted)}.post-lock svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2}
+.post-ans{font-size:11.5px;font-weight:800;color:var(--accent);border:1.5px solid var(--accent);border-radius:999px;padding:1px 8px}
+.cmt.adm{background:color-mix(in srgb,var(--accent) 8%,transparent);border-radius:10px;padding:8px 10px}.cmt-adm{font-size:11px;font-weight:800;color:#fff;background:var(--accent);border-radius:999px;padding:1px 7px;margin-right:6px}
 .cmt{font-size:14px;line-height:1.6}.cmt b{font-size:13px;margin-right:6px}.cmt small{color:var(--muted);font-size:12px;margin-left:6px}
 .cmtf{display:flex;gap:6px}.cmtf input{flex:1;min-width:0}
 .comempty{padding:40px 16px;text-align:center;color:var(--muted)}
@@ -1908,13 +1918,21 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
               <span style="display:flex;gap:8px;align-items:center"><span class="count" id="pCount"></span><button type="button" class="ibtn" data-refresh="prompt" title="새로고침: 지금 설정으로 다시 만들기" aria-label="새로고침"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn sm primary" data-copy="prompt">복사</button></span></div>
             <div class="note" id="editedNote" hidden><span>직접 고친 내용이 있어요. 복사하면 새로 넣은 문장을 저장할지 챗봇이 물어볼게요.</span><button class="btn sm" id="resetEdit">원래대로</button></div>
             <textarea id="outPrompt" spellcheck="false" aria-label="대본 프롬프트"></textarea>
+            <div class="aiw" id="aiW"><button type="button" class="btn aibtn" id="aiWrite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5 13.8 11.3 12 16l-1.8-4.7L5.5 9.5l4.7-1.8Z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8Z"/></svg><span>AI로 대본 써 보기</span></button><span class="hint">프롬프트 대신 완성 대본을 바로 받아요</span></div>
+            <div class="aibox" id="aiBox" hidden>
+              <div class="aibox-h"><b>AI 대본</b><span class="count" id="aiCount"></span><span class="btnrow"><button type="button" class="ibtn" id="aiAgain" title="다시 쓰기" aria-label="다시 쓰기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button type="button" class="btn sm primary" id="aiCopy">복사</button></span></div>
+              <textarea id="aiScript" spellcheck="false" aria-label="AI 대본"></textarea>
+              <form class="aifix" id="aiFix"><input class="tinput" id="aiFixIn" maxlength="200" placeholder="고칠 점을 말해 주세요 (예: 더 짧게, 첫 문장 더 세게)"><button class="btn sm">고치기</button></form>
+              <p class="hint aiuse">브루 → 텍스트로 비디오 만들기 → <b>직접 입력</b>에 붙여 넣으세요.</p>
+            </div>
           </div>
           <div class="slot">
             <div class="slot-h"><span class="slot-n"><span class="num">3</span>글자 수 설정</span></div>
             <div class="val"><span id="outLen" style="font-size:22px">300</span>자로 켜 두세요 <span class="hint">· AI 목소리 1초 약 5자 기준이라 몇 초 차이 날 수 있어요</span></div>
           </div>
           <div class="slot" id="imgSlot" hidden>
-            <div class="slot-h"><span class="slot-n"><span class="num">4</span>이미지 프롬프트 칸 <span class="hint">비디오 꾸미기 단계</span></span><span class="btnrow"><button type="button" class="ibtn" data-refresh="img" title="새로고침: 지금 설정으로 다시 만들기" aria-label="새로고침"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn sm primary" data-copyimg>복사</button></span></div>
+            <div class="slot-h"><span class="slot-n"><span class="num">4</span>이미지 프롬프트 칸 <span class="hint">비디오 꾸미기 단계</span></span><span class="btnrow"><span class="seg" id="imgBgSeg" title="배경"><button type="button" data-imgbg="kr" aria-pressed="true">한국 배경</button><button type="button" data-imgbg="topic" aria-pressed="false">주제에 맞게</button></span><span class="seg" id="imgLangSeg"><button type="button" data-imglang="en" aria-pressed="true">영문</button><button type="button" data-imglang="ko" aria-pressed="false">한글</button></span><button type="button" class="ibtn" data-refresh="img" title="새로고침: 지금 설정으로 다시 만들기" aria-label="새로고침"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn sm primary" data-copyimg>복사</button></span></div>
+            <p class="hint imgst" id="imgSt" hidden></p>
             <textarea id="outImg" spellcheck="false" style="min-height:170px" aria-label="이미지 프롬프트"></textarea>
             <div class="note" id="imgHint" style="color:var(--ink);background:var(--bg)"></div>
           </div>
@@ -2124,6 +2142,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <input class="tinput" id="comTitle" maxlength="80" placeholder="제목" required>
       <textarea class="tinput" id="comBody" rows="6" maxlength="3000" placeholder="내용을 써 주세요" required></textarea>
       <input class="tinput" id="comLink" type="url" placeholder="링크 (선택) 예: 공모전 안내 주소, 내 영상 주소">
+      <label class="compriv" id="comPrivL" hidden><input type="checkbox" id="comPriv"><span><b>비공개 질문</b><small>나와 예람쌤만 볼 수 있어요</small></span></label>
       <div class="row"><button type="button" class="btn ghost" id="comCancel">취소</button><button type="submit" class="btn primary">올리기</button></div>
     </form></div></div>
 <div class="modal" id="loginModal" hidden role="dialog" aria-modal="true" aria-labelledby="lgH">
@@ -2389,18 +2408,19 @@ const IMG_STYLES=[
  {v:"pixel",t:"픽셀 아트",s:"레트로 게임 같은 픽셀 아트 스타일로 또렷하게 표현한다."},
  {v:"retro",t:"레트로 애니",s:"1980년대 말~1990년대 초 손으로 그린 셀 애니메이션처럼, 섬세한 선화와 절제된 2단계 셀 명암, 머리카락의 넓은 하이라이트로 표현한다. 세피아나 과하게 바랜 필터는 쓰지 않는다."},
  {v:"chibi3d",t:"3D 치비",s:"2~3등신 귀여운 3D 치비 캐릭터와 부드러운 3D 애니메이션 조명으로, 은은한 무광 재질로 표현한다. 번들거리는 플라스틱 광택은 쓰지 않는다."}];
+const IMG_PAD=[{v:"black",t:"검정",s:"정사각형 바깥은 검정"},{v:"white",t:"흰색",s:"정사각형 바깥은 흰색"},{v:"match",t:"어울리는 배경",s:"정사각형 바깥은 장면과 어울리는 단순한 배경"}];
 const IMG_RATIO=[{v:"9:16",t:"9:16",s:"9:16 세로 화면"},{v:"16:9",t:"16:9",s:"16:9 가로 화면"},{v:"9:16sq",t:"1:1",s:"9:16 세로 화면, 장면은 가운데 1:1 정사각형"}];
 const RSHAPE=v=>`<i class="rshape r${v==="9:16"?"v":v==="16:9"?"h":"s"}"></i>`;
 const IMG_PAL=[{v:"extract",t:"이미지에서 색 뽑기",s:""},{v:"pick",t:"직접 고르기",s:""},{v:"auto",t:"알아서",s:""}];
 const PAL_KEYS=[["main","메인"],["sub1","보조 1"],["sub2","보조 2"],["text","글자·어두운 색"],["point","포인트(조금만)"]];
-const BASE_KEYS={form:FORMS,imgUse:IMG_USE,imgRef:IMG_REF,imgStyle:IMG_STYLES,imgRatio:IMG_RATIO,imgPal:IMG_PAL,mode:MODES,genre:null,length:LENGTHS,grade:GRADES,subject:SUBJECTS,viewer:VIEWERS,hook:HOOKS,tone:TONES,speaker:SPEAKERS,ending:ENDINGS};
-const KEY_NAMES={form:"형식",mode:"용도",genre:"장르",length:"길이",grade:"학년",subject:"교과",viewer:"시청자",hook:"첫 문장",tone:"말투",speaker:"화자",ending:"마무리",imgUse:"이미지",imgRef:"캐릭터",imgStyle:"이미지 스타일",imgRatio:"화면 비율",imgPal:"색"};
+const BASE_KEYS={form:FORMS,imgUse:IMG_USE,imgRef:IMG_REF,imgStyle:IMG_STYLES,imgRatio:IMG_RATIO,imgPad:IMG_PAD,imgPal:IMG_PAL,mode:MODES,genre:null,length:LENGTHS,grade:GRADES,subject:SUBJECTS,viewer:VIEWERS,hook:HOOKS,tone:TONES,speaker:SPEAKERS,ending:ENDINGS};
+const KEY_NAMES={form:"형식",mode:"용도",genre:"장르",length:"길이",grade:"학년",subject:"교과",viewer:"시청자",hook:"첫 문장",tone:"말투",speaker:"화자",ending:"마무리",imgUse:"이미지",imgRef:"캐릭터",imgStyle:"이미지 스타일",imgRatio:"화면 비율",imgPad:"바깥 배경",imgPal:"색"};
 const STAT_KEYS=["form","mode","genre","length","grade","subject","viewer","hook","tone","speaker","ending","imgUse","imgRef","imgStyle","imgRatio"];
 
 /* ===================== 상태 ===================== */
 const EMPTY=()=>({profile:{nick:"",defaults:{}},chars:[],character:null,v:2,stats:{},rules:[],history:[],over:{},add:{},pals:[],lastColors:null,styles:[]});
 let S=EMPTY();
-const DEF={form:"",mode:"",genre:"",length:"",grade:"any",subject:"none",viewer:"all",hook:"",tone:"warm",speaker:"",ending:"",topic:"",focus:"",name:"",must:"",msg:"",avoid:"",gf:{},extra:[],imgUse:"",imgRef:"",imgChar:"",imgStyle:"",imgRatio:"9:16",imgPal:"",colors:{main:"#FFAD60",sub1:"#FFC8A1",sub2:"#FFDCC3",text:"#262626",point:"#43C7D9"}};
+const DEF={form:"",mode:"",genre:"",length:"",grade:"any",subject:"none",viewer:"all",hook:"",tone:"warm",speaker:"",ending:"",topic:"",focus:"",name:"",must:"",msg:"",avoid:"",gf:{},extra:[],imgUse:"",imgRef:"",imgChar:"",imgStyle:"",imgRatio:"9:16",imgPad:"black",imgPal:"",colors:{main:"#FFAD60",sub1:"#FFC8A1",sub2:"#FFDCC3",text:"#262626",point:"#43C7D9"}};
 let cur=JSON.parse(JSON.stringify(DEF));
 let generated="", lastHistId=null;
 
@@ -2455,7 +2475,7 @@ async function initFirebase(){
     auth.onAuthStateChanged(fb.auth,async u=>{
       fb.user=u;
       if(u){
-        $("#loginModal").hidden=true;if(window._afterLogin){const f=window._afterLogin;window._afterLogin=null;setTimeout(f,300)}
+        $("#loginModal").hidden=true;if(document.body.dataset.stage==="community")setTimeout(()=>{try{loadCom()}catch(_){}},400);if(window._afterLogin){const f=window._afterLogin;window._afterLogin=null;setTimeout(f,300)}
         try{const sn=await fs.getDoc(fs.doc(fb.db,"users",u.uid));const remote=sn.exists()?fix(JSON.parse(sn.data().data)):EMPTY();
           const loc=local.load();S=(loc&&!loc.owner&&(loc.history.length||loc.rules.length))?merge(remote,fix(loc)):remote;S.owner=u.uid;if(FRESH_SESS)S.character=null;
           
@@ -2546,7 +2566,7 @@ function rows(){
   if(cur.imgUse==="yes"){
     R.push({key:"imgRef",k:"캐릭터"});
     if(cur.imgRef==="desc")R.push({key:"imgChar",k:"캐릭터 설명",type:"text",ph:"예: 주황색 앞치마를 두른 둥근 얼굴의 아기 곰"});
-    const RF=["ref","bg"].includes(cur.imgRef);if(!RF)R.push({key:"imgStyle",k:"이미지 스타일"});R.push({key:"imgRatio",k:"화면 비율"});if(!RF)R.push({key:"imgPal",k:"색 정하기"});
+    const RF=["ref","bg"].includes(cur.imgRef);if(!RF)R.push({key:"imgStyle",k:"이미지 스타일"});R.push({key:"imgRatio",k:"화면 비율"});if(cur.imgRatio==="9:16sq")R.push({key:"imgPad",k:"바깥 배경"});if(!RF)R.push({key:"imgPal",k:"색 정하기"});
     if(!RF&&cur.imgPal&&cur.imgPal!=="auto")R.push({key:"colors",k:"색 조합",type:"palette"});
   }
   return R;
@@ -2572,7 +2592,7 @@ function editorHTML(){
   if(!editing)return"";
   const {key,v}=editing, isNew=v==null, o=isNew?{t:"",s:""}:(key==="genre"?curGenre()&&optOf("genre",v):optOf(key,v))||{t:"",s:""};
   const builtIn=!isNew&&!String(v).startsWith("my_"), edited=!isNew&&S.over[key+":"+v];
-  const needS=!["length","grade","subject","mode","imgUse","imgPal","imgRatio"].includes(key);
+  const needS=!["length","grade","subject","mode","imgUse","imgPal","imgRatio","imgPad"].includes(key);
   return `<div class="editor" id="editor">
     <label for="edT">선택지 이름</label><input class="tinput" id="edT" value="${esc(o.t)}" ${builtIn&&key!=="genre"&&!needS?"disabled":""}>
     ${needS?`<label for="edS">프롬프트에 들어갈 문장</label><textarea class="tinput" id="edS">${esc(o.s)}</textarea>`:""}
@@ -2664,13 +2684,16 @@ const IMG_LOOK={photo:"자연광 위주의 부드러운 조명, 실제 렌즈로
  "3d":"부드러운 전역 조명과 은은한 림 라이트, 매끈한 재질감",anime:"선명한 셀 채색과 또렷한 그림자 경계",emo:"햇살과 하늘빛이 번지는 서정적인 빛, 섬세한 배경 묘사",webtoon:"깔끔한 선화와 단정한 셀 채색",
  flat:"그림자 없이 면과 색으로만 나눈 단정한 화면",motion:"단순한 도형, 넉넉한 여백, 정보가 한눈에 보이는 배치",iso:"위에서 비스듬히 본 시점, 작은 소품까지 정돈된 미니어처",water:"물감 번짐과 종이 질감이 살아 있는 맑은 색",
  crayon:"크레파스 결이 보이는 따뜻한 질감",paper:"종이 겹 사이의 은은한 그림자로 만든 입체감",clay:"손자국이 살짝 남은 점토 질감과 부드러운 조명",pixel:"또렷한 도트와 제한된 색 수",retro:"바랜 색감과 굵은 외곽선"};
+const PAD_KO=()=>cur.imgPad==="white"?"정사각형 위와 아래는 아무것도 없는 흰색(#FFFFFF) 단색 띠로 채운다.":cur.imgPad==="match"?"정사각형 위와 아래는 장면과 같은 색감의 단순한 배경(하늘·벽·바닥처럼 흐리게 이어지는 면)으로 채우고, 인물·사물·글자는 넣지 않는다.":"정사각형 위와 아래는 아무것도 없는 검정(#000000) 단색 띠로 채운다.";
+const PAD_EN=()=>cur.imgPad==="white"?"solid pure white (#FFFFFF) bars":cur.imgPad==="match"?"a soft, blurred, empty continuation of the scene's background in the same colors (no people, objects or text)":"solid pure black (#000000) letterbox bars";
 function buildImg(){
   if(cur.imgUse!=="yes")return "";
   const L=[],st=optOf("imgStyle",cur.imgStyle),topic=(cur.topic||"").trim(),R=cur.imgRef,REFD=["ref","bg"].includes(R);
-  if(cur.imgRatio==="9:16sq")L.push("[화면] 모든 장면 공통, 꼭 지킬 것","세로 9:16 이미지. 그림은 화면 정가운데 정사각형(1:1) 안에만 그리고, 위아래는 단색 배경으로 비워 둔다.","");
+  if(cur.imgRatio==="9:16sq")L.push("[화면] 모든 장면 공통, 꼭 지킬 것","세로 9:16 화면. 장면은 화면 정가운데 정사각형(1:1, 화면 너비와 같은 크기) 안에만 그린다.",PAD_KO(),"");
   L.push("[장면]");
   L.push("대본 문장마다 그 내용을 보여 주는 장면 하나를 그린다. 핵심 대상이 한눈에 보이게 크고 또렷하게.");
   if(topic)L.push(`배경과 소품은 ‘${topic}’에 어울리는 장소와 물건으로.`);
+  if(!(typeof IMGT==="object"&&IMGT.bg==="topic"))L.push("배경은 기본적으로 한국(한국 사람·한국 학교·교실·거리·집)으로. 주제상 다른 나라가 꼭 필요할 때만 바꾼다.");
   if(cur.mode==="edu")L.push("개념은 비교·확대·전후 변화처럼 눈으로 이해되게 보여 준다.");
   L.push("");L.push("[캐릭터]");
   if(R==="ref")L.push("첨부한 캐릭터를 모든 장면에 그대로 등장시킨다. 생김새·옷·색·비율·그림체는 바꾸지 말고 표정과 포즈만 장면에 맞게 바꾼다.","캐릭터는 화면의 30% 정도 크기로, 머리와 발이 잘리지 않게.");
@@ -2684,7 +2707,7 @@ function buildImg(){
     else L.push("색은 밝고 선명하게, 장면마다 톤을 맞춘다.")}
   L.push("");L.push("[구도]");
   L.push("장면마다 가까이·멀리 구도를 바꾼다.");
-  if(cur.imgRatio==="9:16sq")L.push("다시 강조: 모든 장면을 가운데 정사각형 안에만 그리고 위아래는 비운다.");
+  if(cur.imgRatio==="9:16sq")L.push("다시 강조: 장면은 가운데 정사각형 안에만. "+PAD_KO());
   else L.push("화면 아래쪽 1/4은 자막 자리로 단순하게 둔다.");
   L.push("");L.push("[넣지 말 것]");
   L.push("글자, 숫자, 로고, 워터마크, 말풍선, 화면 분할, 테두리.");
@@ -2700,7 +2723,7 @@ function renderOut(keep){
   $("#outLen").textContent=cur.length?(+cur.length*5):"-";
   $("#pCount").textContent=generated?$("#outPrompt").value.length+"자":"";
   const im=buildImg();$("#imgSlot").hidden=!im;
-  if(im&&($("#outImg").value===genImg||!$("#outImg").value))$("#outImg").value=im;genImg=im;
+  if(im&&($("#outImg").value===genImg||!$("#outImg").value)){$("#outImg").value=im;IMGT.shown=im}genImg=im;try{imgAuto(im)}catch(_){}
   $("#imgHint").textContent=im?(cur.imgRef==="ref"?"브루 ‘참고 이미지’ 버튼으로 캐릭터 이미지를 꼭 올리세요. 그래야 이 프롬프트가 제대로 먹혀요. ":cur.imgRef==="bg"?"브루 ‘참고 이미지’ 버튼으로 배경·분위기 이미지를 꼭 올리세요. ":"")+`비율 버튼도 ‘${(cur.imgRatio||"9:16").replace("sq","")}’에 맞추세요.`:"";
   const g=curGenre();$("#genreTip").hidden=!(g&&g.tip);if(g&&g.tip)$("#genreTip").textContent=""+g.tip;
 }
@@ -2756,6 +2779,7 @@ function steps(){
     A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?\n첨부한다면 그 이미지에 캐릭터가 들어 있는지가 중요해요. 첨부하면 그림체·색감·배경을 참고 이미지에 맞추라고 쓸게요."});
     if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요. 생김새·옷·색을 넣으면 장면마다 비슷하게 나와요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
     A.push({id:"imgRatio",key:"imgRatio",ask:()=>"이미지 비율은요?\n1:1을 고르면 세로 화면 가운데에 정사각형 장면을 두고, 위아래에 제목·자막 넣을 자리를 비워 둬요."});
+    A.push({id:"imgPad",key:"imgPad",when:()=>cur.imgRatio==="9:16sq",ask:()=>"정사각형 바깥(위아래)은 어떻게 채울까요?"});
     if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은요? 영상으로 움직일 그림이라 장면 분위기에 맞게 골라 주세요."});
     A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요? 로고·학교 상징·캐릭터 이미지를 올리면 거기서 색 코드를 뽑아 드려요."})}
   }
@@ -2811,7 +2835,7 @@ function afterAnswer(key){
   const n=nextStep();
   if(n&&phase!=="review")ask(n); else review();
 }
-const STYLE_KEYS=["form","mode","genre","length","grade","subject","viewer","hook","tone","speaker","ending","name","avoid","imgUse","imgRef","imgChar","imgStyle","imgRatio","imgPal"];
+const STYLE_KEYS=["form","mode","genre","length","grade","subject","viewer","hook","tone","speaker","ending","name","avoid","imgUse","imgRef","imgChar","imgStyle","imgRatio","imgPad","imgPal"];
 let curStyleId=null;
 function okQuick(){setQuick(`<button type="button" class="opt" data-ok aria-pressed="true">좋아요, 이대로!</button><button type="button" class="opt" data-savestyle>이 스타일 저장</button>`)}
 function suggestName(){const g=curGenre();return [g&&g.t,cur.length&&secLabel(),label("tone",cur.tone)].filter(Boolean).join(" · ")}
@@ -3421,7 +3445,7 @@ function renderPad(force){
   const W=$("#padWrap");
   if(PADLET&&PADJ&&PADJ.posts&&PADJ.board&&PADJ.board.id===padId(PADLET)){
     W.classList.add("native");
-    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.filter(p=>!VF||p.kind===VF).map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard" data-open="v:${esc(p.id)}">${authorRow(by,p.at,"")}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-vopen="${esc(p.id)}">${esc(p.subject||"제목 없음")}</button></h4>${can?kMenu(`<button type="button" data-vdl="${esc(p.url||"")}">다운로드</button><button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):""}</div><div class="pdmw">${padMedia(p.url)}<button type="button" class="pdexp" data-vopen="${esc(p.id)}" aria-label="크게 보기" title="크게 보기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><div class="pdtx" data-vopen="${esc(p.id)}">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
+    loadRx();W.innerHTML=PADJ.posts.length?`<div class="pdgrid">${PADJ.posts.map(p=>{const L=String(p.body||"").split("\n"),last=L[L.length-1]||"",by=p.by||(/^—\s*/.test(last)?last.replace(/^—\s*/,""):""),intro=p.intro||(/^—\s*/.test(last)?L.slice(0,-1):L).join(" ").trim();const can=!!(myVids()[p.id]||(fb&&isAdmin()));return `<article class="pdcard" data-open="v:${esc(p.id)}">${authorRow(by,p.at,"")}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-vopen="${esc(p.id)}">${esc(p.subject||"제목 없음")}</button></h4>${can?kMenu(`<button type="button" data-vdl="${esc(p.url||"")}">다운로드</button><button type="button" data-vedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-vdel="${esc(p.id)}">삭제</button>`):""}</div><div class="pdmw">${padMedia(p.url)}<button type="button" class="pdexp" data-vopen="${esc(p.id)}" aria-label="크게 보기" title="크게 보기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><div class="pdtx" data-vopen="${esc(p.id)}">${intro?`<p>${esc(intro)}</p>`:""}</div>${rxHTML("v_"+p.id)}${cmtBox("v_"+p.id,1)}</article>`}).join("")}</div>`:`<div class="pdempty"><b>아직 올라온 영상이 없어요</b><span>오른쪽 위 [영상 올리기]로 첫 영상을 올려 주세요.</span></div>`;return}
   W.classList.remove("native");
   const cur=$("#padWrap iframe");
   if(force||!cur||!PADLET)W.innerHTML=PADLET?`<iframe src="${esc(padEmbed(PADLET))}" allow="camera;microphone;geolocation;display-capture;clipboard-write" title="갤러리 패들렛"></iframe>`:`<p class="empty">패들렛을 준비하고 있어요.</p>`;
@@ -3716,7 +3740,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792841265"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792841938"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3866,29 +3890,92 @@ $("#cvWrap").innerHTML=CV.map(([n,a],i)=>`<section class="cvsec"><div class="cvs
 const COM_CAT={review:"수강 후기",qna:"질문",free:"자유",contest:"자유",tip:"자유",show:"자유"};const comCatOf=c=>["review","qna"].includes(c)?c:"free";let comTab="all",comOpen=null,comItems=[];
 const fmtD=t=>{try{const d=t&&t.toDate?t.toDate():new Date(t);return `${d.getMonth()+1}.${d.getDate()}`}catch(e){return ""}};
 const myNick=()=>(S.profile&&S.profile.nick)||(user()&&(user().displayName||(user().email||"").split("@")[0]))||"선생님";
+const comCol=id=>{const it=comItems.find(x=>x.id===id);return it&&it.priv?"cpriv":"community"};
+const tms=t=>t&&t.toMillis?t.toMillis():(t?+new Date(t):Date.now());
 async function loadCom(){const box=$("#comList");box.innerHTML=`<p class="comempty">불러오는 중…</p>`;comItems=[];
-  if(fb){try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,"community"),F.orderBy("createdAt","desc"),F.limit(100)));comItems=snap.docs.map(d=>({id:d.id,...d.data()}))}catch(e){box.innerHTML=`<p class="comempty">글을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>`;return}}
+  if(fb){try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,"community"),F.orderBy("createdAt","desc"),F.limit(100)));comItems=snap.docs.map(d=>({id:d.id,...d.data()}))}catch(e){box.innerHTML=`<p class="comempty">글을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>`;return}
+    const u=user();if(u){try{const F=fb.fs,q=isAdmin()?F.query(F.collection(fb.db,"cpriv"),F.limit(200)):F.query(F.collection(fb.db,"cpriv"),F.where("uid","==",u.uid),F.limit(100));const sp=await F.getDocs(q);comItems=comItems.concat(sp.docs.map(d=>({id:d.id,...d.data(),priv:true}))).sort((a,b)=>tms(b.createdAt)-tms(a.createdAt))}catch(_){}}}
   paintCom()}
 function paintCom(){const L=comItems.filter(x=>comTab==="all"||comCatOf(x.cat)===comTab),u=user();
   $$("#comTabs [data-ct]").forEach(b=>b.setAttribute("aria-selected",b.dataset.ct===comTab));
   const N={all:comItems.length};comItems.forEach(x=>{const c=comCatOf(x.cat);N[c]=(N[c]||0)+1});$$("#comTabs [data-ct]").forEach(b=>{const n=N[b.dataset.ct]||0;b.innerHTML=`${b.dataset.ct==="all"?"전체":b.dataset.ct==="free"?"자유 게시판":COM_CAT[b.dataset.ct]}${n?`<i>${n}</i>`:""}`});
-  $("#comList").innerHTML=L.length?L.map(x=>{const mine=u&&(x.uid===u.uid||isAdmin());const op=comOpen===x.id;const nk=x.nick||"선생님";return `<article class="post${op?" open":""}" data-pid="${x.id}"><button type="button" class="post-h" data-popen="${x.id}"><span class="post-av">${esc(nk.slice(0,1))}</span><span class="post-main"><span class="post-top"><span class="post-c ${comCatOf(x.cat)}">${COM_CAT[x.cat]||"자유"}</span><span class="post-t">${esc(x.title||"")}</span></span>${!op&&x.body?`<span class="post-ex">${esc(x.body.replace(/\s+/g," ").slice(0,120))}</span>`:""}<span class="post-m">${esc(nk)} · ${fmtD(x.createdAt)}</span></span><span class="post-n${x.cmtN?"":" z"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>${x.cmtN||0}</span></button>${op?`<div class="post-bd"><p class="post-b">${esc(x.body||"")}</p>${x.link?`<a class="post-l" href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.link)}</a>`:""}<div class="cmts" id="cm_${x.id}"><p class="post-m">댓글 불러오는 중…</p></div><form class="cmtf" data-cform="${x.id}"><input class="tinput" placeholder="${u?"댓글 쓰기":"로그인하면 댓글을 쓸 수 있어요"}" maxlength="500" ${u?"":"disabled"}><button class="btn sm" ${u?"":"disabled"}>등록</button></form>${mine?`<div class="acts"><button type="button" data-pdel="${x.id}">삭제</button></div>`:""}</div>`:""}</article>`}).join(""):`<div class="comempty"><b>${comTab==="all"?"아직 글이 없어요":COM_CAT[comTab]+" 글이 아직 없어요"}</b><span>첫 글을 올려 주세요.</span></div>`;
+  $("#comList").innerHTML=L.length?L.map(x=>{const mine=u&&(x.uid===u.uid||isAdmin());const op=comOpen===x.id;const nk=x.nick||"선생님";return `<article class="post${op?" open":""}" data-pid="${x.id}"><button type="button" class="post-h" data-popen="${x.id}"><span class="post-av">${esc(nk.slice(0,1))}</span><span class="post-main"><span class="post-top"><span class="post-c ${comCatOf(x.cat)}">${COM_CAT[x.cat]||"자유"}</span>${x.priv?`<span class="post-lock" title="비공개"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>비공개</span>`:""}${x.ans?`<span class="post-ans">답변 완료</span>`:""}<span class="post-t">${esc(x.title||"")}</span></span>${!op&&x.body?`<span class="post-ex">${esc(x.body.replace(/\s+/g," ").slice(0,120))}</span>`:""}<span class="post-m">${esc(nk)} · ${fmtD(x.createdAt)}</span></span><span class="post-n${x.cmtN?"":" z"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>${x.cmtN||0}</span></button>${op?`<div class="post-bd"><p class="post-b">${esc(x.body||"")}</p>${x.link?`<a class="post-l" href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.link)}</a>`:""}<div class="cmts" id="cm_${x.id}"><p class="post-m">댓글 불러오는 중…</p></div><form class="cmtf" data-cform="${x.id}"><input class="tinput" placeholder="${u?"댓글 쓰기":"로그인하면 댓글을 쓸 수 있어요"}" maxlength="500" ${u?"":"disabled"}><button class="btn sm" ${u?"":"disabled"}>등록</button></form>${mine?`<div class="acts"><button type="button" data-pdel="${x.id}">삭제</button></div>`:""}</div>`:""}</article>`}).join(""):`<div class="comempty"><b>${comTab==="all"?"아직 글이 없어요":COM_CAT[comTab]+" 글이 아직 없어요"}</b><span>첫 글을 올려 주세요.</span></div>`;
   if(comOpen)loadCmts(comOpen)}
-async function loadCmts(id){const box=$("#cm_"+id);if(!box||!fb)return;try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,"community",id,"comments"),F.orderBy("createdAt","asc"),F.limit(200)));
-  box.innerHTML=snap.docs.length?snap.docs.map(d=>{const c=d.data();return `<div class="cmt"><b>${esc(c.nick||"")}</b>${esc(c.body||"")}<small>${fmtD(c.createdAt)}</small></div>`}).join(""):`<p class="post-m">첫 댓글을 남겨 주세요.</p>`}catch(e){box.innerHTML=`<p class="post-m">댓글을 불러오지 못했어요.</p>`}}
+async function loadCmts(id){const box=$("#cm_"+id);if(!box||!fb)return;try{const F=fb.fs;const snap=await F.getDocs(F.query(F.collection(fb.db,comCol(id),id,"comments"),F.orderBy("createdAt","asc"),F.limit(200)));
+  box.innerHTML=snap.docs.length?snap.docs.map(d=>{const c=d.data();return `<div class="cmt${c.adm?" adm":""}"><b>${esc(c.nick||"")}</b>${c.adm?`<span class="cmt-adm">답변</span>`:""}${esc(c.body||"")}<small>${fmtD(c.createdAt)}</small></div>`}).join(""):`<p class="post-m">첫 댓글을 남겨 주세요.</p>`}catch(e){box.innerHTML=`<p class="post-m">댓글을 불러오지 못했어요.</p>`}}
 document.addEventListener("click",async e=>{let b;
   if(e.target.closest("[data-community]")){setStage("community");window.scrollTo({top:0});loadCom();return}
   if((b=e.target.closest("[data-ct]"))){comTab=b.dataset.ct;paintCom();return}
   if((b=e.target.closest("[data-popen]"))){comOpen=comOpen===b.dataset.popen?null:b.dataset.popen;paintCom();return}
-  if((b=e.target.closest("[data-pdel]"))){const id=b.dataset.pdel;if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="한 번 더 누르면 삭제";return}try{await fb.fs.deleteDoc(fb.fs.doc(fb.db,"community",id));comItems=comItems.filter(x=>x.id!==id);comOpen=null;paintCom();toast("삭제했어요")}catch(err){toast("삭제하지 못했어요")}return}
-  if(e.target.closest("#comWrite")){if(!user()){toast("로그인하면 글을 쓸 수 있어요");openLogin&&openLogin();return}$("#comModal").hidden=false;$("#comTitle").focus();try{const c=document.querySelector(`[name="comcat"][value="${comTab==="all"?"review":comTab}"]`);if(c)c.checked=true}catch(_){}return}
+  if((b=e.target.closest("[data-pdel]"))){const id=b.dataset.pdel;if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="한 번 더 누르면 삭제";return}try{await fb.fs.deleteDoc(fb.fs.doc(fb.db,comCol(id),id));comItems=comItems.filter(x=>x.id!==id);comOpen=null;paintCom();toast("삭제했어요")}catch(err){toast("삭제하지 못했어요")}return}
+  if(e.target.closest("#comWrite")){if(!user()){toast("로그인하면 글을 쓸 수 있어요");openLogin&&openLogin();return}$("#comModal").hidden=false;$("#comTitle").focus();try{const c=document.querySelector(`[name="comcat"][value="${comTab==="all"?"review":comTab}"]`);if(c)c.checked=true}catch(_){}comPrivSync();return}
   if(e.target.closest("#comCancel")){$("#comModal").hidden=true;return}});
+const comPrivSync=()=>{const q=((document.querySelector('[name="comcat"]:checked')||{}).value)==="qna";$("#comPrivL").hidden=!q;if(!q)$("#comPriv").checked=false};
+document.addEventListener("change",e=>{if(e.target.name==="comcat")comPrivSync()});
 $("#comForm").addEventListener("submit",async e=>{e.preventDefault();if(!fb||!user()){toast("로그인이 필요해요");return}
   const d={cat:(document.querySelector('[name="comcat"]:checked')||{}).value||"qna",title:$("#comTitle").value.trim(),body:$("#comBody").value.trim(),link:$("#comLink").value.trim(),nick:myNick(),uid:user().uid,cmtN:0,createdAt:fb.fs.serverTimestamp()};
   if(!d.title||!d.body){toast("제목과 내용을 써 주세요");return}
-  try{await fb.fs.addDoc(fb.fs.collection(fb.db,"community"),d);$("#comModal").hidden=true;$("#comForm").reset();toast("올렸어요");comTab="all";loadCom()}catch(err){toast("올리지 못했어요. 잠시 뒤 다시 해 주세요.")}});
+  const pv=d.cat==="qna"&&$("#comPriv").checked;
+  try{await fb.fs.addDoc(fb.fs.collection(fb.db,pv?"cpriv":"community"),d);$("#comModal").hidden=true;$("#comForm").reset();comPrivSync();toast("올렸어요");comTab="all";loadCom()}catch(err){toast("올리지 못했어요. 잠시 뒤 다시 해 주세요.")}});
 document.addEventListener("submit",async e=>{const f=e.target.closest("[data-cform]");if(!f)return;e.preventDefault();const id=f.dataset.cform,inp=f.querySelector("input"),t=inp.value.trim();if(!t||!fb||!user())return;
-  try{const F=fb.fs;await F.addDoc(F.collection(fb.db,"community",id,"comments"),{body:t,nick:myNick(),uid:user().uid,createdAt:F.serverTimestamp()});F.updateDoc(F.doc(fb.db,"community",id),{cmtN:F.increment(1)}).catch(()=>{});inp.value="";const it=comItems.find(x=>x.id===id);if(it)it.cmtN=(it.cmtN||0)+1;loadCmts(id)}catch(err){toast("댓글을 올리지 못했어요")}});
+  try{const F=fb.fs;const col=comCol(id),adm=isAdmin();await F.addDoc(F.collection(fb.db,col,id,"comments"),{body:t,nick:adm?"예람쌤":myNick(),uid:user().uid,adm,createdAt:F.serverTimestamp()});F.updateDoc(F.doc(fb.db,col,id),adm?{cmtN:F.increment(1),ans:true}:{cmtN:F.increment(1)}).catch(()=>{});{const it=comItems.find(x=>x.id===id);if(it&&adm)it.ans=true}inp.value="";const it=comItems.find(x=>x.id===id);if(it)it.cmtN=(it.cmtN||0)+1;loadCmts(id)}catch(err){toast("댓글을 올리지 못했어요")}});
+/* ===== AI 대본 · 영문 이미지 프롬프트 (Vertex) ===== */
+async function aiCall(system,prompt,opt){opt=opt||{};const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),opt.ms||45000);
+  try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=ai",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({system,prompt,temp:opt.temp,q:opt.q||""}),signal:ctl.signal});clearTimeout(to);
+    if(!r.ok)return null;const d=await r.json();return String(d.text||"").trim()||null}catch(_){clearTimeout(to);return null}}
+const AI_DOWN="지금은 AI를 쓸 수 없어요. 프롬프트를 복사해 브루 AI 글쓰기에 넣어 주세요.";
+const AISYS=()=>{const n=cur.length?+cur.length*5:300;return `너는 초등 교사를 돕는 최고 수준의 한국어 영상 대본 작가야. 사용자가 준 [대본 요청서]를 하나도 빠짐없이 지켜서, AI 목소리가 그대로 읽을 내레이션 대본만 써.
+규칙:
+- 공백 포함 ${n}자 안팎(±10%). 길이를 반드시 지켜.
+- 한 줄에 한 문장. 문장은 짧고 입에 붙게. 줄 사이 빈 줄 없이.
+- 첫 문장은 요청서의 첫 문장 방식으로 강하게 시작해. 뻔한 인사(안녕하세요 여러분 등)로 시작하지 마.
+- 요청서의 말투를 끝까지 유지해. 상투적인 표현, 과장된 감탄, 같은 어미 반복은 피하고 구체적인 장면과 단어를 써.
+- 사실은 정확하게. 확실하지 않은 숫자나 사실은 쓰지 마.
+- 제목, 장면 번호, 괄호 속 지시, 화자 이름, 이모지, 해시태그, 따옴표 꾸밈 없이 읽을 문장만 출력해.`};
+let aiLast="",aiBusy2=false;
+function aiPaint(t){$("#aiBox").hidden=false;$("#aiScript").value=t;$("#aiCount").textContent=t.replace(/\n/g,"").length+"자"}
+async function aiWrite(fix){if(aiBusy2)return;const req=$("#outPrompt").value.trim();if(!generated||!req){toast("먼저 챗봇 질문에 답해 주세요");return}
+  if(!user()){gateLogin&&gateLogin("AI 대본은 로그인하면 쓸 수 있어요",()=>aiWrite(fix));return}
+  aiBusy2=true;const b=$("#aiWrite"),sp=b.querySelector("span"),t0=sp.textContent;b.disabled=true;sp.textContent=fix?"고치는 중…":"쓰는 중…";$("#aiFix button").disabled=true;
+  const topic=(cur.topic||"").trim();
+  const prompt=fix&&aiLast?`[대본 요청서]\n${req}\n\n[지금 대본]\n${aiLast}\n\n[고칠 점]\n${fix}\n\n고칠 점을 반영해 대본 전체를 다시 써. 고칠 점과 관계없는 좋은 부분은 살려.`:`[주제] ${topic}\n\n[대본 요청서]\n${req}`;
+  const t=await aiCall(AISYS(),prompt,{temp:fix?0.7:0.9,q:"hi"});
+  aiBusy2=false;b.disabled=false;sp.textContent=t0;$("#aiFix button").disabled=false;
+  if(!t){toast(AI_DOWN);return}
+  aiLast=t.replace(/^```\w*|```$/g,"").trim();aiPaint(aiLast);if(fix)$("#aiFixIn").value="";else $("#aiBox").scrollIntoView({block:"nearest",behavior:"smooth"})}
+$("#aiWrite").addEventListener("click",()=>aiWrite());
+$("#aiAgain").addEventListener("click",()=>aiWrite());
+$("#aiFix").addEventListener("submit",e=>{e.preventDefault();const v=$("#aiFixIn").value.trim();if(!v){$("#aiFixIn").focus();return}aiWrite(v)});
+$("#aiScript").addEventListener("input",e=>{aiLast=e.target.value;$("#aiCount").textContent=aiLast.replace(/\n/g,"").length+"자"});
+$("#aiCopy").addEventListener("click",e=>copyText($("#aiScript").value,e.currentTarget));
+/* 이미지 프롬프트: 영문 기본, 한글 보기 */
+var IMGT={lang:"en",bg:"kr",en:"",key:"",shown:"",T:0,busy:false};
+try{const v=JSON.parse(localStorage.getItem("ymImgT")||"{}");if(v.lang)IMGT.lang=v.lang;if(v.bg)IMGT.bg=v.bg}catch(_){}
+function imgSeg(){$$("[data-imglang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.imglang===IMGT.lang));$$("[data-imgbg]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.imgbg===IMGT.bg))}
+function imgStyleEn(){const c=S.character||{};if(cur.imgRef==="ref"&&c.style)return (STYLE_EN[c.style]||"")+(c.style?` (${c.style})`:"");return ""}
+function imgSys(){const sq=cur.imgRatio==="9:16sq";return `You are an expert prompt engineer for AI image generators. Vrew (a Korean video editor) uses ONE shared prompt to generate one image per script sentence, so the prompt must describe a consistent look, not one specific scene.
+Rewrite the Korean spec into ONE concise, natural English prompt (80-150 words). Output only the prompt, as short labeled lines in this order:
+STYLE: ${imgStyleEn()?"start EXACTLY with: \"Same character and art style as the attached reference image: "+imgStyleEn()+".\" then keep identity, outfit, colors and proportions locked.":"the art style, rendering and lighting from the spec, very specific."}
+${sq?`FRAME: "Vertical 9:16 canvas. The illustration is a perfect 1:1 square, full canvas width, centered vertically. Above and below the square: ${PAD_EN()}. Nothing else outside the square."`:`FRAME: ${cur.imgRatio==="16:9"?"horizontal 16:9":"vertical 9:16"} full-bleed image.`}
+SCENE: one clear illustration of the current sentence, main subject large and readable.
+CHARACTER: from the spec.
+SETTING: ${IMGT.bg==="kr"?"set in Korea by default - Korean people, Korean school/classroom/street/home details, Hangul-free signage; unless the topic clearly needs another place.":"whatever place best fits the topic."}
+COMPOSITION: vary close-up / medium / wide shots${sq?"":", keep the bottom quarter simple for subtitles"}.
+AVOID: any text, letters, numbers, logos, watermarks, speech bubbles, split panels, borders.
+Topic: ${(cur.topic||"").trim()||"(none)"}`}
+function imgAuto(im){imgSeg();if(!im){return}const key=im+"|"+IMGT.bg+"|"+imgStyleEn()+"|"+(cur.topic||"");
+  if(key===IMGT.key&&IMGT.en){imgShow();return}
+  clearTimeout(IMGT.T);if(IMGT.lang!=="en"){imgShow();return}IMGT.T=setTimeout(()=>imgRefine(key,im),900)}
+async function imgRefine(key,im){if(IMGT.busy===key)return;IMGT.busy=key;$("#imgSt").hidden=false;$("#imgSt").textContent="영문 프롬프트로 다듬는 중…";
+  const t=await aiCall(imgSys(),"[Korean spec]\n"+im,{temp:0.3,ms:30000});if(IMGT.busy===key)IMGT.busy=false;
+  if(key!==(genImg+"|"+IMGT.bg+"|"+imgStyleEn()+"|"+(cur.topic||"")))return;
+  if(!t){$("#imgSt").textContent="지금은 영문으로 다듬을 수 없어요. 한글 프롬프트를 그대로 써도 돼요.";IMGT.en="";IMGT.key="";return}
+  IMGT.en=t.replace(/^```\w*|```$/g,"").trim();IMGT.key=key;$("#imgSt").hidden=true;imgShow()}
+function imgShow(){const ta=$("#outImg");if(ta.value!==IMGT.shown&&ta.value)return;const v=IMGT.lang==="en"&&IMGT.en?IMGT.en:genImg;ta.value=v;IMGT.shown=v}
+document.addEventListener("click",e=>{let b;
+  if((b=e.target.closest("[data-imglang]"))){IMGT.lang=b.dataset.imglang;try{localStorage.setItem("ymImgT",JSON.stringify({lang:IMGT.lang,bg:IMGT.bg}))}catch(_){}
+    const ta=$("#outImg");ta.value=IMGT.shown;imgSeg();if(IMGT.lang==="en"&&!IMGT.en)imgAuto(genImg);else{$("#imgSt").hidden=true;imgShow()}return}
+  if((b=e.target.closest("[data-imgbg]"))){IMGT.bg=b.dataset.imgbg;try{localStorage.setItem("ymImgT",JSON.stringify({lang:IMGT.lang,bg:IMGT.bg}))}catch(_){}$("#outImg").value=IMGT.shown;IMGT.en="";imgAuto(genImg);return}});
 /* 페이지 머리 내용 */
 const PGH={
  char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",hi:"캐릭터는 이 네 가지만 정하면 돼요! 앞 글자만 따서 ‘피동장스’라고 불러요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 삽입 → AI 이미지"]],
@@ -3914,7 +4001,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792841265";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792841938";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4209,8 +4296,7 @@ document.addEventListener("mouseout",e=>{const c=e.target.closest(".pdcard[data-
     const bad=msgs.find(m=>/못했|주세요|넣어/.test(m));T(bad||"저장했어요")});
 })();
 
-var VF="";
-document.addEventListener("click",e=>{const b=e.target.closest("[data-vf]");if(!b)return;VF=b.dataset.vf;$$("[data-vf]").forEach(x=>x.setAttribute("aria-pressed",x===b));renderPad()});
+
 
 /* 화면을 옮기면 영상 멈추기 */
 function pauseAllMedia(){document.querySelectorAll("video").forEach(v=>{if(!v.closest(".mq")&&!v.closest(".pdr"))v.pause()});["#mdlPopF","#modelsFrame"].forEach(q=>{try{const w=$(q).contentWindow;w&&w.ymPauseAll&&w.ymPauseAll()}catch(_){}})}
