@@ -6,6 +6,19 @@
  },
  "posts": [
   {
+   "id": "post_PVKBQOr7GX65aj5x",
+   "subject": "북극곰 털",
+   "body": "",
+   "url": "https://res.cloudinary.com/mcilphba/video/upload/v1792841044/ci8yyftumktdjnm1uxxf.mp4",
+   "caption": "",
+   "color": "",
+   "section": "🩷갤러리",
+   "at": "2026-10-24T11:24:06Z",
+   "by": "김예람",
+   "intro": "",
+   "kind": ""
+  },
+  {
    "id": "post_Xb8YaLMGkxK6Qyn1",
    "subject": "세종대 왕한글",
    "body": "",
@@ -14,29 +27,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T11:15:58Z",
-   "by": ""
-  },
-  {
-   "id": "post_E851Q0qe5YBdZVAb",
-   "subject": "세종대 왕한글",
-   "body": "",
-   "url": "https://res.cloudinary.com/mcilphba/video/upload/v1792840501/xqegxrs494hf0gyho9yp.mp4",
-   "caption": "",
-   "color": "",
-   "section": "🩷갤러리",
-   "at": "2026-10-24T11:15:02Z",
-   "by": ""
-  },
-  {
-   "id": "post_E1P8aXb6GXr3ZwA9",
-   "subject": "세종대 왕한글",
-   "body": "",
-   "url": "https://res.cloudinary.com/mcilphba/video/upload/v1792840394/v9vfy6q9rxy2njb2xqed.mp4",
-   "caption": "",
-   "color": "",
-   "section": "🩷갤러리",
-   "at": "2026-10-24T11:13:15Z",
-   "by": ""
+   "by": "김예람",
+   "intro": "",
+   "kind": "i2v"
   },
   {
    "id": "post_L8KjW9VnB2JoaJbv",
@@ -47,18 +40,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T06:14:31Z",
-   "by": ""
-  },
-  {
-   "id": "post_94PGWn5KLz4oZLRV",
-   "subject": "세종대왕(아침햇살)",
-   "body": "",
-   "url": "https://res.cloudinary.com/mcilphba/video/upload/v1792822384/t8ewoa6tpaiwjg1grgr2.mp4",
-   "caption": "",
-   "color": "",
-   "section": "🩷갤러리",
-   "at": "2026-10-24T06:13:06Z",
-   "by": ""
+   "by": "아침햇살(윤샘)",
+   "intro": "세종대왕 업적",
+   "kind": "t2v"
   },
   {
    "id": "post_wKmOZ52YKARPWzMA",
@@ -69,7 +53,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T06:12:24Z",
-   "by": ""
+   "by": "윤성준",
+   "intro": "6학년 과학 실험 소개",
+   "kind": "i2v"
   },
   {
    "id": "post_x5m7aovORl4yWkAV",
@@ -80,7 +66,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T06:01:10Z",
-   "by": ""
+   "by": "최은영",
+   "intro": "금속활자의 우수성",
+   "kind": "t2v"
   },
   {
    "id": "post_NvylWEXKx1keZ0OX",
@@ -91,7 +79,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T06:00:49Z",
-   "by": ""
+   "by": "시쭈",
+   "intro": "2학년 국어 매체를 경험해요",
+   "kind": "i2v"
   },
   {
    "id": "post_J24jale8Rlw0Q0A1",
@@ -102,7 +92,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T06:00:38Z",
-   "by": ""
+   "by": "K데미안",
+   "intro": "미래 사회",
+   "kind": "t2v"
   },
   {
    "id": "post_BJkrQAdo1802aEge",
@@ -113,7 +105,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:58:15Z",
-   "by": ""
+   "by": "goeun Kim",
+   "intro": "2학년 인물 시간이 흐르면",
+   "kind": "i2v"
   },
   {
    "id": "post_PR3NWxq7yLxgab0O",
@@ -124,7 +118,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:57:39Z",
-   "by": ""
+   "by": "스팅",
+   "intro": "",
+   "kind": "i2v"
   },
   {
    "id": "post_E1P8aXb6rPbeZwA9",
@@ -135,18 +131,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:57:23Z",
-   "by": ""
-  },
-  {
-   "id": "post_L8KjW9VnB0q2aJbv",
-   "subject": "영상",
-   "body": "",
-   "url": "https://res.cloudinary.com/mcilphba/video/upload/v1792821426/hp7x8atm4j02umbivnrx.mp4",
-   "caption": "",
-   "color": "",
-   "section": "🩷갤러리",
-   "at": "2026-10-24T05:57:08Z",
-   "by": ""
+   "by": "Eddy Kim",
+   "intro": "6학년 2학기 사회-경제",
+   "kind": "t2v"
   },
   {
    "id": "post_Ae2Rav0g7LMbZnz4",
@@ -157,7 +144,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:56:22Z",
-   "by": ""
+   "by": "이현경",
+   "intro": "5학년 사회",
+   "kind": "t2v"
   },
   {
    "id": "post_LNV1Q7rMK6nNamq3",
@@ -168,7 +157,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:56:12Z",
-   "by": ""
+   "by": "김예람",
+   "intro": "",
+   "kind": "t2v"
   },
   {
    "id": "post_94PGWn5KL8poZLRV",
@@ -179,7 +170,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:56:08Z",
-   "by": ""
+   "by": "N K",
+   "intro": "브루",
+   "kind": "t2v"
   },
   {
    "id": "post_wKmOZ52YKD5mWzMA",
@@ -190,7 +183,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:55:13Z",
-   "by": ""
+   "by": "무지개",
+   "intro": "세금 소개",
+   "kind": "t2v"
   },
   {
    "id": "post_YDgnZe2VR4OoWwrA",
@@ -201,7 +196,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:55:01Z",
-   "by": ""
+   "by": "수학",
+   "intro": "",
+   "kind": "t2v"
   },
   {
    "id": "post_YBl3Z2Y9K54wQv16",
@@ -212,7 +209,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-24T05:54:08Z",
-   "by": ""
+   "by": "김예린",
+   "intro": "경기도민의 일상",
+   "kind": "t2v"
   },
   {
    "id": "post_goElQyAxg6PvQ3yY",
@@ -223,18 +222,9 @@
    "color": "",
    "section": "🩷갤러리",
    "at": "2026-10-23T18:49:31Z",
-   "by": ""
-  },
-  {
-   "id": "post_wKmOZ52YvRYnWzMA",
-   "subject": "업로드 테스트 (지워도 돼요)",
-   "body": "",
-   "url": "https://res.cloudinary.com/mcilphba/video/upload/v1792776368/qw55tsnk61maa7ug9ok6.webm",
-   "caption": "",
-   "color": "",
-   "section": "🩷갤러리",
-   "at": "2026-10-23T17:26:10Z",
-   "by": ""
+   "by": "김예람",
+   "intro": "",
+   "kind": ""
   }
  ]
 }
