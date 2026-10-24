@@ -1510,7 +1510,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .rxbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
 .rxbar button{font:inherit;cursor:pointer}
 .rxc{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-size:14px;color:var(--ink);transition:transform .12s,background .15s}
-.rxc b{font-size:12.5px;font-weight:700;color:var(--muted)}
+.rxc b{font-size:12.5px;font-weight:700;color:var(--muted)}.rxc b:empty{display:none}
 .rxc.on{background:var(--accent-soft);border-color:var(--accent)}.rxc.on b{color:var(--accent-strong)}
 .rxc:active,.rxpick button:active{transform:scale(.9)}
 .rxpw{position:relative;display:inline-flex}
@@ -3714,7 +3714,7 @@ async function openItem(id){
 function openUpload(){
   if(fb&&!user()){openLogin();toast("올리려면 먼저 로그인해 주세요");return}
   upFileObj=null;$("#upPrev").hidden=true;$("#upHint").hidden=false;$("#upFile").value="";
-  $("#upTitle").value=(cv("subj")||"").split(",").slice(0,2).join(" ").trim().slice(0,30);
+  $("#upTitle").value=(myNick()+"의 캐릭터").slice(0,30);
   $("#upWithPrompt").checked=false;$("#upWpL").hidden=!cv("subj");
   $("#upNote").textContent=fb?"":"지금은 미리보기라 이 브라우저에만 저장돼요. 배포하면 모두가 보는 갤러리에 올라가요.";
   $("#upModal").hidden=false;
@@ -3838,7 +3838,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792856836"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792856914"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4128,7 +4128,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792856836"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792856914"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4341,7 +4341,7 @@ function myRx(){try{return JSON.parse(localStorage.getItem("ymRx")||"{}")}catch(
 function saveMyRx(m){try{localStorage.setItem("ymRx",JSON.stringify(m))}catch(_){}}
 async function loadRx(){loadAllCmt();if(!fb||rxLoaded)return;rxLoaded=1;try{const F=fb.fs;const sn=await F.getDocs(F.collection(fb.db,"rx"));sn.forEach(d=>{RXD[d.id]=d.data()});paintAllRx()}catch(e){rxLoaded=0}}
 function rxInner(key){const c=RXD[key]||{},mine=myRx()[key]||[];
-  return RX.filter(([k])=>c[k]>0).map(([k,e])=>`<button type="button" class="rxc${mine.includes(k)?" on":""}" data-rxk="${k}" aria-pressed="${mine.includes(k)}">${e}<b>${c[k]}</b></button>`).join("")
+  return RX.filter(([k],i)=>i===0||c[k]>0).map(([k,e])=>`<button type="button" class="rxc${mine.includes(k)?" on":""}" data-rxk="${k}" aria-pressed="${mine.includes(k)}">${e}<b>${c[k]>0?c[k]:""}</b></button>`).join("")
    +`<span class="rxpw"><button type="button" class="rxadd" data-rxadd aria-label="이모지 반응 남기기" title="반응 남기기">${IC_SMILE}</button><span class="rxpick" hidden>${RX.map(([k,e])=>`<button type="button" data-rxk="${k}" aria-label="${e}">${e}</button>`).join("")}</span></span>`
    +`<button type="button" class="rxcm" data-rxcm aria-label="댓글">${IC_BUBBLE}<span>${c.c>0?c.c:""}</span></button>`}
 function rxHTML(key){return `<div class="rxbar" data-rx="${esc(key)}">${rxInner(key)}</div>`}
