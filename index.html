@@ -1541,6 +1541,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .rshape.rv{width:12px;height:20px}.rshape.rh{width:22px;height:12px}.rshape.rs{width:16px;height:16px}
 .ratioopts{display:flex;gap:10px;flex-wrap:wrap}
 .rpills{display:flex;gap:8px;flex-wrap:wrap}
+.msg b.hl{background:linear-gradient(transparent 52%,color-mix(in srgb,var(--accent) 32%,transparent) 52%,color-mix(in srgb,var(--accent) 32%,transparent) 92%,transparent 92%);padding:0 2px;font-weight:800}
 .sbm{display:block;font-size:10.5px;font-weight:600;color:var(--muted);margin-top:1px}
 .msg.bot .ack{color:var(--accent-strong,var(--accent-deep));font-weight:800}
 .rpill{--rpi-bg:var(--paper);display:inline-flex;align-items:center;gap:8px;padding:9px 18px 9px 14px;border:1px solid var(--line);background:var(--paper);border-radius:999px;font:inherit;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;transition:.15s}
@@ -3829,7 +3830,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792856603"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792856624"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4118,7 +4119,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792856603"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792856624"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4161,16 +4162,16 @@ function cAsk(sec,k){
   if(sec==="subj"){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
-    cbot(cLog.children.length?`<b>피사체</b> · 누구를 그릴까요?`:`안녕하세요! 캐릭터를 같이 만들어 볼게요. 먼저 <b>누구</b>를 그릴까요?`);
+    cbot(cLog.children.length?`<b class="hl">피사체</b> · 누구를 그릴까요?`:`안녕하세요! 캐릭터를 같이 만들어 볼게요. 먼저 <b class="hl">누구</b>를 그릴까요?`);
     sb.sel={};sb.sum=null;sb.dirty=false;subjPanel();
   }else if(sec==="act"){
-    cbot("<b>동작</b> · 어떤 포즈와 표정일까요? 처음 만드는 기본 이미지는 정면 전신 기본 포즈를 추천해요.");
+    cbot('<b class="hl">동작</b> · 어떤 포즈와 표정일까요? 기본 이미지는 정면 전신 포즈를 추천해요.');
     pkOpen("act");
   }else if(sec==="place"){
-    cbot("<b>장소</b> · 배경은요? 기본은 흰 배경이에요. 투명 배경을 고르면 PNG 파일로 달라고 써 둘게요.");
+    cbot('<b class="hl">장소</b> · 배경은 어떻게 할까요? 기본은 흰 배경이에요.');
     pkOpen("place");
   }else if(sec==="style"){
-    cbot("<b>스타일</b> · 그림체는요? 그림을 눌러 고르거나, 아래 칸에 직접 써도 돼요. 예: 동화책 같은 연필 그림");
+    cbot('<b class="hl">스타일</b> · 어떤 그림체로 할까요? 그림을 고르거나 직접 써도 돼요.');
     const animal=sb.sel.kind==="동물", list=STYLES.filter(x=>animal?x.g==="동물":x.g==="인물");
     pkOpen("style");
   }else if(sec==="ratio"){
