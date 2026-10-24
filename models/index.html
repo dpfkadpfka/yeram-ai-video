@@ -135,8 +135,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
   <div class="bar" role="tablist">
     <button class="tab" role="tab" id="t-img" aria-selected="true" aria-controls="p-img">이미지 <i>8</i></button>
-    <button class="tab" role="tab" id="t-vid" aria-selected="false" aria-controls="p-vid">비디오 <i>11</i></button>
-    <button class="tab" role="tab" id="t-hard" aria-selected="false" aria-controls="p-hard">비디오 지시 따르기 <i>9</i></button>
+    <button class="tab" role="tab" id="t-hard" aria-selected="false" aria-controls="p-hard">비디오 <i>9</i></button>
+    <button class="tab" role="tab" id="t-vid" aria-selected="false" aria-controls="p-vid" hidden>비디오 기본 <i>11</i></button>
     <span class="spacer"></span>
   </div>
 
@@ -267,7 +267,10 @@ function show(id){tabs.forEach(t=>{const on=t.id===id;t.setAttribute('aria-selec
   try{localStorage.setItem('tab',id)}catch(e){}}
 tabs.forEach(t=>t.addEventListener('click',()=>show(t.id)));
 let saved=null;try{saved=localStorage.getItem('tab')}catch(e){}
-if(saved==='t-vid'||saved==='t-hard')show(saved);
+const tVid=document.getElementById('t-vid');
+window.ymSetOld=on=>{tVid.hidden=!on;if(!on&&tVid.getAttribute('aria-selected')==='true')show('t-hard')};
+ymSetOld(/[?&]old=1/.test(location.search));
+if(saved==='t-hard'||(saved==='t-vid'&&!tVid.hidden))show(saved);
 
 // 아래 설명창
 const info=document.getElementById('info'),infoIn=document.getElementById('infoIn');
