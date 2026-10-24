@@ -165,8 +165,13 @@ export default {
     const r = await fetch(`https://api.padlet.dev/v1/boards/${id}?include=posts,sections`, { headers: H(env.PADLET_KEY) });
     if (!r.ok) return J({ error: r.status }, 502);
     let X = { hidden: [], meta: {} }; try { if (env.HIDE) X = await getIdx(env); } catch (e) {}
-    const hidden = new Set(X.hidden), meta = X.meta;
     const j = await r.json(), inc = j.included || [];
+    if (X.tmp && env.HIDE) { // 목록(list) 없이 글 ID로 옛 키를 직접 읽어 idx 만들기
+      const ids = inc.filter(x => x.type === "post").map(x => String(x.id)); const NX = { hidden: [], meta: {} };
+      await Promise.all(ids.map(async pid => { const [h, m] = await Promise.all([env.HIDE.get("h:" + pid), env.HIDE.get("m:" + pid)]); if (h) NX.hidden.push(pid); if (m) { try { NX.meta[pid] = JSON.parse(m); } catch (e) {} } }));
+      X = NX; ctx.waitUntil(env.HIDE.put("idx", JSON.stringify(NX)).catch(() => {}));
+    }
+    const hidden = new Set(X.hidden), meta = X.meta;
     const sections = Object.fromEntries(inc.filter(x => x.type === "section").map(x => [x.id, x.attributes?.title || ""]));
     const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
       const a = x.attributes || {}, c = a.content || {}, at = c.attachment || {};
