@@ -1554,7 +1554,8 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .rte-col{position:relative}.rte-a{font-weight:800;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:2px}
 .rte-pal{position:absolute;top:34px;left:0;z-index:5;display:grid;grid-template-columns:repeat(4,22px);gap:6px;padding:8px;background:var(--paper);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 24px -12px rgba(0,0,0,.3)}.rte-pal[hidden]{display:none}
 .rte-pal button{width:22px!important;min-width:0!important;height:22px!important;padding:0!important;border-radius:50%!important;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)!important}
-.rte-ed{min-height:200px;max-height:46vh;overflow:auto;border:0!important;border-radius:0!important;padding:12px 14px!important;line-height:1.75;outline:0;background:var(--paper)!important}
+.rte-ed{font-weight:400;min-height:200px;max-height:46vh;overflow:auto;border:0!important;border-radius:0!important;padding:12px 14px!important;line-height:1.75;outline:0;background:var(--paper)!important}
+.rte-ed b,.rte-ed strong,.bdv-b.rt b,.bdv-b.rt strong{font-weight:800}.bdv-b.rt{font-weight:400}
 .rte-ed:empty::before{content:attr(data-ph);color:var(--muted)}
 .rte-ed img,.bdv-b.rt img{max-width:100%;border-radius:10px;margin:4px 0}.rte-ed img[data-up]{opacity:.5}
 .rte-ed h3,.bdv-b.rt h3{font-size:18px;font-weight:800;margin:10px 0 4px}.rte-ed blockquote,.bdv-b.rt blockquote{margin:8px 0;padding:6px 14px;border-left:3px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0}
@@ -3903,7 +3904,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792858021"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792858063"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4085,7 +4086,7 @@ function rteClean(html){const doc=new DOMParser().parseFromString(`<div>${html}<
 (function(){const bar=$("#rteBar"),ed=$("#comBody");if(!bar)return;const PAL=["#262626","#E65588","#E53935","#FB8C00","#2E7D32","#1E88E5","#8E24AA","#9E9E9E"];bar.querySelector(".rte-pal").innerHTML=PAL.map(c=>`<button type="button" data-rcolv="${c}" style="background:${c}" aria-label="${c}"></button>`).join("");
   ["keyup","mouseup","input","blur"].forEach(ev=>ed.addEventListener(ev,rteSave));
   bar.addEventListener("mousedown",e=>{if(e.target.closest("button"))e.preventDefault()});
-  bar.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;rteRestore();try{document.execCommand("styleWithCSS",false,true)}catch(_){}
+  bar.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;rteRestore();try{document.execCommand("styleWithCSS",false,!!(b.dataset.rcolv||b.dataset.rc==="hilite"))}catch(_){}
     if(b.dataset.rc==="hilite"){document.execCommand("hiliteColor",false,"#FFF3A3")}
     else if(b.dataset.rc==="formatBlock"){const cur=(document.queryCommandValue("formatBlock")||"").toUpperCase();document.execCommand("formatBlock",false,cur===b.dataset.rv?"DIV":b.dataset.rv)}
     else if(b.dataset.rc)document.execCommand(b.dataset.rc,false,null);
@@ -4248,7 +4249,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792858021"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792858063"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
