@@ -22,6 +22,12 @@
 .mv-s ul{margin:0;padding-left:18px;line-height:1.7}
 .mv-x{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;border:0;background:var(--paper);color:var(--ink);font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 @media (max-width:820px){.mv-c{grid-template-columns:1fr;overflow:auto}.mv-m video,.mv-m img{max-height:55vh}}
+.bar .spacer{flex:1}
+.sortb{display:flex;align-items:center;gap:4px;padding:0 2px}
+.sortb button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 13px;font:inherit;font-size:13.5px;font-weight:700;color:var(--muted);cursor:pointer;transition:.15s;white-space:nowrap}
+.sortb button:hover{border-color:var(--accent);color:var(--ink)}
+.sortb button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+@media (max-width:640px){.bar{flex-wrap:wrap}.sortb{width:100%;padding:8px 0}}
 </style></head><body>
 <title>AI 모델 비교</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -152,6 +158,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <button class="tab" role="tab" id="t-hard" aria-selected="false" aria-controls="p-hard">비디오 <i>9</i></button>
     <button class="tab" role="tab" id="t-vid" aria-selected="false" aria-controls="p-vid" hidden>비디오 기본 <i>11</i></button>
     <span class="spacer"></span>
+    <div class="sortb" role="group" aria-label="정렬"><button type="button" data-sort="q" aria-pressed="true">품질순</button><button type="button" data-sort="v" aria-pressed="false">가성비순</button><button type="button" data-sort="c" aria-pressed="false">저렴한 순</button></div>
   </div>
 
   <section id="p-img" role="tabpanel" aria-labelledby="t-img" style="display:flex;flex-direction:column;gap:16px">
@@ -272,7 +279,13 @@ const hg=document.getElementById('hardGrid');
 hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="원본"><img class="m" src="h00_start.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap ask"><b>이 장면에서 시작, 5가지 지시</b><q>① 칠판에 ‘과학’ 쓰기<br>② 비커를 쳐서 파란 액체 쏟기<br>③ “어머, 큰일 났다!” 외치기<br>④ 입 가리기<br>⑤ 카메라가 돌며 얼굴 클로즈업</q><small>6초 · 720p · 마우스를 올리면 지켰는지 ✓/✗</small></div></div>`+
 HARD.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
-// 탭
+// 정렬: 품질순(별점↓, 크레딧↑) · 가성비순(별점/크레딧↓) · 저렴한 순(크레딧↑)
+const crN=m=>{const n=parseFloat(String(m.cr).replace(/[^0-9.]/g,''));return isNaN(n)?1e9:n};
+const stN=m=>STAR[m.co||m.id]||0;
+const SORTS={q:(a,b)=>stN(b)-stN(a)||crN(a)-crN(b),v:(a,b)=>((stN(b)>=3)-(stN(a)>=3))||(stN(b)/Math.max(crN(b),1))-(stN(a)/Math.max(crN(a),1))||stN(b)-stN(a),c:(a,b)=>crN(a)-crN(b)||stN(b)-stN(a)};
+function sortGrids(k){['imgGrid','vidGrid','hardGrid'].forEach(id=>{const g=document.getElementById(id);if(!g)return;const T=[...g.children].filter(t=>t.dataset.id&&ALL[t.dataset.id]);T.sort((x,y)=>SORTS[k](ALL[x.dataset.id],ALL[y.dataset.id])).forEach(t=>g.append(t))});document.querySelectorAll('[data-sort]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sort===k));try{localStorage.setItem('msort',k)}catch(e){}}
+document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener('click',()=>sortGrids(b.dataset.sort)));
+try{const k=localStorage.getItem('msort');if(k&&SORTS[k])setTimeout(()=>sortGrids(k),0);else setTimeout(()=>sortGrids('q'),0)}catch(e){}
 const tabs=[...document.querySelectorAll('.tab')];
 const vids=()=>[...document.querySelectorAll('#vidGrid video,#hardGrid video')];
 function show(id){tabs.forEach(t=>{const on=t.id===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});
