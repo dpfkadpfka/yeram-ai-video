@@ -1923,6 +1923,41 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
  body[data-stage="char"].cfresh:not(.cpre) #extLinks{display:none!important}
  body[data-stage="char"].cfresh:not(.cpre) .sbpanel{max-height:none}
 }
+
+.snmore,.msheet{display:none}
+@media (max-width:900px){
+ .pgh{display:none!important}
+ #extLinks{display:none!important}
+ body,body.sidemini{padding-top:68px!important}
+ .sidenav [data-stepgo="3"],.sidenav [data-stepgo="4"],.sidenav [data-models],.sidenav [data-survey]{display:none!important}
+ .sidenav .snmore{display:flex!important}
+ .sidenav .sn{min-width:0}
+ .snmore .ico-m{width:24px;height:24px;display:grid;place-items:center}.snmore .ico-m svg{width:22px;height:22px;fill:currentColor}
+ .snmore.cur{color:var(--accent-strong,var(--accent-deep))}
+ .msheet{display:block;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.35);animation:msf .15s}
+ .msheet[hidden]{display:none}
+ @keyframes msf{from{opacity:0}}@keyframes msu{from{transform:translateY(30px);opacity:0}}
+ .msheet-c{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:22px 22px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:msu .2s ease-out;display:grid;gap:14px}
+ .msheet-grip{justify-self:center;width:40px;height:4px;border-radius:9px;background:var(--line)}
+ .msheet-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+ .msheet-g button,.msheet-g a{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border:0;background:var(--bg);border-radius:14px;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none}
+ .msheet-g .ico{width:26px;height:26px}
+ .msheet-l{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+ .msheet-l a{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none}.msheet-l .sym{display:none!important}.msheet-l a>img{height:15px;width:auto}.msheet-l a.wm-vs>img{height:18px}
+ /* 피동장스 화면도 휴대폰에 고정 */
+ body.cpre[data-stage="char"]{overflow:hidden;overscroll-behavior:none}
+ body.cpre[data-stage="char"] .pdintro{position:fixed;left:0;right:0;top:var(--toph,56px);bottom:var(--navh,70px);z-index:5;overflow:hidden;margin:0!important;background:var(--bg)}
+ body.cpre[data-stage="char"] .pdintro>*{height:100%}
+ body.cpre[data-stage="char"] .pdw{height:100%;border-radius:0!important;grid-template-rows:auto auto auto 1fr auto auto;border:0!important;box-shadow:none!important}
+ body.cpre[data-stage="char"] .pdl .pd-eye{padding-top:14px}
+ body.cpre[data-stage="char"] .pdl h3{font-size:22px!important}
+ body.cpre[data-stage="char"] .pdl .pd-lead{padding-bottom:10px;font-size:13px}
+ body.cpre[data-stage="char"] .pdr .pdimg{width:min(calc(100vw - 36px),calc(100dvh - var(--toph,56px) - var(--navh,70px) - 340px))!important;height:auto!important;aspect-ratio:1/1!important;align-self:center}
+ body.cpre[data-stage="char"] .pdrows li{padding:10px 12px!important}
+ body.cpre[data-stage="char"] .pdrw{padding-top:10px}
+ body.cpre[data-stage="char"] .pdr .pd-go{padding:10px 18px 12px}
+ body.cpre[data-stage="char"] #charFeed{display:none!important}
+}
 </style>
 
 <div class="wrap"><nav class="extlinks" id="extLinks" aria-label="바로가기"></nav>
@@ -1945,6 +1980,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <span class="snlab snlab-m">알아보기</span>
       <button type="button" data-models class="sn" data-snav="models" data-tip="AI 이미지·영상 모델을 같은 조건으로 비교해 봤어요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMjM5LjQzLDEzM2wtMzItODBoMGE4LDgsMCwwLDAtOS4xNi00Ljg0TDEzNiw2MlY0MGE4LDgsMCwwLDAtMTYsMFY2NS41OEw1NC4yNiw4MC4xOUE4LDgsMCwwLDAsNDguNTcsODVoMHYuMDZMMTYuNTcsMTY1YTcuOTIsNy45MiwwLDAsMC0uNTcsM2MwLDIzLjMxLDI0LjU0LDMyLDQwLDMyczQwLTguNjksNDAtMzJhNy45Miw3LjkyLDAsMCwwLS41Ny0zTDY2LjkyLDkzLjc3LDEyMCw4MlYyMDhIMTA0YTgsOCwwLDAsMCwwLDE2aDQ4YTgsOCwwLDAsMCwwLTE2SDEzNlY3OC40MkwxODcsNjcuMSwxNjAuNTcsMTMzYTcuOTIsNy45MiwwLDAsMC0uNTcsM2MwLDIzLjMxLDI0LjU0LDMyLDQwLDMyczQwLTguNjksNDAtMzJBNy45Miw3LjkyLDAsMCwwLDIzOS40MywxMzNaTTU2LDE4NGMtNy41MywwLTIyLjc2LTMuNjEtMjMuOTMtMTQuNjRMNTYsMTA5LjU0bDIzLjkzLDU5LjgyQzc4Ljc2LDE4MC4zOSw2My41MywxODQsNTYsMTg0Wm0xNDQtMzJjLTcuNTMsMC0yMi43Ni0zLjYxLTIzLjkzLTE0LjY0TDIwMCw3Ny41NGwyMy45Myw1OS44MkMyMjIuNzYsMTQ4LjM5LDIwNy41MywxNTIsMjAwLDE1MloiLz48L3N2Zz4=)" aria-hidden="true"></span><span>모델 비교</span></button>
       <button type="button" class="sn" data-community data-snav="community" data-tip="공모전 소식, 질문, 팁을 함께 나눠요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNMTI4LDI0QTEwNCwxMDQsMCwxLDAsMjMyLDEyOCwxMDQuMTEsMTA0LjExLDAsMCwwLDEyOCwyNFpNNzQuMDgsMTk3LjVhNjQsNjQsMCwwLDEsMTA3Ljg0LDAsODcuODMsODcuODMsMCwwLDEtMTA3Ljg0LDBaTTk2LDEyMGEzMiwzMiwwLDEsMSwzMiwzMkEzMiwzMiwwLDAsMSw5NiwxMjBabTk3Ljc2LDY2LjQxYTc5LjY2LDc5LjY2LDAsMCwwLTM2LjA2LTI4Ljc1LDQ4LDQ4LDAsMSwwLTU5LjQsMCw3OS42Niw3OS42NiwwLDAsMC0zNi4wNiwyOC43NSw4OCw4OCwwLDEsMSwxMzEuNTIsMFoiLz48L3N2Zz4=)" aria-hidden="true"></span><span>커뮤니티</span></button>
+      <button type="button" class="sn snmore" id="snMore" aria-haspopup="true"><span class="ico-m" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></span><span>더보기</span></button>
       <a class="sn snsv" data-survey href="https://forms.gle/SZLSbbdfzNCVSs8u8" target="_blank" rel="noopener" data-tip="수업이 끝나면 꼭 참여해 주세요"><span class="ico" style="--i:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjMUYxQTE3Ij48cGF0aCBkPSJNNDAsODhINzNhMzIsMzIsMCwwLDAsNjIsMGg4MWE4LDgsMCwwLDAsMC0xNkgxMzVhMzIsMzIsMCwwLDAtNjIsMEg0MGE4LDgsMCwwLDAsMCwxNlptNjQtMjRBMTYsMTYsMCwxLDEsODgsODAsMTYsMTYsMCwwLDEsMTA0LDY0Wk0yMTYsMTY4SDE5OWEzMiwzMiwwLDAsMC02MiwwSDQwYTgsOCwwLDAsMCwwLDE2aDk3YTMyLDMyLDAsMCwwLDYyLDBoMTdhOCw4LDAsMCwwLDAtMTZabS00OCwyNGExNiwxNiwwLDEsMSwxNi0xNkExNiwxNiwwLDAsMSwxNjgsMTkyWiIvPjwvc3ZnPg==)" aria-hidden="true"></span><span>만족도 조사</span></a>
     </nav>
     <div class="acct">
@@ -2322,6 +2358,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <label class="compriv" id="comPrivL" hidden><input type="checkbox" id="comPriv"><span><b>비공개 질문</b><small>나와 예람쌤만 볼 수 있어요</small></span></label>
       <div class="row"><button type="button" class="btn ghost" id="comCancel">취소</button><button type="submit" class="btn primary">올리기</button></div>
     </form></div></div>
+<div class="msheet" id="mSheet" hidden><div class="msheet-c" role="dialog" aria-label="더보기"><span class="msheet-grip" aria-hidden="true"></span><div class="msheet-g" id="mSheetG"></div><div class="msheet-l" id="mSheetL"></div></div></div>
 <div class="modal" id="loginModal" hidden role="dialog" aria-modal="true" aria-labelledby="lgH">
   <div class="modal-card">
     <h2 id="lgH">로그인</h2>
@@ -3938,7 +3975,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792863912"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792864053"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4260,6 +4297,15 @@ renderYT();
 (function(){const s=$("#cfMore");if(!s||!window.IntersectionObserver)return;new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!cfEnd&&!$("#charFeed").hidden)loadCharFeed(true)},{rootMargin:"300px"}).observe(s)})();
 /* 바로가기: 설치된 앱(PWA)이 링크를 가로채지 않게 빈 새 탭을 먼저 열고 이동 */
 document.addEventListener("click",e=>{const a=e.target.closest("#extLinks a[href]");if(!a||e.ctrlKey||e.metaKey||e.shiftKey)return;const u=a.href;if(!/^https?:/.test(u))return;e.preventDefault();const w=window.open("about:blank","_blank");if(w){try{w.opener=null}catch(_){}w.location.replace(u)}else location.href=u});
+/* 휴대폰 더보기 시트 */
+(function(){const btn=$("#snMore"),sh=$("#mSheet");if(!btn||!sh)return;
+  const ITEMS=[["shot",'#stepper [data-stepgo="3"]'],["scene",'#stepper [data-stepgo="4"]'],["models",".sn[data-models]"],["survey","[data-survey]"]];
+  function open(){const g=$("#mSheetG");g.innerHTML="";ITEMS.forEach(([k,sel])=>{if(document.body.classList.contains("hm-"+k))return;const o=document.querySelector("header.side "+sel);if(!o)return;const ic=o.querySelector(".ico"),lb=(o.querySelector("b")||o.querySelector("span:not(.ico)")||o).textContent.trim();const b=document.createElement("button");b.type="button";b.innerHTML=(ic?ic.outerHTML:"")+`<span>${esc(lb)}</span>`;b.onclick=()=>{sh.hidden=true;o.click()};g.append(b)});
+    {const ab=document.createElement("button");ab.type="button";ab.innerHTML=`<span class="ico" style="--i:url(${AVA})" aria-hidden="true"></span><span>예람쌤</span>`;ab.querySelector(".ico").outerHTML=`<img src="${AVA}" alt="" style="width:26px;height:26px;border-radius:50%">`;ab.onclick=()=>{sh.hidden=true;document.querySelector("[data-about]").click()};g.append(ab)}
+    $("#mSheetL").innerHTML=$("#extLinks").innerHTML;$("#mSheetL").hidden=!$("#mSheetL").children.length;sh.hidden=false}
+  btn.addEventListener("click",open);sh.addEventListener("click",e=>{if(e.target===sh)sh.hidden=true});
+  $("#mSheetL").addEventListener("click",e=>{const a=e.target.closest("a[href]");if(!a)return;e.preventDefault();sh.hidden=true;const w=window.open("about:blank","_blank");if(w){try{w.opener=null}catch(_){}w.location.replace(a.href)}});
+  const mark=()=>btn.classList.toggle("cur",["shot","scene","models","about"].includes(document.body.dataset.stage));new MutationObserver(mark).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});mark()})();
 /* 페이지 머리 내용 */
 const PGH={
  char:{eye:"프롬프트 만들기",t:"캐릭터",d:"영상에 계속 나올 주인공 캐릭터의 이미지 프롬프트를 만들어요.",hi:"캐릭터는 이 네 가지만 정하면 돼요! 앞 글자만 따서 ‘피동장스’라고 불러요.",meta:[["결과물","캐릭터 이미지 프롬프트"],["넣는 곳","브루 삽입 → AI 이미지"]],
@@ -4285,7 +4331,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792863912"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792864053"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
