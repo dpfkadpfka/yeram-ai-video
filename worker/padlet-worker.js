@@ -42,6 +42,11 @@ async function isAdmin(idToken) {
 }
 export default {
   async fetch(req, env, ctx) {
+    try { return await this.handle(req, env, ctx); } catch (e) {
+      return new Response(JSON.stringify({ error: "worker", msg: String(e && e.message || e).slice(0, 300) }), { status: 500, headers: { "Access-Control-Allow-Origin": ALLOW, "Vary": "Origin", "Content-Type": "application/json; charset=utf-8" } });
+    }
+  },
+  async handle(req, env, ctx) {
     const cors = { "Access-Control-Allow-Origin": ALLOW, "Vary": "Origin", "Content-Type": "application/json; charset=utf-8" };
     const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: cors });
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
