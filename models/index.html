@@ -8,6 +8,20 @@
 }
 .tag .best{display:inline-block;margin-left:6px;background:var(--accent,#E65588);color:#fff;font-size:11.5px;font-weight:800;padding:2px 8px;border-radius:999px;vertical-align:middle}
 .cap.ask{display:grid;gap:6px}.cap.ask b{font-size:13px;color:var(--muted);font-weight:700}.cap.ask q{quotes:none;font-weight:700;line-height:1.55}.cap.ask small{font-size:12.5px;color:var(--muted)}
+#mv{position:fixed;inset:0;z-index:60;background:rgb(20 16 18 / .62);display:grid;place-items:center;padding:24px;animation:mvf .15s}
+#mv[hidden]{display:none}
+@keyframes mvf{from{opacity:0}}
+.mv-c{position:relative;width:min(1180px,100%);max-height:calc(100vh - 48px);display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);background:var(--paper);border-radius:22px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.5);animation:mvz .18s ease-out}
+@keyframes mvz{from{transform:scale(.97);opacity:0}}
+.mv-m{background:#111;display:grid;place-items:center;min-height:0}.mv-m video,.mv-m img{width:100%;height:100%;max-height:calc(100vh - 48px);object-fit:contain;display:block}
+.mv-s{padding:24px 24px 22px;overflow:auto;display:grid;gap:14px;align-content:start;font-size:14.5px}
+.mv-s h3.dh{display:flex;align-items:center;gap:8px;margin:0;font-family:var(--f-title);font-weight:800;font-size:22px}.mv-s h3.dh .lg{width:22px;height:22px}
+.mv-s .meta2{margin:0;font-size:13.5px;color:var(--muted);line-height:1.7}
+.mv-s .bx{border-radius:14px;padding:12px 14px}.mv-s .bx.t{background:var(--bg)}.mv-s .bx.r{background:var(--accent-soft)}
+.mv-s .bx b{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.mv-s .bx.r b{color:var(--accent-strong)}
+.mv-s ul{margin:0;padding-left:18px;line-height:1.7}
+.mv-x{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;border:0;background:var(--paper);color:var(--ink);font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+@media (max-width:820px){.mv-c{grid-template-columns:1fr;overflow:auto}.mv-m video,.mv-m img{max-height:55vh}}
 </style></head><body>
 <title>AI 모델 비교</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -130,7 +144,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <script>if(window.self!==window.top)document.documentElement.classList.add("embed")</script>
   <header>
     <h1><span class="hl">AI 모델</span> 비교</h1>
-    <p class="sub">예람쌤 캐릭터 하나로 여러 AI 이미지·영상 모델을 같은 조건에서 돌려 봤어요. 칸에 <b>마우스를 올리면</b> 옆에 실제 결과가 떠요.</p>
+    <p class="sub">예람쌤 캐릭터 하나로 여러 AI 이미지·영상 모델을 같은 조건에서 돌려 봤어요. 칸을 <b>누르면</b> 크게 보면서 실제 결과를 볼 수 있어요.</p>
   </header>
 
   <div class="bar" role="tablist">
@@ -239,7 +253,7 @@ const ov=m=>`<div class="cap"><span class="co"><span class="mn">${lgOf(m)}<b>${m
 const detail=m=>`<div><h3 class="dh">${lgOf(m)}${m.n}</h3><p class="meta2"><span style="color:var(--accent);font-size:15px;letter-spacing:1px">${stars(m)}</span> 품질<br>${CO[m.id]} · ${m.cr}크레딧<br>${m.spec.replace(/ ?· ?별 \d개/,'').replace(/^별 \d개 ?·? ?/,'')}</p></div><div class="bx t"><b>알려진 특징</b>${stHtml(m)}</div><div class="bx r"><b>실제 결과</b>${m.ck?`<p style="margin-bottom:4px">${m.ck.map((c,i)=>`<span style="white-space:nowrap;margin-right:8px;color:${c?'var(--ok)':'var(--bad)'}">${c?'✓':'✗'} ${CK[i]}</span>`).join('')}</p>`:''}${ul(m.rs)}</div>`;
 const STAR={flare:5,sunburst:5,nb:5,muse:4,gpt2:4,seedream:3,flux:2,sdxl:1,s25:5,s20:5,s20f:5,s20m:4,gem:5,kling:5,veo:4,veof:4,veol:3,s15:3,s1f:1};
 const stars=m=>{const n=STAR[m.co||m.id]||0;return '★'.repeat(n)+'☆'.repeat(5-n);};
-const tag=(m)=>m.f&&/^[vh]_/.test(m.id)?`<span class="sndi" aria-hidden="true"></span>`:"";
+const tag=()=>"";
 /* 비디오는 품질 높은 순, 같으면 크레딧 싼 순 */
 const byQ=(a,b)=>(STAR[b.co||b.id]||0)-(STAR[a.co||a.id]||0)||(+a.cr)-(+b.cr);VID.sort(byQ);HARD.sort(byQ);
 
@@ -281,24 +295,21 @@ function showInfo(t){const m=ALL[t&&t.dataset.id];if(!m){hideInfo();return}docum
   if(POP()){info.classList.add('pop');infoIn.innerHTML=pop(m);info.hidden=false;const r=t.getBoundingClientRect(),w=info.offsetWidth,h=info.offsetHeight;let x=r.right+12;if(x+w>innerWidth-8)x=r.left-w-12;if(x<8)x=Math.max(8,innerWidth-w-8);let y=Math.min(Math.max(8,r.top),innerHeight-h-8);info.style.left=x+'px';info.style.top=y+'px';return}
   info.classList.remove('pop');info.style.left=info.style.top='';infoIn.innerHTML=detail(m)+'<button class="x" type="button" id="infoX">닫기</button>';info.hidden=false;}
 function hideInfo(){if(!info.classList.contains('pop'))return;info.hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'))}
-let infoMute=null;document.addEventListener('mouseover',e=>{const t=e.target.closest('.tile');if(!t){hideInfo();return}if(t===infoMute)return;infoMute=null;showInfo(t);});
-addEventListener('scroll',()=>hideInfo(),{passive:true});
-document.addEventListener('focusin',e=>{const t=e.target.closest('.tile');if(t)showInfo(t);});
-
-// 크게 보기 (터치에선 첫 탭 = 설명, 두 번째 탭 = 크게)
-const lb=document.getElementById('lb'),box=document.getElementById('lbBox');
-function openLb(t){const m=ALL[t.dataset.id];const med=t.dataset.video?`<video src="${t.dataset.video}" controls autoplay playsinline></video>`:`<img src="${t.dataset.src}" alt="">`;box.innerHTML=`<div>${med}</div>`+(m?`<div class="side"><p style="font-size:13px;color:#615c6e">${CO[m.id]} · ${m.cr}크레딧 · ${m.spec}</p><div><b style="font-size:12px;color:#615c6e">이론상</b>${ul(m.th)}</div><div><b style="font-size:12px;color:#b8336a">실제 결과</b>${ul(m.rs)}</div></div>`:'');document.getElementById('lbName').textContent=t.dataset.name;lb.hidden=false;}
-function closeLb(){lb.hidden=true;box.innerHTML='';}
-const touch=matchMedia('(hover:none)').matches;
+document.addEventListener('focusin',()=>{});
+const mv=document.createElement('div');mv.id='mv';mv.hidden=true;mv.setAttribute('role','dialog');mv.setAttribute('aria-modal','true');document.body.append(mv);
+function openMv(t){const m=ALL[t.dataset.id];document.querySelectorAll('.tile video').forEach(v=>{v.muted=true});
+  const med=t.dataset.video?`<video src="${t.dataset.video}" poster="${(t.querySelector('video')||{}).poster||''}" controls autoplay playsinline loop></video>`:`<img src="${t.dataset.src}" alt="">`;
+  const cap=t.querySelector('.cap.ask');
+  mv.innerHTML=`<div class="mv-c"><button type="button" class="mv-x" data-mvx aria-label="닫기">✕</button><div class="mv-m">${med}</div><div class="mv-s">${m?detail(m):(cap?cap.outerHTML:'')}</div></div>`;mv.hidden=false;document.documentElement.style.overflow='hidden';const v=mv.querySelector('video');if(v){v.muted=false;v.play().catch(()=>{})}}
+function closeMv(){mv.hidden=true;mv.innerHTML='';document.documentElement.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mv.hidden)closeMv()});
 document.addEventListener('click',e=>{
-  if(e.target.closest('#infoX')){infoMute=document.querySelector('.tile.sel');info.hidden=true;document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));return;}
-  if(e.target.closest('#lbClose')||e.target===lb){closeLb();return;}
-  const t=e.target.closest('.tile');if(!t||!t.dataset.name)return;
-  if(touch&&!t.classList.contains('sel')&&t.dataset.id){showInfo(t);return;}
-  toggleSound(t);
+  if(e.target.closest('[data-mvx]')||e.target===mv){closeMv();return;}
+  if(!mv.hidden)return;
+  const t=e.target.closest('.tile');if(!t||!t.dataset.name)return;openMv(t);
 });
 function toggleSound(t){const v=t.querySelector('video');if(!v)return;const on=v.muted;document.querySelectorAll('.tile video').forEach(x=>{x.muted=true;x.closest('.tile').classList.remove('snd');});if(on){v.muted=false;v.currentTime=0;v.play().catch(()=>{});t.classList.add('snd');}}
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('tile'))toggleSound(e.target);});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('tile'))openMv(e.target);});
 </script>
 
 <script>document.addEventListener("visibilitychange",()=>{if(document.hidden)document.querySelectorAll("video").forEach(v=>v.pause())});window.ymPauseAll=()=>{document.querySelectorAll("video").forEach(v=>{v.pause();v.muted=true});document.querySelectorAll(".tile.snd").forEach(x=>x.classList.remove("snd"))};</script></body></html>
