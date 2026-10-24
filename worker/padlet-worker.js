@@ -18,8 +18,8 @@ async function getIdx(env) {
   try { // 처음 한 번만 옛 키에서 옮기기
     for (const k of (await env.HIDE.list({ prefix: "h:" })).keys) x.hidden.push(k.name.slice(2));
     for (const k of (await env.HIDE.list({ prefix: "m:" })).keys) { try { x.meta[k.name.slice(2)] = JSON.parse(await env.HIDE.get(k.name)); } catch (e) {} }
-  } catch (e) {}
-  await env.HIDE.put("idx", JSON.stringify(x)).catch(() => {});
+    await env.HIDE.put("idx", JSON.stringify(x)).catch(() => {});
+  } catch (e) { x.tmp = 1; } // 옮기기 실패(한도 초과 등): 저장하지 않고 다음에 다시
   return x;
 }
 async function lookupUser(idToken) {
@@ -127,7 +127,7 @@ export default {
       const X = await getIdx(env); const old = X.meta[post] || {};
       const m = { ...old, subject: String(b.subject || "").slice(0, 120), intro: String(b.intro || "").slice(0, 300), by: String(b.by || "").slice(0, 30) };
       if (["t2v", "i2v", ""].includes(b.kind)) m.kind = b.kind;
-      X.meta[post] = m; await env.HIDE.put("idx", JSON.stringify(X));
+      X.meta[post] = m; if (X.tmp) await env.HIDE.put("m:" + post, JSON.stringify(m)); else await env.HIDE.put("idx", JSON.stringify(X));
       ctx.waitUntil(cache.delete(key));
       return J({ ok: true });
     }
@@ -137,7 +137,7 @@ export default {
       if (!post) return J({ error: "post" }, 400);
       const ok = (b.token && b.token === await sign(env.PADLET_KEY, post)) || await isAdmin(b.idToken);
       if (!ok) return J({ error: "forbidden" }, 403);
-      const X = await getIdx(env); if (!X.hidden.includes(post)) X.hidden.push(post); await env.HIDE.put("idx", JSON.stringify(X));
+      const X = await getIdx(env); if (!X.hidden.includes(post)) X.hidden.push(post); if (X.tmp) await env.HIDE.put("h:" + post, "1"); else await env.HIDE.put("idx", JSON.stringify(X));
       ctx.waitUntil(cache.delete(key));
       return J({ ok: true });
     }
@@ -152,7 +152,7 @@ export default {
       if (!r.ok) return J({ ok: false, status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
       const d = await r.json().catch(() => ({}));
       const pid = String(d?.data?.id || "");
-      if (pid && env.HIDE) { const X = await getIdx(env); X.meta[pid] = { by, intro, kind }; await env.HIDE.put("idx", JSON.stringify(X)); }
+      if (pid && env.HIDE) { const X = await getIdx(env); X.meta[pid] = { by, intro, kind }; if (X.tmp) await env.HIDE.put("m:" + pid, JSON.stringify(X.meta[pid])); else await env.HIDE.put("idx", JSON.stringify(X)); }
       return J({ ok: true, id: pid, token: pid ? await sign(env.PADLET_KEY, pid) : "" });
     }
     const hit = await cache.match(key);
