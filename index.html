@@ -2842,27 +2842,27 @@ function exPick(g){if(!g)return[];const pool=[...new Set((EX_POOL[g.v]||[]).conc
 const answered=new Set(); let curStep=null, phase="ask"; // ask | review | done
 function steps(){
   const g=curGenre(), A=[];
-  A.push({id:"form",key:"form",ask:()=>"안녕하세요! 같이 대본 프롬프트를 만들어 볼게요.\n화면 비율부터 정해 볼까요?"});
-  A.push({id:"mode",key:"mode",ask:()=>"어떤 영상을 만들어 볼까요?"});
-  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 형식으로 만들어 볼까요?":cur.mode==="contest"?"공모전 요강을 붙여 넣어 주세요.\n없으면 분야를 골라요.":cur.form==="long"?"어떤 장르로 만들어 볼까요?":"어떤 장르로 만들어 볼까요?"});
-  A.push({id:"length",key:"length",ask:()=>false?"":"영상 길이는 어느 정도로 할까요?"});
+  A.push({id:"form",key:"form",ask:()=>"안녕하세요! 같이 대본 프롬프트를 만들어 볼게요.\n**화면 비율**부터 정해 볼까요?"});
+  A.push({id:"mode",key:"mode",ask:()=>"어떤 **영상**을 만들어 볼까요?"});
+  A.push({id:"genre",key:"genre",ask:()=>cur.mode==="edu"?"어떤 **형식**으로 만들어 볼까요?":cur.mode==="contest"?"공모전 요강을 붙여 넣어 주세요.\n없으면 분야를 골라요.":cur.form==="long"?"어떤 **장르**로 만들어 볼까요?":"어떤 **장르**로 만들어 볼까요?"});
+  A.push({id:"length",key:"length",ask:()=>false?"":"**영상 길이**는 어느 정도로 할까요?"});
   A.push({id:"topic",key:"topic",type:"text",ask:()=>cur.contestTheme?`요강 주제가 ‘${cur.contestTheme}’예요. 어떤 이야기를 할까요?`:(g?g.topicQ:"주제는 무엇인가요?"),ex:()=>cur.contestTheme?themeEx(cur.contestTheme):exPick(g)});
   A.push({id:"focus",key:"focus",type:"text",skip:true,when:()=>cur.topic&&cur.topic.replace(/\s/g,"").length<7,
     ask:()=>`‘${cur.topic}’은(는) ${secLabel()}에 담기엔 조금 넓어요. 숏폼은 하나만 확실히 남기는 게 좋아요.\n이 영상에서 딱 하나 전할 것은 뭐예요?`});
-  if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"누가 보는 영상인가요?"});A.push({id:"subject",key:"subject",ask:()=>"어느 교과인가요?"})}
+  if(cur.mode==="edu"){A.push({id:"grade",key:"grade",ask:()=>"**누가 보는** 영상인가요?"});A.push({id:"subject",key:"subject",ask:()=>"어느 **교과**인가요?"})}
   if(cur.mode==="gen")A.push({id:"viewer",key:"viewer",ask:()=>"주로 누가 볼까요?"});
-  A.push({id:"tone",key:"tone",ask:()=>cur.mode==="contest"?"말투는 어떻게 할까요?\n공모전은 공익광고·광고 카피가 잘 어울려요.":"말투는 어떻게 할까요?"});
+  A.push({id:"tone",key:"tone",ask:()=>cur.mode==="contest"?"**말투**는 어떻게 할까요?\n공모전은 공익광고·광고 카피가 잘 어울려요.":"**말투**는 어떻게 할까요?"});
   if(g)(g.f||[]).forEach(f=>A.push({id:"gf."+f.k,key:"gf."+g.v+"."+f.k,type:f.type==="text"?"text":"choice",skip:true,ask:()=>f.q,ph:f.ph}));
   A.push({id:"must",key:"must",type:"text",skip:true,ask:()=>"꼭 넣을 내용이 있나요? 쉼표로 적어 주세요.",ph:"예: 털은 투명하다, 빛이 흩어져 하얗게 보인다, 피부는 검다"});
   A.push({id:"msg",key:"msg",type:"text",skip:true,ask:()=>"마지막에 꼭 남기고 싶은 한마디가 있나요?",ph:"예: 북극곰 털은 사실 투명하다"});
-  A.push({id:"imgUse",key:"imgUse",ask:()=>"이미지 프롬프트도 만들까요?"});
+  A.push({id:"imgUse",key:"imgUse",ask:()=>"**이미지 프롬프트**도 만들까요?"});
   if(cur.imgUse==="yes"){
     A.push({id:"imgRef",key:"imgRef",ask:()=>"브루에 참고 이미지를 첨부할 건가요?"});
     if(cur.imgRef==="desc")A.push({id:"imgChar",key:"imgChar",type:"text",ask:()=>"캐릭터를 한 줄로 설명해 주세요.",ex:()=>["주황색 앞치마를 두른 둥근 얼굴의 아기 곰","안경 쓴 단발머리 선생님","파란 후드티를 입은 초등학생"]});
-    A.push({id:"imgRatio",key:"imgRatio",ask:()=>"이미지 비율은 어떻게 할까요?"});
+    A.push({id:"imgRatio",key:"imgRatio",ask:()=>"**이미지 비율**은 어떻게 할까요?"});
     A.push({id:"imgPad",key:"imgPad",when:()=>cur.imgRatio==="9:16sq",ask:()=>"정사각형 위아래는 어떻게 채울까요?"});
-    if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"이미지 스타일은 어떤 게 좋을까요?"});
-    A.push({id:"imgPal",key:"imgPal",ask:()=>"색은 어떻게 할까요?"})}
+    if(!["ref","bg"].includes(cur.imgRef)){A.push({id:"imgStyle",key:"imgStyle",ask:()=>"**이미지 스타일**은 어떤 게 좋을까요?"});
+    A.push({id:"imgPal",key:"imgPal",ask:()=>"**색**은 어떻게 할까요?"})}
   }
   return A.filter(s=>!s.when||s.when());
 }
@@ -2876,7 +2876,7 @@ function ackFor(key,v,shown){const n=ACKn++;
   return `${pre} <b class="ack">${esc(shown)}</b>${ro} 할게요.`}
 function ask(st){
   curStep=st; phase="ask";
-  if(ACK){const q=st.ask();botHTML(`<span class="ackl">${ACK}</span>\n${esc(q)}`.replace(/\n/g,"<br>"));ACK=""}else bot(st.ask());
+  {const q=st.ask(),hq=esc(q).replace(/\*\*(.+?)\*\*/g,'<b class="hl">$1</b>');if(ACK){botHTML(`<span class="ackl">${ACK}</span>\n${hq}`.replace(/\n/g,"<br>"));ACK=""}else if(/\*\*/.test(q))botHTML(hq.replace(/\n/g,"<br>"));else bot(q)}
   if(st.type==="text"){
     const ex=st.ex?st.ex():[];
     setQuick(ex.map(e=>`<button type="button" class="opt" data-qtext="${esc(e)}">${esc(e)}</button>`).join("")+(ex.length?`<button type="button" class="opt optskip" data-exmore>↻ 다른 예시</button>`:"")+(st.skip?`<button type="button" class="opt" data-qskip>건너뛰기</button>`:""));
@@ -3078,7 +3078,7 @@ async function aiSay(text){
 출력 형식: {"set":{"칸":"값"},"intent":"answer|question|other","reply":""}
 칸 목록:
 ${aiSchema()}`;
-  const prompt=`지금 챗봇이 물은 질문(칸 ${st?st.key:"없음"}): ${st?st.ask():""}
+  const prompt=`지금 챗봇이 물은 질문(칸 ${st?st.key:"없음"}): ${st?st.ask().replace(/\*\*/g,""):""}
 지금까지 정해진 값: ${JSON.stringify(now)}
 ${cur.brief?"공모전 요강:\n"+cur.brief.replace(/\s+/g," ").slice(0,2500)+"\n":""}사용자의 말: ${text}`;
   let j=null;
@@ -3839,7 +3839,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792857005"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792857061"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4129,7 +4129,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792857005"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792857061"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
