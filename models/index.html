@@ -244,7 +244,7 @@ vg.innerHTML=`<div class="tile" tabindex="0" data-src="start_frame.jpg" data-nam
 VID.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
 const hg=document.getElementById('hardGrid');
-hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="원본"><img class="m" src="h00_start.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap ask"><b>이 장면에서 시작, 5가지 지시</b><q>① 칠판에 ‘과학’ 쓰기 ② 비커를 쳐서 파란 액체 쏟기 ③ “어머, 큰일 났다!” 외치기 ④ 입 가리기 ⑤ 카메라가 돌며 얼굴 클로즈업</q><small>6초 · 720p · 마우스를 올리면 지켰는지 ✓/✗</small></div></div>`+
+hg.innerHTML=`<div class="tile" tabindex="0" data-src="h00_start.jpg" data-name="원본"><img class="m" src="h00_start.jpg" alt="원본"><div class="tag"><span class="name">원본</span></div><div class="cap ask"><b>이 장면에서 시작, 5가지 지시</b><q>① 칠판에 ‘과학’ 쓰기<br>② 비커를 쳐서 파란 액체 쏟기<br>③ “어머, 큰일 났다!” 외치기<br>④ 입 가리기<br>⑤ 카메라가 돌며 얼굴 클로즈업</q><small>6초 · 720p · 마우스를 올리면 지켰는지 ✓/✗</small></div></div>`+
 HARD.map(m=>`<div class="tile" tabindex="0" data-id="${m.id}" data-video="${m.f}.mp4" data-name="${m.n}"><video class="m" src="${m.f}.mp4" poster="${m.f}_poster.jpg" muted loop playsinline preload="metadata"></video>${tag(m)}${ov(m)}</div>`).join('');
 
 // 탭
