@@ -1747,6 +1747,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .trc-who{font-size:14px;color:var(--muted)}
 .trc-go{justify-self:start;margin-top:6px;padding:8px 16px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;font-size:14px}
 @media (max-width:760px){.trc{grid-template-columns:minmax(0,1fr)}}
+.gmore-b{border:0!important;background:none!important;color:var(--muted)!important;pointer-events:none}
 </style>
 
 <div class="wrap"><nav class="extlinks" id="extLinks" aria-label="바로가기"></nav>
@@ -2015,7 +2016,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
       <div class="gbar"><p class="hint" style="margin:0">선생님들이 만든 캐릭터예요.</p><div class="gfil" id="galFilter" hidden><button type="button" data-gf="all" aria-pressed="true">전체</button><button type="button" data-gf="mine" aria-pressed="false">내가 올린 것</button></div><button type="button" class="btn primary" data-upload>캐릭터 올리기</button></div>
       <div class="ggrid" id="galGrid"></div>
       <div class="pdempty" id="galEmpty" hidden><b>아직 올라온 캐릭터가 없어요</b><span>오른쪽 위 [캐릭터 올리기]로 첫 캐릭터를 올려 주세요.</span></div>
-      <div class="gmore"><button type="button" class="btn" id="galMore" hidden>더 보기</button></div>
+      <div class="gmore"><button type="button" class="btn gmore-b" id="galMore" hidden>불러오는 중…</button></div>
     </div>
     <div class="gpane" data-gpane="videos" hidden>
       <div class="gbar"><span></span><a class="btn primary" id="padOpen" href="#" target="_blank" rel="noopener">영상 올리기</a></div>
@@ -3715,7 +3716,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792841229"}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792841265"}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -3913,7 +3914,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792841229";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792841265";m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4311,5 +4312,8 @@ $("#lgClose").addEventListener("click",()=>{window._afterLogin=null;setTimeout((
 document.addEventListener("click",e=>{const b=e.target.closest("#pdGo");if(!b||!fb||user())return;e.preventDefault();e.stopImmediatePropagation();gateLogin("캐릭터를 만들고 마지막에 <b>AI로 바로 그리려면</b> 구글 로그인이 필요해요. 로그인하면 바로 채팅이 시작돼요.",()=>$("#pdGo").click())},true);
 // 대본·컷·씬 화면에 들어오면 한 번 안내
 (function(){let shown=false;const ss=window.setStage;window.setStage=function(x){const r=ss.apply(this,arguments);if(!shown&&fb&&!user()&&["chat","split","shot","scene"].includes(x)){shown=true;setTimeout(()=>{if(!user())gateLogin()},400)}return r}})();
+
+/* 갤러리 캐릭터: 스크롤하면 자동으로 더 불러오기 */
+(function(){let busy=false;const io=new IntersectionObserver(async es=>{if(!es.some(x=>x.isIntersecting)||busy||!galLast||document.body.dataset.stage!=="gallery")return;busy=true;try{await galLoad(false)}finally{busy=false}},{rootMargin:"600px 0px"});io.observe($("#galMore"))})();
 </script>
 </body></html>
