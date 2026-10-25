@@ -72,6 +72,16 @@ export default {
       await env.VIDS.put(k, req.body, { httpMetadata: { contentType: ct } });
       return J({ ok: true, url: u.origin + "/" + k, key: k, size: len });
     }
+    if (req.method === "POST" && act === "seturl") {
+      const b = await req.json().catch(() => ({}));
+      if (!(await isAdmin(b.idToken))) return J({ error: "forbidden" }, 403);
+      const post = String(b.post || ""), nu = String(b.url || "");
+      if (!post || !nu.startsWith(u.origin + "/v/")) return J({ error: "bad" }, 400);
+      const X = await getIdx(env); const m = { ...(X.meta[post] || {}), url: nu, orig: b.orig ? String(b.orig).slice(0, 300) : undefined };
+      X.meta[post] = m; if (X.tmp) await env.HIDE.put("m:" + post, JSON.stringify(m)); else await env.HIDE.put("idx", JSON.stringify(X));
+      ctx.waitUntil(caches.default.delete(new Request("https://cache.local/padlet/" + id)));
+      return J({ ok: true });
+    }
     if (req.method === "POST" && act === "usage") {
       const b = await req.json().catch(() => ({}));
       if (!(await isAdmin(b.idToken))) return J({ error: "forbidden" }, 403);
@@ -219,7 +229,7 @@ export default {
     const sections = Object.fromEntries(inc.filter(x => x.type === "section").map(x => [x.id, x.attributes?.title || ""]));
     const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
       const a = x.attributes || {}, c = a.content || {}, at = c.attachment || {};
-      return { id: x.id, subject: meta[x.id]?.subject || strip(c.subject), body: strip(c.body), url: at.url || "", caption: at.caption || "", color: a.color || "",
+      return { id: x.id, subject: meta[x.id]?.subject || strip(c.subject), body: strip(c.body), url: meta[x.id]?.url || at.url || "", caption: at.caption || "", color: a.color || "",
         section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: meta[x.id]?.by || a.author?.name || a.authorName || "", intro: meta[x.id]?.intro || "", kind: meta[x.id]?.kind || "", who: meta[x.id]?.who || "tc" };
     }).sort((p, q) => String(q.at).localeCompare(String(p.at)));
     const out = JSON.stringify({ board: { id, title: j.data?.attributes?.title || "" }, posts });
