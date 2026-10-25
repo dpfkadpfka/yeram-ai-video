@@ -2016,6 +2016,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .wkseg{display:flex;gap:4px;background:var(--bg);border-radius:12px;padding:4px}.wkseg button{flex:1;border:0;background:none;border-radius:9px;padding:9px;font:inherit;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer}.wkseg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 .wksize{border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:13.5px}.wksize summary{cursor:pointer;font-weight:700;color:var(--accent-strong,var(--accent-deep))}.wksize p{margin:8px 0 4px}.wksize ol{margin:4px 0 0;padding-left:18px;display:grid;gap:4px}
 #wkFil,#gkFil{margin-right:auto}
+.pdm.cvm{position:relative;aspect-ratio:16/9;background:#111}.pdm.cvm iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
 #upKind{margin:4px 0 12px}
 .usehd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 #useBox{display:grid;gap:12px}.usecard{border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px;background:var(--paper)}
@@ -2408,8 +2409,8 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
   <div class="modal-card comcard vupcard"><h2 id="wkH">작품 올리기</h2><p class="hint" style="margin:4px 0 0">완성한 영상을 유튜브 링크나 파일로 공유해요.</p>
     <form id="wkForm" class="comform">
       <div class="comcats"><label><input type="radio" name="wkwho" value="tc" checked>선생님 작품</label><label><input type="radio" name="wkwho" value="st">학생 작품</label></div>
-      <div class="wkseg" role="tablist"><button type="button" data-wkm="yt" aria-pressed="true">유튜브 링크</button><button type="button" data-wkm="file" aria-pressed="false">파일 올리기</button></div>
-      <input class="tinput" id="wkUrl" placeholder="https://youtu.be/… 또는 youtube.com/shorts/…" inputmode="url">
+      <div class="wkseg" role="tablist"><button type="button" data-wkm="yt" aria-pressed="true">링크 (유튜브·캔바)</button><button type="button" data-wkm="file" aria-pressed="false">파일 올리기</button></div>
+      <input class="tinput" id="wkUrl" placeholder="유튜브 또는 캔바 동영상 공유 링크" inputmode="url">
       <label class="vdrop" id="wkDrop" hidden><input type="file" id="wkFile" accept="video/*" hidden><span class="vd-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span><b id="wkDropT">영상 파일을 끌어다 놓거나 눌러서 고르세요</b><small>mp4 · 100MB 이하</small><video id="wkPrev" muted playsinline hidden></video></label>
       <details class="wksize" id="wkSize" hidden><summary>100MB가 넘으면?</summary><p>보통 <b>1080p는 1분 안팎</b>, <b>720p는 2~3분</b>까지 올릴 수 있어요.</p><ol><li>브루: 내보내기 → 영상 파일(mp4) → 해상도를 <b>720p</b>로 낮춰 다시 내보내기</li><li>또는 유튜브에 <b>일부 공개</b>로 올리고 [유튜브 링크]로 공유하기</li></ol></details>
       <input class="tinput" id="wkTitle" maxlength="80" placeholder="제목" required>
@@ -3823,18 +3824,20 @@ async function upVideo(f,onp){if(PAD_API){try{const j=await xhrUp(PAD_API.replac
   const fd=new FormData();fd.append("file",f);fd.append("upload_preset",CLD.preset);const j=await xhrUp(`https://api.cloudinary.com/v1_1/${CLD.cloud}/video/upload`,fd,"",onp).catch(e=>{throw typeof e==="object"?(e.message||"업로드 실패"):e});if(!j.secure_url)throw "업로드 실패";return j.secure_url}
 /* 작품 공유: Firestore works (유튜브 링크 또는 Cloudinary 파일) */
 let wkItems=[],wkFil="all",wkMode="yt",wkLoaded=0;
+function cvId(u){const m=String(u||"").match(/canva\.com\/design\/([\w-]+)\/([\w-]+)/);return m?m[1]+"/"+m[2]:""}
+function cvEmbed(c){return `https://www.canva.com/design/${c}/watch?embed`}
 function ytId(u){const m=String(u||"").match(/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/);return m?m[1]:""}
 async function loadWorks(force){if(!fb){renderWorks();return}if(wkLoaded&&!force&&Date.now()-wkLoaded<20000){renderWorks();return}
   try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"works"),F.orderBy("createdAt","desc"),F.limit(120)));wkItems=sn.docs.map(d=>({id:d.id,...d.data()}));wkLoaded=Date.now()}catch(e){}
   renderWorks()}
 function canWk(it){const u=user();return !!(u&&(u.uid===it.uid||isAdmin()))}
-function wkMedia(it){return it.yt?`<div class="pdm yt"><img src="https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg" alt="" loading="lazy"><i></i></div>`:padMedia(it.url)}
+function wkMedia(it){if(it.cv)return `<div class="pdm cvm"><iframe src="${cvEmbed(it.cv)}" loading="lazy" tabindex="-1" title=""></iframe></div>`;return it.yt?`<div class="pdm yt"><img src="https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg" alt="" loading="lazy"><i></i></div>`:padMedia(it.url)}
 function renderWorks(){const W=$("#wkWrap");if(!W)return;loadRx();
   const L=wkItems.filter(p=>wkFil==="all"||(p.who||"tc")===wkFil).map((p,i)=>[p,i]).sort((a,b)=>((a[0].who==="st")-(b[0].who==="st"))||a[1]-b[1]).map(x=>x[0]);
   W.innerHTML=L.length?`<div class="pdgrid">${L.map(p=>`<article class="pdcard" data-open="w:${esc(p.id)}">${authorRow(p.name,p.createdAt,"")}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-wopen="${esc(p.id)}">${esc(p.title||"제목 없음")}</button></h4>${canWk(p)?kMenu(`<button type="button" data-wedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-wdel="${esc(p.id)}">삭제</button>`):""}</div><div class="pdmw">${wkMedia(p)}</div><div class="pdtx" data-wopen="${esc(p.id)}">${p.intro?`<p>${esc(p.intro)}</p>`:""}</div>${rxHTML("w_"+p.id)}${cmtBox("w_"+p.id,1)}</article>`).join("")}</div>`
     :`<div class="pdempty"><b>${wkFil==="all"?"아직 공유된 작품이 없어요":(wkFil==="st"?"학생":"선생님")+" 작품이 아직 없어요"}</b><span>완성한 영상을 [작품 올리기]로 공유해 주세요.</span></div>`}
 function openWork(id,edit){const p=wkItems.find(x=>x.id===id);if(!p)return;const key="w_"+p.id;
-  const media=p.yt?`<iframe src="https://www.youtube-nocookie.com/embed/${p.yt}?rel=0&cc_load_policy=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:`<video src="${esc(cldV(p.url))}" poster="${esc(cldP(p.url))}" controls preload="none" playsinline></video>`;
+  const media=p.cv?`<iframe src="${cvEmbed(p.cv)}" allow="fullscreen;autoplay" allowfullscreen title="영상"></iframe>`:p.yt?`<iframe src="https://www.youtube-nocookie.com/embed/${p.yt}?rel=0&cc_load_policy=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:`<video src="${esc(cldV(p.url))}" poster="${esc(cldP(p.url))}" controls preload="none" playsinline></video>`;
   const head=edit?`<div class="gvhead gvediting"><div class="gvedit"><label>제목<input class="tinput" data-wm="title" maxlength="80" value="${esc(p.title||"")}"></label><label>한 줄 소개<textarea class="tinput" data-wm="intro" rows="2" maxlength="300">${esc(p.intro||"")}</textarea></label><label>만든 사람<input class="tinput" data-wm="name" maxlength="20" value="${esc(p.name||"")}"></label><label>작품 구분<select class="tinput" data-wm="who"><option value="tc"${(p.who||"tc")==="tc"?" selected":""}>선생님 작품</option><option value="st"${p.who==="st"?" selected":""}>학생 작품</option></select></label><div class="gvact"><button type="button" class="gva" data-wopen="${esc(p.id)}">취소</button><button type="button" class="gva save" data-wsave="${esc(p.id)}">저장</button></div></div></div>`
     :`<div class="gvhead"><div class="ptlrow"><h2>${esc(p.title||"제목 없음")}</h2>${canWk(p)?kMenu(`<button type="button" data-wedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-wdel="${esc(p.id)}">삭제</button>`):""}</div>${p.intro?`<p class="gvintro">${esc(p.intro)}</p>`:""}</div>`;
   $("#gvCard").innerHTML=`<button type="button" class="gvx" data-gclose aria-label="닫기">✕</button><div class="gvimg">${media}</div><div class="gvside">${authorRow(p.name,p.createdAt,"")}${head}${rxHTML(key)}${cmtBox(key)}</div>`;
@@ -3856,12 +3859,12 @@ $("#wkFile").addEventListener("change",e=>wkSet(e.target.files[0]));
 ["dragover","dragenter"].forEach(t=>$("#wkDrop").addEventListener(t,e=>{e.preventDefault();$("#wkDrop").classList.add("on")}));
 ["dragleave","drop"].forEach(t=>$("#wkDrop").addEventListener(t,e=>{e.preventDefault();$("#wkDrop").classList.remove("on");if(t==="drop")wkSet(e.dataTransfer.files[0])}));
 $("#wkForm").addEventListener("submit",async e=>{e.preventDefault();if(!user()){toast("로그인해 주세요");return}const title=$("#wkTitle").value.trim();if(!title){toast("제목을 써 주세요");return}
-  const who=(document.querySelector('[name="wkwho"]:checked')||{}).value==="st"?"st":"tc";let yt="",url="";
-  if(wkMode==="yt"){yt=ytId($("#wkUrl").value);if(!yt){toast("유튜브 주소를 확인해 주세요");return}}else if(!$("#wkFile").files[0]){toast("영상 파일을 골라 주세요");return}
+  const who=(document.querySelector('[name="wkwho"]:checked')||{}).value==="st"?"st":"tc";let yt="",url="",cv="";
+  if(wkMode==="yt"){const lu=$("#wkUrl").value;cv=cvId(lu);yt=cv?"":ytId(lu);if(!yt&&!cv){toast("유튜브나 캔바 공유 링크를 확인해 주세요");return}}else if(!$("#wkFile").files[0]){toast("영상 파일을 골라 주세요");return}
   const P=$("#wkProg"),bar=P.querySelector("i"),tx=P.querySelector("span"),btn=$("#wkSubmit");btn.disabled=true;
   try{if(wkMode==="file"){P.hidden=false;const f=$("#wkFile").files[0];
       url=await upVideo(f,p=>{bar.style.width=p+"%";tx.textContent=`올리는 중… ${p}%`});tx.textContent="등록하는 중…"}
-    const u=user(),F=fb.fs,d={uid:u.uid,name:$("#wkName").value.trim()||myNick(),photo:u.photoURL||"",title,intro:$("#wkIntro").value.trim(),who,yt,url,createdAt:F.serverTimestamp()};
+    const u=user(),F=fb.fs,d={uid:u.uid,name:$("#wkName").value.trim()||myNick(),photo:u.photoURL||"",title,intro:$("#wkIntro").value.trim(),who,yt,cv,url,createdAt:F.serverTimestamp()};
     const ref=await F.addDoc(F.collection(fb.db,"works"),d);wkItems.unshift({...d,id:ref.id,createdAt:new Date()});
     wkFil="all";$$("#wkFil button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.wf==="all"));renderWorks();$("#wkModal").hidden=true;toast("공유했어요!")
   }catch(err){toast("올리지 못했어요"+(err&&typeof err==="string"?` (${err})`:""));btn.disabled=false;P.hidden=true}});
@@ -4135,7 +4138,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792929680"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792929747"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4519,7 +4522,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792929680"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792929747"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
