@@ -47,7 +47,7 @@ service cloud.firestore {
       allow update: if signed() && (
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reports']) ||
         ((resource.data.uid == request.auth.uid || isOwnerAdmin()) &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'name'])));
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'name', 'kind'])));
       allow delete: if signed() && (resource.data.uid == request.auth.uid || isOwnerAdmin());
     }
     match /galleryFull/{id} {
