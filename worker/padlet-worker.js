@@ -51,6 +51,16 @@ export default {
     const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: cors });
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
     const u = new URL(req.url), id = u.searchParams.get("id") || "", act = u.searchParams.get("act") || "";
+    if (act === "yt") {
+      const ck = new Request("https://cache.local/yt/v1"), c = caches.default, hit = await c.match(ck);
+      if (hit) return new Response(await hit.text(), { headers: cors });
+      const t = await fetch("https://www.youtube.com/feeds/videos.xml?channel_id=UC9yQ7_VmqtOguVyPc9_EKQA").then(r => r.ok ? r.text() : "").catch(() => "");
+      const dec = x => x.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+      const v = [...t.matchAll(/<entry>[\s\S]*?<yt:videoId>([^<]+)<[\s\S]*?<title>([^<]*)<[\s\S]*?href="([^"]+)"[\s\S]*?<published>([^<]+)</g)].map(m => ({ id: m[1], t: dec(m[2]), sh: /\/shorts\//.test(m[3]), at: m[4] }));
+      const out = JSON.stringify({ v });
+      if (v.length) ctx.waitUntil(c.put(ck, new Response(out, { headers: { "Cache-Control": "max-age=3600" } })));
+      return new Response(out, { headers: cors });
+    }
     if (act === "vmodels") {
       let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
       const tok = await vertexToken(sa); const out = [];
