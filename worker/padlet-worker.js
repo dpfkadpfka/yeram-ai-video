@@ -132,6 +132,7 @@ export default {
       const X = await getIdx(env); const old = X.meta[post] || {};
       const m = { ...old, subject: String(b.subject || "").slice(0, 120), intro: String(b.intro || "").slice(0, 300), by: String(b.by || "").slice(0, 30) };
       if (["t2v", "i2v", ""].includes(b.kind)) m.kind = b.kind;
+      if (["st", "tc"].includes(b.who)) m.who = b.who;
       X.meta[post] = m; if (X.tmp) await env.HIDE.put("m:" + post, JSON.stringify(m)); else await env.HIDE.put("idx", JSON.stringify(X));
       ctx.waitUntil(cache.delete(key));
       return J({ ok: true });
@@ -148,7 +149,7 @@ export default {
     }
     if (req.method === "POST") {
       const b = await req.json().catch(() => ({}));
-      const subject = String(b.subject || "").slice(0, 120), body = String(b.body || "").slice(0, 2000), url = String(b.url || ""), by = String(b.by || "").slice(0, 30), intro = String(b.intro || "").slice(0, 300), kind = ["t2v", "i2v"].includes(b.kind) ? b.kind : "";
+      const subject = String(b.subject || "").slice(0, 120), body = String(b.body || "").slice(0, 2000), url = String(b.url || ""), by = String(b.by || "").slice(0, 30), intro = String(b.intro || "").slice(0, 300), kind = ["t2v", "i2v"].includes(b.kind) ? b.kind : "", who = b.who === "st" ? "st" : "tc";
       if (!subject || !/^https:\/\/res\.cloudinary\.com\//.test(url)) return J({ error: "bad" }, 400);
       const send = att => fetch(`https://api.padlet.dev/v1/boards/${id}/posts`, { method: "POST", headers: H(env.PADLET_KEY), body: JSON.stringify({ data: { type: "post", attributes: { content: { subject, body, attachment: att } } } }) });
       let r = await send({ url, caption: "" });
@@ -157,7 +158,7 @@ export default {
       if (!r.ok) return J({ ok: false, status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
       const d = await r.json().catch(() => ({}));
       const pid = String(d?.data?.id || "");
-      if (pid && env.HIDE) { const X = await getIdx(env); X.meta[pid] = { by, intro, kind }; if (X.tmp) await env.HIDE.put("m:" + pid, JSON.stringify(X.meta[pid])); else await env.HIDE.put("idx", JSON.stringify(X)); }
+      if (pid && env.HIDE) { const X = await getIdx(env); X.meta[pid] = { by, intro, kind, who }; if (X.tmp) await env.HIDE.put("m:" + pid, JSON.stringify(X.meta[pid])); else await env.HIDE.put("idx", JSON.stringify(X)); }
       return J({ ok: true, id: pid, token: pid ? await sign(env.PADLET_KEY, pid) : "" });
     }
     const hit = await cache.match(key);
@@ -176,7 +177,7 @@ export default {
     const posts = inc.filter(x => x.type === "post" && !hidden.has(String(x.id))).map(x => {
       const a = x.attributes || {}, c = a.content || {}, at = c.attachment || {};
       return { id: x.id, subject: meta[x.id]?.subject || strip(c.subject), body: strip(c.body), url: at.url || "", caption: at.caption || "", color: a.color || "",
-        section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: meta[x.id]?.by || a.author?.name || a.authorName || "", intro: meta[x.id]?.intro || "", kind: meta[x.id]?.kind || "" };
+        section: sections[x.relationships?.section?.data?.id] || "", at: a.createdAt || a.created_at || "", by: meta[x.id]?.by || a.author?.name || a.authorName || "", intro: meta[x.id]?.intro || "", kind: meta[x.id]?.kind || "", who: meta[x.id]?.who || "tc" };
     }).sort((p, q) => String(q.at).localeCompare(String(p.at)));
     const out = JSON.stringify({ board: { id, title: j.data?.attributes?.title || "" }, posts });
     ctx.waitUntil(cache.put(key, new Response(out, { headers: { "Cache-Control": "max-age=10" } })));
