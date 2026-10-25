@@ -51,6 +51,39 @@ export default {
     const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: cors });
     if (req.method === "OPTIONS") return new Response(null, { headers: { ...cors, "Access-Control-Allow-Methods": "GET,POST", "Access-Control-Allow-Headers": "content-type" } });
     const u = new URL(req.url), id = u.searchParams.get("id") || "", act = u.searchParams.get("act") || "";
+    // R2 영상 저장소: 올리기(POST act=vup, 본문=파일) / 보기(GET act=vf&k=키, Range 지원)
+    if (u.pathname.startsWith("/v/")) {
+      if (!env.VIDS) return new Response("no store", { status: 503 });
+      const k = decodeURIComponent(u.pathname.slice(1)); if (!/^v\/[\w.-]+$/.test(k)) return new Response("bad", { status: 400 });
+      const range = req.headers.get("range"); let opt = {};
+      if (range) { const m = range.match(/bytes=(\d*)-(\d*)/); if (m) { const st = m[1] ? +m[1] : undefined, en = m[2] ? +m[2] : undefined; opt.range = st !== undefined ? (en !== undefined ? { offset: st, length: en - st + 1 } : { offset: st }) : { suffix: en }; } }
+      const o = await env.VIDS.get(k, opt); if (!o) return new Response("not found", { status: 404 });
+      const h = new Headers({ "Access-Control-Allow-Origin": "*", "Accept-Ranges": "bytes", "Cache-Control": "public, max-age=31536000, immutable", "Content-Type": o.httpMetadata?.contentType || "video/mp4", "ETag": o.httpEtag });
+      if (opt.range && o.range) { const off = o.range.offset ?? (o.size - o.range.suffix), len = o.range.length ?? (o.size - off); h.set("Content-Range", `bytes ${off}-${off + len - 1}/${o.size}`); h.set("Content-Length", String(len)); return new Response(o.body, { status: 206, headers: h }); }
+      h.set("Content-Length", String(o.size)); return new Response(o.body, { headers: h });
+    }
+    if (req.method === "POST" && act === "vup") {
+      if (!env.VIDS) return J({ error: "nostore" }, 503);
+      const ct = req.headers.get("content-type") || "", len = +(req.headers.get("content-length") || 0);
+      if (!/^video\//.test(ct)) return J({ error: "type" }, 400);
+      if (!len || len > 100 * 1024 * 1024) return J({ error: "size" }, 413);
+      const ext = (ct.split("/")[1] || "mp4").replace(/[^a-z0-9]/g, "").slice(0, 5) || "mp4";
+      const k = "v/" + Date.now().toString(36) + crypto.randomUUID().slice(0, 8) + "." + (ext === "quicktime" ? "mov" : ext);
+      await env.VIDS.put(k, req.body, { httpMetadata: { contentType: ct } });
+      return J({ ok: true, url: u.origin + "/" + k, key: k, size: len });
+    }
+    if (req.method === "POST" && act === "usage") {
+      const b = await req.json().catch(() => ({}));
+      if (!(await isAdmin(b.idToken))) return J({ error: "forbidden" }, 403);
+      const out = { at: new Date().toISOString() };
+      if (env.CLD_KEY && env.CLD_SECRET) {
+        const r = await fetch("https://api.cloudinary.com/v1_1/mcilphba/usage", { headers: { Authorization: "Basic " + btoa(env.CLD_KEY + ":" + env.CLD_SECRET) } }).catch(() => null);
+        const j = r && r.ok ? await r.json().catch(() => null) : null;
+        out.cld = j ? { plan: j.plan, updated: j.last_updated, credits: j.credits, bandwidth: j.bandwidth && j.bandwidth.usage, storage: j.storage && j.storage.usage, tf: j.transformations && j.transformations.usage, resources: j.resources } : { error: r ? r.status : "net" };
+      } else out.cld = { error: "nokey" };
+      if (env.VIDS) { let n = 0, sz = 0, cur; do { const l = await env.VIDS.list({ prefix: "v/", cursor: cur, limit: 1000 }); l.objects.forEach(o => { n++; sz += o.size; }); cur = l.truncated ? l.cursor : null; } while (cur); out.r2 = { n, size: sz, limit: 10 * 1024 ** 3 }; } else out.r2 = { error: "nostore" };
+      return J(out);
+    }
     if (act === "yt") {
       const ck = new Request("https://cache.local/yt/v1"), c = caches.default, hit = await c.match(ck);
       if (hit) return new Response(await hit.text(), { headers: cors });
@@ -160,7 +193,7 @@ export default {
     if (req.method === "POST") {
       const b = await req.json().catch(() => ({}));
       const subject = String(b.subject || "").slice(0, 120), body = String(b.body || "").slice(0, 2000), url = String(b.url || ""), by = String(b.by || "").slice(0, 30), intro = String(b.intro || "").slice(0, 300), kind = ["t2v", "i2v"].includes(b.kind) ? b.kind : "", who = b.who === "st" ? "st" : "tc";
-      if (!subject || !/^https:\/\/res\.cloudinary\.com\//.test(url)) return J({ error: "bad" }, 400);
+      if (!subject || !(/^https:\/\/res\.cloudinary\.com\//.test(url) || url.startsWith(u.origin + "/v/"))) return J({ error: "bad" }, 400);
       const send = att => fetch(`https://api.padlet.dev/v1/boards/${id}/posts`, { method: "POST", headers: H(env.PADLET_KEY), body: JSON.stringify({ data: { type: "post", attributes: { content: { subject, body, attachment: att } } } }) });
       let r = await send({ url, caption: "" });
       if (!r.ok) r = await send({ attachment_url: url, attachment_caption: "" });
