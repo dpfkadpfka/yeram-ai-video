@@ -1408,13 +1408,13 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .pdempty{display:grid;gap:6px;place-items:center;text-align:center;padding:70px 20px;border:1px dashed var(--line);border-radius:18px;background:var(--paper);color:var(--muted)}.pdempty b{color:var(--ink);font-size:17px}
 /* 고르기 창이 대화를 가리지 않게: 창은 안에서 스크롤, 버튼 줄은 아래 고정 */
 .phone .log{min-height:120px}
-.phone .quick:not(:empty){max-height:min(46vh,330px);overflow-y:auto;overscroll-behavior:contain;flex-shrink:0}
+.phone .quick:not(:empty){max-height:min(40vh,330px);overflow-y:auto;overscroll-behavior:contain;flex-shrink:0}
 .phone .quick .sbact{position:sticky;bottom:-12px;z-index:2;background:var(--paper);margin:10px -12px -12px;padding:10px 12px 12px}
 @media (min-width:901px){.sn::before{top:0!important;left:0!important;width:100%!important;height:100%!important;margin:0!important;border-radius:12px}}
 /* 대본·캐릭터 첫 대화 화면: 컷 편집처럼 넓고 크게 */
 @media (min-width:901px){
  body[data-stage="chat"] .main,body.cfresh .cgrid{grid-template-columns:minmax(0,1040px)!important;justify-content:center}
- body.cfresh .phone,body[data-stage="chat"] .phone{height:max(520px,calc(100vh - 230px))!important;max-height:900px;min-height:0}
+ body.cfresh .phone,body[data-stage="chat"] .phone{height:max(400px,calc(100vh - 205px))!important;max-height:900px;min-height:0}
  body.cfresh .phone .quick:not(:empty),body[data-stage="chat"] .phone .quick:not(:empty){max-height:min(48vh,420px)}
 }
 /* 이력: 촘촘하게 */
@@ -2002,6 +2002,7 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
  .bdv{padding:16px}.bdv-h h3{font-size:19px}.bdv-b{font-size:15px}
  body[data-stage="community"]{padding-bottom:150px!important}
 }
+@media (min-width:901px){body .phone .quick:not(:empty){flex:0 1 auto!important;min-height:140px;max-height:min(42vh,340px)!important}body .phone .log{min-height:60px}}
 </style>
 
 <div class="wrap"><nav class="extlinks" id="extLinks" aria-label="바로가기"></nav>
@@ -3592,12 +3593,10 @@ const CMULTI={subj:1,act:1};
 const SB_KIND={k:"kind",t:"종류",o:["여자","남자","아이","동물"]};
 const SB_PERSON=[SB_KIND,
   {k:"hair",t:"머리",o:["긴 생머리","웨이브","단발","숏컷","포니테일","양갈래","땋은 머리"]},
-  {k:"bang",t:"앞머리",o:["앞머리 있음","앞머리 없음"]},
   {k:"hcolor",t:"머리색",o:["검정 머리","갈색 머리","금발","분홍 머리","하늘색 머리"]},
   {k:"eye",t:"눈",o:["큰 눈","동그란 눈","눈웃음","윙크"]},
-  {k:"face",t:"얼굴",o:["볼터치","주근깨","안경","보조개"],m:1},
-  {k:"cloth",t:"옷",o:["원피스","블라우스","셔츠","후드티","니트","정장","교복","앞치마","한복"]},
-  {k:"bottom",t:"하의",o:["청바지","슬랙스","치마","반바지","트레이닝 바지"]},
+  {k:"face",t:"얼굴",o:["앞머리","볼터치","주근깨","안경","보조개"],m:1},
+  {k:"cloth",t:"옷",o:["원피스","블라우스","후드티","니트","교복","한복","청바지","치마","반바지"],m:1},
   {k:"item",t:"소품",o:["작은 뿔","천사 날개","머리띠","모자","리본","없음"],m:1}];
 const SB_ANIMAL=[SB_KIND,
   {k:"species",t:"동물",o:["강아지","고양이","곰","토끼","펭귄","여우","판다","햄스터"]},
@@ -3605,8 +3604,8 @@ const SB_ANIMAL=[SB_KIND,
   {k:"feat",t:"특징",o:["큰 귀","동그란 눈","짧은 다리","통통한 몸","긴 꼬리"],m:1},
   {k:"item",t:"소품",o:["목도리","리본","모자","앞치마","가방","없음"],m:1}];
 let sb={sel:{},step:0};
-const SB_BY={남자:{hair:["짧은 머리","투블럭","댄디컷","곱슬머리","가르마 펌","스포츠머리","장발"],cloth:["셔츠","티셔츠","후드티","맨투맨","니트","정장","교복","앞치마","한복"],bottom:["청바지","슬랙스","면바지","반바지","트레이닝 바지"],item:["모자","백팩","헤드폰","넥타이","손목시계","없음"]},
- 아이:{hair:["짧은 머리","단발","바가지 머리","양갈래","포니테일","곱슬머리"],cloth:["티셔츠","원피스","후드티","맨투맨","교복","체육복","한복"],bottom:["청바지","반바지","치마","멜빵바지","트레이닝 바지"],item:["모자","가방","리본","머리띠","안전모","없음"]}};
+const SB_BY={남자:{hair:["짧은 머리","투블럭","댄디컷","곱슬머리","가르마 펌","스포츠머리","장발"],cloth:["셔츠","티셔츠","후드티","맨투맨","정장","교복","한복","청바지","슬랙스","반바지"],item:["모자","백팩","헤드폰","넥타이","손목시계","없음"]},
+ 아이:{hair:["짧은 머리","단발","바가지 머리","양갈래","포니테일","곱슬머리"],cloth:["티셔츠","원피스","후드티","체육복","한복","청바지","반바지","치마","멜빵바지"],item:["모자","가방","리본","머리띠","안전모","없음"]}};
 function sbGroups(){if(sb.sel.kind==="동물")return SB_ANIMAL;const by=SB_BY[sb.sel.kind];return by?SB_PERSON.map(g=>by[g.k]?{...g,o:by[g.k]}:g):SB_PERSON}
 function sbCompose(){
   const G=sbGroups(),v=k=>sb.sel[k];const out=[];
@@ -4025,7 +4024,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792922141"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="models/index.html?v=1792922378"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4384,7 +4383,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792922141"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="models/index.html?v=1792922378"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -4408,7 +4407,7 @@ function openGPT(keep){
   try{gptWin=window.open("https://chatgpt.com/","ymGPT",`popup=yes,width=${w},height=${sh},left=${l},top=${tp}`);if(gptWin){gptWin.focus();return true}}catch(_){}
   return false}
 /* ===================== 캐릭터 챗봇 ===================== */
-const SBQ={age:"나이는요?",hair:"머리 스타일은요?",bang:"앞머리는요?",hcolor:"머리색은요?",face:"얼굴 특징을 골라 주세요. 여러 개 골라도 돼요.",cloth:"옷은요?",item:"소품은요? 여러 개 골라도 돼요.",species:"어떤 동물이에요?",fur:"털색은요?",feat:"특징을 골라 주세요. 여러 개 골라도 돼요."};
+const SBQ={age:"나이는요?",hair:"머리 스타일은요?",bang:"앞머리는요?",hcolor:"머리색은요?",face:"얼굴 특징을 골라 주세요. 여러 개 골라도 돼요.",cloth:"옷은요? 위아래 여러 개 골라도 돼요.",item:"소품은요? 여러 개 골라도 돼요.",species:"어떤 동물이에요?",fur:"털색은요?",feat:"특징을 골라 주세요. 여러 개 골라도 돼요."};
 const ACT_O=["기본 포즈(정면 전신)","의자에 앉아 있기","컴퓨터 앞에서 일하기","책 읽기","걷기","침대에 누워 있기","손 흔들기","가리키며 설명"];
 const RATIO_P=["이모티콘처럼 단순하게(1등신)","2등신 치비","3등신 귀여운 비율","5~6등신 보통 비율","8등신 늘씬한 비율"];
 const RATIO_A=["이모티콘처럼 단순하게","통통한 미니 비율","실제 동물에 가까운 비율"];
