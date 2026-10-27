@@ -125,14 +125,14 @@ export default {
       let pt = "";
       for (let i = 0; i < 8; i++) {
         const r = await fetch(`https://aiplatform.googleapis.com/v1beta1/publishers/google/models?pageSize=100${pt ? "&pageToken=" + pt : ""}`, { headers: { authorization: "Bearer " + tok, "x-goog-user-project": sa.project_id } });
-        const d = await r.json(); (d.publisherModels || []).forEach(m => { if (/gemini|imagen|veo/i.test(m.name)) out.push(m.name.split("/").pop() + ":" + (m.launchStage || "")); });
+        const d = await r.json(); (d.publisherModels || []).forEach(m => { if (/gemini|imagen|veo|tts|chirp/i.test(m.name)) out.push(m.name.split("/").pop() + ":" + (m.launchStage || "")); });
         if (!d.nextPageToken) { if (!r.ok) out.push("ERR " + JSON.stringify(d).slice(0, 200)); break; } pt = d.nextPageToken;
       }
       return J({ out });
     }
     // ===== 장면(studio) =====
     // 하루 사용량: KV "sq:<종류>:<uid>:<날짜>" (장면 그림 12장, 영상 2개 / 관리자 무제한)
-    if (req.method === "POST" && (act === "scene" || act === "vid" || act === "vidpoll")) {
+    if (req.method === "POST" && (act === "scene" || act === "vid" || act === "vidpoll" || act === "tts")) {
       const b = await req.json().catch(() => ({}));
       const who = await lookupUser(b.idToken);
       if (!who || !who.google) return J({ error: "login" }, 401);
@@ -140,7 +140,7 @@ export default {
       let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
       const tok = await vertexToken(sa);
       const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-      const LIM = { scene: 12, vid: 2 };
+      const LIM = { scene: 12, vid: 2, tts: 30 };
       const qk = k => `sq:${k}:${who.uid}:${day}`;
       const used = async k => +(await env.HIDE.get(qk(k)) || 0);
       const bump = async k => env.HIDE.put(qk(k), String((await used(k)) + 1), { expirationTtl: 172800 });
@@ -161,6 +161,33 @@ export default {
           return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: n + 1, limit: admin ? null : LIM.scene, model: m });
         }
         return J({ error: "img" }, 502);
+      }
+      if (act === "tts") {
+        const n = await used("tts"); if (!admin && n >= LIM.tts) return J({ error: "limit", used: n, limit: LIM.tts }, 429);
+        const text = String(b.text || "").trim().slice(0, 600); if (!text) return J({ error: "text" }, 400);
+        const VO = ["Kore", "Leda", "Aoede", "Zephyr", "Puck", "Charon", "Fenrir", "Orus"]; const voice = VO.includes(b.voice) ? b.voice : "Kore";
+        const style = String(b.style || "").slice(0, 120);
+        const body = { contents: [{ role: "user", parts: [{ text: (style ? style + ": " : "") + text }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } } } };
+        for (const m of ["gemini-2.5-flash-tts", "gemini-2.5-flash-preview-tts", "gemini-2.5-pro-tts", "gemini-2.5-pro-preview-tts"]) {
+          for (const loc of ["global", "us-central1"]) {
+            const host = loc === "global" ? "aiplatform.googleapis.com" : `${loc}-aiplatform.googleapis.com`;
+            const r = await fetch(`https://${host}/v1/projects/${sa.project_id}/locations/${loc}/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
+            if (!r.ok) continue;
+            const d = await r.json(); const p = (d?.candidates?.[0]?.content?.parts || []).find(x => x.inlineData || x.inline_data); if (!p) continue;
+            const id = p.inlineData || p.inline_data, mt = id.mimeType || id.mime_type || "";
+            const pcm = Uint8Array.from(atob(id.data), c => c.charCodeAt(0));
+            let out = pcm, ct = mt;
+            if (/L16|pcm/i.test(mt) || !/wav|mp3|mpeg|ogg/i.test(mt)) {
+              const rate = +((mt.match(/rate=(\d+)/) || [])[1] || 24000), h = new DataView(new ArrayBuffer(44)), w = (o, s) => [...s].forEach((c, i) => h.setUint8(o + i, c.charCodeAt(0)));
+              w(0, "RIFF"); h.setUint32(4, 36 + pcm.length, true); w(8, "WAVE"); w(12, "fmt "); h.setUint32(16, 16, true); h.setUint16(20, 1, true); h.setUint16(22, 1, true); h.setUint32(24, rate, true); h.setUint32(28, rate * 2, true); h.setUint16(32, 2, true); h.setUint16(34, 16, true); w(36, "data"); h.setUint32(40, pcm.length, true);
+              out = new Uint8Array(44 + pcm.length); out.set(new Uint8Array(h.buffer), 0); out.set(pcm, 44); ct = "audio/wav";
+            }
+            let bin = ""; for (let i = 0; i < out.length; i += 32768) bin += String.fromCharCode.apply(null, out.subarray(i, i + 32768));
+            await bump("tts");
+            return J({ audio: `data:${ct};base64,${btoa(bin)}`, used: n + 1, limit: admin ? null : LIM.tts, model: m });
+          }
+        }
+        return J({ error: "tts" }, 502);
       }
       const LOC = "us-central1", VEO = ["veo-3.1-lite-generate-001", "veo-3.1-fast-generate-001", "veo-3.1-fast-generate-preview", "veo-3.0-fast-generate-001"];
       const base = m => `https://${LOC}-aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/${LOC}/publishers/google/models/${m}`;
