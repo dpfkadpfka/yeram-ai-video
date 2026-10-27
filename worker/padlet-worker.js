@@ -125,10 +125,73 @@ export default {
       let pt = "";
       for (let i = 0; i < 8; i++) {
         const r = await fetch(`https://aiplatform.googleapis.com/v1beta1/publishers/google/models?pageSize=100${pt ? "&pageToken=" + pt : ""}`, { headers: { authorization: "Bearer " + tok, "x-goog-user-project": sa.project_id } });
-        const d = await r.json(); (d.publisherModels || []).forEach(m => { if (/gemini|imagen/i.test(m.name)) out.push(m.name.split("/").pop() + ":" + (m.launchStage || "")); });
+        const d = await r.json(); (d.publisherModels || []).forEach(m => { if (/gemini|imagen|veo/i.test(m.name)) out.push(m.name.split("/").pop() + ":" + (m.launchStage || "")); });
         if (!d.nextPageToken) { if (!r.ok) out.push("ERR " + JSON.stringify(d).slice(0, 200)); break; } pt = d.nextPageToken;
       }
       return J({ out });
+    }
+    // ===== 장면(studio) =====
+    // 하루 사용량: KV "sq:<종류>:<uid>:<날짜>" (장면 그림 12장, 영상 2개 / 관리자 무제한)
+    if (req.method === "POST" && (act === "scene" || act === "vid" || act === "vidpoll")) {
+      const b = await req.json().catch(() => ({}));
+      const who = await lookupUser(b.idToken);
+      if (!who || !who.google) return J({ error: "login" }, 401);
+      const admin = await isAdmin(b.idToken);
+      let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
+      const tok = await vertexToken(sa);
+      const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+      const LIM = { scene: 12, vid: 2 };
+      const qk = k => `sq:${k}:${who.uid}:${day}`;
+      const used = async k => +(await env.HIDE.get(qk(k)) || 0);
+      const bump = async k => env.HIDE.put(qk(k), String((await used(k)) + 1), { expirationTtl: 172800 });
+      const dataUrl = s => String(s || "").match(/^data:(image\/[\w.+-]+);base64,(.+)$/);
+      if (act === "scene") {
+        const n = await used("scene"); if (!admin && n >= LIM.scene) return J({ error: "limit", used: n, limit: LIM.scene }, 429);
+        const prompt = String(b.prompt || "").slice(0, 1500); if (!prompt) return J({ error: "prompt" }, 400);
+        const ratio = ["1:1", "16:9", "9:16"].includes(b.ratio) ? b.ratio : "9:16";
+        const parts = [{ text: `Use the attached character reference image(s) (character and/or character turnaround sheet). Keep the SAME character: face, hair, outfit, colors and art style must match the references exactly. Draw ONE single scene (not a sheet, no panels, no text, no captions), aspect ratio ${ratio}, full-bleed.\nScene (Korean description): ${prompt}` }];
+        (Array.isArray(b.refs) ? b.refs.slice(0, 2) : []).forEach(x => { const m = dataUrl(x); if (m) parts.push({ inlineData: { mimeType: m[1], data: m[2] } }); });
+        if (parts.length < 2) return J({ error: "ref" }, 400);
+        const body = { contents: [{ role: "user", parts }], generationConfig: { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: ratio } } };
+        for (const m of ["gemini-nano-banana-2.1", "gemini-3.1-flash-image", "gemini-2.5-flash-image"]) {
+          const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
+          if (!r.ok) continue;
+          const d = await r.json(); const im = (d?.candidates?.[0]?.content?.parts || []).find(x => x.inlineData || x.inline_data); if (!im) continue;
+          const idt = im.inlineData || im.inline_data; await bump("scene");
+          return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: n + 1, limit: admin ? null : LIM.scene, model: m });
+        }
+        return J({ error: "img" }, 502);
+      }
+      const LOC = "us-central1", VEO = ["veo-3.1-lite-generate-001", "veo-3.1-fast-generate-001", "veo-3.1-fast-generate-preview", "veo-3.0-fast-generate-001"];
+      const base = m => `https://${LOC}-aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/${LOC}/publishers/google/models/${m}`;
+      if (act === "vid") {
+        const n = await used("vid"); if (!admin && n >= LIM.vid) return J({ error: "limit", used: n, limit: LIM.vid }, 429);
+        const m0 = dataUrl(b.image); if (!m0) return J({ error: "image" }, 400);
+        const ratio = b.ratio === "16:9" ? "16:9" : "9:16", dur = [4, 6, 8].includes(+b.dur) ? +b.dur : 8;
+        const prompt = String(b.prompt || "").slice(0, 800) + "\nKeep the character exactly as in the image. Smooth natural motion. No text.";
+        for (const m of VEO) {
+          const r = await fetch(base(m) + ":predictLongRunning", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify({ instances: [{ prompt, image: { bytesBase64Encoded: m0[2], mimeType: m0[1] } }], parameters: { aspectRatio: ratio, durationSeconds: dur, sampleCount: 1, generateAudio: false, resolution: "720p", personGeneration: "allow_all" } }) });
+          if (!r.ok) continue;
+          const d = await r.json(); if (!d.name) continue;
+          await bump("vid"); return J({ op: d.name, model: m, used: n + 1, limit: admin ? null : LIM.vid });
+        }
+        return J({ error: "vid" }, 502);
+      }
+      // vidpoll
+      const op = String(b.op || ""), m = VEO.includes(b.model) ? b.model : VEO[0];
+      if (!/^projects\/[\w-]+\/locations\/[\w-]+\/publishers\/google\/models\/[\w.-]+\/operations\/[\w-]+$/.test(op)) return J({ error: "op" }, 400);
+      const ck = "vo:" + op.split("/").pop(), done = await env.HIDE.get(ck); if (done) return J({ url: done });
+      const r = await fetch(base(m) + ":fetchPredictOperation", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify({ operationName: op }) });
+      if (!r.ok) return J({ wait: true });
+      const d = await r.json(); if (!d.done) return J({ wait: true });
+      if (d.error) return J({ error: "veo", detail: String(d.error.message || "").slice(0, 200) });
+      const v = (d.response?.videos || [])[0]; if (!v || !v.bytesBase64Encoded) return J({ error: d.response?.raiMediaFilteredCount ? "filtered" : "novideo" });
+      if (!env.VIDS) return J({ error: "nostore" }, 503);
+      const bin = Uint8Array.from(atob(v.bytesBase64Encoded), c => c.charCodeAt(0));
+      const k = "v/s" + Date.now().toString(36) + crypto.randomUUID().slice(0, 8) + ".mp4";
+      await env.VIDS.put(k, bin, { httpMetadata: { contentType: "video/mp4" } });
+      const url = u.origin + "/" + k; await env.HIDE.put(ck, url, { expirationTtl: 86400 });
+      return J({ url });
     }
     if (req.method === "POST" && act === "img") {
       // 나노바나나(Vertex AI) 이미지 생성: 구글 로그인 사용자만, 하루 기본 이미지 5장·캐릭터 시트 5장, 기록은 Firestore imglog
