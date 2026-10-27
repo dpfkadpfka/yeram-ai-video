@@ -150,6 +150,12 @@ export default {
         const idt = im.inlineData || im.inline_data;
         const fields = { uid: sv(who.uid), email: sv(who.email), name: sv(who.name), day: sv(day), at: { timestampValue: new Date().toISOString() }, kind: sv(kind), prompt: sv(prompt.slice(0, 1500)), model: sv(m), ref: { booleanValue: !!ref } };
         ctx.waitUntil(fetch(FS + "/imglog", { method: "POST", headers: ah, body: JSON.stringify({ fields }) }).catch(() => {}));
+        // 알림: 사람마다 처음 만들 때 한 번, 그 뒤 1시간은 조용히. 개인정보(이름·메일)는 보내지 않음 — 자세한 건 관리자 '이미지 기록'에서
+        if (env.NTFY_TOPIC && env.HIDE && !admin) ctx.waitUntil((async () => {
+          const nk = "nt:" + who.uid; if (await env.HIDE.get(nk)) return;
+          await env.HIDE.put(nk, "1", { expirationTtl: 3600 });
+          await fetch("https://ntfy.sh/" + encodeURIComponent(env.NTFY_TOPIC), { method: "POST", headers: { Tags: "art", Click: "https://dpfkadpfka.github.io/yeram-ai-video/", "Content-Type": "text/plain; charset=utf-8" }, body: `AI 영상 제작소: 새로 그림을 만든 사람이 있어요 (${kind === "sheet" ? "캐릭터 시트" : "기본 이미지"}). 관리자 > 이미지 기록에서 확인` }).catch(() => {});
+        })());
         return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: used + 1, limit: admin ? null : LIMIT, model: m, ...(u.searchParams.get("dbg") === "1" ? { errs } : {}) });
       }
       return J({ error: "img", ...(u.searchParams.get("dbg") === "1" ? { errs } : {}) }, 502);
