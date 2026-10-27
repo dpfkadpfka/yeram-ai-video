@@ -72,6 +72,21 @@ export default {
       await env.VIDS.put(k, req.body, { httpMetadata: { contentType: ct } });
       return J({ ok: true, url: u.origin + "/" + k, key: k, size: len });
     }
+    // 커뮤니티 새 글 → 예람쌤 지메일 알림 (Google Apps Script 웹앱 MAIL_HOOK 경유, 같은 글은 한 번만)
+    if (req.method === "POST" && act === "cnotify") {
+      const b = await req.json().catch(() => ({}));
+      const col = b.col === "cpriv" ? "cpriv" : "community", pid = String(b.id || "");
+      if (!env.MAIL_HOOK || !b.idToken || !/^[\w-]{10,40}$/.test(pid)) return J({ ok: false });
+      const dk = "cn:" + pid; if (env.HIDE && await env.HIDE.get(dk)) return J({ ok: true, dup: true });
+      const r = await fetch(`https://firestore.googleapis.com/v1/projects/yeram-ai-video/databases/(default)/documents/${col}/${pid}`, { headers: { authorization: "Bearer " + b.idToken } });
+      if (!r.ok) return J({ ok: false }, 400);
+      const f = (await r.json()).fields || {}, g = k => (f[k] && (f[k].stringValue ?? f[k].booleanValue)) || "";
+      const CAT = { review: "수강 후기", qna: "질문 게시판", free: "자유 게시판" };
+      const txt = String(g("body") || g("html")).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 1500);
+      if (env.HIDE) await env.HIDE.put(dk, "1", { expirationTtl: 86400 * 3 });
+      ctx.waitUntil(fetch(env.MAIL_HOOK, { method: "POST", headers: { "content-type": "text/plain" }, body: JSON.stringify({ key: env.MAIL_KEY || "", subject: `[AI 영상 제작소] ${CAT[g("cat")] || "커뮤니티"}${col === "cpriv" ? "(비공개)" : ""} 새 글: ${g("title")}`.slice(0, 200), text: `${g("nick") || "익명"} 님이 글을 올렸어요.\n\n제목: ${g("title")}\n\n${txt}\n\n바로 보기: https://dpfkadpfka.github.io/yeram-ai-video/#community` }) }).catch(() => {}));
+      return J({ ok: true });
+    }
     if (req.method === "POST" && act === "seturl") {
       const b = await req.json().catch(() => ({}));
       if (!(await isAdmin(b.idToken))) return J({ error: "forbidden" }, 403);
