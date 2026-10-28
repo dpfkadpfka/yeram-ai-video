@@ -4004,27 +4004,29 @@ function charBase(){
 }
 function charSheet(){
   const st=styleByName(cv("style")), sty=st?st.t:(cv("style")||"원본과 같은");
-  return ["방금 만든(또는 첨부한) 캐릭터로 전문 애니메이션 스튜디오가 쓰는 '캐릭터 모델 시트' 1장을 만들어 줘.",
+  return ["방금 만든(또는 첨부한) 캐릭터로 전문 캐릭터 디자인 스튜디오가 만드는 '캐릭터 디자인 바이블' 시트 1장을 만들어 줘.",
     "","[화면]",
-    "- 16:9 가로. 배경은 캐릭터의 피부·머리·옷 색과 확실히 구분되는 아주 연한 단색 파스텔 한 가지로, 캐릭터에 어울리게 골라 줘. 진하거나 튀는 색, 그라데이션, 무늬는 쓰지 마. 칸을 나누는 선은 아주 옅은 회색 실선만.",
-    "- 배경색 때문에 캐릭터의 피부색이나 옷 색이 하얗게 날아가거나 바뀌지 않게, 원본 색을 그대로 유지해.",
+    "- 16:9 가로. 연한 단색 배경 위에, 얇은 테두리와 둥근 모서리가 있는 여러 개의 칸(패널)으로 나눈 깔끔한 레이아웃. 칸 사이 간격은 일정하게.",
+    "- 배경과 칸 테두리는 캐릭터의 대표 색에 어울리는 아주 연한 톤 한 가지로 통일. 진하거나 튀는 색, 무늬는 쓰지 마.",
+    "- 배경색 때문에 캐릭터의 피부색이나 옷 색이 바뀌지 않게 원본 색을 그대로 유지해.",
     `- 그림체는 원본과 같은 ${sty} 스타일 그대로. 모든 그림은 같은 조명, 같은 그림체, 같은 색으로 통일.`,
     ...(styleByName(cv("style"))?["","[스타일 세부]",...styleBlock(true).slice(1)]:[]),
-    "","[구성]",
-    "1. 왼쪽 1/3: 캐릭터의 대표 전신 포즈 1개를 크게. 캐릭터 성격이 드러나는 자신감 있는 자세.",
-    "2. 오른쪽 위: 턴어라운드 전신 5개를 같은 크기·같은 바닥선에 나란히. 정면, 3/4 앞, 옆모습, 3/4 뒤, 뒷모습 순서. 모두 차렷에 가까운 기본 자세.",
-    "   - 키를 맞출 수 있게 머리 위·턱·허리·발끝 높이에 아주 옅은 가로 안내선을 그어 줘. 숫자는 넣지 마.",
-    "3. 오른쪽 가운데: 얼굴 클로즈업 6개를 한 줄로. 기본 미소, 활짝 웃음, 놀람, 고민, 화남, 윙크.",
-    "4. 오른쪽 아래: 동작 포즈 3개(손 흔들기, 가리키며 설명하기, 점프)와 디테일 확대 2개(손 모양, 대표 소품이나 머리 장식).",
-    "5. 맨 아래 가장자리: 캐릭터에 쓰인 주요 색 5개를 동그란 색 칩으로만. 색 이름이나 코드는 쓰지 마.",
+    "","[구성] 칸마다 그림만 넣고, 칸 제목·이름표·설명 글은 넣지 마.",
+    "1. 대표 이미지(왼쪽 위, 가장 큰 칸): 캐릭터의 매력이 가장 잘 드러나는 상반신~전신 대표 그림. 캐릭터에 어울리는 부드럽게 흐린 배경과 분위기 있는 조명.",
+    "2. 표정(위쪽 가운데~오른쪽 칸): 얼굴 클로즈업 8개를 2줄로. 기본 미소, 활짝 웃음, 신남, 놀람, 고민, 부끄러움, 슬픔, 장난스러운 윙크.",
+    "3. 턴어라운드(가운데 왼쪽 칸): 전신 정면·옆모습·뒷모습 3개를 같은 크기·같은 바닥선에 나란히. 모두 차렷에 가까운 기본 자세.",
+    "4. 포즈(가운데 오른쪽 칸): 전신 동작 포즈 4개. 손 흔들기, 가리키며 설명하기, 점프, 쪼그려 앉기 등 캐릭터에 어울리게.",
+    "5. 의상 구성(아래 왼쪽 칸): 캐릭터가 입은 옷과 신발·소품을 하나씩 따로 떼어 놓은 아이템 그림. 겉옷, 상의, 하의, 신발, 액세서리 순서로 나란히.",
+    "6. 디테일(아래 가운데 칸): 머리 모양을 앞·옆·뒤에서 본 클로즈업 3개와, 대표 소품이나 장식 클로즈업 1~2개.",
+    "7. 색 팔레트(아래 오른쪽 칸): 캐릭터에 쓰인 주요 색 5개를 둥근 모서리 색 칩으로만.",
     "","[일관성]",
-    "- 얼굴 비율, 눈·코·입 모양, 머리 모양과 색, 옷과 소품은 원본과 완전히 똑같이. 새 옷이나 소품은 추가하지 마.",
-    "- 모든 그림의 몸 비율과 키가 같아야 해.",
+    "- 모든 그림에서 얼굴 비율, 눈·코·입 모양, 머리 모양과 색, 옷과 소품이 원본과 완전히 똑같아야 해. 새 옷이나 소품은 추가하지 마.",
+    "- 모든 전신 그림의 몸 비율과 키가 같아야 해.",
     ...(cv("point")?[`- 포인트 컬러 ${cv("point").split(",").join(", ")}도 원본처럼 같은 자리에 유지해.`]:[]),
-    "- 그림끼리 겹치지 않게 간격을 넉넉히 두고, 머리나 발이 잘리지 않게.",
-    "- 그림자는 발밑에 옅은 타원으로만.",
+    "- 그림끼리 겹치지 않게 간격을 넉넉히 두고, 머리나 발이 칸 밖으로 잘리지 않게.",
+    "- 대표 이미지를 뺀 나머지 칸은 깨끗한 배경, 발밑에 옅은 그림자만.",
     "","[넣지 말 것]",
-    "글자, 숫자, 이름표, 제목, 화살표, 말풍선, 로고, 워터마크."].join("\n");
+    "글자, 숫자, 제목, 이름, 칸 제목, 이름표, 설명 문장, 색 이름·색 코드, 성격·능력치·그래프, 프로필 표, 로고, 워터마크, QR코드, 말풍선, 화살표."].join("\n");
 }
 function renderChar(){const on=!!cv("subj");if(!$("#cBase").dataset.edited)$("#cBase").value=on?charBase():"";if(!$("#cSheet").dataset.edited)$("#cSheet").value=on?charSheet():"";$$("#charStage [data-ccopy]").forEach(x=>x.classList.toggle("off",!on))}
 function markChips(){renderStylePick&&renderStylePick();if($("#subjBuilder")&&!$("#subjBuilder").innerHTML)renderSB();$$("[data-cfill]").forEach(x=>{const k=x.dataset.cfill,val=$("#c_"+k).value;x.setAttribute("aria-pressed",CMULTI[k]?val.split(/\s*,\s*/).includes(x.dataset.v):val===x.dataset.v)})}
@@ -4615,7 +4617,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793210005"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793210128"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -5000,7 +5002,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793210005"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793210128"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
