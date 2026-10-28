@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>이미지 기록 | 예람쌤 AI 영상 제작소</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#f6f4f2;--paper:#fff;--ink:#1f1a17;--muted:#7a716b;--line:#ebe6e2;--accent:#E8558A;--soft:#fdebf2}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+h1{font-size:24px;margin:0;letter-spacing:-.02em}h1 small{font-size:14px;color:var(--muted);font-weight:600;margin-left:8px}
+.sp{flex:1}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}.btn.pri:hover{filter:brightness(.95);color:#fff}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi .l{font-size:13px;color:var(--muted);font-weight:700}.kpi .v{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;margin-bottom:14px}
+.ct{font-weight:800;margin:0 0 12px;font-size:15px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:140px}
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bars .b i{display:block;width:100%;max-width:34px;background:var(--accent);border-radius:6px 6px 2px 2px;min-height:2px}
+.bars .b.z i{background:var(--line)}
+.bars .b span{font-size:11px;color:var(--muted)}.bars .b em{font-style:normal;font-size:11px;font-weight:700}
+.ppl{display:grid;gap:6px;max-height:190px;overflow:auto}
+.ppl button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border:0;background:none;text-align:left;font:inherit;padding:6px 8px;border-radius:8px;cursor:pointer}
+.ppl button:hover,.ppl button.on{background:var(--soft)}
+.ppl b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ppl small{color:var(--muted);font-weight:500;margin-left:6px}
+.ppl em{font-style:normal;font-weight:800;color:var(--accent)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.in{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 12px;font:inherit;font-size:14px;color:var(--ink)}
+.in:focus{outline:2px solid var(--soft);border-color:var(--accent)}
+#q{flex:1;min-width:200px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-size:12.5px;font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.row{cursor:pointer}tr.row:hover td{background:#fbf9f8}
+td.t{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+td.w b{display:block;font-weight:700}td.w small{color:var(--muted)}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:#f1eeeb;white-space:nowrap}.tag.s{background:var(--soft);color:var(--accent)}
+td.p .s{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+tr.open td.p .s{display:block;-webkit-line-clamp:unset;white-space:pre-wrap}
+td.m{color:var(--muted);font-size:12px;white-space:nowrap}
+.more{text-align:center;margin-top:14px}
+.gate{max-width:420px;margin:12vh auto;text-align:center}.gate p{color:var(--muted)}
+.cnt{color:var(--muted);font-size:13px}
+@media (max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}td.m,th.m{display:none}}
+@media (max-width:560px){.wrap{padding:18px 12px 40px}td.w small{display:none}table{font-size:13px}td,th{padding:8px 6px}}
+</style></head>
+<body>
+<div class="wrap">
+  <div id="gate" class="gate card" hidden>
+    <h1 style="margin-bottom:6px">이미지 기록</h1>
+    <p id="gateMsg">관리자 본인 계정으로 로그인해 주세요.</p>
+    <button class="btn pri" id="login">구글로 로그인</button>
+  </div>
+  <div id="app" hidden>
+    <header><h1>이미지 기록<small id="who"></small></h1><span class="sp"></span>
+      <button class="btn" id="reload">새로고침</button><button class="btn" id="csv">시트로 받기</button><button class="btn" id="logout">로그아웃</button></header>
+    <section class="kpis">
+      <div class="card kpi"><div class="l">오늘</div><div class="v" id="kToday">0</div></div>
+      <div class="card kpi"><div class="l">오늘 쓴 사람</div><div class="v" id="kPpl">0</div></div>
+      <div class="card kpi"><div class="l">최근 7일</div><div class="v" id="kWeek">0</div></div>
+      <div class="card kpi"><div class="l">불러온 기록</div><div class="v" id="kAll">0</div></div>
+    </section>
+    <section class="grid2">
+      <div class="card"><p class="ct">날짜별 (최근 14일)</p><div class="bars" id="bars"></div></div>
+      <div class="card"><p class="ct">사람별 <span class="cnt">눌러서 거르기</span></p><div class="ppl" id="ppl"></div></div>
+    </section>
+    <section class="card">
+      <div class="bar">
+        <input class="in" id="q" placeholder="이름·메일·프롬프트 검색">
+        <select class="in" id="fDay"><option value="">모든 날짜</option></select>
+        <select class="in" id="fKind"><option value="">모든 종류</option><option value="base">기본</option><option value="sheet">시트</option></select>
+        <span class="cnt" id="cnt"></span>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>시간</th><th>사람</th><th>종류</th><th>프롬프트</th><th class="m">모델</th></tr></thead><tbody id="tb"></tbody></table></div>
+      <div class="more"><button class="btn" id="more" hidden>더 불러오기</button></div>
+    </section>
+  </div>
+</div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithPopup,GoogleAuthProvider,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,query,orderBy,limit,startAfter,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const OWNER="dpfkadpfka@gmail.com";
+const app=initializeApp({apiKey:"AIzaSyCZ-UaL2zBCzYYkjwzrdEUAA9dEVLg5uKM",authDomain:"yeram-ai-video.firebaseapp.com",projectId:"yeram-ai-video",storageBucket:"yeram-ai-video.firebasestorage.app",messagingSenderId:"590325912000",appId:"1:590325912000:web:8056b70fbd73e29d34f825"});
+const auth=getAuth(app),db=getFirestore(app);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const PAGE=500;let L=[],last=null,person="";
+const kst=d=>new Date(d.getTime()+9*3600e3);
+const dayOf=d=>kst(d).toISOString().slice(0,10);
+const tm=d=>{const k=kst(d);return `${k.getUTCMonth()+1}.${k.getUTCDate()} ${String(k.getUTCHours()).padStart(2,"0")}:${String(k.getUTCMinutes()).padStart(2,"0")}`};
+const today=()=>dayOf(new Date());
+
+$("#login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>{$("#gateMsg").textContent="로그인하지 못했어요. 팝업 차단을 확인해 주세요."});
+$("#logout").onclick=()=>signOut(auth);
+$("#reload").onclick=()=>load(true);
+$("#more").onclick=()=>load(false);
+onAuthStateChanged(auth,u=>{
+  const ok=u&&(u.email||"").toLowerCase()===OWNER;
+  $("#gate").hidden=!!ok;$("#app").hidden=!ok;
+  if(u&&!ok)$("#gateMsg").textContent=`${u.email} 계정은 볼 수 없어요. 관리자 본인 계정으로 로그인해 주세요.`;
+  if(ok){$("#who").textContent=u.email;load(true)}
+});
+
+async function load(reset){
+  if(reset){L=[];last=null}
+  $("#more").disabled=true;$("#cnt").textContent="불러오는 중…";
+  try{
+    const q=last?query(collection(db,"imglog"),orderBy("at","desc"),startAfter(last),limit(PAGE)):query(collection(db,"imglog"),orderBy("at","desc"),limit(PAGE));
+    const sn=await getDocs(q);
+    sn.docs.forEach(d=>{const x=d.data();const at=x.at&&x.at.toDate?x.at.toDate():new Date(0);L.push({at,day:x.day||dayOf(at),name:x.name||"",email:x.email||"",kind:x.kind==="sheet"?"sheet":"base",prompt:x.prompt||"",model:x.model||"",ref:!!x.ref})});
+    last=sn.docs[sn.docs.length-1]||last;
+    $("#more").hidden=sn.docs.length<PAGE;
+  }catch(e){$("#cnt").textContent="기록을 불러오지 못했어요.";console.error(e);return}
+  finally{$("#more").disabled=false}
+  render();
+}
+
+function render(){
+  const t=today(),wk=new Set([...Array(7)].map((_,i)=>dayOf(new Date(Date.now()-i*864e5))));
+  const tL=L.filter(x=>x.day===t);
+  $("#kToday").textContent=tL.length;
+  $("#kPpl").textContent=new Set(tL.map(x=>x.email||x.name)).size;
+  $("#kWeek").textContent=L.filter(x=>wk.has(x.day)).length;
+  $("#kAll").textContent=L.length;
+  // 날짜별
+  const days=[...Array(14)].map((_,i)=>dayOf(new Date(Date.now()-(13-i)*864e5)));
+  const per={};L.forEach(x=>per[x.day]=(per[x.day]||0)+1);
+  const mx=Math.max(1,...days.map(d=>per[d]||0));
+  $("#bars").innerHTML=days.map(d=>{const n=per[d]||0;return `<div class="b${n?"":" z"}" title="${d} ${n}장"><em>${n||""}</em><i style="height:${Math.round(n/mx*100)}%"></i><span>${+d.slice(8)}</span></div>`}).join("");
+  // 사람별
+  const pp={};L.forEach(x=>{const k=x.email||x.name;(pp[k]=pp[k]||{n:x.name,e:x.email,c:0,t:0}).c++;if(x.day===t)pp[k].t++});
+  $("#ppl").innerHTML=`<button data-p="" class="${person?"":"on"}"><b>전체</b><em>${L.length}</em></button>`+Object.entries(pp).sort((a,b)=>b[1].c-a[1].c).map(([k,v])=>`<button data-p="${esc(k)}" class="${person===k?"on":""}"><b>${esc(v.n||v.e)}<small>${esc(v.n?v.e:"")}${v.t?` · 오늘 ${v.t}`:""}</small></b><em>${v.c}</em></button>`).join("");
+  // 날짜 선택
+  const fd=$("#fDay"),cur=fd.value,ds=[...new Set(L.map(x=>x.day))];
+  fd.innerHTML=`<option value="">모든 날짜</option>`+ds.map(d=>`<option value="${d}">${d===t?"오늘 · ":""}${d}</option>`).join("");fd.value=ds.includes(cur)?cur:"";
+  table();
+}
+function rows(){
+  const q=$("#q").value.trim().toLowerCase(),d=$("#fDay").value,k=$("#fKind").value;
+  return L.filter(x=>(!person||(x.email||x.name)===person)&&(!d||x.day===d)&&(!k||x.kind===k)&&(!q||(x.name+" "+x.email+" "+x.prompt).toLowerCase().includes(q)));
+}
+function table(){
+  const R=rows();$("#cnt").textContent=`${R.length}건`;
+  $("#tb").innerHTML=R.length?R.map(x=>`<tr class="row"><td class="t">${tm(x.at)}</td><td class="w"><b>${esc(x.name||x.email)}</b><small>${esc(x.name?x.email:"")}</small></td><td><span class="tag${x.kind==="sheet"?" s":""}">${x.kind==="sheet"?"시트":"기본"}</span>${x.ref?' <span class="tag">참고</span>':""}</td><td class="p"><div class="s">${esc(x.prompt)}</div></td><td class="m">${esc(x.model.replace(/^gemini-/,""))}</td></tr>`).join(""):`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">기록이 없어요</td></tr>`;
+}
+document.addEventListener("click",e=>{
+  const p=e.target.closest("[data-p]");if(p){person=p.dataset.p;render();return}
+  const r=e.target.closest("tr.row");if(r)r.classList.toggle("open");
+});
+["#q","#fDay","#fKind"].forEach(s=>$(s).addEventListener("input",table));
+$("#csv").onclick=()=>{
+  const R=rows(),c=v=>`"${String(v).replace(/"/g,'""')}"`;
+  const csv="﻿"+[["시간","날짜","이름","메일","종류","참고 그림","모델","프롬프트"].map(c).join(","),...R.map(x=>[tm(x.at),x.day,x.name,x.email,x.kind==="sheet"?"시트":"기본",x.ref?"O":"",x.model,x.prompt].map(c).join(","))].join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=`이미지기록_${today()}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+</script>
+</body></html>
