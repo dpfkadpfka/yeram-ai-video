@@ -2178,6 +2178,18 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
 .vmodel{display:block;font-style:normal;font-size:11px;color:#a59c96;font-weight:600;margin-top:1px;letter-spacing:.01em}
 .acard-tag .vmodel,.aprev-tag .vmodel{display:inline;margin-left:6px;color:#b48a9c}
 .mnote{font-size:11.5px;color:#a59c96;margin-top:-4px}
+
+/* 스타일 고르기 패널: 폭과 상관없이 한 줄 구조 */
+.sbpanel.pkstyle{display:flex!important;flex-direction:column;gap:12px}
+.pkstyle .pcrow{position:static!important;order:-1;border-left:0!important;border-top:0!important;padding:0 0 12px!important;margin:0!important;border-bottom:1px dashed var(--line)!important;flex-direction:row!important;flex-wrap:wrap;align-items:center!important;gap:8px 10px!important}
+.pkstyle .pcrow>b{font-size:13px;width:100%}
+.pkstyle .pcrow small{display:inline!important;margin-left:4px!important}
+.pkstyle .pcpick2{display:flex!important;align-items:center;gap:8px;margin:0}
+.pkstyle .pcpick2 .pcin{width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:8px;background:none}
+.pkstyle .pcpick2 .btn{grid-column:auto!important;height:34px;padding:0 12px}
+.pkstyle .pcpick{flex-direction:row!important;flex-wrap:wrap;align-items:center!important}
+.pktiles{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))!important}
+.pktile .pkph{display:grid;place-items:center;aspect-ratio:1;border-radius:8px;background:linear-gradient(135deg,#f6eef2,#f3f0ee);color:var(--muted);font-size:11px;font-weight:700}
 .wkscprev{width:100%;max-height:300px;border-radius:14px;background:#141210;object-fit:contain}
 @media (max-width:560px){.st-tools{grid-auto-flow:row;grid-template-columns:1fr 1fr}.st-tools>*:last-child:nth-child(3){grid-column:1/-1}.st-sec{padding:18px 16px}}
 </style>
@@ -4602,7 +4614,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793208377"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793208514"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4987,7 +4999,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793208377"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793208514"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -5059,7 +5071,7 @@ let pk=null;
 function pkList(sec){if(sec==="act")return ACT_O.map(t=>({v:t}));if(sec==="place")return PLACE_O.map(t=>({v:t}));const animal=sb.sel.kind==="동물";return STYLES.filter(x=>animal?x.g==="동물":x.g==="인물").map(x=>({v:x.t,img:STYLE_IMG[x.id]}))}
 function pkOpen(sec){const curv={act:actLabel(),place:placeLabel(),style:cv("style")}[sec]||"";pk={sec,sel:curv?curv.split(/\s*,\s*/).filter(Boolean):[],sum:null,dirty:false,multi:sec==="act"};pkPaint()}
 function pkPaint(){const L=pkList(pk.sec),on=v=>pk.sel.includes(v),val=pk.sum!=null?pk.sum:pk.sel.join(", ");
-  const items=pk.sec==="style"?`<div class="pktiles">${L.map(x=>`<button type="button" class="pktile" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${x.img?`<img src="${x.img}" alt="">`:""}<span>${esc(x.v)}</span></button>`).join("")}</div>`:`<div class="sbc">${L.map(x=>`<button type="button" class="opt" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${esc(x.v)}</button>`).join("")}</div>`;
+  const items=pk.sec==="style"?`<div class="pktiles">${L.map(x=>`<button type="button" class="pktile" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${x.img?`<img src="${x.img}" alt="">`:`<i class="pkph">예시 준비 중</i>`}<span>${esc(x.v)}</span></button>`).join("")}</div>`:`<div class="sbc">${L.map(x=>`<button type="button" class="opt" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${esc(x.v)}</button>`).join("")}</div>`;
   const pcs=cv("point")?cv("point").split(","):[],pc=pcs[pcs.length-1]||"",PAL=[["","원래 색"],["#F06292","분홍"],["#E53935","빨강"],["#FB8C00","주황"],["#FDD835","노랑"],["#43A047","초록"],["#26C6DA","민트"],["#29B6F6","하늘"],["#1E88E5","파랑"],["#8E24AA","보라"],["#6D4C41","갈색"],["#37474F","검정"]];
   const pal=pk.sec==="style"?`<div class="pcrow"><b>포인트 컬러 <small>선택 · 최대 3개</small></b><div class="pcpick2"><input type="color" class="pcin" id="pcIn" value="${window._pcLast||"#E65588"}" aria-label="색 고르기"><span class="pchex" id="pcHex">${(window._pcLast||"#E65588").toUpperCase()}</span><button type="button" class="btn sm primary" data-pcadd${pcs.length>=3?" disabled":""}>선택하기</button></div>${pcs.length?`<div class="pcpick"><span class="pcl">고른 색</span>${pcs.map(h=>`<span class="pcchip"><i style="background:${h}"></i>${h}<button type="button" data-pcx="${h}" aria-label="${h} 빼기">✕</button></span>`).join("")}</div>`:""}</div>`:"";
   cQuick.innerHTML=`<div class="sbpanel${pk.sec==="style"?" pkstyle":""}">${items}${pal}</div><div class="sbact"><button type="button" class="opt optskip" data-cback>← 이전</button><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;$("#cSay").value=val}
