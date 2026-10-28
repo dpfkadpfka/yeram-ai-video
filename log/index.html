@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>이미지 기록 | 예람쌤 AI 영상 제작소</title>
+<title>생성 기록 | 예람쌤 AI 영상 제작소</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
@@ -39,7 +39,7 @@ td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
 tr.row{cursor:pointer}tr.row:hover td{background:#fbf9f8}
 td.t{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
 td.w b{display:block;font-weight:700}td.w small{color:var(--muted)}
-.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:#f1eeeb;white-space:nowrap}.tag.s{background:var(--soft);color:var(--accent)}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:#f1eeeb;white-space:nowrap}.tag.k-sheet{background:var(--soft);color:var(--accent)}.tag.k-scene{background:#e7f3ff;color:#2a6fb0}.tag.k-vid{background:#efe7ff;color:#6a3fc0}.tag.k-tts{background:#e6f6ec;color:#2b8a4e}.vl{display:inline-block;margin-top:4px;font-size:13px;font-weight:700;color:var(--accent);text-decoration:none}
 td.p .s{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 tr.open td.p .s{display:block;-webkit-line-clamp:unset;white-space:pre-wrap}
 td.m{color:var(--muted);font-size:12px;white-space:nowrap}
@@ -52,12 +52,12 @@ td.m{color:var(--muted);font-size:12px;white-space:nowrap}
 <body>
 <div class="wrap">
   <div id="gate" class="gate card" hidden>
-    <h1 style="margin-bottom:6px">이미지 기록</h1>
+    <h1 style="margin-bottom:6px">생성 기록</h1>
     <p id="gateMsg">관리자 본인 계정으로 로그인해 주세요.</p>
     <button class="btn pri" id="login">구글로 로그인</button>
   </div>
   <div id="app" hidden>
-    <header><h1>이미지 기록<small id="who"></small></h1><span class="sp"></span>
+    <header><h1>생성 기록<small id="who"></small></h1><span class="sp"></span>
       <button class="btn" id="reload">새로고침</button><button class="btn" id="csv">시트로 받기</button><button class="btn" id="logout">로그아웃</button></header>
     <section class="kpis">
       <div class="card kpi"><div class="l">오늘</div><div class="v" id="kToday">0</div></div>
@@ -73,7 +73,7 @@ td.m{color:var(--muted);font-size:12px;white-space:nowrap}
       <div class="bar">
         <input class="in" id="q" placeholder="이름·메일·프롬프트 검색">
         <select class="in" id="fDay"><option value="">모든 날짜</option></select>
-        <select class="in" id="fKind"><option value="">모든 종류</option><option value="base">기본</option><option value="sheet">시트</option></select>
+        <select class="in" id="fKind"><option value="">모든 종류</option><option value="base">캐릭터</option><option value="sheet">캐릭터 시트</option><option value="scene">장면</option><option value="vid">영상</option><option value="tts">음성</option></select>
         <span class="cnt" id="cnt"></span>
       </div>
       <div style="overflow-x:auto"><table><thead><tr><th>시간</th><th>사람</th><th>종류</th><th>프롬프트</th><th class="m">모델</th></tr></thead><tbody id="tb"></tbody></table></div>
@@ -90,7 +90,7 @@ const app=initializeApp({apiKey:"AIzaSyCZ-UaL2zBCzYYkjwzrdEUAA9dEVLg5uKM",authDo
 const auth=getAuth(app),db=getFirestore(app);
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const PAGE=500;let L=[],last=null,person="";
+const KN={base:"캐릭터",sheet:"시트",scene:"장면",vid:"영상",tts:"음성"};const PAGE=500;let L=[],last=null,person="";
 const kst=d=>new Date(d.getTime()+9*3600e3);
 const dayOf=d=>kst(d).toISOString().slice(0,10);
 const tm=d=>{const k=kst(d);return `${k.getUTCMonth()+1}.${k.getUTCDate()} ${String(k.getUTCHours()).padStart(2,"0")}:${String(k.getUTCMinutes()).padStart(2,"0")}`};
@@ -113,7 +113,7 @@ async function load(reset){
   try{
     const q=last?query(collection(db,"imglog"),orderBy("at","desc"),startAfter(last),limit(PAGE)):query(collection(db,"imglog"),orderBy("at","desc"),limit(PAGE));
     const sn=await getDocs(q);
-    sn.docs.forEach(d=>{const x=d.data();const at=x.at&&x.at.toDate?x.at.toDate():new Date(0);L.push({at,day:x.day||dayOf(at),name:x.name||"",email:x.email||"",kind:x.kind==="sheet"?"sheet":"base",prompt:x.prompt||"",model:x.model||"",ref:!!x.ref})});
+    sn.docs.forEach(d=>{const x=d.data();const at=x.at&&x.at.toDate?x.at.toDate():new Date(0);L.push({at,day:x.day||dayOf(at),name:x.name||"",email:x.email||"",kind:KN[x.kind]?x.kind:"base",url:x.url||"",prompt:x.prompt||"",model:x.model||"",ref:!!x.ref})});
     last=sn.docs[sn.docs.length-1]||last;
     $("#more").hidden=sn.docs.length<PAGE;
   }catch(e){$("#cnt").textContent="기록을 불러오지 못했어요.";console.error(e);return}
@@ -132,7 +132,7 @@ function render(){
   const days=[...Array(14)].map((_,i)=>dayOf(new Date(Date.now()-(13-i)*864e5)));
   const per={};L.forEach(x=>per[x.day]=(per[x.day]||0)+1);
   const mx=Math.max(1,...days.map(d=>per[d]||0));
-  $("#bars").innerHTML=days.map(d=>{const n=per[d]||0;return `<div class="b${n?"":" z"}" title="${d} ${n}장"><em>${n||""}</em><i style="height:${Math.round(n/mx*100)}%"></i><span>${+d.slice(8)}</span></div>`}).join("");
+  $("#bars").innerHTML=days.map(d=>{const n=per[d]||0;return `<div class="b${n?"":" z"}" title="${d} ${n}건"><em>${n||""}</em><i style="height:${Math.round(n/mx*100)}%"></i><span>${+d.slice(8)}</span></div>`}).join("");
   // 사람별
   const pp={};L.forEach(x=>{const k=x.email||x.name;(pp[k]=pp[k]||{n:x.name,e:x.email,c:0,t:0}).c++;if(x.day===t)pp[k].t++});
   $("#ppl").innerHTML=`<button data-p="" class="${person?"":"on"}"><b>전체</b><em>${L.length}</em></button>`+Object.entries(pp).sort((a,b)=>b[1].c-a[1].c).map(([k,v])=>`<button data-p="${esc(k)}" class="${person===k?"on":""}"><b>${esc(v.n||v.e)}<small>${esc(v.n?v.e:"")}${v.t?` · 오늘 ${v.t}`:""}</small></b><em>${v.c}</em></button>`).join("");
@@ -147,7 +147,7 @@ function rows(){
 }
 function table(){
   const R=rows();$("#cnt").textContent=`${R.length}건`;
-  $("#tb").innerHTML=R.length?R.map(x=>`<tr class="row"><td class="t">${tm(x.at)}</td><td class="w"><b>${esc(x.name||x.email)}</b><small>${esc(x.name?x.email:"")}</small></td><td><span class="tag${x.kind==="sheet"?" s":""}">${x.kind==="sheet"?"시트":"기본"}</span>${x.ref?' <span class="tag">참고</span>':""}</td><td class="p"><div class="s">${esc(x.prompt)}</div></td><td class="m">${esc(x.model.replace(/^gemini-/,""))}</td></tr>`).join(""):`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">기록이 없어요</td></tr>`;
+  $("#tb").innerHTML=R.length?R.map(x=>`<tr class="row"><td class="t">${tm(x.at)}</td><td class="w"><b>${esc(x.name||x.email)}</b><small>${esc(x.name?x.email:"")}</small></td><td><span class="tag k-${x.kind}">${KN[x.kind]}</span>${x.ref?' <span class="tag">참고</span>':""}</td><td class="p"><div class="s">${esc(x.prompt)}</div>${x.url?`<a class="vl" href="${esc(x.url)}" target="_blank" rel="noopener">▶ 영상 보기</a>`:""}</td><td class="m">${esc(x.model.replace(/^gemini-/,""))}</td></tr>`).join(""):`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">기록이 없어요</td></tr>`;
 }
 document.addEventListener("click",e=>{
   const p=e.target.closest("[data-p]");if(p){person=p.dataset.p;render();return}
@@ -156,8 +156,8 @@ document.addEventListener("click",e=>{
 ["#q","#fDay","#fKind"].forEach(s=>$(s).addEventListener("input",table));
 $("#csv").onclick=()=>{
   const R=rows(),c=v=>`"${String(v).replace(/"/g,'""')}"`;
-  const csv="﻿"+[["시간","날짜","이름","메일","종류","참고 그림","모델","프롬프트"].map(c).join(","),...R.map(x=>[tm(x.at),x.day,x.name,x.email,x.kind==="sheet"?"시트":"기본",x.ref?"O":"",x.model,x.prompt].map(c).join(","))].join("\n");
-  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=`이미지기록_${today()}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  const csv="﻿"+[["시간","날짜","이름","메일","종류","참고 그림","모델","프롬프트","영상 링크"].map(c).join(","),...R.map(x=>[tm(x.at),x.day,x.name,x.email,KN[x.kind],x.ref?"O":"",x.model,x.prompt,x.url].map(c).join(","))].join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=`생성기록_${today()}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
 };
 </script>
 </body></html>

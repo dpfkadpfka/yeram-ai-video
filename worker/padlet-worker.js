@@ -145,6 +145,9 @@ export default {
       const used = async k => +(await env.HIDE.get(qk(k)) || 0);
       const bump = async k => env.HIDE.put(qk(k), String((await used(k)) + 1), { expirationTtl: 172800 });
       const dataUrl = s => String(s || "").match(/^data:(image\/[\w.+-]+);base64,(.+)$/);
+      // 생성 기록(관리자 '생성 기록' 페이지용): 장면·영상·음성도 imglog에 남김
+      const sv = v => ({ stringValue: String(v || "") });
+      const logIt = (kind, prompt, model, extra) => ctx.waitUntil(fetch("https://firestore.googleapis.com/v1/projects/yeram-ai-video/databases/(default)/documents/imglog", { method: "POST", headers: { authorization: "Bearer " + b.idToken, "content-type": "application/json" }, body: JSON.stringify({ fields: Object.assign({ uid: sv(who.uid), email: sv(who.email), name: sv(who.name), day: sv(day), at: { timestampValue: new Date().toISOString() }, kind: sv(kind), prompt: sv(String(prompt || "").slice(0, 1500)), model: sv(model), ref: { booleanValue: false } }, extra || {}) }) }).catch(() => {}));
       if (act === "scene") {
         const n = await used("scene"); if (!admin && n >= LIM.scene) return J({ error: "limit", used: n, limit: LIM.scene }, 429);
         const prompt = String(b.prompt || "").slice(0, 1500); if (!prompt) return J({ error: "prompt" }, 400);
@@ -159,7 +162,7 @@ export default {
           const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
           if (!r.ok) continue;
           const d = await r.json(); const im = (d?.candidates?.[0]?.content?.parts || []).find(x => x.inlineData || x.inline_data); if (!im) continue;
-          const idt = im.inlineData || im.inline_data; await bump("scene");
+          const idt = im.inlineData || im.inline_data; await bump("scene"); logIt("scene", prompt, m, { ref: { booleanValue: true }, extra: { integerValue: String(ex.length) } });
           return J({ image: `data:${idt.mimeType || idt.mime_type || "image/png"};base64,${idt.data}`, used: n + 1, limit: admin ? null : LIM.scene, model: m });
         }
         return J({ error: "img" }, 502);
@@ -185,7 +188,7 @@ export default {
               out = new Uint8Array(44 + pcm.length); out.set(new Uint8Array(h.buffer), 0); out.set(pcm, 44); ct = "audio/wav";
             }
             let bin = ""; for (let i = 0; i < out.length; i += 32768) bin += String.fromCharCode.apply(null, out.subarray(i, i + 32768));
-            await bump("tts");
+            await bump("tts"); logIt("tts", (style ? "[" + style + "] " : "") + text, m, { voice: sv(voice) });
             return J({ audio: `data:${ct};base64,${btoa(bin)}`, used: n + 1, limit: admin ? null : LIM.tts, model: m });
           }
         }
@@ -204,7 +207,7 @@ export default {
           const r = await fetch(base(m) + ":predictLongRunning", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify({ instances: [{ prompt, image: { bytesBase64Encoded: m0[2], mimeType: m0[1] } }], parameters: { aspectRatio: ratio, durationSeconds: dur, sampleCount: 1, generateAudio: sfx || speech, resolution: "720p", personGeneration: "allow_all" } }) });
           if (!r.ok) continue;
           const d = await r.json(); if (!d.name) continue;
-          await bump("vid"); return J({ op: d.name, model: m, used: n + 1, limit: admin ? null : LIM.vid });
+          await bump("vid"); await env.HIDE.put("vp:" + d.name.split("/").pop(), JSON.stringify({ p: String(b.prompt || "").slice(0, 800), dur, ratio, sfx, speech, line }), { expirationTtl: 86400 }); return J({ op: d.name, model: m, used: n + 1, limit: admin ? null : LIM.vid });
         }
         return J({ error: "vid" }, 502);
       }
@@ -222,6 +225,9 @@ export default {
       const k = "v/s" + Date.now().toString(36) + crypto.randomUUID().slice(0, 8) + ".mp4";
       await env.VIDS.put(k, bin, { httpMetadata: { contentType: "video/mp4" } });
       const url = u.origin + "/" + k; await env.HIDE.put(ck, url, { expirationTtl: 86400 });
+      { let vp = {}; try { vp = JSON.parse(await env.HIDE.get("vp:" + op.split("/").pop()) || "{}"); } catch (e) {}
+        const opt = [vp.dur ? vp.dur + "초" : "", vp.ratio || "", vp.sfx ? "효과음" : "", vp.speech ? "대사" + (vp.line ? ": " + vp.line : "") : ""].filter(Boolean).join(" · ");
+        logIt("vid", (opt ? "[" + opt + "] " : "") + (vp.p || ""), m, { url: sv(url) }); }
       return J({ url });
     }
     if (req.method === "POST" && act === "img") {
