@@ -2075,7 +2075,7 @@ body[data-stage="studio"] .main,body[data-stage="studio"] .startcard,body[data-s
 .st-phone{height:max(380px,min(calc(100vh - 290px),640px))}
 .st-phone:has(.st-stage[data-r="9:16"]){aspect-ratio:9/16.9}
 .st-phone:has(.st-stage[data-r="16:9"]){height:auto;width:min(100%,780px);aspect-ratio:16.9/9}
-.st-phone:has(.st-stage[data-r="16:9"])::before{top:50%;left:12px;transform:translateY(-50%);width:20px;height:34%}
+.st-phone:has(.st-stage[data-r="16:9"])::before{top:50%;left:9px;transform:translateY(-50%);width:12px;height:26%}
 .st-stage[data-r="16:9"]{width:100%;height:100%}
 .st-phone:has(.st-stage[data-r="1:1"]){aspect-ratio:9/16.9}
 .st-out .st-acts{margin-top:2px}
@@ -4089,6 +4089,7 @@ function stSetRef(k,src){ST.ref[k]=src||"";const L=$(`.st-ref[data-ref="${k}"]`)
 function stAuto(){["base","sheet"].forEach(k=>{if(!ST.ref[k]){const g=(typeof GEN!=="undefined"&&GEN[k]&&GEN[k][GSEL[k]])||"";if(g)stSetRef(k,g)}})}
 function stShrink(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=1280,sc=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.88))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(f)})}
 async function stDataUrl(src){if(!src||src.startsWith("data:"))return src;const b=await (await fetch(src)).blob();return await stShrink(b)}
+function stFocus(){if(innerWidth<=900){const ph=document.querySelector("#studioSec .st-out");if(ph)setTimeout(()=>ph.scrollIntoView({block:"start",behavior:"smooth"}),120)}}
 function stView(which){ST.view=(which==="vid"&&ST.vid)?"vid":"img";const I=$("#stImg"),V=$("#stVid");$("#stEmpty").hidden=!!(ST.img||ST.vid);
   if(which==="vid"&&ST.vid){V.src=ST.vid;V.hidden=false;I.hidden=true;V.play().catch(()=>{})}else{V.pause();V.hidden=true;I.hidden=!ST.img;if(ST.img)I.src=ST.img}
   $("#stImgActs").hidden=!ST.img;$("#stMove").hidden=!ST.img;$("#stVidActs").hidden=!ST.vid;$("#stViewSeg").hidden=!ST.vid;$$("[data-stv]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.stv===ST.view)));if(ST.img)$("#stImgDl").href=ST.img;if(ST.vid)$("#stVidDl").href=ST.vid;stMoveNote()}
@@ -4101,14 +4102,14 @@ async function stDraw(){const p=$("#stImgP").value.trim();if(!p){toast("어떤 �
   try{const refs=[];for(const k of ["base","sheet"])if(ST.ref[k])refs.push(await stDataUrl(ST.ref[k]));
     const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=scene",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,refs,ratio:ST.ratio})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 장면 그리기를 다 썼어요 (${j.limit}장)`);return}if(!r.ok||!j.image)throw 0;
-    ST.img=j.image;ST.vid="";if(window.onSceneDrawn)window.onSceneDrawn(j.image,ST.ratio);ST.hist.unshift({img:j.image,vid:"",ratio:ST.ratio});ST.hist=ST.hist.slice(0,12);stView("img");stHist();if(j.limit)$("#stImgQ").textContent=`오늘 ${j.used}/${j.limit}장`}
+    ST.img=j.image;ST.vid="";if(window.onSceneDrawn)window.onSceneDrawn(j.image,ST.ratio);ST.hist.unshift({img:j.image,vid:"",ratio:ST.ratio});ST.hist=ST.hist.slice(0,12);stView("img");stHist();stFocus();if(j.limit)$("#stImgQ").textContent=`오늘 ${j.used}/${j.limit}장`}
   catch(_){toast("그리지 못했어요. 잠시 뒤 다시 해 주세요")}finally{stBusy(0)}}
 async function stMove(){if(!ST.img||ST.ratio==="1:1")return;const p=$("#stVidP").value.trim()||"캐릭터가 자연스럽게 움직이고, 카메라가 천천히 다가간다";
   const idToken=await stTok();stBusy(1,"영상을 생성하는 중… (1~3분)");
   try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:ST.img,ratio:ST.ratio,dur:ST.dur})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 영상 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.op)throw 0;
     const t0=Date.now();while(Date.now()-t0<6*60e3){await new Promise(z=>setTimeout(z,8000));const q=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vidpoll",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,op:j.op,model:j.model})}).then(x=>x.json()).catch(()=>({}));
-      if(q.url){ST.vid=q.url;const h=ST.hist.find(x=>x.img===ST.img);if(h)h.vid=q.url;stView("vid");stHist();return}if(q.error){if(q.error==="filtered")toast("이 장면은 영상으로 만들 수 없었어요. 움직임 설명을 바꿔 보세요");else throw 0;return}}
+      if(q.url){ST.vid=q.url;const h=ST.hist.find(x=>x.img===ST.img);if(h)h.vid=q.url;stView("vid");stHist();stFocus();return}if(q.error){if(q.error==="filtered")toast("이 장면은 영상으로 만들 수 없었어요. 움직임 설명을 바꿔 보세요");else throw 0;return}}
     throw 0}
   catch(_){toast("영상을 만들지 못했어요. 잠시 뒤 다시 해 주세요")}finally{stBusy(0)}}
 const ST_AI={img:`너는 초등 교사를 돕는 AI 이미지 장면 연출가야. 사용자가 쓴 짧은 장면 아이디어를, 첨부한 캐릭터가 등장하는 한 장면 묘사로 다듬어. 한국어로 3~4문장. 포함: 캐릭터의 동작과 표정, 장소와 배경, 시간·빛·분위기, 카메라 구도(전신/상반신/클로즈업). 캐릭터 생김새(머리·옷)는 쓰지 마(첨부 그림을 따름). 묘사만 출력.`,
@@ -4473,7 +4474,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793191669"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793191811"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4858,7 +4859,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793191669"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793191811"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
