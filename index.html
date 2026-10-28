@@ -2134,6 +2134,46 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
 .vcard.w{width:240px}.vcard.w img{aspect-ratio:16/9}.vcard.sq img{aspect-ratio:1}
 .s5n{margin:9px 0 5px;width:26px;height:26px;background:#ece6e1;color:#5c534d}
 .sn .s5n{display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;padding:2px 0 0!important;box-sizing:border-box;width:26px!important;height:26px!important}
+
+/* ===== 장면·5단계 공통 UI ===== */
+.st-grid{gap:20px}
+@media (min-width:901px){.st-grid{grid-template-columns:minmax(360px,440px) minmax(0,1fr)!important;align-items:stretch}}
+.st-card{border-radius:20px}
+.st-set{padding:0!important;gap:0!important;overflow:hidden;align-content:start}
+.st-sec{display:grid;gap:12px;padding:20px 22px;border-top:1px solid var(--line)}
+.st-sec:first-child{border-top:0}
+.st-move{background:none!important}
+.st-h{min-height:28px}
+.st-go{height:48px!important;font-size:15.5px!important;border-radius:12px!important}
+.st-seg button{padding:10px 6px}
+.st-out{position:relative!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px!important;gap:0!important}
+.st-out>.st-outh{position:absolute;top:16px;left:22px;right:16px;width:auto;min-height:32px;margin:0}
+.st-out .st-phone{margin:0!important}
+.st-outh>span{font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.02em}
+.st-shelf{margin-top:20px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px 22px 20px}
+.st-shelf[hidden]{display:none}
+.st-shelfh{display:flex;align-items:center;gap:8px;margin-bottom:12px}.st-shelfh b{font-size:15px;font-weight:800}
+.st-shelf .matrow{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 6px;align-items:flex-start}
+.st-shelf .matempty{flex:1}
+.vcard{flex:0 0 auto;width:auto!important;display:grid;gap:8px;justify-items:stretch}
+.vcard img,.vcard video{height:200px;width:auto!important;aspect-ratio:9/16;object-fit:cover;border-radius:12px;background:#141210;display:block;cursor:pointer}
+.vcard.w img,.vcard.w video{aspect-ratio:16/9}.vcard.sq img,.vcard.sq video{aspect-ratio:1}
+.vcard .va,.acard .va{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.vcard .va button,.vcard .va a,.acard .va button,.acard .va a{height:32px;border-radius:9px;border:1px solid var(--line);background:var(--paper);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;display:grid;place-items:center;color:var(--ink);text-decoration:none;padding:0 8px;white-space:nowrap}
+.vcard .va button:hover,.vcard .va a:hover,.acard .va button:hover,.acard .va a:hover{border-color:var(--accent);color:var(--accent)}
+.audlist{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;max-height:none!important;overflow:visible!important}
+.acard{border:1.5px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;cursor:pointer;background:var(--paper);transition:border-color .15s,box-shadow .15s}
+.acard:hover{border-color:#e3c3d0}.acard.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.acard p{margin:0;font-size:14px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:42px}
+.acard-tag,.aprev-tag{justify-self:start;font-size:12px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+.aprev{width:100%;max-width:520px;display:grid}
+.aprev-empty{display:grid;gap:6px;text-align:center;color:var(--muted);padding:60px 20px;border:1.5px dashed var(--line);border-radius:18px;line-height:1.5}.aprev-empty b{color:var(--ink);font-size:16px}.aprev-empty span{font-size:13px}
+.aprev-card{display:grid;gap:16px;padding:28px;border-radius:20px;background:linear-gradient(160deg,var(--accent-soft),#fff 70%);border:1px solid var(--line)}
+.aprev-card p{margin:0;font-size:18px;line-height:1.6;font-weight:600;white-space:pre-wrap}
+.aprev-card audio{width:100%}
+.sbr{border-radius:12px;padding:8px 10px}
+.st-tools{grid-auto-columns:1fr}
+@media (max-width:900px){.st-out{padding:56px 16px 20px!important}.st-sec{padding:18px 16px}.st-shelf{padding:16px}.vcard img,.vcard video{height:170px}}
 .wkscprev{width:100%;max-height:300px;border-radius:14px;background:#141210;object-fit:contain}
 @media (max-width:560px){.st-tools{grid-auto-flow:row;grid-template-columns:1fr 1fr}.st-tools>*:last-child:nth-child(3){grid-column:1/-1}.st-sec{padding:18px 16px}}
 </style>
@@ -2408,7 +2448,7 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
         <div class="st-sec st-move" id="stMove" hidden>
           <div class="st-h"><b>4</b>움직이기<button type="button" class="st-ai" data-stai="vid">AI 도우미</button></div>
           <textarea class="tinput" id="stVidP" rows="3" maxlength="600" placeholder="예: 캐릭터가 웃으며 손을 천천히 흔들고, 카메라가 살짝 다가간다"></textarea>
-          <div class="st-row"><div class="st-seg sm" id="stDur"><button type="button" data-sd="4" aria-pressed="false">4초</button><button type="button" data-sd="6" aria-pressed="false">6초</button><button type="button" data-sd="8" aria-pressed="true">8초</button></div><button type="button" class="btn primary" id="stVidGo">영상 생성하기</button></div>
+          <div class="st-seg" id="stDur"><button type="button" data-sd="4" aria-pressed="false">4초</button><button type="button" data-sd="6" aria-pressed="false">6초</button><button type="button" data-sd="8" aria-pressed="true">8초</button></div><button type="button" class="btn primary st-go" id="stVidGo">영상 생성하기</button>
           <div class="st-tools" id="stVidActs" hidden><button type="button" id="stVidRe"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>다시 생성하기</button><a id="stVidDl" download="장면.mp4" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>영상 다운로드</a><button type="button" id="stVidUp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5"/><path d="M5 19h14"/></svg>갤러리에 올리기</button></div>
           <small class="hint" id="stVidNote"></small>
         </div>
@@ -2418,47 +2458,79 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
         <div class="st-phone"><div class="st-screen"><div class="st-stage" id="stStage" data-r="9:16"><div class="st-empty" id="stEmpty"><b>여기에 장면이 나와요</b><span>캐릭터를 넣고 장면을 쓴 뒤<br>[장면 생성하기]</span></div><img id="stImg" alt="" hidden><video id="stVid" controls playsinline loop hidden></video></div><div class="st-busy" id="stBusy" hidden><i></i><span>생성하는 중…</span></div></div></div>
       </div>
     </div>
-    <div class="st-hist" id="stHist" hidden><div class="st-h">이번에 만든 장면</div><div class="st-hl" id="stHl"></div></div>
-    <div class="st-hist s2mat" id="s2Mat"><div class="st-h">이미지 재료<span class="s5cnt" id="s2Cnt"></span></div><div class="matrow" id="s2Imgs"></div></div>
+    <div class="st-shelf" id="stHist" hidden><div class="st-shelfh"><b>이번에 만든 장면</b></div><div class="st-hl" id="stHl"></div></div>
+    <div class="st-shelf s2mat" id="s2Mat"><div class="st-shelfh"><b>이미지 재료</b><span class="s5cnt" id="s2Cnt"></span></div><div class="matrow" id="s2Imgs"></div></div>
   </section>
   <section class="s5sec" id="s3Sec" aria-label="영상 재료">
     <div class="st-grid">
-      <div class="st-card">
-        <div class="st-h"><b>1</b>이미지 재료 고르기<span class="s5cnt" id="s3Cnt"></span></div>
-        <div class="matgrid" id="s3Imgs"></div>
-        <div class="st-h"><b>2</b>움직임<button type="button" class="st-ai" data-s3ai>AI 도우미</button></div>
-        <textarea class="tinput" id="s3P" rows="3" maxlength="600" placeholder="예: 캐릭터가 웃으며 손을 천천히 흔들고, 카메라가 살짝 다가간다"></textarea>
-        <div class="st-row"><div class="st-seg sm" id="s3Dur"><button type="button" data-s3d="4" aria-pressed="false">4초</button><button type="button" data-s3d="6" aria-pressed="false">6초</button><button type="button" data-s3d="8" aria-pressed="true">8초</button></div><button type="button" class="btn primary" id="s3Go">영상 생성하기</button></div>
-        <small class="hint" id="s3Note">영상은 1~3분쯤 걸려요. 9:16·16:9 그림만 영상으로 만들 수 있어요.</small>
+      <div class="st-card st-set">
+        <div class="st-sec">
+          <div class="st-h"><b>1</b>이미지 재료 고르기<span class="s5cnt" id="s3Cnt"></span></div>
+          <div class="matgrid" id="s3Imgs"></div>
+        </div>
+        <div class="st-sec">
+          <div class="st-h"><b>2</b>움직임<button type="button" class="st-ai" data-s3ai>AI 도우미</button></div>
+          <textarea class="tinput" id="s3P" rows="4" maxlength="600" placeholder="예: 캐릭터가 웃으며 손을 천천히 흔들고, 카메라가 살짝 다가간다"></textarea>
+        </div>
+        <div class="st-sec">
+          <div class="st-h"><b>3</b>길이</div>
+          <div class="st-seg" id="s3Dur"><button type="button" data-s3d="4" aria-pressed="false">4초</button><button type="button" data-s3d="6" aria-pressed="false">6초</button><button type="button" data-s3d="8" aria-pressed="true">8초</button></div>
+          <button type="button" class="btn primary st-go" id="s3Go">영상 생성하기</button>
+          <div class="st-tools" id="s3Acts" hidden><button type="button" id="s3Re"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>다시 생성하기</button><a id="s3Dl" download="영상.mp4" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>영상 다운로드</a><button type="button" id="s3Up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5"/><path d="M5 19h14"/></svg>갤러리에 올리기</button></div>
+          <small class="hint" id="s3Note">영상은 1~3분쯤 걸려요. 9:16·16:9 그림만 영상으로 만들 수 있어요.</small>
+        </div>
       </div>
-      <div class="st-card st-out"><div class="st-phone"><div class="st-screen"><div class="st-stage" id="s3Stage" data-r="9:16"><div class="st-empty" id="s3Empty"><b>이미지 재료를 골라 주세요</b><span>2단계에서 그린 장면이 여기 나와요</span></div><img id="s3Img" alt="" hidden><video id="s3Vid" controls playsinline loop hidden></video></div><div class="st-busy" id="s3Busy" hidden><i></i><span>영상을 생성하는 중… (1~3분)</span></div></div></div><div class="st-tools" id="s3Acts" hidden><button type="button" id="s3Re"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>다시 생성하기</button><a id="s3Dl" download="영상.mp4" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>영상 다운로드</a><button type="button" id="s3Up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5"/><path d="M5 19h14"/></svg>갤러리에 올리기</button></div></div>
+      <div class="st-card st-out">
+        <div class="st-outh"><span>미리보기</span></div>
+        <div class="st-phone"><div class="st-screen"><div class="st-stage" id="s3Stage" data-r="9:16"><div class="st-empty" id="s3Empty"><b>이미지 재료를 골라 주세요</b><span>2단계에서 만든 장면이 여기 나와요</span></div><img id="s3Img" alt="" hidden><video id="s3Vid" controls playsinline loop hidden></video></div><div class="st-busy" id="s3Busy" hidden><i></i><span>영상을 생성하는 중… (1~3분)</span></div></div></div>
+      </div>
     </div>
-    <div class="st-hist"><div class="st-h">영상 재료<span class="s5cnt" id="s3VCnt"></span></div><div class="matrow" id="s3Vids"></div></div>
+    <div class="st-shelf"><div class="st-shelfh"><b>영상 재료</b><span class="s5cnt" id="s3VCnt"></span></div><div class="matrow" id="s3Vids"></div></div>
   </section>
   <section class="s5sec" id="s4Sec" aria-label="AI 음성">
     <div class="st-grid">
-      <div class="st-card">
-        <div class="st-h"><b>1</b>대사</div>
-        <textarea class="tinput" id="s4T" rows="5" maxlength="600" placeholder="예: 안녕, 친구들! 오늘은 무지개가 왜 생기는지 함께 알아볼까?"></textarea>
-        <div class="st-h"><b>2</b>목소리</div>
-        <div class="vgrid" id="s4V"></div>
-        <div class="st-h"><b>3</b>말투</div>
-        <div class="st-seg" id="s4S"><button type="button" data-s4s="밝고 친근하게, 또박또박 읽어 주세요" aria-pressed="true">밝게</button><button type="button" data-s4s="차분하고 따뜻하게 읽어 주세요" aria-pressed="false">차분하게</button><button type="button" data-s4s="신나고 활기차게 읽어 주세요" aria-pressed="false">신나게</button><button type="button" data-s4s="뉴스 아나운서처럼 또렷하게 읽어 주세요" aria-pressed="false">또렷하게</button></div>
-        <button type="button" class="btn primary st-go" id="s4Go">음성 생성하기</button>
-        <small class="hint" id="s4Q"></small>
+      <div class="st-card st-set">
+        <div class="st-sec">
+          <div class="st-h"><b>1</b>대사</div>
+          <textarea class="tinput" id="s4T" rows="4" maxlength="600" placeholder="예: 안녕, 친구들! 오늘은 무지개가 왜 생기는지 함께 알아볼까?"></textarea>
+        </div>
+        <div class="st-sec">
+          <div class="st-h"><b>2</b>목소리</div>
+          <div class="vgrid" id="s4V"></div>
+        </div>
+        <div class="st-sec">
+          <div class="st-h"><b>3</b>말투</div>
+          <div class="st-seg" id="s4S"><button type="button" data-s4s="밝고 친근하게, 또박또박 읽어 주세요" aria-pressed="true">밝게</button><button type="button" data-s4s="차분하고 따뜻하게 읽어 주세요" aria-pressed="false">차분하게</button><button type="button" data-s4s="신나고 활기차게 읽어 주세요" aria-pressed="false">신나게</button><button type="button" data-s4s="뉴스 아나운서처럼 또렷하게 읽어 주세요" aria-pressed="false">또렷하게</button></div>
+          <button type="button" class="btn primary st-go" id="s4Go">음성 생성하기</button>
+          <div class="st-tools" id="s4Acts" hidden><button type="button" id="s4Re"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>다시 생성하기</button><a id="s4Dl" download="음성.wav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>음성 다운로드</a></div>
+          <small class="hint" id="s4Q"></small>
+        </div>
       </div>
-      <div class="st-card"><div class="st-h">음성 재료<span class="s5cnt" id="s4Cnt"></span></div><div class="audlist" id="s4List"><p class="hint">아직 만든 목소리가 없어요.</p></div></div>
+      <div class="st-card st-out">
+        <div class="st-outh"><span>미리보기</span></div>
+        <div class="aprev" id="s4Prev"><div class="aprev-empty"><b>여기에 음성이 나와요</b><span>대사를 쓰고 목소리를 고른 뒤<br>[음성 생성하기]</span></div></div>
+      </div>
     </div>
+    <div class="st-shelf"><div class="st-shelfh"><b>음성 재료</b><span class="s5cnt" id="s4Cnt"></span></div><div class="audlist" id="s4List"></div></div>
   </section>
   <section class="s5sec" id="s5Sec" aria-label="최종 영상">
     <div class="st-grid">
-      <div class="st-card">
-        <div class="st-h"><b>1</b>순서 정하기<small class="hint" style="margin-left:auto;font-weight:500">영상마다 음성을 붙일 수 있어요</small></div>
-        <div class="sblist" id="s5List"></div>
-        <div class="st-row"><button type="button" class="btn primary" id="s5Play">처음부터 재생</button><button type="button" class="btn" id="s5Dl">재료 모두 다운로드</button></div>
-        <small class="hint">받은 재료를 편집 앱에서 순서대로 이어 붙이면 최종 영상이 완성돼요.</small>
+      <div class="st-card st-set">
+        <div class="st-sec">
+          <div class="st-h"><b>1</b>순서와 음성<span class="s5cnt">영상마다 음성을 붙일 수 있어요</span></div>
+          <div class="sblist" id="s5List"></div>
+        </div>
+        <div class="st-sec">
+          <div class="st-h"><b>2</b>미리보기와 다운로드</div>
+          <button type="button" class="btn primary st-go" id="s5Play">처음부터 재생</button>
+          <div class="st-tools"><button type="button" id="s5Dl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>재료 모두 다운로드</button></div>
+          <small class="hint">다운로드한 재료를 편집 앱에서 순서대로 이어 붙이면 최종 영상이 완성돼요.</small>
+        </div>
       </div>
-      <div class="st-card st-out"><div class="st-phone"><div class="st-screen"><div class="st-stage" id="s5Stage" data-r="9:16"><div class="st-empty" id="s5Empty"><b>최종 영상 미리보기</b><span>[처음부터 재생]을 눌러 보세요</span></div><video id="s5Vid" playsinline hidden></video><audio id="s5Aud" hidden></audio></div><div class="s5cap" id="s5Cap" hidden></div></div></div></div>
+      <div class="st-card st-out">
+        <div class="st-outh"><span>미리보기</span></div>
+        <div class="st-phone"><div class="st-screen"><div class="st-stage" id="s5Stage" data-r="9:16"><div class="st-empty" id="s5Empty"><b>최종 영상 미리보기</b><span>[처음부터 재생]을 눌러 보세요</span></div><video id="s5Vid" playsinline hidden></video><audio id="s5Aud" hidden></audio></div><div class="s5cap" id="s5Cap" hidden></div></div></div>
+      </div>
     </div>
   </section>
   <div class="s5next" id="s5Next" hidden><button type="button" class="btn" id="s5Prev">← 이전 단계</button><button type="button" class="btn primary" id="s5Fwd">다음 단계 →</button></div>
@@ -4188,12 +4260,17 @@ const VOICES=[["Kore","여자 · 또렷한"],["Leda","여자 · 밝은"],["Aoede
 let S4={v:"Leda",s:"밝고 친근하게, 또박또박 읽어 주세요",busy:0};
 function r4(){$("#s4V").innerHTML=VOICES.map(([k,t])=>`<button type="button" data-s4v="${k}" aria-pressed="${S4.v===k}"><b>${t.split(" · ")[1]} 목소리</b><small>${t.split(" · ")[0]}</small></button>`).join("");
   $("#s4Cnt").textContent=MAT.aud.length?`${MAT.aud.length}개`:"";
-  $("#s4List").innerHTML=MAT.aud.length?MAT.aud.map(a=>`<div class="aud"><p>${esc(a.text)}</p><small>${esc((VOICES.find(v=>v[0]===a.voice)||["",""])[1])}</small><audio controls src="${a.src}" preload="none"></audio><div class="va"><button type="button" data-s4re="${a.id}">다시 생성하기</button><a href="${a.src}" download="음성_${esc(a.text.slice(0,10))}.wav">음성 다운로드</a><button type="button" data-s4del="${a.id}">삭제</button></div></div>`).join(""):`<p class="hint">아직 만든 목소리가 없어요.</p>`}
-async function s4Make(){const t=$("#s4T").value.trim();if(!t){toast("대사를 써 주세요");$("#s4T").focus();return}const idToken=await stTok();const b=$("#s4Go");b.disabled=true;b.textContent="생성하는 중…";
+  if(!MAT.aud.some(a=>a.id===S4.cur))S4.cur=MAT.aud[0]?MAT.aud[0].id:"";
+  const vl=a=>esc((VOICES.find(v=>v[0]===a.voice)||["",""])[1]);
+  const cur=MAT.aud.find(a=>a.id===S4.cur);
+  $("#s4Acts").hidden=!cur;if(cur){$("#s4Dl").href=cur.src;$("#s4Dl").download=`음성_${cur.text.slice(0,12)}.wav`}
+  $("#s4Prev").innerHTML=cur?`<div class="aprev-card"><span class="aprev-tag">${vl(cur)}</span><p>${esc(cur.text)}</p><audio controls src="${cur.src}" preload="metadata"></audio></div>`:`<div class="aprev-empty"><b>여기에 음성이 나와요</b><span>대사를 쓰고 목소리를 고른 뒤<br>[음성 생성하기]</span></div>`;
+  $("#s4List").innerHTML=MAT.aud.length?MAT.aud.map(a=>`<div class="acard${a.id===S4.cur?" on":""}" data-s4pick="${a.id}"><span class="acard-tag">${vl(a)}</span><p>${esc(a.text)}</p><div class="va"><a href="${a.src}" download="음성_${esc(a.text.slice(0,12))}.wav">다운로드</a><button type="button" data-s4del="${a.id}">삭제</button></div></div>`).join(""):`<p class="matempty">음성을 생성하면 여기에 음성 재료로 모여요. 5단계에서 영상에 붙일 수 있어요.</p>`}
+async function s4Make(){const t=$("#s4T").value.trim();if(!t){toast("대사를 써 주세요");$("#s4T").focus();return}const idToken=await stTok();const b=$("#s4Go");b.disabled=true;b.textContent="생성하는 중…";$$("#s4Acts button").forEach(x=>x.disabled=true);
   try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=tts",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,text:t,voice:S4.v,style:S4.s})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 목소리 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.audio)throw 0;
-    MAT.aud.unshift({id:mid(),src:j.audio,text:t,voice:S4.v,style:S4.s});matSave();r4();if(j.limit)$("#s4Q").textContent=`오늘 ${j.used}/${j.limit}개`;const a=$("#s4List audio");if(a)a.play().catch(()=>{})}
-  catch(_){toast("목소리를 만들지 못했어요. 잠시 뒤 다시 해 주세요")}finally{b.disabled=false;b.textContent="음성 생성하기"}}
+    const nid=mid();MAT.aud.unshift({id:nid,src:j.audio,text:t,voice:S4.v,style:S4.s});S4.cur=nid;matSave();r4();if(j.limit)$("#s4Q").textContent=`오늘 ${j.used}/${j.limit}개`;const a=$("#s4Prev audio");if(a)a.play().catch(()=>{});if(innerWidth<=900)$("#s4Prev").scrollIntoView({block:"center",behavior:"smooth"})}
+  catch(_){toast("목소리를 만들지 못했어요. 잠시 뒤 다시 해 주세요")}finally{b.disabled=false;b.textContent="음성 생성하기";$$("#s4Acts button").forEach(x=>x.disabled=false)}}
 /* 5단계 */
 function s5Order(){const ids=MAT.vid.map(v=>v.id);MAT.order=MAT.order.filter(i=>ids.includes(i));ids.forEach(i=>{if(!MAT.order.includes(i))MAT.order.push(i)});return MAT.order.map(i=>MAT.vid.find(v=>v.id===i))}
 function r5(){const L=s5Order();$("#s5List").innerHTML=L.length?L.map((v,i)=>`<div class="sbr"><b>${i+1}</b><video src="${esc(v.url)}#t=0.3" muted playsinline preload="metadata"></video><select class="tinput" data-s5a="${v.id}"><option value="">음성 없음</option>${MAT.aud.map(a=>`<option value="${a.id}"${MAT.map[v.id]===a.id?" selected":""}>${esc(a.text.slice(0,24))}</option>`).join("")}</select><span class="sbb"><button type="button" data-s5u="${v.id}" aria-label="위로">▲</button><button type="button" data-s5d="${v.id}" aria-label="아래로">▼</button></span></div>`).join(""):`<p class="matempty">3단계에서 영상 재료를 먼저 만들어 주세요.</p>`}
@@ -4223,7 +4300,8 @@ document.addEventListener("click",async e=>{const t=e.target;let b;
   if((b=t.closest("[data-s2show]"))){const x=MAT.img.find(y=>y.id===b.dataset.s2show);if(x){ST.img=x.src;ST.vid="";ST.ratio=x.ratio;$$("[data-sr]").forEach(y=>y.setAttribute("aria-pressed",String(y.dataset.sr===x.ratio)));$("#stStage").dataset.r=x.ratio;stView("img");stFocus()}return}
   if(t.closest("#s3Re")){if(!S3.busy)s3Redo();return}
   if(t.closest("#s3Up")){const v=MAT.vid.find(x=>x.id===S3.cur);if(v)openSceneUp(v.url,v.p||"");return}
-  if((b=t.closest("[data-s4re]"))){if($("#s4Go").disabled)return;const x=MAT.aud.find(y=>y.id===b.dataset.s4re);if(!x)return;$("#s4T").value=x.text;S4.v=x.voice||S4.v;if(x.style)S4.s=x.style;$$("#s4S button").forEach(z=>z.setAttribute("aria-pressed",String(z.dataset.s4s===S4.s)));r4();s4Make();return}
+  if((b=t.closest("[data-s4pick]"))&&!t.closest("a,button")){S4.cur=b.dataset.s4pick;r4();const a=$("#s4Prev audio");if(a)a.play().catch(()=>{});return}
+  if((b=t.closest("[data-s4re]"))||(t.closest("#s4Re")&&(b={dataset:{s4re:S4.cur}}))){if($("#s4Go").disabled)return;const x=MAT.aud.find(y=>y.id===b.dataset.s4re);if(!x)return;$("#s4T").value=x.text;S4.v=x.voice||S4.v;if(x.style)S4.s=x.style;$$("#s4S button").forEach(z=>z.setAttribute("aria-pressed",String(z.dataset.s4s===S4.s)));r4();s4Make();return}
   if((b=t.closest("[data-s4del]"))){MAT.aud=MAT.aud.filter(x=>x.id!==b.dataset.s4del);matSave();r4();return}
   if((b=t.closest("[data-s5u]"))||(b=t.closest("[data-s5d]"))){s5Order();const id=b.dataset.s5u||b.dataset.s5d,i=MAT.order.indexOf(id),j=i+(b.dataset.s5u?-1:1);if(j<0||j>=MAT.order.length)return;[MAT.order[i],MAT.order[j]]=[MAT.order[j],MAT.order[i]];matSave();r5();return}
   if(t.closest("#s5Play")){s5Play();return}
@@ -4486,7 +4564,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793205607"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793205791"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4871,7 +4949,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793205607"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793205791"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
