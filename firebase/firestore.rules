@@ -50,6 +50,13 @@ service cloud.firestore {
         id == request.resource.data.day + '_' + request.resource.data.m;
       allow delete: if isOwnerAdmin();
     }
+    // 선물 챙기기용 당첨 기록(이메일 포함): 본인 당첨만 생성, 예람쌤만 읽기·체크·삭제
+    match /evwin/{id} {
+      allow read, update, delete: if signed() && request.auth.token.email == 'dpfkadpfka@gmail.com';
+      allow create: if signed() && request.resource.data.uid == request.auth.uid &&
+        exists(/databases/$(database)/documents/events/$(id)) &&
+        get(/databases/$(database)/documents/events/$(id)).data.uid == request.auth.uid;
+    }
     // 이벤트 N번째 미션용 기록
     match /evlog/{id} {
       allow read: if true;
