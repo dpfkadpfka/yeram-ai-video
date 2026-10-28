@@ -2067,11 +2067,20 @@ body[data-stage="studio"] .main,body[data-stage="studio"] .startcard,body[data-s
 .st-busy{position:absolute;inset:0;z-index:2;background:rgba(20,18,16,.72);display:grid;place-content:center;justify-items:center;gap:12px;color:#fff;font-weight:700}
 .st-busy i{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:#fff;animation:stsp 1s linear infinite}@keyframes stsp{to{transform:rotate(360deg)}}
 .st-acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.st-move{display:grid;gap:10px;border-top:1px dashed var(--line);padding-top:14px}
+.st-move{display:grid;gap:10px;border-top:1px dashed var(--line);padding-top:14px;margin-top:4px}
 .st-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .st-hist{margin-top:20px}.st-hl{display:flex;gap:10px;overflow-x:auto;padding:8px 2px}
 .st-hl button{flex:0 0 auto;width:96px;aspect-ratio:1;border-radius:12px;border:2px solid transparent;padding:0;overflow:hidden;cursor:pointer;background:#141210;position:relative}.st-hl button.on{border-color:var(--accent)}.st-hl img{width:100%;height:100%;object-fit:cover}.st-hl em{position:absolute;right:4px;bottom:4px;font-style:normal;font-size:10px;font-weight:800;background:var(--accent);color:#fff;border-radius:6px;padding:1px 5px}
 @media (max-width:900px){.st-grid{grid-template-columns:1fr}.st-out{position:static}.st-phone{height:min(70vh,600px)}}
+.st-phone{height:max(380px,min(calc(100vh - 290px),640px))}
+.st-phone:has(.st-stage[data-r="9:16"]){aspect-ratio:9/16.9}
+.st-phone:has(.st-stage[data-r="16:9"]){height:auto;width:min(100%,780px);aspect-ratio:16.9/9}
+.st-phone:has(.st-stage[data-r="16:9"])::before{top:50%;left:12px;transform:translateY(-50%);width:20px;height:34%}
+.st-stage[data-r="16:9"]{width:100%;height:100%}
+.st-phone:has(.st-stage[data-r="1:1"]){aspect-ratio:9/16.9}
+.st-out .st-acts{margin-top:2px}
+@media (max-width:900px){.st-phone{height:min(64vh,560px)}.st-phone:has(.st-stage[data-r="16:9"]){height:auto;width:100%;border-width:5px;border-radius:26px;padding:4px}.st-phone:has(.st-stage[data-r="16:9"]) .st-screen{border-radius:20px}}
+
 
 /* ===== 5단계 사이트(SITE5) ===== */
 .s5nav{display:none}body.site5 .s5nav{display:contents}
@@ -2364,17 +2373,17 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
         <textarea class="tinput" id="stImgP" rows="5" maxlength="1200" placeholder="예: 교실에서 칠판 앞에 서서 학생들에게 손을 흔들며 인사한다. 아침 햇살, 밝은 분위기"></textarea>
         <button type="button" class="btn primary st-go" id="stImgGo">장면 그리기</button>
         <small class="hint st-q" id="stImgQ"></small>
-      </div>
-      <div class="st-card st-out">
-        <div class="st-phone"><div class="st-screen"><div class="st-stage" id="stStage" data-r="9:16"><div class="st-empty" id="stEmpty"><b>여기에 장면이 나와요</b><span>캐릭터를 넣고 장면을 쓴 뒤<br>[장면 그리기]</span></div><img id="stImg" alt="" hidden><video id="stVid" controls playsinline loop hidden></video></div><div class="st-busy" id="stBusy" hidden><i></i><span>그리는 중…</span></div></div></div>
-        <div class="st-acts" id="stImgActs" hidden><button type="button" class="btn sm" id="stImgRe">다시 그리기</button><a class="btn sm" id="stImgDl" download="장면.png">그림 받기</a></div>
         <div class="st-move" id="stMove" hidden>
           <div class="st-h"><b>4</b>움직이기<button type="button" class="st-ai" data-stai="vid">AI 도우미</button></div>
           <textarea class="tinput" id="stVidP" rows="3" maxlength="600" placeholder="예: 캐릭터가 웃으며 손을 천천히 흔들고, 카메라가 살짝 다가간다"></textarea>
           <div class="st-row"><div class="st-seg sm" id="stDur"><button type="button" data-sd="4" aria-pressed="false">4초</button><button type="button" data-sd="6" aria-pressed="false">6초</button><button type="button" data-sd="8" aria-pressed="true">8초</button></div><button type="button" class="btn primary" id="stVidGo">영상 만들기</button></div>
           <small class="hint" id="stVidNote"></small>
-          <div class="st-acts" id="stVidActs" hidden><button type="button" class="btn sm" id="stShowImg">그림 보기</button><a class="btn sm" id="stVidDl" download="장면.mp4" target="_blank">영상 받기</a></div>
         </div>
+      </div>
+      <div class="st-card st-out">
+        <div class="st-phone"><div class="st-screen"><div class="st-stage" id="stStage" data-r="9:16"><div class="st-empty" id="stEmpty"><b>여기에 장면이 나와요</b><span>캐릭터를 넣고 장면을 쓴 뒤<br>[장면 그리기]</span></div><img id="stImg" alt="" hidden><video id="stVid" controls playsinline loop hidden></video></div><div class="st-busy" id="stBusy" hidden><i></i><span>그리는 중…</span></div></div></div>
+        <div class="st-acts" id="stImgActs" hidden><button type="button" class="btn sm" id="stImgRe">다시 그리기</button><a class="btn sm" id="stImgDl" download="장면.png">그림 받기</a></div>
+        <div class="st-acts" id="stVidActs" hidden><button type="button" class="btn sm" id="stShowImg">그림 보기</button><a class="btn sm" id="stVidDl" download="장면.mp4" target="_blank">영상 받기</a></div>
       </div>
     </div>
     <div class="st-hist" id="stHist" hidden><div class="st-h">이번에 만든 장면</div><div class="st-hl" id="stHl"></div></div>
@@ -4425,7 +4434,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793191323"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793191374"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4810,7 +4819,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793191323"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793191374"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
