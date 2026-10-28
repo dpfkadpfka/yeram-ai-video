@@ -1776,7 +1776,8 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 .gen-thumbs{display:flex;gap:6px;overflow-x:auto}.gen-thumbs:empty{display:none}
 .gthumb{flex:none;width:56px;height:56px;padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;background:#fff;cursor:pointer}
 .gthumb.on{border-color:var(--accent)}.gthumb img{width:100%;height:100%;object-fit:cover}
-.gen-act{display:flex;gap:6px;align-items:center}.gen-left{margin-right:auto;font-size:13px;color:var(--muted);font-weight:700}
+.gen-act{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.gen-act .btn{white-space:nowrap}
+@media (max-width:560px){.gen-act{display:grid;grid-template-columns:1fr 1fr}.gen-act .gen-left{grid-column:1/-1}.gen-act .btn{width:100%;min-width:0;font-size:13.5px;padding:0 8px}.gen-act .btn:last-child:nth-child(odd){grid-column:1/-1}}.gen-left{margin-right:auto;font-size:13px;color:var(--muted);font-weight:700}
 .cdone.gen{margin-top:6px}.cdone.gen .cd-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}.cdone.gen .cd-btn.on span{color:rgba(255,255,255,.85)}
 .imglog{display:grid;gap:14px}.il-sum{font-size:15px}.il-t{width:100%;border-collapse:collapse;font-size:13.5px}.il-t th{text-align:left;color:var(--muted);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--line)}.il-t td{padding:7px 8px;border-bottom:1px dashed var(--line);vertical-align:top}.il-t small{color:var(--muted)}.il-p{max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wrap{position:relative}
@@ -3911,7 +3912,7 @@ us3d:{look:"극장용 3D 애니메이션 장편 영화의 주인공 같은 고�
 webtoon:{look:"한국 웹툰 연재작의 깔끔한 2D 캐릭터 일러스트",ratio:"6~7등신의 자연스러운 웹툰 비율",line:"일정한 굵기의 깔끔하고 매끄러운 디지털 선화",shade:"셀 채색 1~2단계, 경계가 또렷한 그림자, 볼에 옅은 홍조",tex:"머리카락은 큰 덩어리와 선명한 하이라이트 띠, 옷 주름은 간결하게",light:"한쪽에서 오는 밝은 조명",color:"화사하고 깨끗한 웹툰 색감",avoid:"3D 렌더, 수채화 번짐, 거친 스케치 선, 과한 질감"},
 fig3d:{look:"2~3등신 귀여운 3D 치비 캐릭터, 극장용 3D 애니메이션 같은 완성도",ratio:"머리가 몸만큼 큰 2~3등신, 짧고 통통한 팔다리",line:"외곽선 없이 부드러운 입체감",shade:"부드러운 그림자와 앰비언트 오클루전",tex:"피부와 옷은 은은한 무광 재질, 머리카락은 매끈한 덩어리와 부드러운 하이라이트",light:"부드러운 스튜디오 조명과 은은한 림 라이트",color:"밝고 사랑스러운 파스텔에 가까운 색감",avoid:"번들거리는 플라스틱 광택, 사실적인 가닥 머리카락, 2D 그림체, 날카로운 얼굴"},
 chibi:{look:"2~3등신 귀여운 2D 치비 캐릭터 일러스트",ratio:"머리가 몸만큼 큰 2~3등신, 짧은 팔다리",line:"굵고 부드러운 둥근 외곽선",shade:"단순한 1단계 셀 그림자, 볼 홍조",tex:"머리카락과 옷은 단순한 덩어리, 작은 하이라이트",light:"밝고 평평한 조명",color:"밝고 선명한 색",avoid:"3D 렌더, 사실적인 비율, 복잡한 질감, 가는 선"},
-flat:{look:"단순한 도형과 면으로 구성한 플랫 벡터 일러스트",ratio:"단순화된 4~5등신",line:"외곽선 없이 색 면의 경계로 형태 표현",shade:"그림자는 거의 없거나 단색 면 하나로만",tex:"질감 없이 깨끗한 단색 면",light:"조명 효과 없음",color:"제한된 4~6가지 색 팔레트, 채도 적당",avoid:"그라데이션, 3D 입체감, 세밀한 묘사, 질감"},
+flat:{look:"트렌디한 모던 플랫 벡터 캐릭터 일러스트(세련된 브랜드 캐릭터·앱 일러스트 수준)",ratio:"머리가 조금 큰 4~5등신의 귀여운 비율",line:"외곽선 없이 매끄러운 곡선 면으로 형태 표현, 실루엣이 예쁘고 또렷하게",shade:"한 톤 어두운 면으로 그림자 1단계, 머리카락에 단순한 하이라이트 면 하나",tex:"질감 없이 깨끗한 면, 얼굴은 크고 반짝이는 눈(눈 하이라이트 포함)·작은 코·자연스러운 미소·볼 홍조로 매력적이게, 머리카락은 볼륨감 있는 예쁜 실루엣",light:"평면 조명",color:"조화로운 5~7가지 색의 세련된 팔레트, 피부는 따뜻하고 맑은 톤",avoid:"점 같은 작은 눈, 밋밋하고 어색한 얼굴, 막대 같은 팔다리, 아이콘처럼 지나치게 단순한 그림, 3D 입체감, 거친 질감"},
 detail:{look:"게임 일러스트나 라이트노벨 표지처럼 완성도가 아주 높은 디테일 디지털 일러스트(애니메이션풍 반실사)",ratio:"7~8등신의 늘씬하고 정확한 인체 비율",line:"섬세하고 가는 선화, 강약 조절이 살아 있는 선",shade:"여러 단계의 부드러운 명암과 블렌딩, 피부의 은은한 반사광, 옷 주름마다 깊이 있는 그림자",tex:"머리카락은 가닥 결과 여러 겹의 하이라이트가 보이게, 눈동자는 그라데이션과 반짝이는 반사광, 옷의 천 질감·봉제선·단추·장식까지 세밀하게",light:"드라마틱한 키 라이트와 선명한 림 라이트, 은은한 빛 번짐과 공기감",color:"풍부하고 깊은 색감, 색 대비가 분명한 고급스러운 팔레트",avoid:"단순한 셀 채색, 치비 비율, 평면적인 그림, 흐릿하거나 뭉개진 디테일"},
 pixel:{look:"16비트 레트로 게임 캐릭터 같은 픽셀 아트",ratio:"3~4등신 게임 캐릭터 비율",line:"한 픽셀 굵기의 어두운 외곽선",shade:"2~3단계 디더링 없는 픽셀 명암",tex:"모든 형태가 또렷한 정사각 픽셀로 이루어짐",light:"왼쪽 위에서 오는 단순한 광원",color:"제한된 16색 안팎의 팔레트",avoid:"부드러운 그라데이션, 흐릿한 경계, 안티에일리어싱, 3D 렌더"},
 minipixel:{look:"작은 2등신 미니 픽셀 아트 캐릭터",ratio:"머리가 몸만큼 큰 2등신",line:"한 픽셀 굵기의 외곽선",shade:"1~2단계 단순한 픽셀 명암",tex:"적은 픽셀 수로 단순하게 표현한 도트",light:"단순한 광원",color:"제한된 8~12색 팔레트",avoid:"세밀한 묘사, 부드러운 그라데이션, 큰 픽셀 수"},
@@ -3923,7 +3924,7 @@ anime:{look:"일본 TV 애니메이션 작화",ratio:"6~7등신의 애니메이�
 real3d:{look:"실사에 가까운 고품질 3D 렌더링 인물",ratio:"실제 사람과 같은 7~8등신 비율",line:"외곽선 없음",shade:"사실적인 피부 반사와 부드러운 그림자",tex:"자연스러운 피부 결과 모공, 가닥이 살아 있는 머리카락, 실제 같은 옷감",light:"영화 같은 자연스러운 조명",color:"자연스러운 실제 색",avoid:"만화 같은 큰 눈, 외곽선, 장난감 같은 질감"},
 a3d:{look:"극장용 3D 애니메이션에 나오는 귀여운 3D 동물 캐릭터",ratio:"머리가 큰 통통한 비율",line:"외곽선 없이 입체감",shade:"부드러운 그림자",tex:"한 올 한 올 살아 있는 부드러운 털 질감, 촉촉한 눈",light:"따뜻한 스튜디오 조명과 림 라이트",color:"따뜻하고 부드러운 색감",avoid:"2D 그림체, 실제 동물 사진 같은 표현"},
 atoon:{look:"동화책 같은 만화풍 동물 캐릭터",ratio:"머리가 큰 귀여운 비율",line:"둥글고 부드러운 외곽선",shade:"단순한 1~2단계 명암",tex:"단순한 털 표현",light:"밝고 부드러운 조명",color:"밝고 따뜻한 색",avoid:"3D 렌더, 사실적인 털, 날카로운 선"},
-aflat:{look:"단순한 면으로 된 플랫 동물 일러스트",ratio:"단순화된 귀여운 비율",line:"외곽선 없이 색 면으로",shade:"그림자 거의 없음",tex:"질감 없는 단색 면",light:"조명 효과 없음",color:"4~6가지 색 팔레트",avoid:"그라데이션, 3D 입체감, 세밀한 묘사"}};
+aflat:{look:"트렌디한 모던 플랫 벡터 동물 캐릭터 일러스트",ratio:"머리가 큰 통통하고 귀여운 비율",line:"외곽선 없이 매끄러운 곡선 면",shade:"한 톤 어두운 면으로 그림자 1단계",tex:"질감 없이 깨끗한 면, 크고 반짝이는 눈과 귀여운 표정",light:"평면 조명",color:"조화로운 5~7가지 색의 세련된 팔레트",avoid:"점 같은 작은 눈, 밋밋한 표정, 지나치게 단순한 그림, 3D 입체감"}};
 function styleBlock(withRatio){const st=styleByName(cv("style"));
   if(!st){const t=cv("style")||STYLES[0].d;return [`[스타일] ${t}`,`- 위 스타일의 그림체·선·채색·질감·조명을 정확히 따라 줘.`]}
   const S=STYLE_SPEC[st.id]||{look:st.d};const r=withRatio&&ratioDesc()?ratioDesc():S.ratio;
@@ -4594,7 +4595,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793206115"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793206193"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4979,7 +4980,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793206115"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793206193"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -5124,6 +5125,7 @@ function charBase(){
   return ["캐릭터 1명을 그려 줘. 가장 중요한 건 아래 [스타일]을 정확하게 지키는 거야.","",
     ...styleBlock(true),"",
     "[캐릭터]",`- 피사체: ${cv("subj")||"(누구인지 적어 주세요)"}`,`- 동작·표정: ${cv("act")||ACT_FULL}`,`- 장소: ${png?"투명 배경":(cv("place")||"흰색 단색 배경")}`,
+    "- 상업용 캐릭터 수준의 완성도로 그려 줘. 얼굴은 귀엽고 매력적으로, 눈·코·입의 크기와 위치가 조화롭게, 표정은 생기 있게.",
     "- 피사체에 적힌 것만 단순하게 그리지 말고, 얼굴형·눈 색·머리 모양·옷의 색과 소재·장식까지 위 스타일에 맞게 구체적으로 정해서 완성도 높게 그려 줘. 적힌 특징은 바꾸지 마.",
     ...(cv("point")?[`- 포인트 컬러: ${cv("point").split(",").join(", ")}. 옷·리본·소품 같은 포인트에 이 색을 써 줘. 피사체에서 정한 색이 있으면 그 색을 먼저 지켜.`]:[]),"",
     "[화면]","- 정사각형 1:1. 머리부터 발끝까지 전신이 모두 보이게 캐릭터를 가운데에 두고, 위아래 여백을 남겨 줘.",
