@@ -725,6 +725,7 @@ a.btn{color:var(--ink);text-decoration:none}
 .padform{display:grid;gap:8px;padding:14px 16px;border:1px solid var(--accent);border-radius:14px;background:var(--accent-soft)}
 .padform .row{display:flex;gap:8px;flex-wrap:wrap}.padform .row input{flex:1;min-width:240px}
 .admbox{display:grid;gap:8px;border-top:1px dashed var(--accent);padding-top:12px;margin-top:4px}
+.admnote{margin:2px 0 8px;font-size:12.5px;line-height:1.55;color:var(--muted)}
 .admlist{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .admlist li{display:flex;align-items:center;gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 12px;font-size:14px}
 .padwrap .empty{display:grid;place-items:center;height:100%;color:var(--muted);text-align:center;padding:24px}
@@ -2550,7 +2551,7 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
     <form class="padform" id="mdlSetForm" data-admtab="모델 비교"><b>모델 비교 탭</b><label class="admck"><input type="checkbox" id="mdlOld"><span>‘비디오 기본’ 탭 보이기 <small class="hint">손 흔들며 인사하는 영상 11개</small></span></label><small class="hint">끄면 이미지·비디오 탭만 보여요. 영상 데이터는 지우지 않아요.</small></form>
     <form class="padform" id="galSetForm" data-admtab="갤러리"><b>갤러리 표시</b><label class="admck"><input type="checkbox" id="showAuthor" checked><span>작성자 이름 표시</span></label><label class="admck"><input type="checkbox" id="showTime"><span>올린 시간 표시</span></label><button class="btn primary" type="submit">저장</button></form>
     <form class="padform" id="padForm" data-admtab="패들렛 · 관리자"><label for="padUrl"><b>관리자</b> 이번 연수에 쓸 패들렛 주소</label><div class="row"><input class="tinput" id="padUrl" placeholder="https://padlet.com/..." autocomplete="off"><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 갤러리가 이 패들렛으로 바뀌어요.</small>
-      <div class="admbox" id="admBox"><label for="admEmail"><b>관리자 권한 주기</b> 패들렛을 바꿀 수 있는 사람</label>
+      <div class="admbox" id="admBox"><label for="admEmail"><b>관리자 권한 주기</b> 사이트 전체를 함께 관리할 사람</label><p class="admnote">갤러리·작품·커뮤니티 글 수정·삭제, 비공개 질문 답변, 패들렛·영상 목록·사이트 설정 관리, 생성 횟수 제한 없음. 관리자 추가·삭제는 소유자만 할 수 있어요.</p>
         <div class="row"><input class="tinput" id="admEmail" type="email" placeholder="함께 연수하는 선생님 구글 메일" autocomplete="off"><button class="btn" type="button" id="admAdd">추가</button></div>
         <ul class="admlist" id="admList"></ul></div></form>
     </div></div><div class="admfoot"><span class="admmsg" id="admMsg"></span><button type="button" class="btn ghost" id="padCancel">닫기</button><button type="button" class="btn primary" id="admSave">저장</button></div></div>
@@ -4418,7 +4419,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793153069"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793177508"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4803,7 +4804,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793153069"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793177508"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
