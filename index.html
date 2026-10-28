@@ -1401,6 +1401,16 @@ header.side .sidenav .snlab,header.side .snlab-li{display:none!important}
 }
 .padwrap.native{height:auto;min-height:0;border:0;background:none;overflow:visible}
 .pdgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.wkfds{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:0 0 18px}
+.wkfd{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:inherit;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.wkfd:hover{border-color:var(--accent);box-shadow:0 6px 18px -10px rgba(0,0,0,.25);transform:translateY(-1px)}
+.wkfd svg,.wkfd i{grid-row:span 2;width:34px;height:34px;fill:#FFD27A;stroke:#E0A93A;stroke-width:1.2}
+.wkfd b{font-size:15px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wkfd small{color:var(--muted);font-size:12.5px}
+.wkfd-new{border-style:dashed;background:none}.wkfd-new i{display:grid;place-items:center;font-style:normal;font-size:24px;font-weight:700;color:var(--accent-deep);background:var(--bg);border-radius:10px}
+.wkcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;font-size:15px}.wkcrumb>button{border:0;background:none;font:inherit;color:var(--muted);cursor:pointer;padding:4px 2px}.wkcrumb>button:hover{color:var(--accent-deep)}.wkcrumb>span{color:var(--muted)}
+.wkcrumb b{display:inline-flex;align-items:center;gap:6px}.wkcrumb b svg{width:22px;height:22px;fill:#FFD27A;stroke:#E0A93A;stroke-width:1.2}.wkcrumb-a{margin-left:auto;display:flex;gap:6px}
+.wkfdcard{max-width:420px}.wkfdact{justify-content:flex-end;gap:8px;margin-top:16px}#wkfdBody{margin-top:12px}
+.wkfdpick{display:grid;gap:6px;max-height:320px;overflow:auto}.wkfdpick label{display:block;cursor:pointer}.wkfdpick input{position:absolute;opacity:0}.wkfdpick span{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}.wkfdpick input:checked+span{border-color:var(--accent);background:var(--bg);font-weight:700}.wkfdpick svg{width:22px;height:22px;fill:#FFD27A;stroke:#E0A93A;stroke-width:1.2}
 .pdcard{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
 .pdcard:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(0,0,0,.35)}
 .pdm{display:block;background:#111;aspect-ratio:16/10;position:relative}.pdm video,.pdm img{width:100%;height:100%;object-fit:contain;display:block;background:#111}
@@ -2736,6 +2746,7 @@ body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper l
         <ul class="admlist" id="admList"></ul></div></form>
     </div></div><div class="admfoot"><span class="admmsg" id="admMsg"></span><button type="button" class="btn ghost" id="padCancel">닫기</button><button type="button" class="btn primary" id="admSave">저장</button></div></div>
 </div>
+<div class="modal" id="wkfdModal" hidden role="dialog" aria-modal="true" aria-labelledby="wkfdH"><div class="modal-card comcard wkfdcard"><h2 id="wkfdH">새 폴더</h2><div id="wkfdBody"></div><div class="row wkfdact"><button type="button" class="btn" data-wkfdx>취소</button><button type="button" class="btn primary" id="wkfdOk">저장</button></div></div></div>
 <div class="modal" id="wkModal" hidden role="dialog" aria-modal="true" aria-labelledby="wkH">
   <div class="modal-card comcard vupcard"><h2 id="wkH">작품 올리기</h2><p class="hint" style="margin:4px 0 0">완성한 영상을 유튜브 링크나 파일로 공유해요.</p>
     <form id="wkForm" class="comform">
@@ -4186,16 +4197,43 @@ function cvId(u){const m=String(u||"").match(/canva\.com\/design\/([\w-]+)\/([\w
 function cvEmbed(c){return `https://www.canva.com/design/${c}/watch?embed`}
 function ytId(u){const m=String(u||"").match(/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/);return m?m[1]:""}
 async function loadWorks(force){if(!fb){renderWorks();return}if(wkLoaded&&!force&&Date.now()-wkLoaded<20000){renderWorks();return}
-  try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"works"),F.orderBy("createdAt","desc"),F.limit(120)));wkItems=sn.docs.map(d=>({id:d.id,...d.data()}));wkLoaded=Date.now()}catch(e){}
+  try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"works"),F.orderBy("createdAt","desc"),F.limit(120)));wkItems=sn.docs.map(d=>({id:d.id,...d.data()}));wkLoaded=Date.now()}catch(e){}await loadWkFd();
   renderWorks()}
+function wkfdOpen(mode,id){wkfdMode={mode,id};const B=$("#wkfdBody"),H=$("#wkfdH");
+  if(mode==="move"){const cur=wkFdOf(id);H.textContent="폴더 이동";B.innerHTML=`<div class="wkfdpick"><label><input type="radio" name="wkfdp" value=""${cur?"":" checked"}><span>${FD_IC}폴더 밖 (작품 공유)</span></label>${WKFD.list.map(f=>`<label><input type="radio" name="wkfdp" value="${esc(f.id)}"${cur===f.id?" checked":""}><span>${FD_IC}${esc(f.name)}</span></label>`).join("")}</div>${WKFD.list.length?"":'<p class="hint">먼저 [새 폴더]를 만들어 주세요.</p>'}`}
+  else{const f=WKFD.list.find(x=>x.id===id);H.textContent=mode==="ren"?"폴더 이름 바꾸기":"새 폴더";B.innerHTML=`<input class="tinput" id="wkfdName" maxlength="30" placeholder="폴더 이름 (예: 1기 연수 작품)" value="${esc(f?f.name:"")}">`}
+  $("#wkfdModal").hidden=false;const n=$("#wkfdName");if(n)n.focus()}
+document.addEventListener("click",async e=>{let b;
+  if((b=e.target.closest("[data-wkdir]"))){wkDir=b.dataset.wkdir;renderWk(false);return}
+  if(e.target.closest("[data-wkfdnew]")){wkfdOpen("new");return}
+  if((b=e.target.closest("[data-wkfdren]"))){wkfdOpen("ren",b.dataset.wkfdren);return}
+  if((b=e.target.closest("[data-wkmove]"))){wkfdOpen("move",b.dataset.wkmove);return}
+  if(e.target.closest("[data-wkfdx]")||e.target.id==="wkfdModal"){$("#wkfdModal").hidden=true;return}
+  if((b=e.target.closest("[data-wkfddel]"))){const id=b.dataset.wkfddel,f=WKFD.list.find(x=>x.id===id);if(!f||!confirm(`'${f.name}' 폴더를 지울까요? 안에 있던 작품은 지워지지 않고 폴더 밖으로 나와요.`))return;
+    const bk=JSON.stringify(WKFD);WKFD.list=WKFD.list.filter(x=>x.id!==id);Object.keys(WKFD.map).forEach(k=>{if(WKFD.map[k]===id)delete WKFD.map[k]});try{await saveWkFd();wkDir="";toast("폴더를 지웠어요");renderWk(false)}catch(_){WKFD=JSON.parse(bk);toast("지우지 못했어요")}return}
+  if(e.target.closest("#wkfdOk")&&wkfdMode){const {mode,id}=wkfdMode,bk=JSON.stringify(WKFD);
+    if(mode==="move"){const v=(document.querySelector('[name="wkfdp"]:checked')||{}).value||"";if(v)WKFD.map[id]=v;else delete WKFD.map[id]}
+    else{const n=($("#wkfdName").value||"").trim();if(!n){toast("폴더 이름을 써 주세요");return}if(mode==="ren"){const f=WKFD.list.find(x=>x.id===id);if(f)f.name=n}else WKFD.list.push({id:"f"+Date.now().toString(36),name:n})}
+    try{await saveWkFd();$("#wkfdModal").hidden=true;toast(mode==="move"?"옮겼어요":mode==="ren"?"이름을 바꿨어요":"폴더를 만들었어요");renderWk(false)}catch(_){WKFD=JSON.parse(bk);toast("저장하지 못했어요")}}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="wkfdName"){e.preventDefault();$("#wkfdOk").click()}});
 function canWk(it){const u=user();return !!(u&&(u.uid===it.uid||isAdmin()))}
 function wkMedia(it){if(it.cv)return `<div class="pdm cvm"><iframe src="${cvEmbed(it.cv)}" loading="lazy" tabindex="-1" title=""></iframe></div>`;return it.yt?`<div class="pdm yt"><img src="https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg" alt="" loading="lazy"><i></i></div>`:padMedia(it.url)}
 let scFil="all";
 function renderWorks(){renderWk(false);renderWk(true)}
-function renderWk(sc){const W=$(sc?"#scWrap":"#wkWrap");if(!W)return;loadRx();const FV=sc?scFil:wkFil;
-  const L=wkItems.filter(p=>(p.cat==="scene")===sc).filter(p=>FV==="all"||(p.who||"tc")===FV).map((p,i)=>[p,i]).sort((a,b)=>((a[0].who==="st")-(b[0].who==="st"))||a[1]-b[1]).map(x=>x[0]);
-  W.innerHTML=L.length?`<div class="pdgrid">${L.map(p=>`<article class="pdcard" data-open="w:${esc(p.id)}">${authorRow(p.name,p.createdAt,"")}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-wopen="${esc(p.id)}">${esc(p.title||"제목 없음")}</button></h4>${canWk(p)?kMenu(`<button type="button" data-wedit="${esc(p.id)}">수정</button><button type="button" class="kdel" data-wdel="${esc(p.id)}">삭제</button>`):""}</div><div class="pdmw">${wkMedia(p)}</div><div class="pdtx" data-wopen="${esc(p.id)}">${p.intro?`<p>${esc(p.intro)}</p>`:""}</div>${rxHTML("w_"+p.id)}${cmtBox("w_"+p.id,1)}</article>`).join("")}</div>`
-    :`<div class="pdempty"><b>${FV==="all"?"아직 공유된 작품이 없어요":(FV==="st"?"학생":"선생님")+" 작품이 아직 없어요"}</b><span>${sc?"장면에서 만든 영상을 [갤러리에 올리기]로 공유해 주세요.":"완성한 영상을 [작품 올리기]로 공유해 주세요."}</span></div>`}
+let WKFD={list:[],map:{}},wkDir="",wkfdMode=null;
+async function loadWkFd(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","wkfolders"));if(d.exists()){const x=d.data();WKFD={list:x.list||[],map:x.map||{}}}}catch(_){}}
+async function saveWkFd(){await fb.fs.setDoc(fb.fs.doc(fb.db,"config","wkfolders"),WKFD)}
+const wkFdOf=id=>{const f=WKFD.map[id];return f&&WKFD.list.some(x=>x.id===f)?f:""};
+const FD_IC='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2.5h6.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></svg>';
+function wkFdBar(FV){const adm=isAdmin();const cnt=id=>wkItems.filter(p=>p.cat!=="scene"&&wkFdOf(p.id)===id&&(FV==="all"||(p.who||"tc")===FV)).length;
+  if(wkDir){const f=WKFD.list.find(x=>x.id===wkDir);return `<nav class="wkcrumb"><button type="button" data-wkdir="">작품 공유</button><span>›</span><b>${FD_IC}${esc(f?f.name:"")}</b>${adm?`<span class="wkcrumb-a"><button type="button" class="btn sm" data-wkfdren="${esc(wkDir)}">이름 바꾸기</button><button type="button" class="btn sm" data-wkfddel="${esc(wkDir)}">폴더 삭제</button></span>`:""}</nav>`}
+  if(!WKFD.list.length&&!adm)return "";
+  return `<div class="wkfds">${WKFD.list.map(f=>`<button type="button" class="wkfd" data-wkdir="${esc(f.id)}">${FD_IC}<b>${esc(f.name)}</b><small>${cnt(f.id)}개</small></button>`).join("")}${adm?`<button type="button" class="wkfd wkfd-new" data-wkfdnew><i>+</i><b>새 폴더</b><small>관리자</small></button>`:""}</div>`}
+function renderWk(sc){const W=$(sc?"#scWrap":"#wkWrap");if(!W)return;loadRx();const FV=sc?scFil:wkFil;if(!sc&&wkDir&&!WKFD.list.some(x=>x.id===wkDir))wkDir="";
+  const L=wkItems.filter(p=>(p.cat==="scene")===sc).filter(p=>sc||wkFdOf(p.id)===wkDir).filter(p=>FV==="all"||(p.who||"tc")===FV).map((p,i)=>[p,i]).sort((a,b)=>((a[0].who==="st")-(b[0].who==="st"))||a[1]-b[1]).map(x=>x[0]);
+  const FB=sc?"":wkFdBar(FV);
+  W.innerHTML=FB+(L.length?`<div class="pdgrid">${L.map(p=>`<article class="pdcard" data-open="w:${esc(p.id)}">${authorRow(p.name,p.createdAt,"")}<div class="ptlrow"><h4 class="ptl"><button type="button" class="gt" data-wopen="${esc(p.id)}">${esc(p.title||"제목 없음")}</button></h4>${canWk(p)?kMenu(`<button type="button" data-wedit="${esc(p.id)}">수정</button>${!sc&&isAdmin()?`<button type="button" data-wkmove="${esc(p.id)}">폴더 이동</button>`:""}<button type="button" class="kdel" data-wdel="${esc(p.id)}">삭제</button>`):""}</div><div class="pdmw">${wkMedia(p)}</div><div class="pdtx" data-wopen="${esc(p.id)}">${p.intro?`<p>${esc(p.intro)}</p>`:""}</div>${rxHTML("w_"+p.id)}${cmtBox("w_"+p.id,1)}</article>`).join("")}</div>`
+    :(!sc&&wkDir)?`<div class="pdempty"><b>이 폴더에 작품이 아직 없어요</b><span>${isAdmin()?"작품 카드의 ⋮ → [폴더 이동]으로 넣어 주세요.":"곧 작품이 올라올 거예요."}</span></div>`:(!sc&&WKFD.list.length&&FV==="all")?"":`<div class="pdempty"><b>${FV==="all"?"아직 공유된 작품이 없어요":(FV==="st"?"학생":"선생님")+" 작품이 아직 없어요"}</b><span>${sc?"장면에서 만든 영상을 [갤러리에 올리기]로 공유해 주세요.":"완성한 영상을 [작품 올리기]로 공유해 주세요."}</span></div>`)}
 function openWork(id,edit){const p=wkItems.find(x=>x.id===id);if(!p)return;const key="w_"+p.id;
   const media=p.cv?`<iframe src="${cvEmbed(p.cv)}" allow="fullscreen;autoplay" allowfullscreen title="영상"></iframe>`:p.yt?`<iframe src="https://www.youtube-nocookie.com/embed/${p.yt}?rel=0&cc_load_policy=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen title="영상"></iframe>`:`<video src="${esc(cldV(p.url))}" poster="${esc(cldP(p.url))}" controls preload="none" playsinline></video>`;
   const head=edit?`<div class="gvhead gvediting"><div class="gvedit"><label>제목<input class="tinput" data-wm="title" maxlength="80" value="${esc(p.title||"")}"></label><label>한 줄 소개<textarea class="tinput" data-wm="intro" rows="2" maxlength="300">${esc(p.intro||"")}</textarea></label><label>만든 사람<input class="tinput" data-wm="name" maxlength="20" value="${esc(p.name||"")}"></label><label>작품 구분<select class="tinput" data-wm="who"><option value="tc"${(p.who||"tc")==="tc"?" selected":""}>선생님 작품</option><option value="st"${p.who==="st"?" selected":""}>학생 작품</option></select></label><div class="gvact"><button type="button" class="gva" data-wopen="${esc(p.id)}">취소</button><button type="button" class="gva save" data-wsave="${esc(p.id)}">저장</button></div></div></div>`
@@ -4654,7 +4692,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793217233"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793217342"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -5039,7 +5077,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793217233"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793217342"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
