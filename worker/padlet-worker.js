@@ -131,7 +131,7 @@ export default {
       return J({ out });
     }
     // ===== 장면(studio) =====
-    // 하루 사용량: KV "sq:<종류>:<uid>:<날짜>" (장면 그림 12장, 영상 2개 / 관리자 무제한)
+    // 하루 사용량: KV "sq:<종류>:<uid>:<날짜>" (장면 그림 10장, 영상 3개, 음성 10개 / 관리자 무제한)
     if (req.method === "POST" && (act === "scene" || act === "vid" || act === "vidpoll" || act === "tts")) {
       const b = await req.json().catch(() => ({}));
       const who = await lookupUser(b.idToken);
@@ -140,7 +140,7 @@ export default {
       let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
       const tok = await vertexToken(sa);
       const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-      const LIM = { scene: 12, vid: 3, tts: 10 };
+      const LIM = { scene: 10, vid: 3, tts: 10 };
       const qk = k => `sq:${k}:${who.uid}:${day}`;
       const used = async k => +(await env.HIDE.get(qk(k)) || 0);
       const bump = async k => env.HIDE.put(qk(k), String((await used(k)) + 1), { expirationTtl: 172800 });
