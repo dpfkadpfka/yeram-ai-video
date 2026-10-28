@@ -4262,7 +4262,8 @@ if(window.SITE5){document.body.classList.add("site5");
 }
 const S5ST={1:"char",2:"s2",3:"s3",4:"s4",5:"s5"},S5N={char:1,s2:2,s3:3,s4:4,s5:5};
 function go5(n){n=+n;if(n===1){const b=$('#stepper [data-stepgo="1"]');if(b)b.click();else setStage("char")}else{setStage(S5ST[n]);if(n===2&&typeof stAuto==="function")stAuto();if(n===3)r3();if(n===4)r4();if(n===5)r5()}window.scrollTo({top:0});n5()}
-function n5(){const st=document.body.dataset.stage,n=S5N[st],b=$("#s5Next");if(!b)return;b.hidden=!(window.SITE5&&n);if(!n)return;$("#s5Prev").hidden=n===1;$("#s5Fwd").hidden=n===5;$("#s5Fwd").textContent=n<5?`다음: ${["","","이미지 재료","영상 재료","AI 음성","최종 영상"][n+1]} →`:""}
+if(window.SITE5)setInterval(()=>{try{n5()}catch(_){}},800);
+function n5(){const st=document.body.dataset.stage,n=S5N[st],b=$("#s5Next");if(!b)return;b.hidden=!(window.SITE5&&n);if(!n)return;const ready=n===1?(!document.body.classList.contains("cfresh")&&!!cv("subj")):n===2?MAT.img.length>0:n===3?MAT.vid.length>0:n===4?MAT.aud.length>0:false;$("#s5Prev").hidden=n===1;$("#s5Fwd").hidden=n===5||!ready;if(n===1&&!ready)b.hidden=true;$("#s5Fwd").textContent=n<5?`다음: ${["","","이미지 재료","영상 재료","AI 음성","최종 영상"][n+1]} →`:""}
 if(window.SITE5)new MutationObserver(n5).observe(document.body,{attributes:true,attributeFilter:["data-stage"]});
 /* 재료 저장(IndexedDB) */
 const MAT={img:[],vid:[],aud:[],order:[],map:{}};
@@ -4601,7 +4602,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793208062"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793208377"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4986,7 +4987,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793208062"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793208377"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
