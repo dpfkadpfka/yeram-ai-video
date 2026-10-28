@@ -2203,6 +2203,23 @@ body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper l
 .st-tg[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep,var(--accent))}
 .st-tg[aria-pressed="true"]::before{content:"✓ "}
 .st-audn{font-size:11.5px;color:#a59c96;margin-left:auto}
+.evt-pop{position:fixed;inset:0;z-index:100000;background:rgba(20,14,18,.55);display:grid;place-items:center;padding:20px;animation:evtfade .25s ease}
+.evt-cf{position:fixed;inset:0;pointer-events:none;z-index:2}
+.evt-card{position:relative;z-index:3;width:min(380px,100%);background:#fff;border-radius:26px;padding:30px 26px 24px;text-align:center;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);animation:evtpop .55s cubic-bezier(.2,1.6,.4,1)}
+.evt-box{position:relative;width:96px;height:86px;margin:-78px auto 10px;animation:evtbounce 1.2s ease-in-out infinite}
+.evt-body{position:absolute;left:8px;right:8px;bottom:0;height:58px;border-radius:10px;background:linear-gradient(135deg,#ff7aa8,#E8558A)}
+.evt-lid{position:absolute;left:0;right:0;top:10px;height:22px;border-radius:8px;background:linear-gradient(135deg,#ff92b8,#ef6a98);animation:evtlid .6s .2s both}
+.evt-rib{position:absolute;left:50%;top:6px;bottom:0;width:14px;margin-left:-7px;background:#FFC94D;border-radius:3px}
+.evt-tag{display:inline-block;font-size:12.5px;font-weight:800;color:#E8558A;background:#fdebf2;border-radius:999px;padding:4px 12px}
+.evt-card h2{margin:10px 0 4px;font-size:30px;letter-spacing:-.02em}
+.evt-who{margin:0 0 14px;color:#5c534d}.evt-who b{color:#1f1a17}
+.evt-prize{display:grid;gap:2px;background:#fff8e6;border:1.5px dashed #FFC94D;border-radius:16px;padding:12px;margin-bottom:12px}.evt-prize small{color:#a07a14;font-weight:700}.evt-prize b{font-size:18px}
+.evt-hint{font-size:12.5px;color:#a59c96;margin:0 0 14px}.evt-ok{width:100%;height:46px}
+@keyframes evtpop{from{transform:scale(.5) translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes evtfade{from{opacity:0}}@keyframes evtbounce{50%{transform:translateY(-8px) rotate(-3deg)}}
+@keyframes evtlid{from{transform:translateY(16px) rotate(0)}60%{transform:translateY(-14px) rotate(-12deg)}to{transform:translateY(-6px) rotate(-6deg)}}
+.evt-main{padding:10px 12px;border-radius:12px;background:#fdebf2}
+.evt-ms{display:grid;gap:10px;margin:10px 0 14px}.evt-m{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:8px}.evt-m small{display:block}
 .wkscprev{width:100%;max-height:300px;border-radius:14px;background:#141210;object-fit:contain}
 @media (max-width:560px){.st-tools{grid-auto-flow:row;grid-template-columns:1fr 1fr}.st-tools>*:last-child:nth-child(3){grid-column:1/-1}.st-sec{padding:18px 16px}}
 </style>
@@ -2711,6 +2728,7 @@ body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper l
     <form class="padform" id="useForm" data-admtab="용량"><div class="usehd"><b>저장 공간 · 사용량</b><button type="button" class="btn sm" id="useRefresh">새로고침</button></div><div id="useBox"><p class="hint">불러오는 중…</p></div>
       <div class="uselinks"><a href="https://console.cloudinary.com/" target="_blank" rel="noopener">Cloudinary 대시보드 ↗</a><a href="https://console.firebase.google.com/project/yeram-ai-video/usage" target="_blank" rel="noopener">Firebase 사용량 ↗</a><a href="https://dash.cloudflare.com/0e83fdf9fdb049a6054996ff1aec3610/workers/services/view/bold-morning-576f/production/metrics" target="_blank" rel="noopener">Cloudflare 서버 ↗</a></div></form>
     <form class="padform" id="mdlSetForm" data-admtab="모델 비교"><b>모델 비교 탭</b><label class="admck"><input type="checkbox" id="mdlOld"><span>‘비디오 기본’ 탭 보이기 <small class="hint">손 흔들며 인사하는 영상 11개</small></span></label><small class="hint">끄면 이미지·비디오 탭만 보여요. 영상 데이터는 지우지 않아요.</small></form>
+    <form class="padform" id="evtForm" data-admtab="이벤트" onsubmit="return false"><b>연수 이벤트</b><div id="evtBox"><p class="hint">불러오는 중…</p></div></form>
     <form class="padform" id="galSetForm" data-admtab="갤러리"><b>갤러리 표시</b><label class="admck"><input type="checkbox" id="showAuthor" checked><span>작성자 이름 표시</span></label><label class="admck"><input type="checkbox" id="showTime"><span>올린 시간 표시</span></label><button class="btn primary" type="submit">저장</button></form>
     <form class="padform" id="padForm" data-admtab="패들렛 · 관리자"><label for="padUrl"><b>관리자</b> 이번 연수에 쓸 패들렛 주소</label><div class="row"><input class="tinput" id="padUrl" placeholder="https://padlet.com/..." autocomplete="off"><button class="btn primary" type="submit">저장</button></div><small class="hint">저장하면 모든 선생님 화면의 갤러리가 이 패들렛으로 바뀌어요.</small>
       <div class="admbox" id="admBox"><label for="admEmail"><b>관리자 권한 주기</b> 사이트 전체를 함께 관리할 사람</label><p class="admnote">갤러리·작품·커뮤니티 글 수정·삭제, 비공개 질문 답변, 패들렛·영상 목록·사이트 설정 관리, 생성 횟수 제한 없음. 관리자 추가·삭제는 소유자만 할 수 있어요.</p>
@@ -3106,7 +3124,7 @@ async function initFirebase(){
       }
       persist();renderAll();renderAcct();renderPad();if(document.body.dataset.stage==="gallery")galLoad(true);
     });
-    loadSiteConfig();
+    loadSiteConfig();setTimeout(loadEvt,600);
   }catch(e){fb=null;renderAcct()}
 }
 
@@ -4531,7 +4549,7 @@ $("#upForm").addEventListener("submit",async e=>{
     const nm=(S.profile&&S.profile.nick)||(user()&&(user().displayName||""))||"게스트";
     const meta={title:$("#upTitle").value.trim(),style:cv("style")||"",prompt:pr,name:nm,thumb,reports:0,kind:upKind};
     if(fb){const F=fb.fs;const ref=await F.addDoc(F.collection(fb.db,"gallery"),{...meta,uid:user().uid,createdAt:F.serverTimestamp()});
-      await F.setDoc(F.doc(fb.db,"galleryFull",ref.id),{img,uid:user().uid});}
+      await F.setDoc(F.doc(fb.db,"galleryFull",ref.id),{img,uid:user().uid});if(upKind==="char")tryWin("char");}
     else{galLocal.unshift({...meta,img,id:uid(),uid:"local"});saveGalLocal()}
     $("#upModal").hidden=true;galFilter="all";$$("#galFilter button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.gf==="all"));
     if(document.body.dataset.stage==="gallery"){toast("갤러리에 올렸어요");openGallery("chars")}else toastLink("갤러리에 올렸어요","갤러리 보기",()=>openGallery("chars"));loadCharFeed();
@@ -4636,7 +4654,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793211547"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793213698"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -4871,7 +4889,7 @@ $("#comForm").addEventListener("submit",async e=>{e.preventDefault();if(!fb||!us
   const pv=d.cat==="qna"&&$("#comPriv").checked;
   try{const nref=await fb.fs.addDoc(fb.fs.collection(fb.db,pv?"cpriv":"community"),d);if(!isAdmin())user().getIdToken().then(t=>fetch(PAD_API.replace(/\/$/,"")+"/?act=cnotify",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken:t,col:pv?"cpriv":"community",id:nref.id})})).catch(()=>{});$("#comModal").hidden=true;$("#comForm").reset();$("#comBody").innerHTML="";comImgs=[];paintComImgs();comPrivSync();toast("올렸어요");comTab="all";loadCom()}catch(err){toast("올리지 못했어요. 잠시 뒤 다시 해 주세요.")}});
 document.addEventListener("submit",async e=>{const f=e.target.closest("[data-cform]");if(!f)return;e.preventDefault();const id=f.dataset.cform,inp=f.querySelector("input"),t=inp.value.trim();if(!t||!fb||!user())return;
-  try{const F=fb.fs;const col=comCol(id),adm=isAdmin();await F.addDoc(F.collection(fb.db,col,id,"comments"),{body:t,nick:adm?"예람쌤":myNick(),uid:user().uid,photo:(user().photoURL||"").slice(0,500),adm,createdAt:F.serverTimestamp()});F.updateDoc(F.doc(fb.db,col,id),adm?{cmtN:F.increment(1),ans:true}:{cmtN:F.increment(1)}).catch(()=>{});{const it=comItems.find(x=>x.id===id);if(it&&adm)it.ans=true}inp.value="";const it=comItems.find(x=>x.id===id);if(it)it.cmtN=(it.cmtN||0)+1;loadCmts(id)}catch(err){toast("댓글을 올리지 못했어요")}});
+  try{const F=fb.fs;const col=comCol(id),adm=isAdmin();await F.addDoc(F.collection(fb.db,col,id,"comments"),{body:t,nick:adm?"예람쌤":myNick(),uid:user().uid,photo:(user().photoURL||"").slice(0,500),adm,createdAt:F.serverTimestamp()});tryWin("cmt");F.updateDoc(F.doc(fb.db,col,id),adm?{cmtN:F.increment(1),ans:true}:{cmtN:F.increment(1)}).catch(()=>{});{const it=comItems.find(x=>x.id===id);if(it&&adm)it.ans=true}inp.value="";const it=comItems.find(x=>x.id===id);if(it)it.cmtN=(it.cmtN||0)+1;loadCmts(id)}catch(err){toast("댓글을 올리지 못했어요")}});
 /* ===== AI 대본 · 영문 이미지 프롬프트 (Vertex) ===== */
 async function aiCall(system,prompt,opt){opt=opt||{};const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),opt.ms||45000);
   try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=ai",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({system,prompt,temp:opt.temp,q:opt.q||""}),signal:ctl.signal});clearTimeout(to);
@@ -5021,7 +5039,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793211547"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793213698"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -5250,12 +5268,44 @@ function rxInner(key){const c=RXD[key]||{},mine=myRx()[key]||[];
    +`<button type="button" class="rxcm" data-rxcm aria-label="댓글">${IC_BUBBLE}<span>${c.c>0?c.c:""}</span></button>`}
 function rxHTML(key){return `<div class="rxbar" data-rx="${esc(key)}">${rxInner(key)}</div>`}
 function rxSum(key){const c=RXD[key]||{},t=RX.reduce((a,[k])=>a+(c[k]||0),0);const top=RX.filter(([k])=>c[k]>0).sort((a,b)=>c[b[0]]-c[a[0]]).slice(0,3).map(x=>x[1]).join("");return [t?`${top} ${t}`:"",c.c>0?`💬 ${c.c}`:""].filter(Boolean).join(" · ")}
+/* ===== 연수 이벤트: 미션 선착순 당첨 팝업 ===== */
+const EVT_DEF=[["char","캐릭터 첫 공유","오늘 캐릭터를 갤러리에 가장 먼저 올린 사람","오늘의 첫 작가"],["like","첫 좋아요","남의 게시물에 가장 먼저 반응을 누른 사람","천사"],["cmt","첫 댓글","가장 먼저 댓글을 남긴 사람","첫 마디 요정"],["five","캐릭터 5장 완성","캐릭터 기본 이미지 5장을 가장 먼저 다 만든 사람","펜타 메이커"]];
+let EVT={on:false,day:"",m:{}};const EVT_SEEN=new Set();let evtUnsub=null,evtBoot=false;
+const kday=()=>new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
+function evtLive(){return !!(EVT.on&&EVT.day===kday())}
+async function loadEvt(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","event"));if(d.exists())EVT=Object.assign({on:false,day:"",m:{}},d.data())}catch(_){}evtListen()}
+function evtListen(){if(!fb||evtUnsub||!evtLive())return;const F=fb.fs;evtBoot=false;
+  evtUnsub=F.onSnapshot(F.query(F.collection(fb.db,"events"),F.where("day","==",kday())),sn=>{sn.docChanges().forEach(c=>{const d=c.doc.data();if(c.type!=="added"||EVT_SEEN.has(c.doc.id))return;EVT_SEEN.add(c.doc.id);if(!evtBoot)return;const u=user();if((u&&u.uid===d.uid)||isAdmin())evtPop(d)});evtBoot=true;if(document.getElementById("evtList"))renderEvtAdmin()},()=>{})}
+async function tryWin(m){try{if(!fb||!evtLive())return;const cfg=(EVT.m||{})[m];if(!cfg||!cfg.on)return;const u=user();if(!u||isAdmin())return;
+  const F=fb.fs,id=kday()+"_"+m;const ex=await F.getDoc(F.doc(fb.db,"events",id));if(ex.exists())return;
+  await F.setDoc(F.doc(fb.db,"events",id),{day:kday(),m,uid:u.uid,name:myNick(),title:cfg.title||"",prize:cfg.prize||"",at:F.serverTimestamp()})}catch(_){}}
+function evtSound(){try{const C=new (window.AudioContext||window.webkitAudioContext)();const t0=C.currentTime;[[523,0],[659,.12],[784,.24],[1047,.36],[784,.52],[1047,.64]].forEach(([f,t])=>{const o=C.createOscillator(),g=C.createGain();o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0+t);g.gain.exponentialRampToValueAtTime(.28,t0+t+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+t+.42);o.connect(g).connect(C.destination);o.start(t0+t);o.stop(t0+t+.45)})}catch(_){}}
+function evtConfetti(host){const cv=document.createElement("canvas");cv.className="evt-cf";host.append(cv);const x=cv.getContext("2d"),W=cv.width=innerWidth,H=cv.height=innerHeight,col=["#E8558A","#FFC94D","#6EC6FF","#7BD389","#B48CFF","#FF8A65"];
+  const P=[...Array(160)].map(()=>({x:W/2+(Math.random()-.5)*120,y:H*.45,vx:(Math.random()-.5)*16,vy:-Math.random()*16-4,r:Math.random()*6+4,c:col[Math.random()*col.length|0],a:Math.random()*6,s:(Math.random()-.5)*.3}));let n=0;
+  (function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.s;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++n<200)requestAnimationFrame(f);else cv.remove()})()}
+function evtPop(d){const w=document.createElement("div");w.className="evt-pop";const me=user()&&user().uid===d.uid;
+  w.innerHTML=`<div class="evt-card"><div class="evt-box"><i class="evt-lid"></i><i class="evt-body"></i><i class="evt-rib"></i></div><div class="evt-tag">🎉 이벤트 당첨</div><h2>${esc(d.title||"당첨")}</h2><p class="evt-who"><b>${esc(d.name||"선생님")}</b>${me?" 님, 축하해요!":" 님 당첨!"}</p>${d.prize?`<div class="evt-prize"><small>선물</small><b>${esc(d.prize)}</b></div>`:""}<p class="evt-hint">${me?"선물은 예람쌤이 따로 보내 드려요.":"당첨자에게도 같은 팝업이 떴어요."}</p><button type="button" class="btn primary evt-ok">좋아요!</button></div>`;
+  document.body.append(w);evtSound();evtConfetti(w);w.addEventListener("click",e=>{if(e.target.closest(".evt-ok")||e.target===w)w.remove()})}
+/* 관리자 탭 */
+function renderEvtAdmin(){const box=document.getElementById("evtBox");if(!box)return;const live=evtLive();
+  box.innerHTML=`<label class="admck evt-main"><input type="checkbox" id="evtOn"${live?" checked":""}><span><b>오늘 이벤트 켜기</b> <small class="hint">켜면 오늘(${kday()})만 진행돼요. 날짜가 바뀌면 자동으로 꺼져요.</small></span></label>
+  <div class="evt-ms">${EVT_DEF.map(([k,t,d,ti])=>{const c=(EVT.m||{})[k]||{};return `<div class="evt-m"><label class="admck"><input type="checkbox" data-evm="${k}" data-f="on"${c.on!==false?" checked":""}><span><b>${t}</b><small class="hint">${d}</small></span></label><div class="row"><input class="tinput" data-evm="${k}" data-f="title" placeholder="호칭" value="${esc(c.title||ti)}"><input class="tinput" data-evm="${k}" data-f="prize" placeholder="선물 (예: 커피 기프티콘)" value="${esc(c.prize||"")}"></div></div>`}).join("")}</div>
+  <div class="row" style="justify-content:space-between;align-items:center"><b>오늘 당첨자</b><span><button type="button" class="btn sm" id="evtTest">팝업 미리보기</button> <button type="button" class="btn sm" id="evtReset">당첨 기록 초기화</button></span></div><div id="evtList"><p class="hint">불러오는 중…</p></div>`;
+  loadEvtWinners()}
+async function loadEvtWinners(){const L=document.getElementById("evtList");if(!L||!fb)return;try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"events"),F.where("day","==",kday())));const W=sn.docs.map(d=>d.data());
+  L.innerHTML=W.length?`<table class="il-t"><thead><tr><th>미션</th><th>호칭</th><th>당첨자</th><th>선물</th></tr></thead><tbody>${EVT_DEF.map(([k,t])=>{const w=W.find(x=>x.m===k);return `<tr><td>${t}</td><td>${esc(w?w.title:"")}</td><td>${w?esc(w.name):'<span class="hint">아직 없음</span>'}</td><td>${esc(w?w.prize:"")}</td></tr>`}).join("")}</tbody></table>`:`<p class="hint">아직 당첨자가 없어요.</p>`}catch(_){L.innerHTML='<p class="hint">불러오지 못했어요</p>'}}
+async function saveEvt(){if(!fb)return;const m={};EVT_DEF.forEach(([k])=>{const g=f=>document.querySelector(`[data-evm="${k}"][data-f="${f}"]`);m[k]={on:g("on").checked,title:g("title").value.trim(),prize:g("prize").value.trim()}});
+  const on=document.getElementById("evtOn").checked;EVT={on,day:on?kday():"",m};try{await fb.fs.setDoc(fb.fs.doc(fb.db,"config","event"),EVT);toast(on?"오늘 이벤트를 켰어요":"이벤트를 껐어요");evtListen()}catch(_){toast("저장하지 못했어요")}}
+document.addEventListener("change",e=>{if(e.target.closest("#evtBox"))saveEvt()});
+document.addEventListener("click",async e=>{if(e.target.closest("[data-admgo='이벤트']"))renderEvtAdmin();
+  if(e.target.closest("#evtTest")){evtPop({title:"천사",name:"미리보기",prize:"커피 기프티콘"});return}
+  if(e.target.closest("#evtReset")){if(!confirm("오늘 당첨 기록을 모두 지울까요?"))return;try{const F=fb.fs;const sn=await F.getDocs(F.query(F.collection(fb.db,"events"),F.where("day","==",kday())));await Promise.all(sn.docs.map(d=>F.deleteDoc(d.ref)));toast("초기화했어요");loadEvtWinners()}catch(_){toast("초기화하지 못했어요")}}});
 function paintAllRx(){$$("[data-rx]").forEach(el=>{el.innerHTML=rxInner(el.dataset.rx)});$$("[data-rxs]").forEach(el=>{el.textContent=rxSum(el.dataset.rxs)})}
 async function toggleRx(key,k){if(!fb){toast("잠시 뒤 다시 눌러 주세요");return}
   const m=myRx(),mine=m[key]||[],on=mine.includes(k),d=on?-1:1,c=RXD[key]=RXD[key]||{};
   if(on&&!(c[k]>0)){m[key]=mine.filter(x=>x!==k);saveMyRx(m);paintAllRx();return}
   c[k]=(c[k]||0)+d;m[key]=on?mine.filter(x=>x!==k):mine.concat(k);saveMyRx(m);paintAllRx();
-  try{const F=fb.fs;await F.setDoc(F.doc(fb.db,"rx",key),{[k]:F.increment(d)},{merge:true})}
+  try{const F=fb.fs;await F.setDoc(F.doc(fb.db,"rx",key),{[k]:F.increment(d)},{merge:true});if(d>0)tryWin("like")}
   catch(e){c[k]=Math.max(0,(c[k]||0)-d);m[key]=mine;saveMyRx(m);paintAllRx();toast("반응을 남기지 못했어요")}}
 function cmtBox(key,mini){return `<div class="rxcmts${mini?" mini":""}" data-cbox="${esc(key)}">${mini?"":"<h3>댓글</h3>"}<div class="rxlist">${cmtItems(key,mini)}</div>${user()?`<form class="rxform" data-rxform="${esc(key)}"><input maxlength="300" placeholder="${mini?"댓글 추가":"따뜻한 한마디를 남겨 주세요"}" aria-label="댓글"><button type="submit">${mini?"↑":"등록"}</button></form>`:`<button type="button" class="rxlogin" data-rxlogin>로그인하고 댓글 쓰기</button>`}</div>`}
 const CMTS={};let cmtLoaded=0;
@@ -5285,7 +5335,7 @@ document.addEventListener("click",async e=>{const t=e.target;let b;
 });
 document.addEventListener("submit",async e=>{const f=e.target.closest("[data-rxform]");if(!f)return;e.preventDefault();const key=f.dataset.rxform,inp=f.querySelector("input"),body=inp.value.trim();if(!body)return;
   if(!fb||!user()){openLogin();return}const btn=f.querySelector("button");btn.disabled=true;
-  try{const F=fb.fs;const r=await F.addDoc(F.collection(fb.db,"rx",key,"c"),{body,nick:myNick(),uid:user().uid,at:F.serverTimestamp()});
+  try{const F=fb.fs;const r=await F.addDoc(F.collection(fb.db,"rx",key,"c"),{body,nick:myNick(),uid:user().uid,at:F.serverTimestamp()});tryWin("cmt");
     (CMTS[key]=CMTS[key]||[]).push({id:r.id,body,nick:myNick(),uid:user().uid,at:null});inp.value="";paintCmt(key);
     const c=RXD[key]=RXD[key]||{};c.c=(c.c||0)+1;paintAllRx();F.setDoc(F.doc(fb.db,"rx",key),{c:F.increment(1)},{merge:true}).catch(()=>{})}
   catch(err){toast("댓글을 올리지 못했어요")}btn.disabled=false});
@@ -5377,7 +5427,7 @@ async function genImage(kind,btn){
     const j=await r.json().catch(()=>({}));
     if(r.status===429){GUSED[kind]={used:j.used,limit:j.limit};paintQuota();toast(`오늘은 ${kind==="sheet"?"캐릭터 시트":"기본 이미지"}를 ${j.limit}장 다 그렸어요. 내일 다시 그릴 수 있어요`);return}
     if(!r.ok||!j.image)throw 0;
-    GEN[kind].unshift(j.image);GSEL[kind]=0;GUSED[kind]={used:j.used,limit:j.limit};paintQuota();toast("다 그렸어요! 마음에 드는 걸 골라 올려 보세요")
+    GEN[kind].unshift(j.image);GSEL[kind]=0;GUSED[kind]={used:j.used,limit:j.limit};if(kind==="base"&&j.used>=5)tryWin("five");paintQuota();toast("다 그렸어요! 마음에 드는 걸 골라 올려 보세요")
   }catch(e){toast("그리지 못했어요. 잠시 뒤 다시 해 주세요")}
   finally{box.classList.remove("busy");$$(`[data-gen="${kind}"]`).forEach(b=>{b.disabled=false;{const g=b.querySelector(".gl");if(g)g.textContent=GEN[kind].length?"다시 생성하기":"AI 생성하기"}});paintGen(kind)}}
 document.addEventListener("click",async e=>{const t=e.target;let b;

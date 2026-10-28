@@ -38,7 +38,17 @@ service cloud.firestore {
     // 홈 캐릭터 영상(config/hv_…): 누구나 보기, 관리자만 쓰기
     match /config/{doc} {
       allow read: if true;
-      allow write: if doc.matches('hv_.*') && isOwnerAdmin();
+      allow write: if (doc.matches('hv_.*') || doc == 'event') && isOwnerAdmin();
+    }
+    // 연수 이벤트 당첨 기록: 미션별 하루 1명(먼저 만든 사람), 고치기 불가, 관리자만 지우기
+    match /events/{id} {
+      allow read: if true;
+      allow create: if signed() && request.resource.data.uid == request.auth.uid &&
+        exists(/databases/$(database)/documents/config/event) &&
+        get(/databases/$(database)/documents/config/event).data.on == true &&
+        request.resource.data.day == get(/databases/$(database)/documents/config/event).data.day &&
+        id == request.resource.data.day + '_' + request.resource.data.m;
+      allow delete: if isOwnerAdmin();
     }
     // 캐릭터 갤러리
     match /gallery/{id} {
