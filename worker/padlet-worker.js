@@ -140,7 +140,7 @@ export default {
       let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
       const tok = await vertexToken(sa);
       const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-      const LIM = { scene: 12, vid: 2, tts: 30 };
+      const LIM = { scene: 12, vid: 3, tts: 10 };
       const qk = k => `sq:${k}:${who.uid}:${day}`;
       const used = async k => +(await env.HIDE.get(qk(k)) || 0);
       const bump = async k => env.HIDE.put(qk(k), String((await used(k)) + 1), { expirationTtl: 172800 });
