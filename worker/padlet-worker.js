@@ -152,6 +152,8 @@ export default {
         const parts = [{ text: `Use the attached character reference image(s) (character and/or character turnaround sheet). Keep the SAME character: face, hair, outfit, colors and art style must match the references exactly. Draw ONE single scene (not a sheet, no panels, no text, no captions), aspect ratio ${ratio}, full-bleed.\nScene (Korean description): ${prompt}` }];
         (Array.isArray(b.refs) ? b.refs.slice(0, 2) : []).forEach(x => { const m = dataUrl(x); if (m) parts.push({ inlineData: { mimeType: m[1], data: m[2] } }); });
         if (parts.length < 2) return J({ error: "ref" }, 400);
+        const ex = (Array.isArray(b.extra) ? b.extra.slice(0, 2) : []).map(dataUrl).filter(Boolean);
+        if (ex.length) { parts.push({ text: `The next ${ex.length} image(s) show OTHER character(s) who must ALSO appear in this same scene together with the main character. Keep each character's face, hair, outfit and colors exactly as in their image, redrawn in the same art style as the main character.` }); ex.forEach(m => parts.push({ inlineData: { mimeType: m[1], data: m[2] } })); }
         const body = { contents: [{ role: "user", parts }], generationConfig: { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: ratio } } };
         for (const m of ["gemini-nano-banana-2.1", "gemini-3.1-flash-image", "gemini-2.5-flash-image"]) {
           const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
@@ -195,9 +197,11 @@ export default {
         const n = await used("vid"); if (!admin && n >= LIM.vid) return J({ error: "limit", used: n, limit: LIM.vid }, 429);
         const m0 = dataUrl(b.image); if (!m0) return J({ error: "image" }, 400);
         const ratio = b.ratio === "16:9" ? "16:9" : "9:16", dur = [4, 6, 8].includes(+b.dur) ? +b.dur : 8;
-        const prompt = String(b.prompt || "").slice(0, 800) + "\nKeep the character exactly as in the image. Smooth natural motion. No text.";
+        const sfx = !!(b.audio && b.audio.sfx), speech = !!(b.audio && b.audio.speech), line = String((b.audio && b.audio.line) || "").slice(0, 200);
+        const aud = !(sfx || speech) ? "" : "\nAudio: " + [sfx ? "natural sound effects that match the actions" : "no sound effects", speech ? (line ? `the character speaks this line in Korean, clearly and naturally with matching lip movement: "${line}"` : "the character speaks briefly in natural Korean with matching lip movement") : "no dialogue, no speech, no voices", "no background music"].join("; ") + ".";
+        const prompt = String(b.prompt || "").slice(0, 800) + "\nKeep the character exactly as in the image. Smooth natural motion. No text." + aud;
         for (const m of VEO) {
-          const r = await fetch(base(m) + ":predictLongRunning", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify({ instances: [{ prompt, image: { bytesBase64Encoded: m0[2], mimeType: m0[1] } }], parameters: { aspectRatio: ratio, durationSeconds: dur, sampleCount: 1, generateAudio: false, resolution: "720p", personGeneration: "allow_all" } }) });
+          const r = await fetch(base(m) + ":predictLongRunning", { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify({ instances: [{ prompt, image: { bytesBase64Encoded: m0[2], mimeType: m0[1] } }], parameters: { aspectRatio: ratio, durationSeconds: dur, sampleCount: 1, generateAudio: sfx || speech, resolution: "720p", personGeneration: "allow_all" } }) });
           if (!r.ok) continue;
           const d = await r.json(); if (!d.name) continue;
           await bump("vid"); return J({ op: d.name, model: m, used: n + 1, limit: admin ? null : LIM.vid });

@@ -2196,6 +2196,13 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
 .stpop-x{border:0;background:var(--bg);width:28px;height:28px;border-radius:50%;cursor:pointer}
 .stpop .pktiles{max-height:340px;overflow:auto;padding:2px}
 body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
+.st-subh{font-size:13px;font-weight:800;margin-top:4px}.st-subh small{color:var(--muted);font-weight:600;margin-left:4px}
+.st-refs-ex .st-ref{aspect-ratio:2/1}.st-refs-ex .st-ph{font-size:12.5px}
+.st-aud{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.st-audl{font-size:13px;font-weight:800;margin-right:4px}
+.st-tg{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)}
+.st-tg[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep,var(--accent))}
+.st-tg[aria-pressed="true"]::before{content:"✓ "}
+.st-audn{font-size:11.5px;color:#a59c96;margin-left:auto}
 .wkscprev{width:100%;max-height:300px;border-radius:14px;background:#141210;object-fit:contain}
 @media (max-width:560px){.st-tools{grid-auto-flow:row;grid-template-columns:1fr 1fr}.st-tools>*:last-child:nth-child(3){grid-column:1/-1}.st-sec{padding:18px 16px}}
 </style>
@@ -2455,6 +2462,11 @@ body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper l
             <label class="st-ref" data-ref="sheet"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 시트</span><img alt="" hidden><button type="button" class="st-x" data-refx="sheet" hidden aria-label="삭제">✕</button></label>
           </div>
           <small class="hint" id="stRefHint">캐릭터 만들기에서 그린 그림이 있으면 자동으로 들어와요. 직접 올려도 돼요.</small>
+          <div class="st-subh">함께 나올 캐릭터 <small>선택 · 최대 2명</small></div>
+          <div class="st-refs st-refs-ex">
+            <label class="st-ref sm" data-ref="ex1"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 추가</span><img alt="" hidden><button type="button" class="st-x" data-refx="ex1" hidden aria-label="삭제">✕</button></label>
+            <label class="st-ref sm" data-ref="ex2"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 추가</span><img alt="" hidden><button type="button" class="st-x" data-refx="ex2" hidden aria-label="삭제">✕</button></label>
+          </div>
         </div>
         <div class="st-sec">
           <div class="st-h"><b>2</b>비율</div>
@@ -2471,7 +2483,9 @@ body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper l
         <div class="st-sec st-move" id="stMove" hidden>
           <div class="st-h"><b>4</b>움직이기<button type="button" class="st-ai" data-stai="vid">AI 도우미</button></div>
           <textarea class="tinput" id="stVidP" rows="3" maxlength="600" placeholder="예: 캐릭터가 웃으며 손을 천천히 흔들고, 카메라가 살짝 다가간다"></textarea>
-          <div class="st-seg" id="stDur"><button type="button" data-sd="4" aria-pressed="false">4초</button><button type="button" data-sd="6" aria-pressed="false">6초</button><button type="button" data-sd="8" aria-pressed="true">8초</button></div><button type="button" class="btn primary st-go" id="stVidGo">영상 생성하기</button>
+          <div class="st-seg" id="stDur"><button type="button" data-sd="4" aria-pressed="false">4초</button><button type="button" data-sd="6" aria-pressed="false">6초</button><button type="button" data-sd="8" aria-pressed="true">8초</button></div><div class="st-aud" id="stAud"><span class="st-audl">소리</span><button type="button" class="st-tg" data-aud="st:sfx" aria-pressed="false">효과음</button><button type="button" class="st-tg" data-aud="st:speech" aria-pressed="false">대사</button><small class="st-audn">배경음악은 넣지 않아요</small></div>
+          <input class="tinput" id="stLine" maxlength="120" placeholder="캐릭터가 할 대사 (선택, 짧게)" hidden>
+          <button type="button" class="btn primary st-go" id="stVidGo">영상 생성하기</button>
           <div class="st-tools" id="stVidActs" hidden><button type="button" id="stVidRe"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>다시 생성하기</button><a id="stVidDl" download="장면.mp4" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>영상 다운로드</a><button type="button" id="stVidUp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5"/><path d="M5 19h14"/></svg>갤러리에 올리기</button></div>
           <small class="hint" id="stVidNote"></small>
           <small class="mnote">Google Veo 3.1</small>
@@ -2499,6 +2513,8 @@ body:not(.studio-on) #stepper li:has(.sn[data-studio]),body.hm-studio #stepper l
         <div class="st-sec">
           <div class="st-h"><b>3</b>길이</div>
           <div class="st-seg" id="s3Dur"><button type="button" data-s3d="4" aria-pressed="false">4초</button><button type="button" data-s3d="6" aria-pressed="false">6초</button><button type="button" data-s3d="8" aria-pressed="true">8초</button></div>
+          <div class="st-aud" id="s3Aud"><span class="st-audl">소리</span><button type="button" class="st-tg" data-aud="s3:sfx" aria-pressed="false">효과음</button><button type="button" class="st-tg" data-aud="s3:speech" aria-pressed="false">대사</button><small class="st-audn">배경음악은 넣지 않아요</small></div>
+          <input class="tinput" id="s3Line" maxlength="120" placeholder="캐릭터가 할 대사 (선택, 짧게)" hidden>
           <button type="button" class="btn primary st-go" id="s3Go">영상 생성하기</button>
           <div class="st-tools" id="s3Acts" hidden><button type="button" id="s3Re"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>다시 생성하기</button><a id="s3Dl" download="영상.mp4" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>영상 다운로드</a><button type="button" id="s3Up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 10l5-5 5 5"/><path d="M5 19h14"/></svg>갤러리에 올리기</button></div>
           <small class="hint" id="s3Note">영상은 1~3분쯤 걸려요. 9:16·16:9 그림만 영상으로 만들 수 있어요.</small>
@@ -4218,6 +4234,8 @@ document.addEventListener("click",e=>{if(e.target.closest("#useRefresh"))loadUsa
 try{if(/[?&]studio=1/.test(location.search)||window.STUDIO_ON)document.body.classList.add("studio-on")}catch(_){}
 setTimeout(()=>{try{if(fb&&isAdmin())document.body.classList.add("studio-on")}catch(_){}},3000);
 const ST={ref:{base:"",sheet:""},ratio:"9:16",dur:8,img:"",vid:"",hist:[],busy:0};
+function audOf(pre){const on=k=>document.querySelector(`[data-aud="${pre}:${k}"]`)?.getAttribute("aria-pressed")==="true";return {sfx:on("sfx"),speech:on("speech"),line:on("speech")?($("#"+pre+"Line").value||"").trim():""}}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-aud]");if(!b)return;const v=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",String(v));const [pre,k]=b.dataset.aud.split(":");if(k==="speech")$("#"+pre+"Line").hidden=!v});
 function stSetRef(k,src){ST.ref[k]=src||"";const L=$(`.st-ref[data-ref="${k}"]`),im=L.querySelector("img");im.hidden=!src;if(src)im.src=src;L.querySelector(".st-ph").hidden=!!src;L.querySelector(".st-x").hidden=!src}
 function stAuto(){["base","sheet"].forEach(k=>{if(!ST.ref[k]){const g=(typeof GEN!=="undefined"&&GEN[k]&&GEN[k][GSEL[k]])||"";if(g)stSetRef(k,g)}})}
 function stShrink(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=1280,sc=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.88))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(f)})}
@@ -4233,13 +4251,13 @@ async function stTok(){return await new Promise(res=>gateLogin("장면을 그리
 async function stDraw(){const p=$("#stImgP").value.trim();if(!p){toast("어떤 장면인지 써 주세요");$("#stImgP").focus();return}if(!ST.ref.base&&!ST.ref.sheet){toast("캐릭터나 캐릭터 시트를 넣어 주세요");return}
   const idToken=await stTok();stBusy(1,"장면을 생성하는 중…");
   try{const refs=[];for(const k of ["base","sheet"])if(ST.ref[k])refs.push(await stDataUrl(ST.ref[k]));
-    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=scene",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,refs,ratio:ST.ratio})});const j=await r.json().catch(()=>({}));
+    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=scene",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,refs,extra:await Promise.all(["ex1","ex2"].filter(k=>ST.ref[k]).map(k=>stDataUrl(ST.ref[k]))),ratio:ST.ratio})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 장면 그리기를 다 썼어요 (${j.limit}장)`);return}if(!r.ok||!j.image)throw 0;
     ST.img=j.image;ST.vid="";if(window.onSceneDrawn)window.onSceneDrawn(j.image,ST.ratio);ST.hist.unshift({img:j.image,vid:"",ratio:ST.ratio});ST.hist=ST.hist.slice(0,12);stView("img");stHist();stFocus();if(j.limit)$("#stImgQ").textContent=`오늘 ${j.used}/${j.limit}장`}
   catch(_){toast("그리지 못했어요. 잠시 뒤 다시 해 주세요")}finally{stBusy(0)}}
 async function stMove(){if(!ST.img||ST.ratio==="1:1")return;const p=$("#stVidP").value.trim()||"캐릭터가 자연스럽게 움직이고, 카메라가 천천히 다가간다";
   const idToken=await stTok();stBusy(1,"영상을 생성하는 중… (1~3분)");
-  try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:ST.img,ratio:ST.ratio,dur:ST.dur})});const j=await r.json().catch(()=>({}));
+  try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:ST.img,ratio:ST.ratio,dur:ST.dur,audio:audOf("st")})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 영상 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.op)throw 0;
     const t0=Date.now();while(Date.now()-t0<6*60e3){await new Promise(z=>setTimeout(z,8000));const q=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vidpoll",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,op:j.op,model:j.model})}).then(x=>x.json()).catch(()=>({}));
       if(q.url){ST.vid=q.url;const h=ST.hist.find(x=>x.img===ST.img);if(h)h.vid=q.url;stView("vid");stHist();stFocus();return}if(q.error){if(q.error==="filtered")toast("이 장면은 영상으로 만들 수 없었어요. 움직임 설명을 바꿔 보세요");else throw 0;return}}
@@ -4302,7 +4320,7 @@ function r3(){const G=$("#s3Imgs");if(!MAT.img.some(x=>x.id===S3.sel)){const f=M
 function s3Redo(){const v=MAT.vid.find(x=>x.id===S3.cur);if(v){if(MAT.img.some(x=>x.id===v.img))S3.sel=v.img;if(v.p)$("#s3P").value=v.p;if(v.dur){S3.dur=v.dur;$$("#s3Dur button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.s3d===v.dur)))}}r3();if(!MAT.img.some(x=>x.id===S3.sel)){toast("이미지 재료를 골라 주세요");return}s3Make()}
 async function s3Make(){const it=MAT.img.find(x=>x.id===S3.sel);if(!it)return;const p=$("#s3P").value.trim()||"캐릭터가 자연스럽게 움직이고, 카메라가 천천히 다가간다";
   const idToken=await stTok();S3.busy=1;$("#s3Busy").hidden=false;r3();
-  try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:it.src,ratio:it.ratio,dur:S3.dur})});const j=await r.json().catch(()=>({}));
+  try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:it.src,ratio:it.ratio,dur:S3.dur,audio:audOf("s3")})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 영상 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.op)throw 0;
     const t0=Date.now();while(Date.now()-t0<6*60e3){await new Promise(z=>setTimeout(z,8000));const q=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vidpoll",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,op:j.op,model:j.model})}).then(x=>x.json()).catch(()=>({}));
       if(q.url){const v={id:mid(),url:q.url,img:it.id,ratio:it.ratio,dur:S3.dur,p};MAT.vid.unshift(v);MAT.order.push(v.id);matSave();S3.busy=0;$("#s3Busy").hidden=true;r3();s3Show(v.id);toast("영상 재료에 담았어요");return}
@@ -4618,7 +4636,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793211351"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793211532"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -5003,7 +5021,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793211351"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src=(window.SITE5?"../":"")+"models/index.html?v=1793211532"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
