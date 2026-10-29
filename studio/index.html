@@ -4303,16 +4303,16 @@ function stView(which){ST.view=(which==="vid"&&ST.vid)?"vid":"img";const I=$("#s
 function stMoveNote(){const sq=ST.ratio==="1:1";$("#stVidGo").disabled=sq||!!ST.busy;$("#stVidNote").textContent=sq?"영상은 9:16 또는 16:9 장면만 만들 수 있어요.":"영상은 1~3분쯤 걸려요. 이 창을 닫지 말고 기다려 주세요."}
 function stBusy(on,t){ST.busy=on?1:0;$("#stBusy").hidden=!on;if(t)$("#stBusy span").textContent=t;$("#stImgGo").disabled=!!on;$$("#stImgActs button,#stVidActs button").forEach(x=>x.disabled=!!on);stMoveNote()}
 function stHist(){const H=$("#stHl");$("#stHist").hidden=!ST.hist.length;H.innerHTML=ST.hist.map((h,i)=>`<button type="button" data-sth="${i}" class="${h.img===ST.img?"on":""}"><img src="${h.img}" alt="">${h.vid?"<em>영상</em>":""}</button>`).join("")}
-async function stTok(){return await new Promise(res=>gateLogin("장면을 그리려면 구글 로그인이 필요해요.",async()=>res(await user().getIdToken())))}
+async function stTok(w){const m=`<b>${w||"그림·영상·음성 생성"}</b>은 구글로 로그인하면 쓸 수 있어요. 둘러보기는 로그인 없이도 돼요.`;if(user()&&!isGoogle()){toast("생성 기능은 구글 로그인으로만 쓸 수 있어요");return new Promise(()=>{})}return await new Promise(res=>gateLogin(m,async()=>res(await user().getIdToken())))}
 async function stDraw(){const p=$("#stImgP").value.trim();if(!p){toast("어떤 장면인지 써 주세요");$("#stImgP").focus();return}if(!ST.ref.base&&!ST.ref.sheet){toast("캐릭터나 캐릭터 시트를 넣어 주세요");return}
-  const idToken=await stTok();stBusy(1,"장면을 생성하는 중…");
+  const idToken=await stTok("장면 그림 생성");stBusy(1,"장면을 생성하는 중…");
   try{const refs=[];for(const k of ["base","sheet"])if(ST.ref[k])refs.push(await stDataUrl(ST.ref[k]));
     const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=scene",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,refs,extra:await Promise.all(["ex1","ex2"].filter(k=>ST.ref[k]).map(k=>stDataUrl(ST.ref[k]))),ratio:ST.ratio})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 장면 그리기를 다 썼어요 (${j.limit}장)`);return}if(!r.ok||!j.image)throw 0;
     ST.img=j.image;ST.vid="";if(window.onSceneDrawn)window.onSceneDrawn(j.image,ST.ratio);ST.hist.unshift({img:j.image,vid:"",ratio:ST.ratio});ST.hist=ST.hist.slice(0,12);stView("img");stHist();stFocus();if(j.limit)$("#stImgQ").textContent=`오늘 ${j.used}/${j.limit}장`}
   catch(_){toast("그리지 못했어요. 잠시 뒤 다시 해 주세요")}finally{stBusy(0)}}
 async function stMove(){if(!ST.img||ST.ratio==="1:1")return;const p=$("#stVidP").value.trim()||"캐릭터가 자연스럽게 움직이고, 카메라가 천천히 다가간다";
-  const idToken=await stTok();stBusy(1,"영상을 생성하는 중… (1~3분)");
+  const idToken=await stTok("영상 생성");stBusy(1,"영상을 생성하는 중… (1~3분)");
   try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:ST.img,ratio:ST.ratio,dur:ST.dur,audio:audOf("st")})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 영상 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.op)throw 0;
     const t0=Date.now();while(Date.now()-t0<6*60e3){await new Promise(z=>setTimeout(z,8000));const q=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vidpoll",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,op:j.op,model:j.model})}).then(x=>x.json()).catch(()=>({}));
@@ -4375,7 +4375,7 @@ function r3(){const G=$("#s3Imgs");if(!MAT.img.some(x=>x.id===S3.sel)){const f=M
   $("#s3Vids").innerHTML=MAT.vid.length?MAT.vid.map(v=>`<div class="vcard${v.ratio==="16:9"?" w":""}"><video src="${esc(v.url)}#t=0.3" muted playsinline preload="metadata" data-s3play="${v.id}"></video><div class="va"><button type="button" data-s3show="${v.id}">보기</button><button type="button" data-s3del="${v.id}">삭제</button></div></div>`).join(""):`<p class="matempty" style="width:100%">만든 영상 재료가 여기에 모여요.</p>`}
 function s3Redo(){const v=MAT.vid.find(x=>x.id===S3.cur);if(v){if(MAT.img.some(x=>x.id===v.img))S3.sel=v.img;if(v.p)$("#s3P").value=v.p;if(v.dur){S3.dur=v.dur;$$("#s3Dur button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.s3d===v.dur)))}}r3();if(!MAT.img.some(x=>x.id===S3.sel)){toast("이미지 재료를 골라 주세요");return}s3Make()}
 async function s3Make(){const it=MAT.img.find(x=>x.id===S3.sel);if(!it)return;const p=$("#s3P").value.trim()||"캐릭터가 자연스럽게 움직이고, 카메라가 천천히 다가간다";
-  const idToken=await stTok();S3.busy=1;$("#s3Busy").hidden=false;r3();
+  const idToken=await stTok("영상 생성");S3.busy=1;$("#s3Busy").hidden=false;r3();
   try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vid",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt:p,image:it.src,ratio:it.ratio,dur:S3.dur,audio:audOf("s3")})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 영상 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.op)throw 0;
     const t0=Date.now();while(Date.now()-t0<6*60e3){await new Promise(z=>setTimeout(z,8000));const q=await fetch(PAD_API.replace(/\/$/,"")+"/?act=vidpoll",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,op:j.op,model:j.model})}).then(x=>x.json()).catch(()=>({}));
@@ -4394,7 +4394,7 @@ function r4(){$("#s4V").innerHTML=VOICES.map(([k,t])=>`<button type="button" dat
   $("#s4Acts").hidden=!cur;if(cur){$("#s4Dl").href=cur.src;$("#s4Dl").download=`음성_${cur.text.slice(0,12)}.wav`}
   $("#s4Prev").innerHTML=cur?`<div class="aprev-card"><span class="aprev-tag">${vl(cur)}<em class="vmodel">${esc(cur.voice||"")} · Gemini 2.5 Flash TTS</em></span><p>${esc(cur.text)}</p><audio controls src="${cur.src}" preload="metadata"></audio></div>`:`<div class="aprev-empty"><b>여기에 음성이 나와요</b><span>대사를 쓰고 목소리를 고른 뒤<br>[음성 생성하기]</span></div>`;
   $("#s4List").innerHTML=MAT.aud.length?MAT.aud.map(a=>`<div class="acard${a.id===S4.cur?" on":""}" data-s4pick="${a.id}"><span class="acard-tag">${vl(a)}<em class="vmodel">${esc(a.voice||"")}</em></span><p>${esc(a.text)}</p><div class="va"><a href="${a.src}" download="음성_${esc(a.text.slice(0,12))}.wav">다운로드</a><button type="button" data-s4del="${a.id}">삭제</button></div></div>`).join(""):`<p class="matempty">음성을 생성하면 여기에 음성 재료로 모여요. 5단계에서 영상에 붙일 수 있어요.</p>`}
-async function s4Make(){const t=$("#s4T").value.trim();if(!t){toast("대사를 써 주세요");$("#s4T").focus();return}const idToken=await stTok();const b=$("#s4Go");b.disabled=true;b.textContent="생성하는 중…";$$("#s4Acts button").forEach(x=>x.disabled=true);
+async function s4Make(){const t=$("#s4T").value.trim();if(!t){toast("대사를 써 주세요");$("#s4T").focus();return}const idToken=await stTok("AI 음성 생성");const b=$("#s4Go");b.disabled=true;b.textContent="생성하는 중…";$$("#s4Acts button").forEach(x=>x.disabled=true);
   try{const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=tts",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,text:t,voice:S4.v,style:S4.s})});const j=await r.json().catch(()=>({}));
     if(j.error==="limit"){toast(`오늘 목소리 만들기를 다 썼어요 (${j.limit}개)`);return}if(!r.ok||!j.audio)throw 0;
     const nid=mid();MAT.aud.unshift({id:nid,src:j.audio,text:t,voice:S4.v,style:S4.s});S4.cur=nid;matSave();r4();if(j.limit)$("#s4Q").textContent=`오늘 ${j.used}/${j.limit}개`;const a=$("#s4Prev audio");if(a)a.play().catch(()=>{});if(innerWidth<=900)$("#s4Prev").scrollIntoView({block:"center",behavior:"smooth"})}
@@ -4692,7 +4692,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793245337"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793245382"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -5077,7 +5077,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793245337"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793245382"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
@@ -5471,7 +5471,7 @@ function paintGen(kind){try{const nb=!GEN.base.length;$("#sheetNeed").hidden=!nb
   const u=GUSED[kind];box.querySelector(".gen-left").textContent=u&&u.limit?`오늘 ${u.used}/${u.limit}장`:"";}
 async function genImage(kind,btn){
   if(!fb){toast("잠시 뒤 다시 눌러 주세요");return}
-  if(!user()){openLogin();toast("구글로 로그인하면 바로 그릴 수 있어요");return}
+  if(!user()){gateLogin("<b>캐릭터 그림 생성</b>은 구글로 로그인하면 쓸 수 있어요. 둘러보기는 로그인 없이도 돼요.");return}
   if(!isGoogle()){toast("바로 그리기는 구글 로그인으로만 쓸 수 있어요");return}
   if(!cv("subj")){toast("피사체부터 적어 주세요");return}
   const prompt=$(kind==="base"?"#cBase":"#cSheet").value.trim();if(!prompt){toast("프롬프트가 비어 있어요");return}
