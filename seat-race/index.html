@@ -3,76 +3,92 @@
 <title>자리 바꾸기 레이스</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* Layout: 하늘빛 운동장 위에 흰 카드. 위는 흰 머리줄, 안내는 토끼 선생님 말풍선, 레이스는 붉은 트랙. 칠판 화면은 2단, 태블릿은 한 줄. 일부러 밝은 한 가지 화면만 씀. */
+/* Layout: 게임 화면. 하늘 배경 위에 두꺼운 흰 게임 패널과 리본 제목, 왼쪽에 토끼 길잡이. 학생은 한 번에 한 가지만 묻는 단계형, 선생님은 같은 패널로 2단. 밝은 한 가지 화면만 씀. */
 @font-face{font-family:"HJiugae";src:url("fonts/HakgyoansimJiugaeR.woff2") format("woff2");font-display:swap}
 @font-face{font-family:"HBareun";src:url("fonts/HakgyoansimBareondotumR.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"HBareun";src:url("fonts/HakgyoansimBareondotumB.woff2") format("woff2");font-weight:700;font-display:swap}
 :root{
   color-scheme:light;
-  --sky:#e6f4ff; --sky2:#d3ebfd; --card:#ffffff; --line:#dbe8f3; --soft:#f2f8fd;
-  --ink:#1d2a4a; --muted:#5d6b86;
-  --blue:#2f8fe8; --blue-d:#1d6fc4; --blue-l:#e3f1fd;
-  --sun:#ffc83a; --sun-d:#e0a514; --sun-fg:#3a2a00;
-  --coral:#ff6f4f; --grass:#4cbf6a; --grass-d:#36a154;
-  --track:#d9583d; --track2:#c84f36; --chalk:#fff6ea;
-  --board:#2f6a52; --desk:#f3d9a8; --desk-d:#d6b170; --desk-fg:#4a3412;
-  --danger:#e5483d;
+  --sky1:#5ec2ff; --sky2:#bfe8ff; --ink:#1b2850; --muted:#64739a; --line:#e3ecf7; --soft:#f3f8fe;
+  --blue:#2f8cf0; --blue-d:#1a63b8; --blue-l:#e4f1ff;
+  --sun:#ffcc2e; --sun2:#ffb000; --sun-d:#c98400; --sun-fg:#3d2800;
+  --pink:#ff7aa2; --coral:#ff6b4a; --grass:#5cc85f; --grass-d:#3e9e43;
+  --track:#e0603f; --track2:#cf5536; --chalk:#fff6ea;
+  --board:#2f6a52; --desk:#f6dcaa; --desk-d:#d9b26e; --desk-fg:#4c3612;
+  --danger:#e8473c;
   --display:"HJiugae","HBareun","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --body:"HBareun","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --panel-shadow:0 10px 0 rgba(20,80,150,.18),0 24px 48px rgba(20,80,150,.18);
 }
 html,body{height:100%}
-body{margin:0;background:var(--sky);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere;
-  background-image:radial-gradient(rgba(47,143,232,.10) 1.5px,transparent 1.6px);background-size:22px 22px}
+body{margin:0;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;word-break:keep-all;overflow-wrap:anywhere;
+  background:#9fdcff linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 62%,#e9f8ff 100%) fixed}
+body::after{content:"";position:fixed;inset:auto 0 0 0;height:90px;z-index:-1;background:
+  radial-gradient(120px 60px at 8% 100%,#7ad66b 98%,transparent 100%),radial-gradient(160px 70px at 30% 105%,#6ccd5e 98%,transparent 100%),
+  radial-gradient(140px 60px at 58% 100%,#7ad66b 98%,transparent 100%),radial-gradient(180px 80px at 86% 108%,#6ccd5e 98%,transparent 100%),
+  linear-gradient(transparent 60%,#6ccd5e 60%)}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(60px 26px at 12% 14%,rgba(255,255,255,.85) 98%,transparent 100%),radial-gradient(44px 22px at 16% 11%,rgba(255,255,255,.85) 98%,transparent 100%),
+  radial-gradient(70px 28px at 78% 20%,rgba(255,255,255,.75) 98%,transparent 100%),radial-gradient(48px 24px at 83% 16%,rgba(255,255,255,.75) 98%,transparent 100%),
+  radial-gradient(56px 22px at 48% 8%,rgba(255,255,255,.6) 98%,transparent 100%)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.25;text-wrap:balance}
 p{margin:0;text-wrap:pretty}
 .muted{color:var(--muted)} .small{font-size:.88rem}
-.wrap{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 110px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.stack{display:grid;gap:16px}
+.stack{display:grid;gap:18px}
 
-/* 버튼 */
-.btn{font-family:var(--display);font-size:1.12rem;border:0;border-radius:16px;padding:.72em 1.3em;background:var(--blue);color:#fff;cursor:pointer;line-height:1.15;box-shadow:0 5px 0 var(--blue-d);transition:transform .12s,box-shadow .12s;white-space:nowrap}
-.btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--blue-d)}
-.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blue-d)}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn.sun{background:var(--sun);color:var(--sun-fg);box-shadow:0 5px 0 var(--sun-d)}
-.btn.sun:hover{box-shadow:0 7px 0 var(--sun-d)}
-.btn.sun:active{box-shadow:0 1px 0 var(--sun-d)}
-.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 0 0 2px var(--line),0 4px 0 var(--line)}
-.btn.ghost:hover{box-shadow:0 0 0 2px var(--blue),0 6px 0 var(--line)}
-.btn.big{font-size:1.45rem;padding:.72em 1.6em;border-radius:20px}
-.btn.sm{font-size:.98rem;padding:.55em .95em;border-radius:12px}
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-input[type=text],input[type=number],textarea,select{font:inherit;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:14px;padding:.6em .8em;min-width:0;transition:border-color .12s,box-shadow .12s}
-input[type=text]:hover,input[type=number]:hover,textarea:hover,select:hover{border-color:#b8d6f0}
-input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-l);outline:none}
+/* 게임 버튼 */
+.btn{position:relative;font-family:var(--display);font-size:1.15rem;border:0;border-radius:999px;padding:.7em 1.5em;color:#fff;cursor:pointer;line-height:1.1;white-space:nowrap;
+  background:linear-gradient(180deg,#5aaefc,var(--blue));box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -4px 0 rgba(0,0,0,.12),0 6px 0 var(--blue-d),0 10px 16px rgba(26,99,184,.25);
+  text-shadow:0 2px 0 rgba(0,0,0,.15);transition:transform .1s,box-shadow .1s,filter .1s}
+.btn:hover{filter:brightness(1.06);transform:translateY(-2px)}
+.btn:active{transform:translateY(5px);box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 1px 0 var(--blue-d)}
+.btn:disabled{filter:grayscale(.6) opacity(.5);cursor:not-allowed;transform:none}
+.btn.sun{background:linear-gradient(180deg,#ffe066,var(--sun2));color:var(--sun-fg);text-shadow:0 1px 0 rgba(255,255,255,.5);box-shadow:inset 0 3px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(0,0,0,.08),0 6px 0 var(--sun-d),0 10px 16px rgba(201,132,0,.25)}
+.btn.sun:active{box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 1px 0 var(--sun-d)}
+.btn.white{background:#fff;color:var(--ink);text-shadow:none;box-shadow:inset 0 -4px 0 #e6eef8,0 6px 0 #c9d9ee,0 10px 16px rgba(20,80,150,.12)}
+.btn.white:active{box-shadow:0 1px 0 #c9d9ee}
+.btn.big{font-size:1.5rem;padding:.75em 1.9em}
+.btn.sm{font-size:1rem;padding:.6em 1.1em}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
+input[type=text],input[type=number],textarea,select{font:inherit;color:var(--ink);background:var(--soft);border:3px solid var(--line);border-radius:16px;padding:.6em .85em;min-width:0;transition:border-color .12s,background .12s}
+input[type=text]:hover,input[type=number]:hover,textarea:hover,select:hover{border-color:#c7dcf3}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--blue);background:#fff;outline:none}
 textarea{width:100%;resize:vertical}
 label{font-size:.95rem;font-weight:700}
 
-.card{background:var(--card);border-radius:24px;padding:22px;border:2px solid var(--line);box-shadow:0 6px 0 var(--sky2)}
-.card h3{font-size:1.25rem}
-.note{border-radius:16px;padding:12px 16px;background:var(--blue-l);font-size:.95rem}
-.note.warn{background:#fff1ee;box-shadow:inset 5px 0 0 var(--danger)}
+/* 게임 패널 */
+.card{position:relative;background:#fff;border-radius:30px;padding:24px;box-shadow:var(--panel-shadow)}
+.card>h3{font-size:1.25rem;display:flex;align-items:center;gap:8px}
+.card>h3::before{content:"";width:10px;height:22px;border-radius:6px;background:var(--sun)}
+.ribbon{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-family:var(--display);font-size:1.35rem;color:#fff;white-space:nowrap;
+  background:linear-gradient(180deg,#ff8fb0,var(--pink));padding:.45em 1.6em;border-radius:16px;box-shadow:inset 0 3px 0 rgba(255,255,255,.35),0 5px 0 #d94f7a;text-shadow:0 2px 0 rgba(0,0,0,.12)}
+.ribbon.blue{background:linear-gradient(180deg,#5aaefc,var(--blue));box-shadow:inset 0 3px 0 rgba(255,255,255,.35),0 5px 0 var(--blue-d)}
+.card.rib{padding-top:42px}
+.note{border-radius:18px;padding:12px 16px;background:var(--blue-l);font-size:.95rem}
+.note.warn{background:#fff1ee;color:#8a2a20}
 
 /* 머리줄 */
-.top{background:#fff;border-bottom:2px solid var(--line);margin-bottom:22px;position:sticky;top:env(safe-area-inset-top,0px);z-index:4}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:#fff}
-.top .in{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{font-family:var(--display);font-size:1.35rem;display:flex;align-items:center;gap:10px;color:var(--ink);white-space:nowrap}
-.brand img{width:40px;height:40px;object-fit:contain}
-.steps{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.steps span{font-size:.9rem;font-weight:700;padding:.35em .9em;border-radius:999px;background:var(--soft);color:var(--muted);white-space:nowrap}
-.steps span.on{background:var(--blue);color:#fff}
-.steps span.done{background:var(--blue-l);color:var(--blue-d)}
+.hud{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 26px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.6rem;color:#fff;-webkit-text-stroke:5px var(--blue-d);paint-order:stroke fill;white-space:nowrap}
+.logo img{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 4px 0 rgba(0,0,0,.12))}
+.stepper{display:flex;align-items:center;background:rgba(255,255,255,.55);border-radius:999px;padding:5px;gap:2px}
+.stepper span{font-weight:700;font-size:.92rem;padding:.45em 1em;border-radius:999px;color:var(--muted);white-space:nowrap}
+.stepper span.on{background:#fff;color:var(--blue-d);box-shadow:0 3px 0 #c9d9ee}
+.stepper span.done{color:var(--blue-d)}
+.stepper span.done::before{content:"✓ "}
+.tlink{border:0;background:rgba(255,255,255,.55);color:var(--ink);font-family:var(--body);font-weight:700;font-size:.85rem;cursor:pointer;padding:.5em 1em;border-radius:999px;transition:background .12s}
+.tlink:hover{background:#fff}
 
-/* 토끼 선생님 말풍선 */
-.guide{display:flex;align-items:flex-end;gap:12px}
-.guide .gf{width:72px;height:72px;flex:none;filter:drop-shadow(0 4px 0 rgba(29,42,74,.08))}
+/* 토끼 길잡이 */
+.guide{display:flex;align-items:flex-end;gap:10px}
+.guide .gf{width:64px;height:64px;flex:none}
 .guide .gf img{width:100%;height:100%;object-fit:contain}
-.bubble{position:relative;background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 16px;font-weight:700;font-size:1.02rem;line-height:1.5;box-shadow:0 4px 0 var(--sky2);min-width:0}
-.bubble::before{content:"";position:absolute;left:-10px;bottom:18px;width:16px;height:16px;background:#fff;border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.bubble{position:relative;background:#fff;border-radius:22px;padding:12px 18px;font-weight:700;font-size:1.05rem;line-height:1.45;box-shadow:0 6px 0 rgba(20,80,150,.14);min-width:0}
+.bubble::before{content:"";position:absolute;left:-8px;bottom:16px;width:18px;height:18px;background:#fff;transform:rotate(45deg);border-radius:3px}
 .bubble b{color:var(--blue-d)}
 
 /* 캐릭터 그림 */
@@ -91,56 +107,92 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .sp .fx-dust{right:62%;bottom:-4%;width:46%;height:34%;opacity:.85}
 .sp[data-p="boost"] .fx-boost,.sp[data-p="slip"] .fx-ban,.sp[data-p="slip"] .fx-dizzy,.sp[data-p="run1"] .fx-dust{display:block}
 
-/* 첫 화면 */
-.home{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:stretch;padding-top:6px}
-@media (max-width:920px){.home{grid-template-columns:1fr}}
-.heroimg{border-radius:28px;overflow:hidden;border:4px solid #fff;box-shadow:0 8px 0 var(--sky2);aspect-ratio:3/2;max-width:100%;background:#9fd8ff}
-.heroimg img{width:100%;height:100%;object-fit:cover;display:block}
-.homeside{display:grid;gap:18px;align-content:center}
-.homeside h1{font-size:clamp(2.4rem,4.6vw,3.6rem);color:var(--ink)}
-.homeside h1 span{color:var(--blue)}
-.homeside .lead{font-size:1.1rem;color:var(--muted)}
-.enter{display:grid;gap:12px}
-.enter button{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;border:2px solid var(--line);border-radius:22px;background:#fff;padding:14px 18px;cursor:pointer;color:var(--ink);font-family:var(--body);box-shadow:0 5px 0 var(--sky2);transition:transform .14s,box-shadow .14s,border-color .14s}
-.enter button:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 8px 0 var(--sky2)}
-.enter .ic{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:var(--blue-l)}
-.enter .ic img{width:50px;height:50px;object-fit:contain}
-.enter .stu .ic{background:#fff5d6}
-.enter .t{font-family:var(--display);font-size:1.4rem;display:block;line-height:1.2}
-.enter .d{font-size:.92rem;color:var(--muted)}
-.enter .go{font-family:var(--display);font-size:1.5rem;color:var(--blue)}
-.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
-@media (max-width:640px){.how{grid-template-columns:1fr}}
-.how div{background:#fff;border:2px solid var(--line);border-radius:22px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;box-shadow:0 5px 0 var(--sky2);transition:transform .14s}
-.how div:hover{transform:translateY(-3px)}
-.how .face{grid-row:span 2;font-size:2.4rem}
-.how b{font-family:var(--display);font-weight:400;font-size:1.15rem}
-.how b i{font-style:normal;color:#fff;background:var(--blue);border-radius:50%;width:1.5em;height:1.5em;display:inline-grid;place-items:center;font-size:.8em;margin-right:6px;vertical-align:.1em}
-.how span{font-size:.9rem;color:var(--muted)}
-
-/* 설정 */
-.setup{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:18px;align-items:start}
-@media (max-width:920px){.setup{grid-template-columns:1fr}}
-.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.field{display:grid;gap:6px;min-width:0}
-.seg{display:grid;gap:8px}
-.seg label{display:flex;gap:10px;align-items:center;background:var(--soft);border:2px solid transparent;border-radius:14px;padding:.55em .85em;cursor:pointer;font-weight:700;transition:border-color .12s,background .12s}
-.seg label:hover{border-color:var(--blue-l);background:var(--blue-l)}
-.seg label:has(input:checked){border-color:var(--blue);background:var(--blue-l)}
-.editor{display:grid;gap:10px;background:var(--soft);border-radius:16px;padding:14px}
-.chk{display:flex;gap:10px;align-items:center;cursor:pointer}
-.chk input,.seg input{width:20px;height:20px;accent-color:var(--blue)}
+/* 학생 단계 화면 */
+.stage{display:grid;grid-template-columns:minmax(180px,280px) minmax(0,820px);gap:24px;justify-content:center;align-items:center;min-height:calc(100vh - 220px)}
+@media (max-width:820px){.stage{grid-template-columns:1fr;min-height:0}}
+.mascot{display:grid;gap:14px;justify-items:center;align-self:center}
+.mascot .bubble{text-align:center;font-size:1.15rem;padding:16px 20px}
+.mascot .bubble::before{left:50%;bottom:-8px;margin-left:-9px}
+.mascot .body{width:min(100%,230px);aspect-ratio:1;max-width:100%}
+.mascot .body img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 0 rgba(20,80,150,.12));animation:bob 1.6s ease-in-out infinite alternate}
+@keyframes bob{from{translate:0 0}to{translate:0 -6px}}
+@media (max-width:820px){.mascot{grid-template-columns:90px 1fr;justify-items:start;align-items:center}.mascot .body{width:90px;order:-1}.mascot .bubble::before{left:-8px;bottom:auto;top:50%;margin:-9px 0 0}}
+.qpanel{display:grid;gap:18px;padding:44px 28px 26px}
+.dots{display:flex;gap:8px;justify-content:center}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--blue);width:30px;border-radius:999px}
+.dots i.ok{background:#9ccbf7}
+.step{display:grid;gap:16px;justify-items:center;text-align:center;animation:slidein .25s ease-out}
+@keyframes slidein{from{opacity:0;translate:16px 0}to{opacity:1;translate:0 0}}
+.navrow{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.navrow .btn.sun{margin-left:auto}
+.err{color:var(--danger);font-weight:700;text-align:center;min-height:1.5em}
+/* 방 번호 */
+.codebox{display:flex;gap:12px;justify-content:center}
+.codebox span{width:72px;height:86px;border-radius:20px;background:var(--soft);border:3px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-size:2.8rem;color:var(--ink)}
+.codebox span.f{border-color:var(--blue);background:#fff}
+.codebox span.cur{border-color:var(--sun);box-shadow:0 0 0 4px rgba(255,204,46,.35)}
+.keypad{display:grid;grid-template-columns:repeat(3,92px);gap:10px;justify-content:center}
+.key{height:64px;border:0;border-radius:18px;background:#fff;font-family:var(--display);font-size:1.8rem;color:var(--ink);cursor:pointer;box-shadow:inset 0 -5px 0 #e6eef8,0 0 0 3px var(--line),0 5px 0 #c9d9ee;transition:transform .08s,box-shadow .08s}
+.key:hover{box-shadow:inset 0 -5px 0 #e6eef8,0 0 0 3px var(--blue),0 5px 0 #c9d9ee}
+.key:active{transform:translateY(4px);box-shadow:inset 0 -2px 0 #e6eef8,0 0 0 3px var(--blue),0 1px 0 #c9d9ee}
+.key.fn{font-family:var(--body);font-weight:700;font-size:1rem;color:var(--muted)}
+/* 고르기 칩 */
+.picks{display:grid;gap:10px;width:100%}
+.picks.g6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.picks.g8{grid-template-columns:repeat(8,minmax(0,1fr))}
+.picks.g10{grid-template-columns:repeat(10,minmax(0,1fr))}
+@media (max-width:640px){.picks.g8,.picks.g10{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.chipbtn{height:58px;border:0;border-radius:16px;background:#fff;font-family:var(--display);font-size:1.35rem;color:var(--ink);cursor:pointer;box-shadow:inset 0 -4px 0 #e6eef8,0 0 0 3px var(--line),0 4px 0 #c9d9ee;transition:transform .08s,box-shadow .08s;white-space:nowrap}
+.chipbtn:hover{box-shadow:inset 0 -4px 0 #e6eef8,0 0 0 3px var(--blue),0 4px 0 #c9d9ee}
+.chipbtn[aria-pressed="true"]{background:linear-gradient(180deg,#5aaefc,var(--blue));color:#fff;box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 4px 0 var(--blue-d)}
+.qlabel{font-family:var(--display);font-size:1.2rem;justify-self:start}
+/* 학교 */
+.schoolrow{display:grid;grid-template-columns:minmax(0,8.5em) minmax(0,1fr);gap:10px;width:100%}
+.schoolrow input,.schoolrow select{width:100%;font-size:1.15rem;height:58px}
+.found{display:grid;gap:8px;width:100%}
+.found button{display:flex;justify-content:space-between;gap:12px;align-items:center;text-align:left;border:0;background:#fff;border-radius:16px;padding:.75em 1em;cursor:pointer;font-family:var(--body);color:var(--ink);box-shadow:0 0 0 3px var(--line),0 4px 0 #dbe7f4;transition:box-shadow .12s}
+.found button:hover{box-shadow:0 0 0 3px var(--blue),0 4px 0 #dbe7f4}
+.found button b{font-size:1.1rem}
+.found button span{font-size:.85rem;color:var(--muted);text-align:right}
+.picked{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;background:var(--blue-l);border-radius:18px;padding:.9em 1.1em;font-weight:700;font-size:1.15rem;text-align:left}
+.picked span{font-weight:400;font-size:.85rem;color:var(--muted)}
+.nameinput{width:min(100%,420px);font-size:1.8rem!important;text-align:center;height:76px;font-family:var(--display)!important}
+/* 동물 */
+.charpick{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;width:100%}
+@media (max-width:900px){.charpick{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:520px){.charpick{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.charpick button{border:0;border-radius:20px;background:#fff;padding:8px 2px 6px;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--ink);font-family:var(--body);font-size:.8rem;font-weight:700;box-shadow:0 0 0 3px var(--line),0 4px 0 #dbe7f4;transition:transform .1s,box-shadow .1s;white-space:nowrap}
+.charpick button .face{font-size:2.1rem}
+.charpick button:hover{transform:translateY(-3px);box-shadow:0 0 0 3px var(--blue),0 4px 0 #dbe7f4}
+.charpick button[aria-pressed="true"]{background:#fff7d6;box-shadow:0 0 0 4px var(--sun2),0 4px 0 var(--sun-d);transform:translateY(-3px)}
+/* 학생 진행 */
+.playbox{display:grid;gap:16px;justify-items:center;text-align:center}
+.me .sp{--sw:170px}
+.mename{font-family:var(--display);font-size:2rem}
+.tap{width:min(60vh,320px);aspect-ratio:1;max-width:100%;border-radius:50%;border:8px solid #fff;color:var(--sun-fg);font-family:var(--display);font-size:2.6rem;cursor:pointer;
+  background:radial-gradient(circle at 50% 35%,#ffe680,var(--sun2));box-shadow:inset 0 -10px 0 rgba(0,0,0,.08),0 14px 0 var(--sun-d),0 22px 30px rgba(201,132,0,.35);
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .05s;display:grid;place-items:center;align-content:center;gap:0}
+.tap .face{font-size:4.8rem}
+.tap.hit{transform:translateY(10px) scale(.97);box-shadow:inset 0 -6px 0 rgba(0,0,0,.08),0 4px 0 var(--sun-d)}
+.tap:disabled{filter:grayscale(.4) opacity(.7)}
+.status{font-family:var(--display);font-size:1.5rem}
+.evt{font-family:var(--display);font-size:1.7rem;min-height:1.6em;color:var(--coral)}
+.bigtxt{font-family:var(--display);line-height:1.1;font-variant-numeric:tabular-nums}
+.meter{height:18px;border-radius:999px;background:var(--soft);overflow:hidden;width:100%;box-shadow:inset 0 0 0 3px var(--line)}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--sun),var(--sun2));border-radius:999px;transition:width .2s linear}
 
 /* 교실 자리표 */
-.room{background:var(--soft);border-radius:20px;padding:16px}
+.room{background:var(--soft);border-radius:22px;padding:16px}
 .board{background:var(--board);color:#eaf6ef;border-radius:10px;text-align:center;padding:10px;font-family:var(--display);letter-spacing:.6em;margin:0 10% 18px;box-shadow:inset 0 0 0 6px #285a46,0 5px 0 #c7a66b}
+.seatwrap{overflow-x:auto;padding:5px}
 .seats{display:grid;gap:12px 6px}
-.seat{min-height:62px;border-radius:10px;background:var(--desk);box-shadow:inset 0 -6px 0 var(--desk-d);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 3px 9px;text-align:center;min-width:0;border:0;color:var(--desk-fg);font-family:var(--body);font-size:.86rem;line-height:1.2;cursor:default;transition:transform .12s,box-shadow .12s}
+.seat{min-height:62px;border-radius:12px;background:var(--desk);box-shadow:inset 0 -6px 0 var(--desk-d);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 3px 9px;text-align:center;min-width:0;border:0;color:var(--desk-fg);font-family:var(--body);font-size:.86rem;line-height:1.2;cursor:default;transition:transform .12s,box-shadow .12s}
 .seat b{font-weight:700;font-size:.95rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .seat .lbl{font-size:.74rem;opacity:.75;white-space:nowrap}
 .seat .face{font-size:1.3rem}
 .seat.off{background:transparent;box-shadow:none;border:2px dashed #c9d9e8;color:var(--muted)}
-.seat.fixed{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--sun)}
+.seat.fixed{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--sun2)}
 .seat.taken{background:#fff;color:var(--ink);box-shadow:inset 0 -6px 0 var(--line)}
 .seat.open,.seat.edit{cursor:pointer}
 .seat.open{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--grass)}
@@ -149,31 +201,39 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .seat.sel{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--coral)}
 .seat.pop{animation:pop .6s ease-out}
 @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
-.seatwrap{overflow-x:auto;padding:5px}
 
-/* 입장 */
-.lobby{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:18px;align-items:start}
+/* 선생님 */
+.setup{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:920px){.setup{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:grid;gap:6px;min-width:0}
+.seg{display:grid;gap:8px}
+.seg label{display:flex;gap:10px;align-items:center;background:var(--soft);border:3px solid transparent;border-radius:16px;padding:.6em .9em;cursor:pointer;font-weight:700;transition:border-color .12s,background .12s}
+.seg label:hover{background:var(--blue-l)}
+.seg label:has(input:checked){border-color:var(--blue);background:var(--blue-l)}
+.editor{display:grid;gap:10px;background:var(--soft);border-radius:18px;padding:14px}
+.chk{display:flex;gap:10px;align-items:center;cursor:pointer}
+.chk input,.seg input{width:20px;height:20px;accent-color:var(--blue)}
+.secret{filter:blur(6px);transition:filter .15s}
+.secret:focus{filter:none}
+.lobby{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:22px;align-items:start}
 @media (max-width:920px){.lobby{grid-template-columns:1fr}}
-.joinbox{text-align:center;display:grid;gap:12px;justify-items:center;background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 0 var(--blue-d)}
-.joinbox .lab{font-weight:700;opacity:.85}
-.bigcode{font-family:var(--display);font-size:4.6rem;letter-spacing:.14em;line-height:1;font-variant-numeric:tabular-nums}
-.qr{background:#fff;padding:10px;border-radius:18px;width:210px;height:210px;display:grid;place-items:center;color:var(--muted)}
-.qr img{width:190px;height:190px;image-rendering:pixelated}
-.url{font-size:.78rem;word-break:break-all;opacity:.8}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{display:flex;align-items:center;gap:6px;background:var(--soft);border:2px solid var(--line);border-radius:999px;padding:.25em .45em .25em .4em;font-weight:700;animation:pop .5s ease-out;transition:border-color .12s;white-space:nowrap}
-.chip:hover{border-color:var(--blue)}
-.chip .face{font-size:1.45rem}
-.chip .no2{font-family:var(--display);color:var(--blue-d);font-size:.92em}
+.joinbox{text-align:center;display:grid;gap:12px;justify-items:center}
+.bigcode{font-family:var(--display);font-size:5rem;letter-spacing:.12em;line-height:1;color:var(--blue-d);font-variant-numeric:tabular-nums}
+.qr{background:#fff;padding:10px;border-radius:20px;width:220px;height:220px;display:grid;place-items:center;color:var(--muted);box-shadow:0 0 0 3px var(--line)}
+.qr img{width:198px;height:198px;image-rendering:pixelated}
+.url{font-size:.78rem;word-break:break-all;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:.3em .5em .3em .4em;font-weight:700;animation:pop .5s ease-out;white-space:nowrap;box-shadow:0 3px 0 var(--line)}
+.chip .face{font-size:1.5rem}
+.chip .no2{font-family:var(--display);color:var(--blue-d)}
 .chip .tag{font-weight:400;font-size:.74rem;color:var(--muted)}
 .chip.offline{opacity:.5}
 .chip button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:0 6px;border-radius:50%}
 .chip button:hover{color:var(--danger)}
-
-/* 레이스 */
-.clock{font-family:var(--display);font-size:2.4rem;font-variant-numeric:tabular-nums;line-height:1;color:var(--sun);background:var(--ink);border-radius:14px;padding:.18em .5em;min-width:3.6em;text-align:center}
-.track{background:var(--grass);padding:14px;border-radius:26px;box-shadow:0 6px 0 var(--grass-d)}
-.lanes2{background:var(--track);border-radius:10px}
+.clock{font-family:var(--display);font-size:2.6rem;font-variant-numeric:tabular-nums;line-height:1;color:var(--sun);background:var(--ink);border-radius:18px;padding:.2em .55em;min-width:3.6em;text-align:center;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.track{background:var(--grass);padding:14px;border-radius:30px;box-shadow:0 8px 0 var(--grass-d),0 20px 40px rgba(20,80,150,.18)}
+.lanes2{background:var(--track);border-radius:12px}
 .lane{display:grid;grid-template-columns:minmax(7em,11em) minmax(0,1fr);align-items:stretch;height:var(--lh,48px);border-top:2px solid var(--chalk)}
 .lane:first-child{border-top:0}
 .lane:nth-child(even){background:var(--track2)}
@@ -182,135 +242,119 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .lane .who .nm{overflow:hidden;text-overflow:ellipsis}
 .lane .who .rk{margin-left:auto;font-family:var(--display);color:var(--sun)}
 .lane .run{position:relative;border-left:4px solid var(--chalk);--sw:calc(var(--lh,48px)*1.3)}
-.lane .run::after{content:"";position:absolute;right:0;top:0;bottom:0;width:14px;background:repeating-conic-gradient(#fff 0 25%,#1d2a4a 0 50%) 0 0/14px 14px}
+.lane .run::after{content:"";position:absolute;right:0;top:0;bottom:0;width:14px;background:repeating-conic-gradient(#fff 0 25%,#1b2850 0 50%) 0 0/14px 14px}
 .rw{position:absolute;bottom:2px;left:calc((100% - var(--sw) - 14px) * var(--p,0));display:flex;align-items:flex-end;transition:left .12s linear;z-index:1}
 .rw .tag{position:absolute;left:100%;top:0;white-space:nowrap;font-size:.82rem;font-weight:700;background:var(--sun);color:var(--sun-fg);border-radius:8px;padding:0 7px;animation:pop .3s ease-out}
-.lane.done .who{background:rgba(255,200,58,.3)}
-.bigcount{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;font-family:var(--display);font-size:min(36vw,17rem);color:var(--sun);-webkit-text-stroke:8px #fff;paint-order:stroke fill;text-shadow:0 10px 0 rgba(29,42,74,.25);z-index:5;animation:pop .4s ease-out}
-
-/* 도착 순서 */
-.top3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:end;margin-bottom:18px}
-@media (max-width:640px){.top3{grid-template-columns:1fr}}
-.pod{background:#fff;border:2px solid var(--line);border-radius:26px;padding:18px;display:grid;justify-items:center;gap:6px;text-align:center;box-shadow:0 6px 0 var(--sky2);transition:transform .15s}
-.pod:hover{transform:translateY(-4px)}
-.pod .medal{width:58px;height:58px}
-.pod .medal img{width:100%;height:100%;object-fit:contain}
-.pod.g{order:2;padding-block:28px;border-color:var(--sun);box-shadow:0 6px 0 var(--sun-d)}
-.pod.s{order:1} .pod.b{order:3}
-@media (max-width:640px){.pod.g,.pod.s,.pod.b{order:0}}
-.pod .sp{--sw:100px} .pod.g .sp{--sw:136px}
-.pod .nm{font-family:var(--display);font-size:1.5rem}
+.lane.done .who{background:rgba(255,204,46,.32)}
+.bigcount{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;font-family:var(--display);font-size:min(36vw,17rem);color:var(--sun);-webkit-text-stroke:10px #fff;paint-order:stroke fill;text-shadow:0 12px 0 rgba(20,80,150,.25);z-index:5;animation:pop .4s ease-out}
+/* 시상대 */
+.top3{display:grid;grid-template-columns:repeat(3,minmax(0,260px));gap:0;justify-content:center;align-items:end;margin:6px 0 26px}
+.pod{display:grid;justify-items:center;gap:4px;text-align:center}
+.pod .sp{--sw:120px} .pod.g .sp{--sw:150px}
+.pod .nm{font-family:var(--display);font-size:1.4rem;color:var(--ink);background:#fff;border-radius:999px;padding:.15em .9em;box-shadow:0 4px 0 rgba(20,80,150,.15);white-space:nowrap}
+.pod .block{width:100%;display:grid;place-items:center;align-content:start;padding-top:12px;font-family:var(--display);font-size:3rem;color:#fff;-webkit-text-stroke:5px rgba(0,0,0,.12);paint-order:stroke fill;border-radius:18px 18px 0 0;margin-top:8px}
+.pod .block img{width:62px;height:62px;object-fit:contain}
+.pod.g{order:2} .pod.s{order:1} .pod.b{order:3}
+.pod.g .block{height:170px;background:linear-gradient(180deg,#ffd84a,#f2b400)}
+.pod.s .block{height:120px;background:linear-gradient(180deg,#d9e3f0,#b4c3d8)}
+.pod.b .block{height:90px;background:linear-gradient(180deg,#f0b07c,#d98a4e)}
 .podium{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.pd{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:8px 12px;transition:border-color .12s}
-.pd:hover{border-color:var(--blue)}
+.pd{display:flex;align-items:center;gap:8px;background:#fff;border-radius:18px;padding:8px 14px;box-shadow:0 4px 0 rgba(20,80,150,.12)}
 .pd .n{font-family:var(--display);font-size:1.15rem;min-width:2.4em;color:var(--blue-d);font-variant-numeric:tabular-nums}
 .pd .face{font-size:1.5rem}
 .pd .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
 /* 자리 고르기 */
-.pick{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);gap:18px;align-items:start}
+.pick{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:22px;align-items:start}
 @media (max-width:920px){.pick{grid-template-columns:1fr}}
 .nowcard{display:grid;justify-items:center;gap:8px;text-align:center}
-.nowcard .sp{--sw:124px}
+.nowcard .sp{--sw:130px}
 .nowcard .nm{font-family:var(--display);font-size:2rem}
-.rkb{font-family:var(--display);background:var(--blue);color:#fff;border-radius:999px;padding:.2em 1em}
-.meter{height:14px;border-radius:999px;background:var(--soft);overflow:hidden;width:100%;box-shadow:inset 0 0 0 2px var(--line)}
-.meter i{display:block;height:100%;background:var(--sun);transition:width .2s linear}
-.left{font-family:var(--display);font-size:1.8rem;font-variant-numeric:tabular-nums}
-.queue{display:grid;gap:8px}
-.queue div{display:flex;gap:8px;align-items:center;font-weight:700;white-space:nowrap}
-.queue .n{color:var(--muted);min-width:2.4em;font-family:var(--display);font-variant-numeric:tabular-nums}
-.queue .face{font-size:1.35rem}
-.done-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.done-top img{width:84px;height:84px;object-fit:contain}
-.done-top h2{font-size:2rem}
-
-/* 학생 */
-.banner{position:relative;border-radius:26px;overflow:hidden;border:4px solid #fff;box-shadow:0 6px 0 var(--sky2);aspect-ratio:16/7;max-width:100%;background:#9fd8ff}
-.banner img{width:100%;height:100%;object-fit:cover;object-position:50% 70%;display:block}
-.banner h1{position:absolute;left:18px;top:14px;white-space:nowrap;font-size:clamp(1.5rem,5.4vw,2.4rem);color:var(--blue-d);-webkit-text-stroke:6px #fff;paint-order:stroke fill;line-height:1.15}
-.tlink{border:0;background:transparent;color:var(--muted);font-family:var(--body);font-size:.85rem;cursor:pointer;padding:.4em .6em;border-radius:10px}
-.tlink:hover{background:var(--soft);color:var(--ink)}
-.secret{filter:blur(6px);transition:filter .15s}
-.secret:focus{filter:none}
-.order{display:grid;gap:6px;width:100%;text-align:left}
-.order div{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:6px 10px;font-weight:700;white-space:nowrap;min-width:0}
+.left{font-family:var(--display);font-size:1.9rem;font-variant-numeric:tabular-nums}
+.order{display:grid;gap:8px;width:100%;text-align:left}
+.order div{display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:16px;padding:7px 12px;font-weight:700;white-space:nowrap;min-width:0}
 .order .n{font-family:var(--display);color:var(--muted);min-width:2.2em;font-variant-numeric:tabular-nums}
 .order .nm{overflow:hidden;text-overflow:ellipsis}
 .order .st{margin-left:auto;font-size:.82rem;color:var(--muted);font-weight:700}
 .order .face{font-size:1.3rem}
-.order .cur{border-color:var(--sun);background:#fff8df;box-shadow:0 0 0 2px var(--sun)}
+.order .cur{background:#fff7d6;box-shadow:0 0 0 3px var(--sun2)}
 .order .cur .st{color:var(--sun-fg)}
-.order .me{border-color:var(--blue)}
+.order .me{box-shadow:0 0 0 3px var(--blue)}
 .order .ok{opacity:.6}
 .order .ok .st{color:var(--grass-d)}
-.order.scroll{max-height:52vh;overflow-y:auto;padding:3px}
-.stu{min-height:100%}
-.joinlay{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start;max-width:1280px;margin:0 auto}
-.jleft{display:grid;gap:14px;min-width:0}
-@media (max-width:860px){.joinlay{grid-template-columns:1fr}}
-.jleft .charpick{max-height:none;grid-template-columns:repeat(8,minmax(0,1fr))}
-.jleft .charpick button{padding:6px 2px 4px}
-.jleft .charpick button .face{font-size:1.9rem}
-.joinlay .banner{aspect-ratio:16/5}
-.joinlay .banner img{object-position:50% 62%}
-@media (max-width:900px){.jleft .charpick{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media (max-width:560px){.jleft .charpick{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.jright{position:sticky;top:80px}
-@media (max-width:860px){.jright{position:static}}
-.stu .inner{display:grid;gap:18px;width:100%;max-width:1100px;margin:0 auto;padding-block:4px 16px}
-.stu .center>*{max-width:100%}
-.stu .center .order{max-width:520px;margin:0 auto}
-.stu .center{display:grid;gap:16px;justify-items:center;text-align:center}
-.formcard{display:grid;gap:16px}
-.formcard .sec{display:grid;gap:10px}
-.formcard .sec+.sec{border-top:2px dashed var(--line);padding-top:16px}
-.sec h3{font-size:1.15rem;display:flex;align-items:center;gap:8px}
-.sec h3 i{font-style:normal;color:#fff;background:var(--blue);border-radius:50%;width:26px;height:26px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:15px;line-height:1;font-variant-numeric:tabular-nums}
-.codein{font-size:2rem!important;text-align:center;font-family:var(--display)!important;letter-spacing:.3em;width:100%}
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.grid3 select{width:100%;font-size:1.1rem;text-align:center}
-.schoolrow{display:grid;grid-template-columns:minmax(0,8em) minmax(0,1fr);gap:10px}
-@media (max-width:460px){.schoolrow{grid-template-columns:1fr}}
-.schoolrow input,.schoolrow select{width:100%;font-size:1.05rem}
-.found{display:grid;gap:6px;margin-top:8px}
-.found:empty{margin-top:0}
-.found button{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:2px solid var(--line);background:#fff;border-radius:14px;padding:.6em .9em;cursor:pointer;font-family:var(--body);color:var(--ink);transition:border-color .12s,background .12s}
-.found button:hover{border-color:var(--blue);background:var(--blue-l)}
-.found button b{font-size:1.02rem}
-.found button span{font-size:.8rem;color:var(--muted);text-align:right}
-.picked{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--blue-l);border:2px solid var(--blue);border-radius:14px;padding:.6em .9em;font-weight:700}
-.picked span{font-weight:400;font-size:.82rem;color:var(--muted)}
-.nameinput{width:100%;font-size:1.3rem!important;text-align:center}
-.charpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;max-height:44vh;overflow-y:auto;padding:4px}
-.charpick button{border:2px solid var(--line);border-radius:18px;background:#fff;padding:8px 2px 6px;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--ink);font-family:var(--body);font-size:.8rem;font-weight:700;transition:transform .12s,border-color .12s;white-space:nowrap}
-.charpick button .face{font-size:2.2rem}
-.charpick button:hover{transform:translateY(-2px);border-color:var(--blue)}
-.charpick button[aria-pressed="true"]{border-color:var(--sun);background:#fff8df;box-shadow:0 0 0 3px var(--sun)}
-.me .sp{--sw:150px}
-.mename{font-family:var(--display);font-size:1.9rem}
-.tap{width:min(76vw,340px);aspect-ratio:1;max-width:100%;border-radius:50%;border:6px solid #fff;background:var(--sun);color:var(--sun-fg);font-family:var(--display);font-size:2.8rem;box-shadow:0 14px 0 var(--sun-d),0 0 0 8px rgba(255,200,58,.25);touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer;transition:transform .05s;display:grid;place-items:center;align-content:center;gap:2px}
-.tap .face{font-size:4.6rem}
-.tap.hit{transform:translateY(10px) scale(.97);box-shadow:0 4px 0 var(--sun-d),0 0 0 8px rgba(255,200,58,.25)}
-.tap:disabled{opacity:.6}
-.status{font-family:var(--display);font-size:1.5rem}
-.evt{font-family:var(--display);font-size:1.6rem;min-height:1.6em;color:var(--coral)}
-.bigtxt{font-family:var(--display);line-height:1.1;font-variant-numeric:tabular-nums}
-.stu .seats{width:100%}
-.stu .seat{min-height:52px}
-.err{color:var(--danger);font-weight:700;text-align:center;min-height:1.5em}
+.order.scroll{max-height:46vh;overflow-y:auto;padding:4px}
+.donehead{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:22px}
+.donehead img{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 8px 0 rgba(20,80,150,.15))}
+.donehead h2{font-size:2.4rem;color:#fff;-webkit-text-stroke:7px var(--blue-d);paint-order:stroke fill}
+.modal{position:fixed;inset:0;z-index:30;background:rgba(18,40,84,.5);display:grid;place-items:center;padding:16px}
+.pinbox{display:grid;gap:16px;justify-items:center;padding:48px 28px 24px;width:min(100%,400px)}
+.pinbox .codebox span{width:62px;height:72px;font-size:2.4rem}
+.demowrap{width:min(96vw,1180px);height:min(90vh,820px);background:#fff;border-radius:26px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.demobar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;font-family:var(--display);font-size:1.2rem;background:var(--soft)}
+.demowrap iframe{width:100%;height:100%;border:0;display:block}
+.demotag{font-family:var(--display);background:var(--pink);color:#fff;border-radius:999px;padding:.35em 1em;font-size:.95rem;box-shadow:0 4px 0 #d94f7a}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head><body>
 
+<!-- 학생: 들어가기 (처음 화면) -->
+<div id="s-join" class="screen" hidden>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><button class="tlink" id="goTeacher" type="button">선생님 화면</button><span class="demotag" id="demoTag" hidden>체험 모드</span></div>
+  <div class="wrap">
+    <div class="stage">
+      <div class="mascot"><div class="bubble" id="jBubble">칠판에 있는 <b>방 번호</b>를 눌러 줘!</div><div class="body"><img id="jMascot" src="art/animals/rabbit/idle.png" alt="토끼 길잡이"></div></div>
+      <div class="card qpanel">
+        <div class="ribbon" id="jTitle">방 번호</div>
+        <div class="dots" id="jDots"></div>
+        <div id="jStep0" class="step">
+          <div class="codebox" id="codeBox"><span></span><span></span><span></span><span></span></div>
+          <input type="text" id="sCode" inputmode="numeric" maxlength="4" hidden>
+          <div class="keypad" id="keypad"></div>
+        </div>
+        <div id="jStep1" class="step" hidden>
+          <div id="schoolBox" style="display:grid;gap:12px;width:100%">
+            <div class="schoolrow"><select id="sRegion" aria-label="지역"></select><input type="text" id="sSchool" maxlength="20" placeholder="학교 이름을 써요" autocomplete="off"></div>
+            <div class="found" id="schoolFound"></div>
+          </div>
+          <div class="picked" id="schoolPicked" hidden></div>
+        </div>
+        <div id="jStep2" class="step" hidden>
+          <span class="qlabel">학년</span><div class="picks g6" id="gradePick"></div>
+          <span class="qlabel">반</span><div class="picks g8" id="clsPick"></div>
+          <input type="hidden" id="sGrade"><input type="hidden" id="sCls">
+        </div>
+        <div id="jStep3" class="step" hidden>
+          <div class="picks g10" id="noPick"></div><input type="hidden" id="sNo">
+        </div>
+        <div id="jStep4" class="step" hidden>
+          <input type="text" id="sName" class="nameinput" maxlength="10" placeholder="이름" autocomplete="off">
+        </div>
+        <div id="jStep5" class="step" hidden>
+          <div class="charpick" id="charPick"></div>
+        </div>
+        <p id="sMsg" class="err" aria-live="polite"></p>
+        <div class="navrow"><button class="btn white sm" id="jPrev" type="button">이전</button><button class="btn sun big" id="jNext" type="button">다음</button><button class="btn sun big" id="sJoin" type="button" hidden>들어가기!</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 학생: 진행 -->
+<div id="s-play" class="screen" hidden>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div></div>
+  <div class="wrap"><div class="stage">
+    <div class="mascot"><div class="bubble" id="pBubble">잘 들어왔어요!</div><div class="body"><img id="pMascot" src="art/animals/rabbit/idle.png" alt="토끼 길잡이"></div></div>
+    <div class="card qpanel"><div class="ribbon blue" id="pTitle">기다리는 중</div><div class="playbox" id="sPlay"></div></div>
+  </div></div>
+</div>
 
 <!-- 선생님: 교실 설정 -->
 <div id="t-setup" class="screen" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="on">1 교실 설정</span><span>2 입장</span><span>3 레이스</span><span>4 자리 고르기</span></div><div class="row"><button class="btn ghost sm" id="exitTeacher" type="button">‹ 처음 화면</button><button class="btn sun" id="toLobby" type="button">학생 입장 받기 ›</button></div></div></div>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="stepper"><span class="on">교실 설정</span><span>입장</span><span>레이스</span><span>자리 고르기</span></div><div class="row"><button class="btn white sm" id="exitTeacher" type="button">처음 화면</button><button class="btn white sm" data-demo type="button">학생 화면 체험</button><button class="btn sun" id="toLobby" type="button">학생 입장 받기</button></div></div>
   <div class="wrap">
   <div class="setup">
-    <div class="card stack">
-      <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble">책상을 누르면 <b>고정석</b>이나 <b>책상 없음</b>으로 바꿀 수 있어요.</div></div>
+    <div class="card rib stack">
+      <div class="ribbon blue">우리 교실</div>
+      <p class="muted" style="text-align:center">책상을 누르면 고정석이나 책상 없음으로 바꿀 수 있어요.</p>
       <div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="setupSeats"></div></div></div>
       <p class="small muted" id="seatCount"></p>
     </div>
@@ -329,7 +373,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       </div>
       <div class="card stack">
         <h3>떨어뜨릴 친구</h3>
-        <p class="small muted">한 줄에 두 명씩 적어요. 앞뒤옆(대각선 포함)에 앉지 않아요.<br>칠판에 띄워도 흐리게 가려지고, 칸을 누를 때만 보여요.</p>
+        <p class="small muted">한 줄에 두 명씩 적어요. 앞뒤옆(대각선 포함)에 앉지 않아요. 칠판에 띄워도 흐리게 가려지고, 칸을 누를 때만 보여요.</p>
         <textarea id="sep" class="secret" rows="3" placeholder="김민준-이서연&#10;박지호-최하윤"></textarea>
       </div>
       <div class="card stack">
@@ -353,18 +397,18 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 <!-- 선생님: 입장 -->
 <div id="t-lobby" class="screen" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="on">2 입장</span><span>3 레이스</span><span>4 자리 고르기</span></div>
-    <div class="row"><button class="btn ghost sm" id="backSetup" type="button">‹ 교실 설정</button><button class="btn sun big" id="startRace" type="button" disabled>출발!</button></div></div></div>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="stepper"><span class="done">교실 설정</span><span class="on">입장</span><span>레이스</span><span>자리 고르기</span></div>
+    <div class="row"><button class="btn white sm" id="backSetup" type="button">교실 설정</button><button class="btn white sm" data-demo type="button">학생 화면 체험</button><button class="btn sun big" id="startRace" type="button" disabled>출발!</button></div></div>
   <div class="wrap">
   <div class="lobby">
-    <div class="card joinbox" id="joinBox">
-      <p class="lab">방 번호</p>
+    <div class="card rib joinbox" id="joinBox">
+      <div class="ribbon">방 번호</div>
       <div class="bigcode" id="bigCode">····</div>
       <div class="qr" id="qr"><span class="small">방 여는 중…</span></div>
+      <p class="muted">태블릿으로 QR을 찍어 들어와요</p>
       <p class="url" id="joinUrl"></p>
     </div>
     <div class="stack">
-      <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble">태블릿으로 <b>QR을 찍어</b> 들어오세요. 모두 들어오면 <b>출발!</b>을 눌러요.</div></div>
       <div id="netNote"></div>
       <div class="card stack">
         <div class="row" style="justify-content:space-between"><h3 id="joinedTitle">들어온 친구 0명</h3><span class="small muted" id="capNote"></span></div>
@@ -374,7 +418,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <h3>태블릿 없이 참가시키기</h3>
         <p class="small muted">명단으로 넣은 학생은 칠판에서 저절로 달려요.</p>
         <textarea id="roster" rows="3" placeholder="이름을 줄바꿈이나 쉼표로 나눠 넣어요"></textarea>
-        <div class="row"><button class="btn sm" id="addRoster" type="button">명단 넣기</button><button class="btn ghost sm" id="addBots" type="button">연습용 친구 5명</button><button class="btn ghost sm" id="clearBots" type="button">명단 참가자 빼기</button></div>
+        <div class="row"><button class="btn sm" id="addRoster" type="button">명단 넣기</button><button class="btn white sm" id="addBots" type="button">연습용 친구 5명</button><button class="btn white sm" id="clearBots" type="button">명단 참가자 빼기</button></div>
       </div>
     </div>
   </div>
@@ -383,26 +427,25 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 <!-- 선생님: 레이스 -->
 <div id="t-race" class="screen" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="done">2 입장</span><span class="on">3 레이스</span><span>4 자리 고르기</span></div><div class="clock" id="clock">20.0</div></div></div>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="stepper"><span class="done">교실 설정</span><span class="done">입장</span><span class="on">레이스</span><span>자리 고르기</span></div><div class="clock" id="clock">20.0</div></div>
   <div class="wrap"><div class="track"><div class="lanes2" id="track"></div></div></div>
   <div class="bigcount" id="bigCount" hidden></div>
 </div>
 
 <!-- 선생님: 도착 순서 -->
 <div id="t-podium" class="screen" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="done">2 입장</span><span class="on">3 레이스</span><span>4 자리 고르기</span></div><div class="row"><button class="btn ghost sm" id="podBack" type="button">‹ 다시 달리기</button><button class="btn sun big" id="toPick" type="button">자리 고르기 ›</button></div></div></div>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="stepper"><span class="done">교실 설정</span><span class="done">입장</span><span class="on">레이스</span><span>자리 고르기</span></div><div class="row"><button class="btn white sm" id="podBack" type="button">다시 달리기</button><button class="btn sun big" id="toPick" type="button">자리 고르기</button></div></div>
   <div class="wrap"><div class="top3" id="top3"></div><div class="podium" id="podium"></div></div>
 </div>
 
 <!-- 선생님: 자리 고르기 -->
 <div id="t-pick" class="screen" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="done">2 입장</span><span class="done">3 레이스</span><span class="on">4 자리 고르기</span></div></div></div>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="stepper"><span class="done">교실 설정</span><span class="done">입장</span><span class="done">레이스</span><span class="on">자리 고르기</span></div><span></span></div>
   <div class="wrap">
   <div class="pick">
-    <div class="card"><div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="pickSeats"></div></div></div></div>
+    <div class="card rib"><div class="ribbon blue">우리 교실</div><div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="pickSeats"></div></div></div><p class="small muted" style="text-align:center;margin-top:10px">칠판 화면에서 책상을 눌러 대신 골라 줄 수도 있어요.</p></div>
     <div class="stack">
-      <div class="card nowcard" id="nowCard"></div>
-      <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble">칠판 화면에서 책상을 눌러 대신 골라 줄 수도 있어요.</div></div>
+      <div class="card rib nowcard" id="nowCard"></div>
       <div class="card stack"><h3>고르는 순서</h3><div class="order scroll" id="queue"></div></div>
     </div>
   </div>
@@ -411,52 +454,21 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 <!-- 선생님: 완성 -->
 <div id="t-done" class="screen" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div>
-    <div class="row"><button class="btn ghost sm" id="copyResult" type="button">자리표 복사</button><button class="btn ghost sm" id="doneSetup" type="button">교실 설정</button><button class="btn sun" id="again" type="button">같은 친구들로 다시</button></div></div></div>
+  <div class="hud"><div class="logo"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div>
+    <div class="row"><button class="btn white sm" id="copyResult" type="button">자리표 복사</button><button class="btn white sm" id="doneSetup" type="button">교실 설정</button><button class="btn sun" id="again" type="button">같은 친구들로 다시</button></div></div>
   <div class="wrap">
-  <div class="done-top"><img src="art/items/trophy.png" alt=""><div><h2>새 자리가 정해졌어요</h2><p class="muted" id="copyMsg"></p></div></div>
-  <div class="card"><div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="doneSeats"></div></div></div></div>
+  <div class="donehead"><img src="art/items/trophy.png" alt=""><h2>새 자리가 정해졌어요</h2></div>
+  <div class="card"><div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="doneSeats"></div></div></div><p class="muted" id="copyMsg" style="text-align:center;margin-top:12px"></p></div>
   <textarea id="copyArea" rows="6" hidden readonly style="margin-top:12px"></textarea>
   </div>
 </div>
 
-<!-- 학생: 들어가기 -->
-<div id="s-join" class="screen stu" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><button class="tlink" id="goTeacher" type="button">선생님 화면</button></div></div>
-  <div class="wrap">
-  <div class="joinlay">
-   <div class="jleft">
-    <div class="banner"><img src="art/scenes/home_hero.png" alt="동물 친구들이 운동장 트랙을 달리는 그림"><h1>자리 바꾸기 레이스</h1></div>
-    <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble"><b>방 번호</b>와 <b>내 정보</b>를 넣고 동물을 골라 줘!</div></div>
-    <div class="card formcard"><div class="sec"><h3>함께 달릴 동물</h3><div class="charpick" id="charPick"></div></div></div>
-   </div>
-    <div class="card formcard jright">
-      <div class="sec"><h3><i>1</i>방 번호</h3><input type="text" id="sCode" class="codein" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off"></div>
-      <div class="sec"><h3><i>2</i>우리 학교</h3>
-        <div id="schoolBox">
-          <div class="schoolrow"><select id="sRegion" aria-label="지역"></select><input type="text" id="sSchool" maxlength="20" placeholder="학교 이름을 써요" autocomplete="off"></div>
-          <div class="found" id="schoolFound"></div>
-        </div>
-        <div class="picked" id="schoolPicked" hidden></div>
-      </div>
-      <div class="sec"><h3><i>3</i>학년 · 반 · 번호</h3>
-        <div class="grid3">
-          <select id="sGrade" aria-label="학년"><option value="">학년</option></select>
-          <select id="sCls" aria-label="반"><option value="">반</option></select>
-          <select id="sNo" aria-label="번호"><option value="">번호</option></select>
-        </div></div>
-      <div class="sec"><h3><i>4</i>이름</h3><input type="text" id="sName" class="nameinput" maxlength="10" placeholder="내 이름" autocomplete="off"></div>
-      <p id="sMsg" class="err" aria-live="polite"></p>
-      <button class="btn sun big" id="sJoin" type="button" style="justify-self:stretch">들어가기</button>
-    </div>
-  </div>
-  </div>
-</div>
-
-<div id="s-play" class="screen stu" hidden>
-  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div></div></div>
-  <div class="wrap"><div class="inner"><div class="center" id="sPlay"></div></div></div>
-</div>
+<!-- 선생님 비밀번호 -->
+<div id="pinModal" class="modal" hidden><div class="card pinbox"><div class="ribbon blue">선생님 비밀번호</div>
+  <div class="codebox" id="pinBox"><span></span><span></span><span></span><span></span></div>
+  <div class="keypad" id="pinPad"></div><p class="err" id="pinMsg"></p><button class="btn white sm" id="pinClose" type="button">닫기</button></div></div>
+<!-- 학생 화면 체험 -->
+<div id="demoModal" class="modal" hidden><div class="demowrap"><div class="demobar"><span>학생 화면 체험 · 방 번호 없이 혼자 해 봐요</span><button class="btn white sm" id="demoClose" type="button">닫기</button></div><iframe id="demoFrame" title="학생 화면 체험"></iframe></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
@@ -740,7 +752,7 @@ function endRace(){
   setTimeout(()=>{
     const list=H.students.slice().sort((a,b)=>a.rank-b.rank);
     const cls=["g","s","b"], med=["medal_gold","medal_silver","medal_bronze"];
-    $("top3").innerHTML=list.slice(0,3).map((s,k)=>'<div class="pod '+cls[k]+'"><span class="medal"><img src="art/items/'+med[k]+'.png" alt="'+(k+1)+'등"></span>'+sprite(s.char,"win")+'<span class="nm">'+esc(label(s))+'</span><span class="muted small">'+(k+1)+'등으로 들어왔어요</span></div>').join("");
+    $("top3").innerHTML=list.slice(0,3).map((s,k)=>'<div class="pod '+cls[k]+'">'+sprite(s.char,"win")+'<span class="nm">'+esc(label(s))+'</span><div class="block"><img src="art/items/'+med[k]+'.png" alt="'+(k+1)+'등"></div></div>').join("");
     $("podium").innerHTML=list.slice(3).map(s=>'<div class="pd"><span class="n">'+s.rank+'등</span>'+face(s.char)+'<span class="nm">'+esc(label(s))+'</span></div>').join("");
     show("t-podium");
   },1200);
@@ -811,7 +823,7 @@ function drawNow(now){
   const el=$("nowCard");
   if(el.dataset.id!==cur.id){
     el.dataset.id=cur.id;
-    el.innerHTML='<span class="rkb">'+cur.rank+'등 차례</span>'+sprite(cur.char,"win")+'<span class="nm">'+esc(label(cur))+'</span><span class="small muted" id="nowHow"></span>'+(auto?'':'<div class="meter"><i id="nowBar"></i></div><span class="left" id="nowLeft"></span>');
+    el.innerHTML='<div class="ribbon">'+cur.rank+'등 차례</div>'+sprite(cur.char,"win")+'<span class="nm">'+esc(label(cur))+'</span><span class="small muted" id="nowHow"></span>'+(auto?'':'<div class="meter"><i id="nowBar"></i></div><span class="left" id="nowLeft"></span>');
   }
   $("nowHow").textContent=how;
   if(!auto){$("nowBar").style.width=(left/total*100)+"%"; $("nowLeft").textContent=Math.ceil(left/1000)+"초";}
@@ -842,16 +854,61 @@ $("doneSetup").onclick=()=>{H.phase="lobby"; H.assign={}; show("t-setup"); rende
 window.addEventListener("beforeunload",e=>{if(H.phase==="race"||H.phase==="pick"){e.preventDefault(); e.returnValue="";}});
 
 /* =================== 학생 =================== */
-const S={peer:null,conn:null,cid:"",char:ANIMALS[0].id,taps:0,sent:0,v:null,deadline:0,picked:false,wake:null,timer:null,school:null,info:null,neis:null};
+const S={peer:null,conn:null,cid:"",char:ANIMALS[0].id,taps:0,sent:0,v:null,deadline:0,picked:false,wake:null,timer:null,school:null,info:null,neis:null,step:0};
 try{S.cid=sessionStorage.getItem("seatrace-cid")||"";}catch(e){}
 if(!S.cid){S.cid="s"+Math.random().toString(36).slice(2,12); try{sessionStorage.setItem("seatrace-cid",S.cid)}catch(e){}}
 
-(function(){const g=$("sGrade"),c=$("sCls"),n=$("sNo");
-  for(let i=1;i<=6;i++) g.insertAdjacentHTML("beforeend",'<option value="'+i+'">'+i+'학년</option>');
-  for(let i=1;i<=15;i++) c.insertAdjacentHTML("beforeend",'<option value="'+i+'">'+i+'반</option>');
-  for(let i=1;i<=40;i++) n.insertAdjacentHTML("beforeend",'<option value="'+i+'">'+i+'번</option>');
-  $("sRegion").innerHTML=REGIONS.map(r=>'<option value="'+r[0]+'">'+r[1]+'</option>').join("");
-})();
+const DEMO=(()=>{try{return new URLSearchParams(location.search).get("demo")==="1"}catch(e){return false}})();
+/* 단계 */
+const STEPS=[
+  {t:"방 번호",b:"칠판에 있는 <b>방 번호</b> 4자리를 눌러 줘!"},
+  {t:"우리 학교",b:"<b>우리 학교</b>를 찾아서 눌러 줘!"},
+  {t:"학년 · 반",b:"몇 <b>학년</b> 몇 <b>반</b>이야?"},
+  {t:"번호",b:"내 <b>번호</b>를 눌러 줘!"},
+  {t:"이름",b:"내 <b>이름</b>을 써 줘!"},
+  {t:"동물 친구",b:"함께 달릴 <b>동물 친구</b>를 골라 줘!"}];
+function goStep(n){
+  S.step=Math.max(DEMO?1:0,Math.min(STEPS.length-1,n)); sMsg("");
+  STEPS.forEach((_,i)=>{$("jStep"+i).hidden=i!==S.step;});
+  $("jTitle").textContent=STEPS[S.step].t; $("jBubble").innerHTML=STEPS[S.step].b;
+  $("jDots").innerHTML=STEPS.map((_,i)=>'<i class="'+(i===S.step?"on":i<S.step?"ok":"")+'"></i>').join("");
+  $("jPrev").style.visibility=S.step===(DEMO?1:0)?"hidden":"visible";
+  const last=S.step===STEPS.length-1; $("jNext").hidden=last; $("sJoin").hidden=!last;
+  $("jMascot").src="art/animals/rabbit/"+(last?"win":"idle")+".png";
+  if(S.step===1&&!S.school) setTimeout(()=>$("sSchool").focus(),50);
+  if(S.step===4) setTimeout(()=>$("sName").focus(),50);
+  if(S.step===5) renderCharPick();
+}
+function stepOk(){
+  if(S.step===0&&$("sCode").value.length!==4){sMsg("방 번호 4자리를 눌러요."); return false;}
+  if(S.step===1&&!S.school){sMsg("우리 학교를 찾아서 눌러요."); return false;}
+  if(S.step===2&&(!$("sGrade").value||!$("sCls").value)){sMsg("학년과 반을 눌러요."); return false;}
+  if(S.step===3&&!$("sNo").value){sMsg("번호를 눌러요."); return false;}
+  if(S.step===4&&!$("sName").value.trim()){sMsg("이름을 써요."); return false;}
+  return true;
+}
+$("jNext").onclick=()=>{if(stepOk()) goStep(S.step+1);};
+$("jPrev").onclick=()=>goStep(S.step-1);
+$("sName").addEventListener("keydown",e=>{if(e.key==="Enter") $("jNext").click();});
+
+/* 방 번호 숫자판 */
+function drawCode(){const v=$("sCode").value; $("codeBox").querySelectorAll("span").forEach((s,i)=>{s.textContent=v[i]||""; s.className=v[i]?"f":i===v.length?"cur":"";});}
+$("keypad").innerHTML=[1,2,3,4,5,6,7,8,9].map(n=>'<button class="key" type="button" data-k="'+n+'">'+n+'</button>').join("")+'<button class="key fn" type="button" data-k="c">지우기</button><button class="key" type="button" data-k="0">0</button><button class="key fn" type="button" data-k="b">← 하나</button>';
+$("keypad").addEventListener("click",e=>{const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k; let v=$("sCode").value;
+  if(k==="c") v=""; else if(k==="b") v=v.slice(0,-1); else if(v.length<4) v+=k;
+  $("sCode").value=v; drawCode(); sMsg(""); if(v.length===4) setTimeout(()=>{if(S.step===0&&$("sCode").value.length===4) goStep(1);},250);});
+document.addEventListener("keydown",e=>{if($("s-join").hidden||S.step!==0) return; if(/^[0-9]$/.test(e.key)) $("keypad").querySelector('[data-k="'+e.key+'"]').click(); if(e.key==="Backspace") $("keypad").querySelector('[data-k="b"]').click();});
+
+/* 학년·반·번호 버튼 */
+function pickGrid(el,n,suffix,input){
+  el.innerHTML=Array.from({length:n},(_,i)=>'<button class="chipbtn" type="button" data-v="'+(i+1)+'" aria-pressed="false">'+(i+1)+suffix+'</button>').join("");
+  el.addEventListener("click",e=>{const b=e.target.closest("[data-v]"); if(!b) return; $(input).value=b.dataset.v; mark(el,input); sMsg("");
+    if(input==="sNo") setTimeout(()=>goStep(4),220);
+    if((input==="sGrade"||input==="sCls")&&$("sGrade").value&&$("sCls").value&&input==="sCls") setTimeout(()=>goStep(3),220);});
+}
+function mark(el,input){el.querySelectorAll("[data-v]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.v===$(input).value)));}
+pickGrid($("gradePick"),6,"학년","sGrade"); pickGrid($("clsPick"),16,"반","sCls"); pickGrid($("noPick"),40,"","sNo");
+$("sRegion").innerHTML=REGIONS.map(r=>'<option value="'+r[0]+'">'+r[1]+'</option>').join("");
 
 /* 나이스 학교 검색 */
 const NEIS="https://open.neis.go.kr/hub/schoolInfo";
@@ -860,7 +917,7 @@ function shortAddr(a){return String(a||"").split(" ").slice(0,3).join(" ");}
 function setSchool(sc){
   S.school=sc;
   if(sc){$("schoolBox").hidden=true; $("schoolPicked").hidden=false;
-    $("schoolPicked").innerHTML='<div>'+esc(sc.name)+(sc.addr?'<br><span>'+esc(sc.addr)+'</span>':'')+'</div><button class="btn ghost sm" type="button" id="schoolChange">바꾸기</button>';
+    $("schoolPicked").innerHTML='<div>'+esc(sc.name)+(sc.addr?'<br><span>'+esc(sc.addr)+'</span>':'')+'</div><button class="btn white sm" type="button" id="schoolChange">다시 찾기</button>';
     $("schoolChange").onclick=()=>{setSchool(null); $("sSchool").focus();};
     LS.set("seatrace-school",JSON.stringify(sc));
   } else {$("schoolBox").hidden=false; $("schoolPicked").hidden=true;}
@@ -878,7 +935,7 @@ async function searchSchool(){
     if(my!==schoolSeq) return; S.neis=true;
     const rows=(j.schoolInfo&&j.schoolInfo[1]&&j.schoolInfo[1].row)||[];
     const total=(j.schoolInfo&&j.schoolInfo[0].head[0].list_total_count)||0;
-    if(!rows.length){out.innerHTML='<p class="small muted">찾는 학교가 없어요.<br>지역과 학교 이름을 다시 봐요.</p>'; return;}
+    if(!rows.length){out.innerHTML='<p class="small muted">찾는 학교가 없어요. 지역과 학교 이름을 다시 봐요.</p>'; return;}
     out.innerHTML=rows.map(r=>'<button type="button" data-code="'+esc(String(r.SD_SCHUL_CODE||"").trim())+'" data-name="'+esc(r.SCHUL_NM)+'" data-addr="'+esc(shortAddr(r.ORG_RDNMA))+'"><b>'+esc(r.SCHUL_NM)+'</b><span>'+esc(shortAddr(r.ORG_RDNMA))+'</span></button>').join("")+(total>rows.length?'<p class="small muted">학교 이름을 더 길게 쓰면 더 잘 찾아요.</p>':'');
     bindFound();
   }catch(e){
@@ -889,34 +946,36 @@ function bindFound(){
   $("schoolFound").querySelectorAll("button").forEach(b=>b.onclick=()=>{
     if(b.dataset.free) setSchool({name:$("sSchool").value.trim(),code:"",addr:""});
     else setSchool({name:b.dataset.name,code:b.dataset.code,addr:b.dataset.addr});
-    $("schoolFound").innerHTML="";
+    $("schoolFound").innerHTML=""; sMsg(""); setTimeout(()=>{if(S.step===1) goStep(2);},350);
   });
 }
 $("sSchool").addEventListener("input",()=>{clearTimeout(schoolTimer); schoolTimer=setTimeout(searchSchool,300);});
 $("sRegion").addEventListener("change",()=>{LS.set("seatrace-region",$("sRegion").value); searchSchool();});
 (function(){const r=LS.get("seatrace-region"); if(r) $("sRegion").value=r;
   try{const sc=JSON.parse(LS.get("seatrace-school")||"null"); if(sc&&sc.name) setSchool(sc);}catch(e){}
-  try{const c=JSON.parse(LS.get("seatrace-class")||"{}"); if(c.grade) $("sGrade").value=c.grade; if(c.cls) $("sCls").value=c.cls;}catch(e){}
+  try{const c=JSON.parse(LS.get("seatrace-class")||"{}"); if(c.grade){$("sGrade").value=c.grade; mark($("gradePick"),"sGrade");} if(c.cls){$("sCls").value=c.cls; mark($("clsPick"),"sCls");}}catch(e){}
 })();
 
 function renderCharPick(){
   $("charPick").innerHTML=ANIMALS.map(a=>'<button type="button" aria-pressed="'+(a.id===S.char)+'" data-c="'+a.id+'">'+face(a.id)+'<span>'+a.ko+'</span></button>').join("");
-  $("charPick").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.char=b.dataset.c; $("charPick").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});
+  $("charPick").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.char=b.dataset.c; $("charPick").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); $("jMascot").src="art/animals/"+S.char+"/win.png";});
 }
 function sMsg(t){$("sMsg").textContent=t||"";}
 $("sJoin").onclick=()=>{
   const code=$("sCode").value.replace(/\D/g,""); const name=$("sName").value.trim();
-  if(code.length!==4){sMsg("방 번호 4자리를 넣어요."); $("sCode").focus(); return;}
-  if(!S.school){sMsg("우리 학교를 찾아서 눌러요."); $("sSchool").focus(); return;}
-  if(!$("sGrade").value||!$("sCls").value||!$("sNo").value){sMsg("학년, 반, 번호를 골라요."); return;}
-  if(!name){sMsg("이름을 써요."); $("sName").focus(); return;}
+  if(DEMO&&S.school&&$("sGrade").value&&$("sCls").value&&$("sNo").value&&name){runDemo(name); return;}
+  if(!DEMO&&code.length!==4){goStep(0); sMsg("방 번호 4자리를 눌러요."); return;}
+  if(!S.school){goStep(1); sMsg("우리 학교를 찾아서 눌러요."); return;}
+  if(!$("sGrade").value||!$("sCls").value){goStep(2); sMsg("학년과 반을 눌러요."); return;}
+  if(!$("sNo").value){goStep(3); sMsg("번호를 눌러요."); return;}
+  if(!name){goStep(4); sMsg("이름을 써요."); return;}
   if(!PeerCls){sMsg("이 화면에서는 들어갈 수 없어요. 선생님이 알려 준 주소로 들어와요."); return;}
   S.info={school:S.school.name,schoolCode:S.school.code,grade:$("sGrade").value,cls:$("sCls").value,no:$("sNo").value};
   LS.set("seatrace-class",JSON.stringify({grade:S.info.grade,cls:S.info.cls}));
   sMsg(""); $("sJoin").disabled=true; $("sJoin").textContent="연결 중…";
   connectStudent(code,name);
 };
-function resetJoinBtn(){$("sJoin").disabled=false; $("sJoin").textContent="들어가기";}
+function resetJoinBtn(){$("sJoin").disabled=false; $("sJoin").textContent="들어가기!";}
 function connectStudent(code,name){
   try{if(S.peer) S.peer.destroy();}catch(e){}
   const peer=new PeerCls(); S.peer=peer; let ok=false;
@@ -929,46 +988,51 @@ function connectStudent(code,name){
   });
   peer.on("error",e=>{
     clearTimeout(to);
-    if(e&&e.type==="peer-unavailable") sMsg("방 "+code+"을 찾지 못했어요. 칠판의 방 번호를 다시 봐요.");
-    else sMsg("연결하지 못했어요. 잠시 뒤 다시 눌러요.");
-    resetJoinBtn(); show("s-join");
+    if(e&&e.type==="peer-unavailable"){show("s-join"); goStep(0); sMsg("방 "+code+"을 찾지 못했어요. 칠판의 방 번호를 다시 봐요.");}
+    else {show("s-join"); sMsg("연결하지 못했어요. 잠시 뒤 다시 눌러요.");}
+    resetJoinBtn();
   });
 }
+function play(title,bubble,mascot,html){
+  if($("s-play").hidden) show("s-play");
+  $("pTitle").textContent=title; $("pBubble").innerHTML=bubble;
+  const src="art/animals/"+(mascot||"rabbit/idle")+".png"; if(!$("pMascot").src.endsWith(src)) $("pMascot").src=src;
+  if(html!=null) $("sPlay").innerHTML=html;
+}
 function lost(code,name){
-  $("sPlay").innerHTML=say('연결이 끊겼어요. 아래 버튼을 눌러요.')+'<button class="btn sun big" id="reJoin" type="button">다시 연결</button>';
-  show("s-play");
+  play("연결 끊김","연결이 끊겼어요. 아래 버튼을 눌러 줘!","rabbit/slip",'<button class="btn sun big" id="reJoin" type="button">다시 연결</button>');
   $("reJoin").onclick=()=>{$("sPlay").innerHTML='<div class="status">다시 연결하는 중…</div>'; connectStudent(code,name);};
 }
 function onStudentData(d){
   if(!d||typeof d!=="object") return;
-  if(d.t==="reject"){sMsg(d.msg||"들어갈 수 없어요."); resetJoinBtn(); show("s-join"); try{S.conn.close()}catch(e){} S.conn=null; return;}
+  if(d.t==="reject"){show("s-join"); sMsg(d.msg||"들어갈 수 없어요."); resetJoinBtn(); try{S.conn.close()}catch(e){} S.conn=null; return;}
   if(d.t==="state"){resetJoinBtn(); renderStudent(d);}
 }
 function wakeOn(){try{if(navigator.wakeLock&&!S.wake) navigator.wakeLock.request("screen").then(w=>{S.wake=w},()=>{});}catch(e){}}
 function renderStudent(v){
-  const prev=S.v; S.v=v; if($("s-play").hidden) show("s-play"); const el=$("sPlay");
-  const me=(pose)=>'<div class="me">'+sprite(v.char,pose||"idle")+'</div><div class="mename">'+esc(v.name)+'</div>';
-  if(v.phase==="lobby"||v.phase==="setup"){el.innerHTML=me("idle")+say('잘 들어왔어요! 선생님이 <b>출발</b>할 때까지 기다려요.'); return;}
-  if(v.phase==="countdown"){el.innerHTML='<div class="bigtxt" style="font-size:8rem;color:var(--blue)">'+v.cd+'</div>'+say('<b>출발!</b> 하면 노란 버튼을 마구 눌러요.'); wakeOn(); return;}
+  const prev=S.v; S.v=v; const me=c=>c+"/";
+  const mine=(pose)=>'<div class="me">'+sprite(v.char,pose||"idle")+'</div><div class="mename">'+esc(v.name)+'</div>';
+  const ord=()=>'<div class="order">'+orderHtml(v.order||[],v.meId)+'</div>';
+  if(v.phase==="lobby"||v.phase==="setup"){play("기다리는 중","잘 들어왔어요! 선생님이 <b>출발</b>할 때까지 기다려요.","rabbit/idle",mine("idle")); return;}
+  if(v.phase==="countdown"){play("준비!","<b>출발!</b> 하면 노란 버튼을 마구 눌러요!","rabbit/run1",'<div class="bigtxt" style="font-size:9rem;color:var(--blue)">'+v.cd+'</div>'); wakeOn(); return;}
   if(v.phase==="race"){
     if(!prev||prev.phase!=="race"||!$("tapBtn")){
-      el.innerHTML='<div class="evt" id="sEvt"></div><button class="tap" id="tapBtn" type="button">'+face(v.char)+'<span>달려!</span></button><div class="meter" style="max-width:340px"><i id="sBar" style="width:0"></i></div><div class="status" id="sRank"></div>';
+      play("달려라!","노란 버튼을 <b>빠르게</b> 마구 눌러요!","rabbit/run2",'<div class="evt" id="sEvt"></div><button class="tap" id="tapBtn" type="button">'+face(v.char)+'<span>달려!</span></button><div class="meter" style="max-width:420px"><i id="sBar" style="width:0"></i></div><div class="status" id="sRank"></div>');
       const b=$("tapBtn");
       b.addEventListener("pointerdown",e=>{e.preventDefault(); S.taps++; b.classList.add("hit"); setTimeout(()=>b.classList.remove("hit"),60); try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}});
       b.addEventListener("contextmenu",e=>e.preventDefault());
     }
     $("sBar").style.width=v.prog+"%"; $("sEvt").textContent=v.evt||"";
-    if(v.rank){$("sRank").textContent=v.rank+"등으로 들어왔어요!"; $("tapBtn").disabled=true;}
+    if(v.rank){$("sRank").textContent=v.rank+"등으로 들어왔어요!"; $("tapBtn").disabled=true; play("도착!","<b>"+v.rank+"등</b>으로 들어왔어요! 친구들을 기다려요.","rabbit/win");}
     return;
   }
-  if(v.phase==="podium"){el.innerHTML=me("win")+'<div class="bigtxt" style="font-size:4.4rem;color:var(--blue)">'+v.rank+'등</div>'+say('곧 들어온 순서대로 자리를 골라요.'); return;}
+  if(v.phase==="podium"){play(v.rank+"등","곧 들어온 순서대로 자리를 골라요.","rabbit/win",mine("win")+'<div class="bigtxt" style="font-size:4.6rem;color:var(--blue)">'+v.rank+'등</div>'); return;}
   if(v.phase==="pick"){
-    const ord='<div class="card stack" style="width:100%;text-align:left"><h3>고르는 순서</h3><div class="order">'+orderHtml(v.order||[],v.meId)+'</div></div>';
-    if(v.mySeat){el.innerHTML=me("win")+'<div class="status">내 자리</div><div class="bigtxt" style="font-size:3rem">'+esc(v.mySeat)+'</div>'+say('친구들이 다 고를 때까지 기다려요.')+ord; return;}
+    if(v.mySeat){play("내 자리","친구들이 다 고를 때까지 기다려요.","rabbit/win",'<div class="status">내 자리</div><div class="bigtxt" style="font-size:3.2rem;color:var(--blue-d)">'+esc(v.mySeat)+'</div>'+ord()); return;}
     if(v.myTurn&&v.map){
       if(!(prev&&prev.myTurn)) S.picked=false;
       S.deadline=Date.now()+v.left*1000;
-      el.innerHTML=say('<b>내 차례예요!</b> 앉고 싶은 책상을 눌러요.')+'<div class="bigtxt" id="sLeft" style="font-size:2.4rem;color:var(--coral)">'+v.left+'초</div><div style="width:100%" class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="sSeats"></div></div></div><p class="small muted">흐린 책상은 고를 수 없어요.</p>';
+      play("내 차례!","앉고 싶은 <b>책상</b>을 눌러요!","rabbit/boost",'<div class="bigtxt" id="sLeft" style="font-size:2.6rem;color:var(--coral)">'+v.left+'초</div><div style="width:100%" class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="sSeats"></div></div></div><p class="small muted">흐린 책상은 고를 수 없어요.</p>');
       renderSeats($("sSeats"),v.map,(b,i)=>{
         const st=v.map.st[i];
         if(st==="x"){b.classList.add("off"); return;}
@@ -981,25 +1045,88 @@ function renderStudent(v){
       clearInterval(S.timer); S.timer=setInterval(()=>{const l=$("sLeft"); if(!l||S.picked){clearInterval(S.timer);return;} l.textContent=Math.max(0,Math.ceil((S.deadline-Date.now())/1000))+"초";},250);
       return;
     }
-    el.innerHTML=me("idle")+'<div class="bigtxt" style="font-size:2.6rem;color:var(--blue)">'+(v.myPos||"")+'번째 순서</div>'+say((v.ahead>0?'앞에 <b>'+v.ahead+'명</b> 남았어요.':'곧 내 차례예요!')+' 지금은 <b>'+esc(v.curName)+'</b> 차례예요.')+ord; return;
+    play((v.myPos||"")+"번째 순서",(v.ahead>0?'앞에 <b>'+v.ahead+'명</b> 남았어요.':'곧 내 차례예요!')+' 지금은 <b>'+esc(v.curName)+'</b> 차례예요.',"rabbit/idle",ord()); return;
   }
-  if(v.phase==="done"){el.innerHTML=me("win")+'<div class="status">내 새 자리는</div><div class="bigtxt" style="font-size:3.4rem">'+(v.mySeat?esc(v.mySeat):"선생님께 물어봐요")+'</div>'+say('칠판 자리표를 보고 새 자리로 옮겨요.'); return;}
+  if(v.phase==="done"){play("새 자리","칠판 자리표를 보고 새 자리로 옮겨요.","rabbit/win",mine("win")+'<div class="status">내 새 자리는</div><div class="bigtxt" style="font-size:3.6rem;color:var(--blue-d)">'+(v.mySeat?esc(v.mySeat):"선생님께 물어봐요")+'</div>'); return;}
 }
 setInterval(()=>{if(S.conn&&S.conn.open&&S.taps!==S.sent){try{S.conn.send({t:"taps",n:S.taps}); S.sent=S.taps;}catch(e){}}},150);
 
-/* 시작 */
-/* 학생은 처음 화면이 바로 들어가기. 선생님은 주소 끝에 #teacher 를 붙여 들어와요. */
-function route(){
-  if(location.hash==="#teacher"){ if(!document.querySelector(".screen[id^='t-']:not([hidden])")){H.phase="setup"; show("t-setup"); renderSetup(); renderEditor();} }
-  else if(!document.querySelector(".screen[id^='s-']:not([hidden])")){ renderCharPick(); show("s-join"); }
+
+/* 선생님 비밀번호 */
+const PIN="1016"; let pin="";
+function unlocked(){try{return sessionStorage.getItem("seatrace-t")==="1"}catch(e){return false}}
+function drawPin(){$("pinBox").querySelectorAll("span").forEach((s,i)=>{s.textContent=pin[i]?"●":""; s.className=pin[i]?"f":i===pin.length?"cur":"";});}
+function askPin(){pin=""; drawPin(); $("pinMsg").textContent=""; $("pinModal").hidden=false;}
+$("pinPad").innerHTML=[1,2,3,4,5,6,7,8,9].map(n=>'<button class="key" type="button" data-k="'+n+'">'+n+'</button>').join("")+'<button class="key fn" type="button" data-k="c">지우기</button><button class="key" type="button" data-k="0">0</button><button class="key fn" type="button" data-k="b">← 하나</button>';
+$("pinPad").addEventListener("click",e=>{const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k;
+  if(k==="c") pin=""; else if(k==="b") pin=pin.slice(0,-1); else if(pin.length<4) pin+=k; drawPin();
+  if(pin.length===4){ if(pin===PIN){try{sessionStorage.setItem("seatrace-t","1")}catch(x){} $("pinModal").hidden=true; location.hash="teacher"; route();}
+    else {$("pinMsg").textContent="비밀번호가 달라요."; pin=""; setTimeout(drawPin,300);} }});
+$("pinClose").onclick=()=>{$("pinModal").hidden=true; if(location.hash==="#teacher") location.hash="";};
+document.addEventListener("keydown",e=>{if($("pinModal").hidden) return; if(/^[0-9]$/.test(e.key)) $("pinPad").querySelector('[data-k="'+e.key+'"]').click(); if(e.key==="Backspace") $("pinPad").querySelector('[data-k="b"]').click(); if(e.key==="Escape") $("pinClose").click();},true);
+
+/* 학생 화면 체험 (선생님 화면에서 열기) */
+document.querySelectorAll("[data-demo]").forEach(b=>b.onclick=()=>{$("demoFrame").src=location.pathname+"?demo=1&t="+Date.now(); $("demoModal").hidden=false;});
+$("demoClose").onclick=()=>{$("demoModal").hidden=true; $("demoFrame").src="about:blank";};
+
+/* 체험 모드: 방 없이 혼자 레이스·자리 고르기 */
+function runDemo(name){
+  const bots=["하늘","바다","솔이","별이"].map((n,k)=>({name:n,char:ANIMALS[(k*5+3)%ANIMALS.length].id,prog:0,rank:0,seat:-1}));
+  const me={name:name,char:S.char,prog:0,rank:0,seat:-1,me:true}; const all=[me].concat(bots);
+  const cfg={rows:4,cols:6,pair:true}; const taken={};
+  let taps=0; S.conn={open:true,send:d=>{ if(d.t==="taps") taps=d.n; if(d.t==="pick") myPick(d.seat); }}; S.taps=0; S.sent=0;
+  const base={name:name,char:S.char};
+  const R=v=>renderStudent(Object.assign({},base,v));
+  R({phase:"lobby"});
+  let t0=Date.now()+1800; let phase="cd";
+  const loop=setInterval(()=>{
+    const now=Date.now();
+    if(phase==="cd"){ const c=Math.ceil((t0+3000-now)/1000); if(now<t0) return; if(c>0){R({phase:"countdown",cd:c});return;} phase="race"; t0=now; last=now; lastTaps=taps; R({phase:"race",prog:0}); return; }
+    if(phase==="race"){
+      const dt=(now-last)/1000; last=now; const rate=(taps-lastTaps)/Math.max(dt,.001); lastTaps=taps; myRate=myRate*.85+rate*.15;
+      if(!me.rank) me.prog=Math.min(100,me.prog+(100/9)*(0.3+0.7*Math.min(myRate,7)/7)*dt);
+      bots.forEach(b=>{if(!b.rank) b.prog=Math.min(100,b.prog+(100/9)*(0.5+Math.random()*0.5)*dt);});
+      all.forEach(a=>{if(!a.rank&&a.prog>=100) a.rank=all.filter(x=>x.rank).length+1;});
+      R({phase:"race",prog:Math.round(me.prog),rank:me.rank});
+      if(all.every(a=>a.rank)||now-t0>13000){ let r=all.filter(x=>x.rank).length; all.filter(a=>!a.rank).sort((a,b)=>b.prog-a.prog).forEach(a=>a.rank=++r);
+        phase="pod"; t0=now; R({phase:"podium",rank:me.rank}); }
+      return;
+    }
+    if(phase==="pod"){ if(now-t0<2200) return; phase="pick"; order=all.slice().sort((a,b)=>a.rank-b.rank); turn=0; t0=now; return; }
+    if(phase==="pick"){
+      const cur=order[turn]; if(!cur){clearInterval(loop); R({phase:"done",mySeat:seatLabel(me.seat,cfg.cols)}); return;}
+      const free=[]; for(let i=0;i<cfg.rows*cfg.cols;i++) if(taken[i]==null) free.push(i);
+      const ol=order.map((a,k)=>({r:a.rank,name:a.name,char:a.char,id:a.me?"me":"b"+k,st:a.seat>=0?"ok":k===turn?"cur":"wait",seat:a.seat>=0?seatLabel(a.seat,cfg.cols):""}));
+      const myPos=order.indexOf(me)+1;
+      if(cur.me){ if(!waitingMe){waitingMe=true; myDeadline=now+12000;}
+        const left=Math.max(0,Math.ceil((myDeadline-now)/1000));
+        if(left<=0){myPick(free[Math.floor(Math.random()*free.length)]); return;}
+        if(!shownTurn){shownTurn=true; R({phase:"pick",myTurn:true,left,map:Object.assign({},cfg,{st:Array.from({length:cfg.rows*cfg.cols},(_,i)=>taken[i]!=null?"t":"o")}),order:ol,meId:"me",myPos});}
+        return; }
+      if(now-t0<1300){ if(!shown){shown=true; R({phase:"pick",myTurn:false,mySeat:me.seat>=0?seatLabel(me.seat,cfg.cols):"",order:ol,meId:"me",myPos,ahead:Math.max(0,myPos-1-turn),curName:cur.name});} return; }
+      const s=free[Math.floor(Math.random()*free.length)]; cur.seat=s; taken[s]=cur.name; turn++; t0=now; shown=false;
+    }
+  },50);
+  let last=0,lastTaps=0,myRate=0,order=[],turn=0,waitingMe=false,shownTurn=false,myDeadline=0,shown=false;
+  function myPick(i){ if(phase!=="pick"||!order[turn]||!order[turn].me||taken[i]!=null) return; me.seat=i; taken[i]=me.name; turn++; t0=Date.now(); shown=false; waitingMe=false; shownTurn=false; }
 }
-$("goTeacher").onclick=()=>{location.hash="teacher";};
-$("exitTeacher").onclick=()=>{location.hash=""; renderCharPick(); show("s-join");};
+if(DEMO){ $("goTeacher").hidden=true; $("demoTag").hidden=false; $("sCode").value="0000"; S.step=1; }
+
+/* 시작: 주소 하나로 씀. 처음은 학생 들어가기, 선생님은 오른쪽 위 '선생님 화면' */
+function route(){
+  if(location.hash==="#teacher"&&!unlocked()){ if($("s-join").hidden&&$("s-play").hidden){show("s-join"); goStep(S.step);} askPin(); return; }
+  if(location.hash==="#teacher"){ if(!document.querySelector(".screen[id^='t-']:not([hidden])")){H.phase="setup"; show("t-setup"); renderSetup(); renderEditor();} }
+  else if(!document.querySelector(".screen[id^='s-']:not([hidden])")){ show("s-join"); goStep(S.step); }
+}
+$("goTeacher").onclick=()=>{if(unlocked()) location.hash="teacher"; else askPin();};
+$("exitTeacher").onclick=()=>{location.hash=""; show("s-join"); goStep(S.step);};
 $("podBack").onclick=()=>{$("again").click();};
 let room=null; try{room=new URLSearchParams(location.search).get("room");}catch(e){}
-if(room&&/^\d{4}$/.test(room)) $("sCode").value=room;
+if(room&&/^\d{4}$/.test(room)){ $("sCode").value=room; S.step=1; }
+drawCode();
 window.addEventListener("hashchange",route);
 route();
+["rabbit/idle","rabbit/win","rabbit/run1","rabbit/run2","rabbit/boost","rabbit/slip"].forEach(p=>{const i=new Image(); i.src="art/animals/"+p+".png";});
 })();
 </script>
 
