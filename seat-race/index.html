@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>자리 바꾸기 레이스</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: 하늘빛 운동장 위에 흰 카드. 위는 흰 머리줄, 안내는 토끼 선생님 말풍선, 레이스는 붉은 트랙. 칠판 화면은 2단, 태블릿은 한 줄. 일부러 밝은 한 가지 화면만 씀. */
+@font-face{font-family:"HJiugae";src:url("fonts/HakgyoansimJiugaeR.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"HBareun";src:url("fonts/HakgyoansimBareondotumR.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"HBareun";src:url("fonts/HakgyoansimBareondotumB.woff2") format("woff2");font-weight:700;font-display:swap}
+:root{
+  color-scheme:light;
+  --sky:#e6f4ff; --sky2:#d3ebfd; --card:#ffffff; --line:#dbe8f3; --soft:#f2f8fd;
+  --ink:#1d2a4a; --muted:#5d6b86;
+  --blue:#2f8fe8; --blue-d:#1d6fc4; --blue-l:#e3f1fd;
+  --sun:#ffc83a; --sun-d:#e0a514; --sun-fg:#3a2a00;
+  --coral:#ff6f4f; --grass:#4cbf6a; --grass-d:#36a154;
+  --track:#d9583d; --track2:#c84f36; --chalk:#fff6ea;
+  --board:#2f6a52; --desk:#f3d9a8; --desk-d:#d6b170; --desk-fg:#4a3412;
+  --danger:#e5483d;
+  --display:"HJiugae","HBareun","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --body:"HBareun","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+html,body{height:100%}
+body{margin:0;background:var(--sky);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere;
+  background-image:radial-gradient(rgba(47,143,232,.10) 1.5px,transparent 1.6px);background-size:22px 22px}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.25;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.muted{color:var(--muted)} .small{font-size:.88rem}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.stack{display:grid;gap:16px}
+
+/* 버튼 */
+.btn{font-family:var(--display);font-size:1.12rem;border:0;border-radius:16px;padding:.72em 1.3em;background:var(--blue);color:#fff;cursor:pointer;line-height:1.15;box-shadow:0 5px 0 var(--blue-d);transition:transform .12s,box-shadow .12s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--blue-d)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blue-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.sun{background:var(--sun);color:var(--sun-fg);box-shadow:0 5px 0 var(--sun-d)}
+.btn.sun:hover{box-shadow:0 7px 0 var(--sun-d)}
+.btn.sun:active{box-shadow:0 1px 0 var(--sun-d)}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 0 0 2px var(--line),0 4px 0 var(--line)}
+.btn.ghost:hover{box-shadow:0 0 0 2px var(--blue),0 6px 0 var(--line)}
+.btn.big{font-size:1.45rem;padding:.72em 1.6em;border-radius:20px}
+.btn.sm{font-size:.98rem;padding:.55em .95em;border-radius:12px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+input[type=text],input[type=number],textarea,select{font:inherit;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:14px;padding:.6em .8em;min-width:0;transition:border-color .12s,box-shadow .12s}
+input[type=text]:hover,input[type=number]:hover,textarea:hover,select:hover{border-color:#b8d6f0}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-l);outline:none}
+textarea{width:100%;resize:vertical}
+label{font-size:.95rem;font-weight:700}
+
+.card{background:var(--card);border-radius:24px;padding:22px;border:2px solid var(--line);box-shadow:0 6px 0 var(--sky2)}
+.card h3{font-size:1.25rem}
+.note{border-radius:16px;padding:12px 16px;background:var(--blue-l);font-size:.95rem}
+.note.warn{background:#fff1ee;box-shadow:inset 5px 0 0 var(--danger)}
+
+/* 머리줄 */
+.top{background:#fff;border-bottom:2px solid var(--line);margin-bottom:22px;position:sticky;top:env(safe-area-inset-top,0px);z-index:4}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:#fff}
+.top .in{max-width:1360px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-size:1.35rem;display:flex;align-items:center;gap:10px;color:var(--ink);white-space:nowrap}
+.brand img{width:40px;height:40px;object-fit:contain}
+.steps{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.steps span{font-size:.9rem;font-weight:700;padding:.35em .9em;border-radius:999px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.steps span.on{background:var(--blue);color:#fff}
+.steps span.done{background:var(--blue-l);color:var(--blue-d)}
+
+/* 토끼 선생님 말풍선 */
+.guide{display:flex;align-items:flex-end;gap:12px}
+.guide .gf{width:72px;height:72px;flex:none;filter:drop-shadow(0 4px 0 rgba(29,42,74,.08))}
+.guide .gf img{width:100%;height:100%;object-fit:contain}
+.bubble{position:relative;background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 16px;font-weight:700;font-size:1.02rem;line-height:1.5;box-shadow:0 4px 0 var(--sky2);min-width:0}
+.bubble::before{content:"";position:absolute;left:-10px;bottom:18px;width:16px;height:16px;background:#fff;border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.bubble b{color:var(--blue-d)}
+
+/* 캐릭터 그림 */
+.face{display:inline-grid;place-items:center;width:1.7em;height:1.7em;line-height:1;flex:none}
+.face img{width:100%;height:100%;object-fit:contain;display:block}
+.sp{position:relative;width:var(--sw,48px);height:var(--sw,48px);flex:none}
+.sp img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;pointer-events:none}
+.sp[data-p="idle"] .p-idle,.sp[data-p="run1"] .p-run1,.sp[data-p="run2"] .p-run2,.sp[data-p="boost"] .p-boost,.sp[data-p="slip"] .p-slip,.sp[data-p="win"] .p-win{display:block}
+.sp[data-p="win"] img.p-win{animation:hop .5s ease-in-out infinite alternate}
+@keyframes hop{from{translate:0 0}to{translate:0 -10%}}
+.sp .fx{position:absolute;display:none;pointer-events:none}
+.sp .fx img{position:static;display:block;width:100%;height:100%;object-fit:contain}
+.sp .fx-boost{right:68%;top:16%;width:150%;height:66%}
+.sp .fx-ban{left:44%;bottom:-6%;width:48%;height:48%}
+.sp .fx-dizzy{left:18%;top:-26%;width:64%;height:40%}
+.sp .fx-dust{right:62%;bottom:-4%;width:46%;height:34%;opacity:.85}
+.sp[data-p="boost"] .fx-boost,.sp[data-p="slip"] .fx-ban,.sp[data-p="slip"] .fx-dizzy,.sp[data-p="run1"] .fx-dust{display:block}
+
+/* 첫 화면 */
+.home{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:stretch;padding-top:6px}
+@media (max-width:920px){.home{grid-template-columns:1fr}}
+.heroimg{border-radius:28px;overflow:hidden;border:4px solid #fff;box-shadow:0 8px 0 var(--sky2);aspect-ratio:3/2;max-width:100%;background:#9fd8ff}
+.heroimg img{width:100%;height:100%;object-fit:cover;display:block}
+.homeside{display:grid;gap:18px;align-content:center}
+.homeside h1{font-size:clamp(2.4rem,4.6vw,3.6rem);color:var(--ink)}
+.homeside h1 span{color:var(--blue)}
+.homeside .lead{font-size:1.1rem;color:var(--muted)}
+.enter{display:grid;gap:12px}
+.enter button{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;border:2px solid var(--line);border-radius:22px;background:#fff;padding:14px 18px;cursor:pointer;color:var(--ink);font-family:var(--body);box-shadow:0 5px 0 var(--sky2);transition:transform .14s,box-shadow .14s,border-color .14s}
+.enter button:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 8px 0 var(--sky2)}
+.enter .ic{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:var(--blue-l)}
+.enter .ic img{width:50px;height:50px;object-fit:contain}
+.enter .stu .ic{background:#fff5d6}
+.enter .t{font-family:var(--display);font-size:1.4rem;display:block;line-height:1.2}
+.enter .d{font-size:.92rem;color:var(--muted)}
+.enter .go{font-family:var(--display);font-size:1.5rem;color:var(--blue)}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
+@media (max-width:640px){.how{grid-template-columns:1fr}}
+.how div{background:#fff;border:2px solid var(--line);border-radius:22px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;box-shadow:0 5px 0 var(--sky2);transition:transform .14s}
+.how div:hover{transform:translateY(-3px)}
+.how .face{grid-row:span 2;font-size:2.4rem}
+.how b{font-family:var(--display);font-weight:400;font-size:1.15rem}
+.how b i{font-style:normal;color:#fff;background:var(--blue);border-radius:50%;width:1.5em;height:1.5em;display:inline-grid;place-items:center;font-size:.8em;margin-right:6px;vertical-align:.1em}
+.how span{font-size:.9rem;color:var(--muted)}
+
+/* 설정 */
+.setup{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:920px){.setup{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:grid;gap:6px;min-width:0}
+.seg{display:grid;gap:8px}
+.seg label{display:flex;gap:10px;align-items:center;background:var(--soft);border:2px solid transparent;border-radius:14px;padding:.55em .85em;cursor:pointer;font-weight:700;transition:border-color .12s,background .12s}
+.seg label:hover{border-color:var(--blue-l);background:var(--blue-l)}
+.seg label:has(input:checked){border-color:var(--blue);background:var(--blue-l)}
+.editor{display:grid;gap:10px;background:var(--soft);border-radius:16px;padding:14px}
+.chk{display:flex;gap:10px;align-items:center;cursor:pointer}
+.chk input,.seg input{width:20px;height:20px;accent-color:var(--blue)}
+
+/* 교실 자리표 */
+.room{background:var(--soft);border-radius:20px;padding:16px}
+.board{background:var(--board);color:#eaf6ef;border-radius:10px;text-align:center;padding:10px;font-family:var(--display);letter-spacing:.6em;margin:0 10% 18px;box-shadow:inset 0 0 0 6px #285a46,0 5px 0 #c7a66b}
+.seats{display:grid;gap:12px 6px}
+.seat{min-height:62px;border-radius:10px;background:var(--desk);box-shadow:inset 0 -6px 0 var(--desk-d);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 3px 9px;text-align:center;min-width:0;border:0;color:var(--desk-fg);font-family:var(--body);font-size:.86rem;line-height:1.2;cursor:default;transition:transform .12s,box-shadow .12s}
+.seat b{font-weight:700;font-size:.95rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seat .lbl{font-size:.74rem;opacity:.75;white-space:nowrap}
+.seat .face{font-size:1.3rem}
+.seat.off{background:transparent;box-shadow:none;border:2px dashed #c9d9e8;color:var(--muted)}
+.seat.fixed{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--sun)}
+.seat.taken{background:#fff;color:var(--ink);box-shadow:inset 0 -6px 0 var(--line)}
+.seat.open,.seat.edit{cursor:pointer}
+.seat.open{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--grass)}
+.seat.open:hover,.seat.edit:hover{transform:translateY(-3px);box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--blue)}
+.seat.blocked{opacity:.3}
+.seat.sel{box-shadow:inset 0 -6px 0 var(--desk-d),0 0 0 3px var(--coral)}
+.seat.pop{animation:pop .6s ease-out}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.seatwrap{overflow-x:auto;padding:5px}
+
+/* 입장 */
+.lobby{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:920px){.lobby{grid-template-columns:1fr}}
+.joinbox{text-align:center;display:grid;gap:12px;justify-items:center;background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 0 var(--blue-d)}
+.joinbox .lab{font-weight:700;opacity:.85}
+.bigcode{font-family:var(--display);font-size:4.6rem;letter-spacing:.14em;line-height:1;font-variant-numeric:tabular-nums}
+.qr{background:#fff;padding:10px;border-radius:18px;width:210px;height:210px;display:grid;place-items:center;color:var(--muted)}
+.qr img{width:190px;height:190px;image-rendering:pixelated}
+.url{font-size:.78rem;word-break:break-all;opacity:.8}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:6px;background:var(--soft);border:2px solid var(--line);border-radius:999px;padding:.25em .45em .25em .4em;font-weight:700;animation:pop .5s ease-out;transition:border-color .12s;white-space:nowrap}
+.chip:hover{border-color:var(--blue)}
+.chip .face{font-size:1.45rem}
+.chip .no2{font-family:var(--display);color:var(--blue-d);font-size:.92em}
+.chip .tag{font-weight:400;font-size:.74rem;color:var(--muted)}
+.chip.offline{opacity:.5}
+.chip button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:0 6px;border-radius:50%}
+.chip button:hover{color:var(--danger)}
+
+/* 레이스 */
+.clock{font-family:var(--display);font-size:2.4rem;font-variant-numeric:tabular-nums;line-height:1;color:var(--sun);background:var(--ink);border-radius:14px;padding:.18em .5em;min-width:3.6em;text-align:center}
+.track{background:var(--grass);padding:14px;border-radius:26px;box-shadow:0 6px 0 var(--grass-d)}
+.lanes2{background:var(--track);border-radius:10px}
+.lane{display:grid;grid-template-columns:minmax(7em,11em) minmax(0,1fr);align-items:stretch;height:var(--lh,48px);border-top:2px solid var(--chalk)}
+.lane:first-child{border-top:0}
+.lane:nth-child(even){background:var(--track2)}
+.lane .who{display:flex;align-items:center;gap:8px;padding:0 10px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;font-size:clamp(.8rem,calc(var(--lh,48px)*.36),1.12rem);background:rgba(0,0,0,.16)}
+.lane .who .no{font-family:var(--body);font-weight:700;line-height:1;min-width:1.7em;height:1.7em;display:grid;place-items:center;border-radius:50%;background:var(--chalk);color:var(--track);font-size:.85em;flex:none}
+.lane .who .nm{overflow:hidden;text-overflow:ellipsis}
+.lane .who .rk{margin-left:auto;font-family:var(--display);color:var(--sun)}
+.lane .run{position:relative;border-left:4px solid var(--chalk);--sw:calc(var(--lh,48px)*1.3)}
+.lane .run::after{content:"";position:absolute;right:0;top:0;bottom:0;width:14px;background:repeating-conic-gradient(#fff 0 25%,#1d2a4a 0 50%) 0 0/14px 14px}
+.rw{position:absolute;bottom:2px;left:calc((100% - var(--sw) - 14px) * var(--p,0));display:flex;align-items:flex-end;transition:left .12s linear;z-index:1}
+.rw .tag{position:absolute;left:100%;top:0;white-space:nowrap;font-size:.82rem;font-weight:700;background:var(--sun);color:var(--sun-fg);border-radius:8px;padding:0 7px;animation:pop .3s ease-out}
+.lane.done .who{background:rgba(255,200,58,.3)}
+.bigcount{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;font-family:var(--display);font-size:min(36vw,17rem);color:var(--sun);-webkit-text-stroke:8px #fff;paint-order:stroke fill;text-shadow:0 10px 0 rgba(29,42,74,.25);z-index:5;animation:pop .4s ease-out}
+
+/* 도착 순서 */
+.top3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:end;margin-bottom:18px}
+@media (max-width:640px){.top3{grid-template-columns:1fr}}
+.pod{background:#fff;border:2px solid var(--line);border-radius:26px;padding:18px;display:grid;justify-items:center;gap:6px;text-align:center;box-shadow:0 6px 0 var(--sky2);transition:transform .15s}
+.pod:hover{transform:translateY(-4px)}
+.pod .medal{width:58px;height:58px}
+.pod .medal img{width:100%;height:100%;object-fit:contain}
+.pod.g{order:2;padding-block:28px;border-color:var(--sun);box-shadow:0 6px 0 var(--sun-d)}
+.pod.s{order:1} .pod.b{order:3}
+@media (max-width:640px){.pod.g,.pod.s,.pod.b{order:0}}
+.pod .sp{--sw:100px} .pod.g .sp{--sw:136px}
+.pod .nm{font-family:var(--display);font-size:1.5rem}
+.podium{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pd{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:8px 12px;transition:border-color .12s}
+.pd:hover{border-color:var(--blue)}
+.pd .n{font-family:var(--display);font-size:1.15rem;min-width:2.4em;color:var(--blue-d);font-variant-numeric:tabular-nums}
+.pd .face{font-size:1.5rem}
+.pd .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 자리 고르기 */
+.pick{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);gap:18px;align-items:start}
+@media (max-width:920px){.pick{grid-template-columns:1fr}}
+.nowcard{display:grid;justify-items:center;gap:8px;text-align:center}
+.nowcard .sp{--sw:124px}
+.nowcard .nm{font-family:var(--display);font-size:2rem}
+.rkb{font-family:var(--display);background:var(--blue);color:#fff;border-radius:999px;padding:.2em 1em}
+.meter{height:14px;border-radius:999px;background:var(--soft);overflow:hidden;width:100%;box-shadow:inset 0 0 0 2px var(--line)}
+.meter i{display:block;height:100%;background:var(--sun);transition:width .2s linear}
+.left{font-family:var(--display);font-size:1.8rem;font-variant-numeric:tabular-nums}
+.queue{display:grid;gap:8px}
+.queue div{display:flex;gap:8px;align-items:center;font-weight:700;white-space:nowrap}
+.queue .n{color:var(--muted);min-width:2.4em;font-family:var(--display);font-variant-numeric:tabular-nums}
+.queue .face{font-size:1.35rem}
+.done-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.done-top img{width:84px;height:84px;object-fit:contain}
+.done-top h2{font-size:2rem}
+
+/* 학생 */
+.banner{position:relative;border-radius:26px;overflow:hidden;border:4px solid #fff;box-shadow:0 6px 0 var(--sky2);aspect-ratio:16/7;max-width:100%;background:#9fd8ff}
+.banner img{width:100%;height:100%;object-fit:cover;object-position:50% 70%;display:block}
+.banner h1{position:absolute;left:18px;top:14px;white-space:nowrap;font-size:clamp(1.5rem,5.4vw,2.4rem);color:var(--blue-d);-webkit-text-stroke:6px #fff;paint-order:stroke fill;line-height:1.15}
+.tlink{border:0;background:transparent;color:var(--muted);font-family:var(--body);font-size:.85rem;cursor:pointer;padding:.4em .6em;border-radius:10px}
+.tlink:hover{background:var(--soft);color:var(--ink)}
+.secret{filter:blur(6px);transition:filter .15s}
+.secret:focus{filter:none}
+.order{display:grid;gap:6px;width:100%;text-align:left}
+.order div{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:6px 10px;font-weight:700;white-space:nowrap;min-width:0}
+.order .n{font-family:var(--display);color:var(--muted);min-width:2.2em;font-variant-numeric:tabular-nums}
+.order .nm{overflow:hidden;text-overflow:ellipsis}
+.order .st{margin-left:auto;font-size:.82rem;color:var(--muted);font-weight:700}
+.order .face{font-size:1.3rem}
+.order .cur{border-color:var(--sun);background:#fff8df;box-shadow:0 0 0 2px var(--sun)}
+.order .cur .st{color:var(--sun-fg)}
+.order .me{border-color:var(--blue)}
+.order .ok{opacity:.6}
+.order .ok .st{color:var(--grass-d)}
+.order.scroll{max-height:52vh;overflow-y:auto;padding:3px}
+.stu{min-height:100%}
+.joinlay{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start;max-width:1280px;margin:0 auto}
+.jleft{display:grid;gap:14px;min-width:0}
+@media (max-width:860px){.joinlay{grid-template-columns:1fr}}
+.jleft .charpick{max-height:none;grid-template-columns:repeat(8,minmax(0,1fr))}
+.jleft .charpick button{padding:6px 2px 4px}
+.jleft .charpick button .face{font-size:1.9rem}
+.joinlay .banner{aspect-ratio:16/5}
+.joinlay .banner img{object-position:50% 62%}
+@media (max-width:900px){.jleft .charpick{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:560px){.jleft .charpick{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.jright{position:sticky;top:80px}
+@media (max-width:860px){.jright{position:static}}
+.stu .inner{display:grid;gap:18px;width:100%;max-width:1100px;margin:0 auto;padding-block:4px 16px}
+.stu .center>*{max-width:100%}
+.stu .center .order{max-width:520px;margin:0 auto}
+.stu .center{display:grid;gap:16px;justify-items:center;text-align:center}
+.formcard{display:grid;gap:16px}
+.formcard .sec{display:grid;gap:10px}
+.formcard .sec+.sec{border-top:2px dashed var(--line);padding-top:16px}
+.sec h3{font-size:1.15rem;display:flex;align-items:center;gap:8px}
+.sec h3 i{font-style:normal;color:#fff;background:var(--blue);border-radius:50%;width:26px;height:26px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:15px;line-height:1;font-variant-numeric:tabular-nums}
+.codein{font-size:2rem!important;text-align:center;font-family:var(--display)!important;letter-spacing:.3em;width:100%}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grid3 select{width:100%;font-size:1.1rem;text-align:center}
+.schoolrow{display:grid;grid-template-columns:minmax(0,8em) minmax(0,1fr);gap:10px}
+@media (max-width:460px){.schoolrow{grid-template-columns:1fr}}
+.schoolrow input,.schoolrow select{width:100%;font-size:1.05rem}
+.found{display:grid;gap:6px;margin-top:8px}
+.found:empty{margin-top:0}
+.found button{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:2px solid var(--line);background:#fff;border-radius:14px;padding:.6em .9em;cursor:pointer;font-family:var(--body);color:var(--ink);transition:border-color .12s,background .12s}
+.found button:hover{border-color:var(--blue);background:var(--blue-l)}
+.found button b{font-size:1.02rem}
+.found button span{font-size:.8rem;color:var(--muted);text-align:right}
+.picked{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--blue-l);border:2px solid var(--blue);border-radius:14px;padding:.6em .9em;font-weight:700}
+.picked span{font-weight:400;font-size:.82rem;color:var(--muted)}
+.nameinput{width:100%;font-size:1.3rem!important;text-align:center}
+.charpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;max-height:44vh;overflow-y:auto;padding:4px}
+.charpick button{border:2px solid var(--line);border-radius:18px;background:#fff;padding:8px 2px 6px;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--ink);font-family:var(--body);font-size:.8rem;font-weight:700;transition:transform .12s,border-color .12s;white-space:nowrap}
+.charpick button .face{font-size:2.2rem}
+.charpick button:hover{transform:translateY(-2px);border-color:var(--blue)}
+.charpick button[aria-pressed="true"]{border-color:var(--sun);background:#fff8df;box-shadow:0 0 0 3px var(--sun)}
+.me .sp{--sw:150px}
+.mename{font-family:var(--display);font-size:1.9rem}
+.tap{width:min(76vw,340px);aspect-ratio:1;max-width:100%;border-radius:50%;border:6px solid #fff;background:var(--sun);color:var(--sun-fg);font-family:var(--display);font-size:2.8rem;box-shadow:0 14px 0 var(--sun-d),0 0 0 8px rgba(255,200,58,.25);touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer;transition:transform .05s;display:grid;place-items:center;align-content:center;gap:2px}
+.tap .face{font-size:4.6rem}
+.tap.hit{transform:translateY(10px) scale(.97);box-shadow:0 4px 0 var(--sun-d),0 0 0 8px rgba(255,200,58,.25)}
+.tap:disabled{opacity:.6}
+.status{font-family:var(--display);font-size:1.5rem}
+.evt{font-family:var(--display);font-size:1.6rem;min-height:1.6em;color:var(--coral)}
+.bigtxt{font-family:var(--display);line-height:1.1;font-variant-numeric:tabular-nums}
+.stu .seats{width:100%}
+.stu .seat{min-height:52px}
+.err{color:var(--danger);font-weight:700;text-align:center;min-height:1.5em}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head><body>
+
+
+<!-- 선생님: 교실 설정 -->
+<div id="t-setup" class="screen" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="on">1 교실 설정</span><span>2 입장</span><span>3 레이스</span><span>4 자리 고르기</span></div><div class="row"><button class="btn ghost sm" id="exitTeacher" type="button">‹ 처음 화면</button><button class="btn sun" id="toLobby" type="button">학생 입장 받기 ›</button></div></div></div>
+  <div class="wrap">
+  <div class="setup">
+    <div class="card stack">
+      <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble">책상을 누르면 <b>고정석</b>이나 <b>책상 없음</b>으로 바꿀 수 있어요.</div></div>
+      <div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="setupSeats"></div></div></div>
+      <p class="small muted" id="seatCount"></p>
+    </div>
+    <div class="stack">
+      <div class="card stack">
+        <h3>책상 배치</h3>
+        <div class="fields">
+          <div class="field"><label for="rows">줄 수 (앞→뒤)</label><input type="number" id="rows" min="1" max="10" value="5"></div>
+          <div class="field"><label for="cols">한 줄 책상 수</label><input type="number" id="cols" min="1" max="12" value="6"></div>
+        </div>
+        <label class="chk"><input type="checkbox" id="pair" checked> 두 명씩 짝으로 붙이기</label>
+      </div>
+      <div class="card stack">
+        <h3>고른 책상</h3>
+        <div class="editor" id="seatEditor"><p class="muted small">왼쪽에서 책상을 눌러 주세요.</p></div>
+      </div>
+      <div class="card stack">
+        <h3>떨어뜨릴 친구</h3>
+        <p class="small muted">한 줄에 두 명씩 적어요. 앞뒤옆(대각선 포함)에 앉지 않아요.<br>칠판에 띄워도 흐리게 가려지고, 칸을 누를 때만 보여요.</p>
+        <textarea id="sep" class="secret" rows="3" placeholder="김민준-이서연&#10;박지호-최하윤"></textarea>
+      </div>
+      <div class="card stack">
+        <h3>게임 규칙</h3>
+        <div class="fields">
+          <div class="field"><label for="raceSec">레이스 시간</label>
+            <select id="raceSec"><option value="15">15초</option><option value="20" selected>20초</option><option value="30">30초</option></select></div>
+          <div class="field"><label for="pickSec">한 명당 고르는 시간</label>
+            <select id="pickSec"><option value="8">8초</option><option value="12" selected>12초</option><option value="20">20초</option></select></div>
+        </div>
+        <div class="field"><span style="font-weight:700;font-size:.95rem">자리 정하는 방법</span>
+          <div class="seg">
+            <label><input type="radio" name="pm" value="pick" checked> 들어온 순서대로 태블릿에서 고르기</label>
+            <label><input type="radio" name="pm" value="auto"> 들어온 순서대로 자동 뽑기</label>
+          </div></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- 선생님: 입장 -->
+<div id="t-lobby" class="screen" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="on">2 입장</span><span>3 레이스</span><span>4 자리 고르기</span></div>
+    <div class="row"><button class="btn ghost sm" id="backSetup" type="button">‹ 교실 설정</button><button class="btn sun big" id="startRace" type="button" disabled>출발!</button></div></div></div>
+  <div class="wrap">
+  <div class="lobby">
+    <div class="card joinbox" id="joinBox">
+      <p class="lab">방 번호</p>
+      <div class="bigcode" id="bigCode">····</div>
+      <div class="qr" id="qr"><span class="small">방 여는 중…</span></div>
+      <p class="url" id="joinUrl"></p>
+    </div>
+    <div class="stack">
+      <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble">태블릿으로 <b>QR을 찍어</b> 들어오세요. 모두 들어오면 <b>출발!</b>을 눌러요.</div></div>
+      <div id="netNote"></div>
+      <div class="card stack">
+        <div class="row" style="justify-content:space-between"><h3 id="joinedTitle">들어온 친구 0명</h3><span class="small muted" id="capNote"></span></div>
+        <div class="chips" id="chips"><p class="muted">학생이 들어오면 여기에 나타나요.</p></div>
+      </div>
+      <div class="card stack">
+        <h3>태블릿 없이 참가시키기</h3>
+        <p class="small muted">명단으로 넣은 학생은 칠판에서 저절로 달려요.</p>
+        <textarea id="roster" rows="3" placeholder="이름을 줄바꿈이나 쉼표로 나눠 넣어요"></textarea>
+        <div class="row"><button class="btn sm" id="addRoster" type="button">명단 넣기</button><button class="btn ghost sm" id="addBots" type="button">연습용 친구 5명</button><button class="btn ghost sm" id="clearBots" type="button">명단 참가자 빼기</button></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- 선생님: 레이스 -->
+<div id="t-race" class="screen" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="done">2 입장</span><span class="on">3 레이스</span><span>4 자리 고르기</span></div><div class="clock" id="clock">20.0</div></div></div>
+  <div class="wrap"><div class="track"><div class="lanes2" id="track"></div></div></div>
+  <div class="bigcount" id="bigCount" hidden></div>
+</div>
+
+<!-- 선생님: 도착 순서 -->
+<div id="t-podium" class="screen" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="done">2 입장</span><span class="on">3 레이스</span><span>4 자리 고르기</span></div><div class="row"><button class="btn ghost sm" id="podBack" type="button">‹ 다시 달리기</button><button class="btn sun big" id="toPick" type="button">자리 고르기 ›</button></div></div></div>
+  <div class="wrap"><div class="top3" id="top3"></div><div class="podium" id="podium"></div></div>
+</div>
+
+<!-- 선생님: 자리 고르기 -->
+<div id="t-pick" class="screen" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><div class="steps"><span class="done">1 교실 설정</span><span class="done">2 입장</span><span class="done">3 레이스</span><span class="on">4 자리 고르기</span></div></div></div>
+  <div class="wrap">
+  <div class="pick">
+    <div class="card"><div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="pickSeats"></div></div></div></div>
+    <div class="stack">
+      <div class="card nowcard" id="nowCard"></div>
+      <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble">칠판 화면에서 책상을 눌러 대신 골라 줄 수도 있어요.</div></div>
+      <div class="card stack"><h3>고르는 순서</h3><div class="order scroll" id="queue"></div></div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- 선생님: 완성 -->
+<div id="t-done" class="screen" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div>
+    <div class="row"><button class="btn ghost sm" id="copyResult" type="button">자리표 복사</button><button class="btn ghost sm" id="doneSetup" type="button">교실 설정</button><button class="btn sun" id="again" type="button">같은 친구들로 다시</button></div></div></div>
+  <div class="wrap">
+  <div class="done-top"><img src="art/items/trophy.png" alt=""><div><h2>새 자리가 정해졌어요</h2><p class="muted" id="copyMsg"></p></div></div>
+  <div class="card"><div class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="doneSeats"></div></div></div></div>
+  <textarea id="copyArea" rows="6" hidden readonly style="margin-top:12px"></textarea>
+  </div>
+</div>
+
+<!-- 학생: 들어가기 -->
+<div id="s-join" class="screen stu" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div><button class="tlink" id="goTeacher" type="button">선생님 화면</button></div></div>
+  <div class="wrap">
+  <div class="joinlay">
+   <div class="jleft">
+    <div class="banner"><img src="art/scenes/home_hero.png" alt="동물 친구들이 운동장 트랙을 달리는 그림"><h1>자리 바꾸기 레이스</h1></div>
+    <div class="guide"><span class="gf" data-face="rabbit"></span><div class="bubble"><b>방 번호</b>와 <b>내 정보</b>를 넣고 동물을 골라 줘!</div></div>
+    <div class="card formcard"><div class="sec"><h3>함께 달릴 동물</h3><div class="charpick" id="charPick"></div></div></div>
+   </div>
+    <div class="card formcard jright">
+      <div class="sec"><h3><i>1</i>방 번호</h3><input type="text" id="sCode" class="codein" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off"></div>
+      <div class="sec"><h3><i>2</i>우리 학교</h3>
+        <div id="schoolBox">
+          <div class="schoolrow"><select id="sRegion" aria-label="지역"></select><input type="text" id="sSchool" maxlength="20" placeholder="학교 이름을 써요" autocomplete="off"></div>
+          <div class="found" id="schoolFound"></div>
+        </div>
+        <div class="picked" id="schoolPicked" hidden></div>
+      </div>
+      <div class="sec"><h3><i>3</i>학년 · 반 · 번호</h3>
+        <div class="grid3">
+          <select id="sGrade" aria-label="학년"><option value="">학년</option></select>
+          <select id="sCls" aria-label="반"><option value="">반</option></select>
+          <select id="sNo" aria-label="번호"><option value="">번호</option></select>
+        </div></div>
+      <div class="sec"><h3><i>4</i>이름</h3><input type="text" id="sName" class="nameinput" maxlength="10" placeholder="내 이름" autocomplete="off"></div>
+      <p id="sMsg" class="err" aria-live="polite"></p>
+      <button class="btn sun big" id="sJoin" type="button" style="justify-self:stretch">들어가기</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div id="s-play" class="screen stu" hidden>
+  <div class="top"><div class="in"><div class="brand"><img src="art/items/trophy.png" alt="">자리 바꾸기 레이스</div></div></div>
+  <div class="wrap"><div class="inner"><div class="center" id="sPlay"></div></div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script>
+(function(){
+"use strict";
+const ANIMALS=[
+ {id:"rabbit",ko:"토끼"},{id:"turtle",ko:"거북이"},{id:"fox",ko:"여우"},{id:"panda",ko:"판다"},
+ {id:"tiger",ko:"호랑이"},{id:"frog",ko:"개구리"},{id:"penguin",ko:"펭귄"},{id:"lion",ko:"사자"},
+ {id:"koala",ko:"코알라"},{id:"hamster",ko:"햄스터"},{id:"puppy",ko:"강아지"},{id:"cat",ko:"고양이"},
+ {id:"pig",ko:"돼지"},{id:"monkey",ko:"원숭이"},{id:"bear",ko:"곰"},{id:"squirrel",ko:"다람쥐"},
+ {id:"duck",ko:"오리"},{id:"otter",ko:"수달"},{id:"giraffe",ko:"기린"},{id:"elephant",ko:"코끼리"},
+ {id:"cheetah",ko:"치타"},{id:"hedgehog",ko:"고슴도치"},{id:"raccoon",ko:"너구리"},{id:"dino",ko:"아기 공룡"}];
+const AMAP=Object.fromEntries(ANIMALS.map(a=>[a.id,a]));
+const POSES=["idle","run1","run2","boost","slip","win"];
+const REGIONS=[["J10","경기"],["B10","서울"],["E10","인천"],["K10","강원"],["C10","부산"],["D10","대구"],["F10","광주"],["G10","대전"],["H10","울산"],["I10","세종"],["M10","충북"],["N10","충남"],["P10","전북"],["Q10","전남"],["R10","경북"],["S10","경남"],["T10","제주"]];
+const PREFIX="seatrace-yr-";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const PeerCls=window.Peer||(window.peerjs&&window.peerjs.Peer)||null;
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function A(id){return AMAP[id]||ANIMALS[0];}
+function faceImg(id){return '<img src="art/animals/'+A(id).id+'/face.png" alt="'+A(id).ko+'">';}
+function face(id){return '<span class="face">'+faceImg(id)+'</span>';}
+function fxHtml(name){return '<span class="fx fx-'+name+'"><img src="art/items/'+({boost:"boost_trail",ban:"banana",dizzy:"dizzy_stars",dust:"dust"})[name]+'.png" alt=""></span>';}
+function sprite(id,pose,extra){
+  const a=A(id); let h='<span class="sp" data-p="'+(pose||"idle")+'"'+(extra||"")+'>'+fxHtml("boost")+fxHtml("dust");
+  POSES.forEach(p=>{h+='<img class="p-'+p+'" src="art/animals/'+a.id+'/'+p+'.png" alt="">';});
+  return h+fxHtml("ban")+fxHtml("dizzy")+'</span>';
+}
+document.querySelectorAll("[data-face]").forEach(el=>{el.innerHTML=faceImg(el.dataset.face);});
+function show(id){document.querySelectorAll(".screen").forEach(e=>{e.hidden=e.id!==id}); window.scrollTo(0,0);}
+function seatLabel(i,cols){return (Math.floor(i/cols)+1)+"줄 "+(i%cols+1)+"번";}
+function near(i,j,cols){return Math.abs(Math.floor(i/cols)-Math.floor(j/cols))<=1&&Math.abs(i%cols-j%cols)<=1;}
+function label(s){return (s.no?s.no+"번 ":"")+s.name;}
+function say(t){return '<div class="guide" style="justify-content:center"><span class="gf">'+faceImg("rabbit")+'</span><div class="bubble" style="text-align:left">'+t+'</div></div>';}
+
+function renderSeats(el,cfg,cell){
+  const {rows,cols,pair}=cfg; el.innerHTML="";
+  const tpl=[],pos=[];
+  for(let c=0;c<cols;c++){ if(pair&&c>0&&c%2===0) tpl.push("18px"); tpl.push("minmax(0,1fr)"); pos.push(tpl.length); }
+  el.style.gridTemplateColumns=tpl.join(" ");
+  el.style.minWidth=(cols*60)+"px";
+  for(let i=0;i<rows*cols;i++){
+    const b=document.createElement("button"); b.type="button"; b.className="seat";
+    b.style.gridColumn=pos[i%cols]; b.style.gridRow=Math.floor(i/cols)+1;
+    cell(b,i); el.appendChild(b);
+  }
+}
+
+/* =================== 선생님 =================== */
+const H={peer:null,code:"",online:false,netMsg:"",students:[],phase:"setup",
+  cfg:{rows:5,cols:6,pair:true,raceSec:20,pickMode:"pick",pickSec:12},
+  meta:{},sel:-1,sep:[],raceStart:0,lastTick:0,nextEvt:0,finished:0,
+  order:[],turn:0,turnStart:0,turnDeadline:0,nextAuto:0,assign:{},loop:null,lastSend:0,lastPop:-1};
+
+function meta(i){const k=Math.floor(i/H.cfg.cols)+"-"+(i%H.cfg.cols); return H.meta[k]||(H.meta[k]={use:true,fixed:""});}
+function readCfg(){
+  H.cfg.rows=Math.max(1,Math.min(10,parseInt($("rows").value)||5));
+  H.cfg.cols=Math.max(1,Math.min(12,parseInt($("cols").value)||6));
+  H.cfg.pair=$("pair").checked;
+  H.cfg.raceSec=parseInt($("raceSec").value)||20;
+  H.cfg.pickMode=document.querySelector('input[name=pm]:checked').value;
+  H.cfg.pickSec=parseInt($("pickSec").value)||12;
+  H.sep=$("sep").value.split(/\n/).map(l=>l.split(/[-,/·\s]+/).map(x=>x.trim()).filter(Boolean)).filter(p=>p.length>=2).map(p=>[p[0],p[1]]);
+}
+function seatTotals(){
+  let usable=0,fixed=0; const n=H.cfg.rows*H.cfg.cols;
+  for(let i=0;i<n;i++){const m=meta(i); if(m.use){usable++; if(m.fixed) fixed++;}}
+  return {usable,fixed};
+}
+function renderSetup(){
+  readCfg();
+  renderSeats($("setupSeats"),H.cfg,(b,i)=>{
+    const m=meta(i); b.classList.add("edit");
+    if(!m.use){b.classList.add("off"); b.innerHTML='<span class="lbl">'+seatLabel(i,H.cfg.cols)+'</span><span class="lbl">책상 없음</span>';}
+    else if(m.fixed){b.classList.add("fixed"); b.innerHTML='<b>'+esc(m.fixed)+'</b><span class="lbl">고정석</span>';}
+    else b.innerHTML='<span class="lbl">'+seatLabel(i,H.cfg.cols)+'</span>';
+    if(i===H.sel) b.classList.add("sel");
+    b.setAttribute("aria-label",seatLabel(i,H.cfg.cols));
+    b.onclick=()=>{H.sel=i; renderSetup(); renderEditor();};
+  });
+  const t=seatTotals();
+  $("seatCount").textContent="앉을 수 있는 자리 "+t.usable+"개"+(t.fixed?" (고정석 "+t.fixed+"개 포함)":"");
+}
+function renderEditor(){
+  const ed=$("seatEditor"); const i=H.sel;
+  if(i<0||i>=H.cfg.rows*H.cfg.cols){ed.innerHTML='<p class="muted small">왼쪽에서 책상을 눌러 주세요.</p>';return;}
+  const m=meta(i);
+  ed.innerHTML='<b>'+seatLabel(i,H.cfg.cols)+'</b>'+
+    '<div class="row"><input type="text" id="fixName" maxlength="10" placeholder="고정할 학생 이름" value="'+esc(m.fixed)+'" style="flex:1"><button class="btn sm" id="fixSet" type="button">고정석으로</button></div>'+
+    '<div class="row"><button class="btn ghost sm" id="fixClear" type="button">고정 풀기</button><button class="btn ghost sm" id="useToggle" type="button">'+(m.use?"책상 없음으로":"책상 다시 두기")+'</button></div>';
+  $("fixSet").onclick=()=>{const v=$("fixName").value.trim(); m.fixed=v; if(v) m.use=true; renderSetup(); renderEditor();};
+  $("fixName").onkeydown=e=>{if(e.key==="Enter") $("fixSet").click();};
+  $("fixClear").onclick=()=>{m.fixed=""; renderSetup(); renderEditor();};
+  $("useToggle").onclick=()=>{m.use=!m.use; if(!m.use) m.fixed=""; renderSetup(); renderEditor();};
+}
+["rows","cols","pair","raceSec","pickSec"].forEach(id=>$(id).addEventListener("change",()=>{H.sel=-1;renderSetup();renderEditor();}));
+
+function joinUrl(){return location.origin+location.pathname+"?room="+H.code;}
+function openRoom(){
+  if(H.peer) return;
+  if(!PeerCls||location.protocol==="file:"){setOffline();return;}
+  H.code=String(1000+Math.floor(Math.random()*9000));
+  let opened=false;
+  const peer=new PeerCls(PREFIX+H.code); H.peer=peer;
+  const to=setTimeout(()=>{if(!opened){try{peer.destroy()}catch(e){} H.peer=null; setOffline();}},9000);
+  peer.on("open",()=>{opened=true; clearTimeout(to); H.online=true; H.netMsg=""; renderJoinBox(); renderLobby();});
+  peer.on("connection",conn=>{
+    conn.on("data",d=>onHostData(conn,d));
+    conn.on("close",()=>{const s=H.students.find(x=>x.conn===conn); if(s){s.online=false; renderLobby();}});
+  });
+  peer.on("disconnected",()=>{try{peer.reconnect()}catch(e){}});
+  peer.on("error",e=>{
+    if(e&&e.type==="unavailable-id"){clearTimeout(to); try{peer.destroy()}catch(x){} H.peer=null; openRoom(); return;}
+    if(e&&e.type==="peer-unavailable") return;
+    if(!opened){clearTimeout(to); try{peer.destroy()}catch(x){} H.peer=null; setOffline();}
+  });
+}
+function setOffline(){
+  H.online=false;
+  H.netMsg="이 화면에서는 태블릿 연결이 되지 않아요. 배포한 사이트 주소로 열면 태블릿으로 들어올 수 있어요. 지금은 명단으로 참가자를 넣어 한 화면으로 할 수 있어요.";
+  $("bigCode").textContent="—"; $("qr").innerHTML='<span class="small">연결 없음</span>'; $("joinUrl").textContent="";
+  renderLobby();
+}
+function renderJoinBox(){
+  $("bigCode").textContent=H.code;
+  $("joinUrl").textContent=joinUrl();
+  try{const q=qrcode(0,"M"); q.addData(joinUrl()); q.make(); $("qr").innerHTML='<img alt="참여 QR 코드" src="'+q.createDataURL(6,2)+'">';}
+  catch(e){$("qr").innerHTML='<span class="small">방 번호로 들어와요.</span>';}
+}
+function newStudent(o){return Object.assign({id:"",name:"",char:ANIMALS[0].id,bot:false,conn:null,online:true,taps:0,prevTaps:0,rate:0,prog:0,luck:1,luckAt:0,botRate:5,boostUntil:0,stunUntil:0,evt:"",evtUntil:0,finishAt:0,rank:0,seat:-1,pose:"idle",school:"",grade:"",cls:"",no:""},o);}
+function onHostData(conn,d){
+  if(!d||typeof d!=="object") return;
+  if(d.t==="hello"){
+    const name=String(d.name||"").trim().slice(0,10); const cid=String(d.cid||"").slice(0,40);
+    const ch=AMAP[d.char]?d.char:ANIMALS[0].id;
+    const info={school:String(d.school||"").slice(0,30),grade:String(d.grade||"").slice(0,2),cls:String(d.cls||"").slice(0,3),no:String(d.no||"").slice(0,3)};
+    if(!name||!cid) return;
+    let s=H.students.find(x=>x.id===cid);
+    if(s){s.conn=conn; s.online=true; if(H.phase==="lobby"){s.name=name; s.char=ch; Object.assign(s,info);} renderLobby(); sendTo(s); return;}
+    if(H.phase!=="lobby"){conn.send({t:"reject",msg:"지금은 레이스 중이에요. 다음 판에 들어와요."}); return;}
+    if(info.no&&H.students.some(x=>x.no===info.no&&x.cls===info.cls&&x.grade===info.grade)){conn.send({t:"reject",msg:info.no+"번은 벌써 들어왔어요. 내 번호를 다시 확인해요."}); return;}
+    if(H.students.some(x=>x.name===name)){conn.send({t:"reject",msg:"같은 이름이 벌써 있어요. 이름 뒤에 숫자를 붙여요."}); return;}
+    s=newStudent(Object.assign({id:cid,name,char:ch,conn},info)); H.students.push(s); renderLobby(); sendTo(s); return;
+  }
+  const s=H.students.find(x=>x.conn===conn); if(!s) return;
+  if(d.t==="taps"){const n=Number(d.n); if(isFinite(n)&&n>s.taps) s.taps=Math.min(n,s.taps+60);}
+  if(d.t==="pick"){handlePick(s,Number(d.seat));}
+}
+function renderLobby(){
+  const n=H.students.length;
+  $("joinedTitle").textContent="들어온 친구 "+n+"명";
+  $("netNote").innerHTML=H.netMsg?'<div class="note warn">'+esc(H.netMsg)+'</div>':"";
+  const chips=$("chips");
+  if(!n){chips.innerHTML='<p class="muted">학생이 들어오면 여기에 나타나요.</p>';}
+  else{
+    const list=H.students.slice().sort((a,b)=>(parseInt(a.no)||999)-(parseInt(b.no)||999));
+    chips.innerHTML=list.map(s=>'<span class="chip'+(s.online?"":" offline")+'" title="'+esc([s.school,s.grade&&s.grade+"학년",s.cls&&s.cls+"반"].filter(Boolean).join(" "))+'">'+face(s.char)+(s.no?'<span class="no2">'+esc(s.no)+'번</span>':'')+esc(s.name)+(s.bot?'<span class="tag">명단</span>':'')+'<button type="button" data-rm="'+esc(s.id)+'" aria-label="'+esc(s.name)+' 빼기">×</button></span>').join("");
+    chips.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{const s=H.students.find(x=>x.id===b.dataset.rm); if(s&&s.conn){try{s.conn.send({t:"reject",msg:"선생님이 목록에서 뺐어요. 다시 들어와요."})}catch(e){}} H.students=H.students.filter(x=>x.id!==b.dataset.rm); renderLobby();});
+  }
+  const t=seatTotals();
+  $("capNote").textContent="자리 "+t.usable+"개"+(n>t.usable?" · "+(n-t.usable)+"자리 모자라요":"");
+  $("startRace").disabled=n<2;
+}
+function addNames(names){
+  names.forEach(nm=>{nm=nm.trim().slice(0,10); if(!nm||H.students.some(x=>x.name===nm)) return;
+    H.students.push(newStudent({id:"bot-"+Math.random().toString(36).slice(2,9),name:nm,char:rnd(ANIMALS).id,bot:true}));});
+  renderLobby();
+}
+$("addRoster").onclick=()=>{addNames($("roster").value.split(/[\n,]+/)); $("roster").value="";};
+$("addBots").onclick=()=>{const pool=["하늘","바다","솔","별","달","봄","숲","구름","새벽","노을","이슬","바람"]; const out=[]; let k=0; while(out.length<5&&k<50){const nm="연습"+rnd(pool)+(Math.floor(Math.random()*90)+10); if(!H.students.some(x=>x.name===nm)&&!out.includes(nm)) out.push(nm); k++;} addNames(out);};
+$("clearBots").onclick=()=>{H.students=H.students.filter(s=>!s.bot); renderLobby();};
+
+function stateFor(s){
+  const now=Date.now(); const v={t:"state",phase:H.phase,name:s.name,char:s.char};
+  if(H.phase==="countdown") v.cd=Math.max(1,Math.ceil((H.raceStart-now)/1000));
+  if(H.phase==="race"){v.prog=Math.round(s.prog); v.rank=s.rank; v.evt=now<s.evtUntil?s.evt:"";}
+  if(H.phase==="podium") v.rank=s.rank;
+  if(H.phase==="pick"){
+    const cur=H.order[H.turn]; v.rank=s.rank; v.mySeat=s.seat>=0?seatLabel(s.seat,H.cfg.cols):"";
+    v.myTurn=cur===s&&H.cfg.pickMode==="pick"; v.curName=cur?cur.name:"";
+    const idx=H.order.indexOf(s); v.ahead=idx>H.turn?idx-H.turn:0; v.myPos=idx+1;
+    v.order=orderList(); v.meId=s.id;
+    if(v.myTurn){
+      v.left=Math.max(0,Math.ceil((H.turnDeadline-now)/1000));
+      const valid=new Set(validSeats(s)); const free=new Set(freeSeats());
+      const st=[]; for(let i=0;i<H.cfg.rows*H.cfg.cols;i++){const m=meta(i); st.push(!m.use?"x":H.assign[i]!=null?"t":valid.has(i)?"o":free.has(i)?"b":"t");}
+      v.map={rows:H.cfg.rows,cols:H.cfg.cols,pair:H.cfg.pair,st};
+    }
+  }
+  if(H.phase==="done") v.mySeat=s.seat>=0?seatLabel(s.seat,H.cfg.cols):"";
+  return v;
+}
+function sendTo(s){if(!s.bot&&s.conn&&s.conn.open){try{s.conn.send(stateFor(s))}catch(e){}}}
+function broadcast(){H.students.forEach(sendTo); H.lastSend=Date.now();}
+
+$("toLobby").onclick=()=>{readCfg(); H.phase="lobby"; show("t-lobby"); openRoom(); renderLobby(); broadcast();};
+$("backSetup").onclick=()=>{H.phase="lobby"; show("t-setup"); renderSetup();};
+$("startRace").onclick=()=>{
+  readCfg(); H.finished=0;
+  H.students.forEach(s=>Object.assign(s,{prevTaps:s.taps,rate:0,prog:0,luck:1,luckAt:0,boostUntil:0,stunUntil:0,evt:"",evtUntil:0,finishAt:0,rank:0,seat:-1,pose:"idle"}));
+  H.phase="countdown"; H.raceStart=Date.now()+3000;
+  buildTrack(); show("t-race"); startLoop(); broadcast();
+};
+function laneH(){const n=Math.max(1,H.students.length); return Math.max(26,Math.min(76,Math.floor((window.innerHeight-150)/n)));}
+function buildTrack(){
+  const tr=$("track"); tr.style.setProperty("--lh",laneH()+"px");
+  tr.innerHTML=H.students.map((s,i)=>'<div class="lane" id="ln'+i+'"><div class="who"><span class="no">'+(i+1)+'</span><span class="nm">'+esc(label(s))+'</span><span class="rk" id="rk'+i+'"></span></div><div class="run"><div class="rw" id="rw'+i+'">'+sprite(s.char,"idle",' id="sp'+i+'"')+'<span class="tag" id="tg'+i+'" hidden></span></div></div></div>').join("");
+}
+window.addEventListener("resize",()=>{if(!$("t-race").hidden) $("track").style.setProperty("--lh",laneH()+"px");});
+function startLoop(){ if(!H.loop) H.loop=setInterval(tick,50); }
+function stopLoop(){ clearInterval(H.loop); H.loop=null; }
+function tick(){
+  const now=Date.now();
+  if(H.phase==="countdown"){
+    const c=Math.ceil((H.raceStart-now)/1000); const bc=$("bigCount");
+    if(c>0){bc.hidden=false; if(bc.textContent!==String(c)){bc.textContent=c; bc.style.animation="none"; void bc.offsetWidth; bc.style.animation="";}}
+    $("clock").textContent=H.cfg.raceSec.toFixed(1);
+    if(now>=H.raceStart){H.phase="race"; H.lastTick=now; H.nextEvt=now+2200; bc.textContent="출발!"; setTimeout(()=>{bc.hidden=true},700); H.students.forEach(s=>{s.prevTaps=s.taps}); broadcast();}
+    else if(now-H.lastSend>300) broadcast();
+    return;
+  }
+  if(H.phase==="race"){
+    const dt=Math.max(.001,(now-H.lastTick)/1000); H.lastTick=now;
+    const vmax=100/(H.cfg.raceSec*0.72);
+    H.students.forEach(s=>{
+      if(s.finishAt) return;
+      if(now>s.luckAt){s.luck=0.7+Math.random()*0.6; s.luckAt=now+1500; s.botRate=3+Math.random()*5;}
+      if(s.bot) s.taps+=s.botRate*dt;
+      const inst=(s.taps-s.prevTaps)/dt; s.prevTaps=s.taps; s.rate=s.rate*0.85+inst*0.15;
+      let v=vmax*(0.3+0.7*Math.min(s.rate,7)/7)*s.luck;
+      if(now<s.stunUntil) v=0; else if(now<s.boostUntil) v*=2.2;
+      s.prog=Math.min(100,s.prog+v*dt);
+      if(s.prog>=100){s.finishAt=now; s.rank=++H.finished;}
+    });
+    if(now>=H.nextEvt){
+      const c=H.students.filter(s=>!s.finishAt&&s.prog>8);
+      if(c.length){const s=rnd(c); if(Math.random()<.55){s.boostUntil=now+1200; s.evt="부스터!";} else {s.stunUntil=now+900; s.evt="미끄덩!";} s.evtUntil=now+1400;}
+      H.nextEvt=now+1400+Math.random()*1600;
+    }
+    const left=Math.max(0,H.raceStart+H.cfg.raceSec*1000-now);
+    $("clock").textContent=(left/1000).toFixed(1);
+    drawRace(now);
+    if(H.finished>=H.students.length||left<=0){endRace(); return;}
+    if(now-H.lastSend>200) broadcast();
+    return;
+  }
+  if(H.phase==="pick"){
+    const cur=H.order[H.turn]; if(!cur){finishPick(); return;}
+    if(H.cfg.pickMode==="auto"){ if(now>=H.nextAuto){autoAssign(cur);} return; }
+    if(cur.bot&&now-H.turnStart>1300){autoAssign(cur); return;}
+    if(now>=H.turnDeadline){autoAssign(cur); return;}
+    drawNow(now);
+  }
+}
+function poseOf(s,now){
+  if(s.finishAt) return "win";
+  if(now<s.stunUntil) return "slip";
+  if(now<s.boostUntil) return "boost";
+  if(s.rate<0.4) return "idle";
+  const step=Math.max(70,230-s.rate*22);
+  return Math.floor(now/step)%2?"run1":"run2";
+}
+function drawRace(now){
+  H.students.forEach((s,i)=>{
+    const rw=$("rw"+i); if(!rw) return;
+    rw.style.setProperty("--p",(s.prog/100).toFixed(4));
+    const p=poseOf(s,now); s.pose=p; const sp=$("sp"+i); if(sp.dataset.p!==p) sp.dataset.p=p;
+    const tg=$("tg"+i); const on=now<s.evtUntil; tg.hidden=!on; if(on&&tg.textContent!==s.evt) tg.textContent=s.evt;
+    $("rk"+i).textContent=s.rank?s.rank+"등":"";
+    if(s.rank) $("ln"+i).classList.add("done");
+  });
+}
+function endRace(){
+  let r=H.finished;
+  H.students.filter(s=>!s.rank).sort((a,b)=>b.prog-a.prog).forEach(s=>{s.rank=++r;});
+  drawRace(Date.now());
+  H.phase="podium"; broadcast();
+  setTimeout(()=>{
+    const list=H.students.slice().sort((a,b)=>a.rank-b.rank);
+    const cls=["g","s","b"], med=["medal_gold","medal_silver","medal_bronze"];
+    $("top3").innerHTML=list.slice(0,3).map((s,k)=>'<div class="pod '+cls[k]+'"><span class="medal"><img src="art/items/'+med[k]+'.png" alt="'+(k+1)+'등"></span>'+sprite(s.char,"win")+'<span class="nm">'+esc(label(s))+'</span><span class="muted small">'+(k+1)+'등으로 들어왔어요</span></div>').join("");
+    $("podium").innerHTML=list.slice(3).map(s=>'<div class="pd"><span class="n">'+s.rank+'등</span>'+face(s.char)+'<span class="nm">'+esc(label(s))+'</span></div>').join("");
+    show("t-podium");
+  },1200);
+}
+
+function presentNames(){return new Set(H.students.map(s=>s.name));}
+function freeSeats(){
+  const out=[], names=presentNames();
+  for(let i=0;i<H.cfg.rows*H.cfg.cols;i++){const m=meta(i); if(!m.use||H.assign[i]!=null) continue; if(m.fixed&&names.has(m.fixed)) continue; out.push(i);}
+  return out;
+}
+function validSeats(s){
+  const free=freeSeats();
+  const partners=H.sep.filter(p=>p.includes(s.name)).map(p=>p[0]===s.name?p[1]:p[0]);
+  const ps=H.students.filter(o=>partners.includes(o.name)&&o.seat>=0).map(o=>o.seat);
+  const ok=free.filter(i=>!ps.some(j=>near(i,j,H.cfg.cols)));
+  return ok.length?ok:free;
+}
+$("toPick").onclick=()=>{
+  H.assign={}; H.students.forEach(s=>{s.seat=-1});
+  const n=H.cfg.rows*H.cfg.cols;
+  for(let i=0;i<n;i++){const m=meta(i); if(m.use&&m.fixed){const s=H.students.find(x=>x.name===m.fixed); if(s){H.assign[i]=s.id; s.seat=i;}}}
+  H.order=H.students.filter(s=>s.seat<0).sort((a,b)=>a.rank-b.rank);
+  H.turn=-1; H.phase="pick"; show("t-pick"); nextTurn(); startLoop();
+};
+function nextTurn(){
+  H.turn++;
+  while(H.turn<H.order.length&&freeSeats().length===0){H.order[H.turn].seat=-2; H.turn++;}
+  if(H.turn>=H.order.length){finishPick(); return;}
+  const now=Date.now(); H.turnStart=now; H.turnDeadline=now+H.cfg.pickSec*1000; H.nextAuto=now+550;
+  drawPick(); broadcast();
+}
+function assign(s,i){H.assign[i]=s.id; s.seat=i; H.lastPop=i;}
+function autoAssign(s){const v=validSeats(s); if(v.length) assign(s,rnd(v)); else s.seat=-2; nextTurn();}
+function handlePick(s,i){
+  if(H.phase!=="pick"||H.order[H.turn]!==s||H.cfg.pickMode!=="pick") return;
+  if(!validSeats(s).includes(i)){sendTo(s); return;}
+  assign(s,i); nextTurn();
+}
+function drawPick(){
+  const cur=H.order[H.turn]; const valid=cur?new Set(validSeats(cur)):new Set(); const free=new Set(freeSeats());
+  const byId=Object.fromEntries(H.students.map(s=>[s.id,s])); const names=presentNames();
+  renderSeats($("pickSeats"),H.cfg,(b,i)=>{
+    const m=meta(i); const who=H.assign[i]!=null?byId[H.assign[i]]:null;
+    if(!m.use){b.classList.add("off"); b.innerHTML='<span class="lbl">책상 없음</span>'; return;}
+    if(who){b.classList.add("taken"); if(i===H.lastPop) b.classList.add("pop"); b.innerHTML=face(who.char)+'<b>'+esc(who.name)+'</b>'; return;}
+    if(m.fixed&&names.has(m.fixed)){b.classList.add("fixed"); b.innerHTML='<b>'+esc(m.fixed)+'</b><span class="lbl">고정석</span>'; return;}
+    b.innerHTML='<span class="lbl">'+seatLabel(i,H.cfg.cols)+'</span>';
+    if(cur&&valid.has(i)){b.classList.add("open"); b.onclick=()=>{if(H.order[H.turn]===cur){assign(cur,i); nextTurn();}};}
+    else if(free.has(i)) b.classList.add("blocked");
+  });
+  $("queue").innerHTML=orderHtml(orderList(),null);
+  const c=$("queue").querySelector(".cur"); if(c) c.scrollIntoView({block:"nearest"});
+  drawNow(Date.now());
+}
+function orderList(){
+  return H.order.map((s,k)=>({r:s.rank,name:label(s),char:s.char,id:s.id,
+    st:s.seat>=0?"ok":k===H.turn?"cur":s.seat===-2?"none":"wait",seat:s.seat>=0?seatLabel(s.seat,H.cfg.cols):""}));
+}
+function orderHtml(list,meId){
+  return list.map(o=>'<div class="'+(o.st==="ok"?"ok":o.st==="cur"?"cur":"")+(o.id&&o.id===meId?" me":"")+'"><span class="n">'+o.r+'등</span>'+face(o.char)+'<span class="nm">'+esc(o.name)+'</span><span class="st">'+(o.st==="ok"?"✓ "+esc(o.seat):o.st==="cur"?"고르는 중":o.st==="none"?"자리 없음":"기다려요")+'</span></div>').join("");
+}
+function drawNow(now){
+  const cur=H.order[H.turn]; if(!cur) return;
+  const total=H.cfg.pickSec*1000; const left=Math.max(0,H.turnDeadline-now);
+  const auto=H.cfg.pickMode==="auto";
+  const how=auto?"자동으로 뽑는 중":cur.bot?"자동으로 고르는 중":(cur.online?"태블릿에서 고르는 중":"연결이 끊겨 자동으로 골라요");
+  const el=$("nowCard");
+  if(el.dataset.id!==cur.id){
+    el.dataset.id=cur.id;
+    el.innerHTML='<span class="rkb">'+cur.rank+'등 차례</span>'+sprite(cur.char,"win")+'<span class="nm">'+esc(label(cur))+'</span><span class="small muted" id="nowHow"></span>'+(auto?'':'<div class="meter"><i id="nowBar"></i></div><span class="left" id="nowLeft"></span>');
+  }
+  $("nowHow").textContent=how;
+  if(!auto){$("nowBar").style.width=(left/total*100)+"%"; $("nowLeft").textContent=Math.ceil(left/1000)+"초";}
+}
+function finishPick(){
+  stopLoop(); H.phase="done"; broadcast();
+  const byId=Object.fromEntries(H.students.map(s=>[s.id,s]));
+  renderSeats($("doneSeats"),H.cfg,(b,i)=>{
+    const m=meta(i); const who=H.assign[i]!=null?byId[H.assign[i]]:null;
+    if(!m.use){b.classList.add("off"); b.innerHTML='<span class="lbl">책상 없음</span>'; return;}
+    if(who){b.classList.add("taken"); b.innerHTML=face(who.char)+'<b>'+esc(who.name)+'</b>'; return;}
+    b.innerHTML='<span class="lbl">빈자리</span>';
+  });
+  const none=H.students.filter(s=>s.seat<0);
+  $("copyMsg").textContent=none.length?"자리가 모자라 못 앉은 친구: "+none.map(s=>s.name).join(", "):"칠판 자리표를 보고 새 자리로 옮겨요.";
+  show("t-done");
+}
+$("copyResult").onclick=()=>{
+  const byId=Object.fromEntries(H.students.map(s=>[s.id,s])); const lines=["[칠판]"];
+  for(let r=0;r<H.cfg.rows;r++){const row=[]; for(let c=0;c<H.cfg.cols;c++){const i=r*H.cfg.cols+c; const m=meta(i); const w=H.assign[i]!=null?byId[H.assign[i]]:null; row.push(!m.use?"·":w?w.name:"(빈자리)"); if(H.cfg.pair&&c%2===1&&c<H.cfg.cols-1) row.push("|");} lines.push((r+1)+"줄: "+row.join(" "));}
+  const text=lines.join("\n");
+  const ta=$("copyArea"); ta.value=text;
+  const fallback=()=>{ta.hidden=false; ta.select(); $("copyMsg").textContent="아래 글을 선택해 복사해 주세요.";};
+  try{navigator.clipboard.writeText(text).then(()=>{$("copyMsg").textContent="자리표를 복사했어요.";},fallback);}catch(e){fallback();}
+};
+$("again").onclick=()=>{H.phase="lobby"; H.assign={}; $("copyArea").hidden=true; show("t-lobby"); renderLobby(); broadcast();};
+$("doneSetup").onclick=()=>{H.phase="lobby"; H.assign={}; show("t-setup"); renderSetup(); broadcast();};
+window.addEventListener("beforeunload",e=>{if(H.phase==="race"||H.phase==="pick"){e.preventDefault(); e.returnValue="";}});
+
+/* =================== 학생 =================== */
+const S={peer:null,conn:null,cid:"",char:ANIMALS[0].id,taps:0,sent:0,v:null,deadline:0,picked:false,wake:null,timer:null,school:null,info:null,neis:null};
+try{S.cid=sessionStorage.getItem("seatrace-cid")||"";}catch(e){}
+if(!S.cid){S.cid="s"+Math.random().toString(36).slice(2,12); try{sessionStorage.setItem("seatrace-cid",S.cid)}catch(e){}}
+
+(function(){const g=$("sGrade"),c=$("sCls"),n=$("sNo");
+  for(let i=1;i<=6;i++) g.insertAdjacentHTML("beforeend",'<option value="'+i+'">'+i+'학년</option>');
+  for(let i=1;i<=15;i++) c.insertAdjacentHTML("beforeend",'<option value="'+i+'">'+i+'반</option>');
+  for(let i=1;i<=40;i++) n.insertAdjacentHTML("beforeend",'<option value="'+i+'">'+i+'번</option>');
+  $("sRegion").innerHTML=REGIONS.map(r=>'<option value="'+r[0]+'">'+r[1]+'</option>').join("");
+})();
+
+/* 나이스 학교 검색 */
+const NEIS="https://open.neis.go.kr/hub/schoolInfo";
+let schoolTimer=null, schoolSeq=0;
+function shortAddr(a){return String(a||"").split(" ").slice(0,3).join(" ");}
+function setSchool(sc){
+  S.school=sc;
+  if(sc){$("schoolBox").hidden=true; $("schoolPicked").hidden=false;
+    $("schoolPicked").innerHTML='<div>'+esc(sc.name)+(sc.addr?'<br><span>'+esc(sc.addr)+'</span>':'')+'</div><button class="btn ghost sm" type="button" id="schoolChange">바꾸기</button>';
+    $("schoolChange").onclick=()=>{setSchool(null); $("sSchool").focus();};
+    LS.set("seatrace-school",JSON.stringify(sc));
+  } else {$("schoolBox").hidden=false; $("schoolPicked").hidden=true;}
+}
+function freeChoice(q){$("schoolFound").innerHTML='<button type="button" data-free="1"><b>'+esc(q)+'</b><span>이 이름으로 할게요</span></button>'; bindFound();}
+async function searchSchool(){
+  const q=$("sSchool").value.trim(); const out=$("schoolFound"); const my=++schoolSeq;
+  if(q.length<2){out.innerHTML=q?'<p class="small muted">두 글자 이상 써요.</p>':''; return;}
+  if(S.neis===false){freeChoice(q); return;}
+  out.innerHTML='<p class="small muted">찾는 중…</p>';
+  try{
+    const url=NEIS+"?Type=json&pIndex=1&pSize=5&ATPT_OFCDC_SC_CODE="+$("sRegion").value+"&SCHUL_NM="+encodeURIComponent(q);
+    const ctl=new AbortController(); const tm=setTimeout(()=>ctl.abort(),6000);
+    const j=await (await fetch(url,{signal:ctl.signal})).json(); clearTimeout(tm);
+    if(my!==schoolSeq) return; S.neis=true;
+    const rows=(j.schoolInfo&&j.schoolInfo[1]&&j.schoolInfo[1].row)||[];
+    const total=(j.schoolInfo&&j.schoolInfo[0].head[0].list_total_count)||0;
+    if(!rows.length){out.innerHTML='<p class="small muted">찾는 학교가 없어요.<br>지역과 학교 이름을 다시 봐요.</p>'; return;}
+    out.innerHTML=rows.map(r=>'<button type="button" data-code="'+esc(String(r.SD_SCHUL_CODE||"").trim())+'" data-name="'+esc(r.SCHUL_NM)+'" data-addr="'+esc(shortAddr(r.ORG_RDNMA))+'"><b>'+esc(r.SCHUL_NM)+'</b><span>'+esc(shortAddr(r.ORG_RDNMA))+'</span></button>').join("")+(total>rows.length?'<p class="small muted">학교 이름을 더 길게 쓰면 더 잘 찾아요.</p>':'');
+    bindFound();
+  }catch(e){
+    if(my!==schoolSeq) return; S.neis=false; freeChoice(q);
+  }
+}
+function bindFound(){
+  $("schoolFound").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(b.dataset.free) setSchool({name:$("sSchool").value.trim(),code:"",addr:""});
+    else setSchool({name:b.dataset.name,code:b.dataset.code,addr:b.dataset.addr});
+    $("schoolFound").innerHTML="";
+  });
+}
+$("sSchool").addEventListener("input",()=>{clearTimeout(schoolTimer); schoolTimer=setTimeout(searchSchool,300);});
+$("sRegion").addEventListener("change",()=>{LS.set("seatrace-region",$("sRegion").value); searchSchool();});
+(function(){const r=LS.get("seatrace-region"); if(r) $("sRegion").value=r;
+  try{const sc=JSON.parse(LS.get("seatrace-school")||"null"); if(sc&&sc.name) setSchool(sc);}catch(e){}
+  try{const c=JSON.parse(LS.get("seatrace-class")||"{}"); if(c.grade) $("sGrade").value=c.grade; if(c.cls) $("sCls").value=c.cls;}catch(e){}
+})();
+
+function renderCharPick(){
+  $("charPick").innerHTML=ANIMALS.map(a=>'<button type="button" aria-pressed="'+(a.id===S.char)+'" data-c="'+a.id+'">'+face(a.id)+'<span>'+a.ko+'</span></button>').join("");
+  $("charPick").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.char=b.dataset.c; $("charPick").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});
+}
+function sMsg(t){$("sMsg").textContent=t||"";}
+$("sJoin").onclick=()=>{
+  const code=$("sCode").value.replace(/\D/g,""); const name=$("sName").value.trim();
+  if(code.length!==4){sMsg("방 번호 4자리를 넣어요."); $("sCode").focus(); return;}
+  if(!S.school){sMsg("우리 학교를 찾아서 눌러요."); $("sSchool").focus(); return;}
+  if(!$("sGrade").value||!$("sCls").value||!$("sNo").value){sMsg("학년, 반, 번호를 골라요."); return;}
+  if(!name){sMsg("이름을 써요."); $("sName").focus(); return;}
+  if(!PeerCls){sMsg("이 화면에서는 들어갈 수 없어요. 선생님이 알려 준 주소로 들어와요."); return;}
+  S.info={school:S.school.name,schoolCode:S.school.code,grade:$("sGrade").value,cls:$("sCls").value,no:$("sNo").value};
+  LS.set("seatrace-class",JSON.stringify({grade:S.info.grade,cls:S.info.cls}));
+  sMsg(""); $("sJoin").disabled=true; $("sJoin").textContent="연결 중…";
+  connectStudent(code,name);
+};
+function resetJoinBtn(){$("sJoin").disabled=false; $("sJoin").textContent="들어가기";}
+function connectStudent(code,name){
+  try{if(S.peer) S.peer.destroy();}catch(e){}
+  const peer=new PeerCls(); S.peer=peer; let ok=false;
+  const to=setTimeout(()=>{if(!ok){sMsg("연결이 오래 걸려요. 인터넷을 보고 다시 눌러요."); resetJoinBtn();}},10000);
+  peer.on("open",()=>{
+    const conn=peer.connect(PREFIX+code,{reliable:true}); S.conn=conn;
+    conn.on("open",()=>{ok=true; clearTimeout(to); conn.send(Object.assign({t:"hello",cid:S.cid,name,char:S.char},S.info||{}));});
+    conn.on("data",onStudentData);
+    conn.on("close",()=>{ if(S.conn===conn) lost(code,name); });
+  });
+  peer.on("error",e=>{
+    clearTimeout(to);
+    if(e&&e.type==="peer-unavailable") sMsg("방 "+code+"을 찾지 못했어요. 칠판의 방 번호를 다시 봐요.");
+    else sMsg("연결하지 못했어요. 잠시 뒤 다시 눌러요.");
+    resetJoinBtn(); show("s-join");
+  });
+}
+function lost(code,name){
+  $("sPlay").innerHTML=say('연결이 끊겼어요. 아래 버튼을 눌러요.')+'<button class="btn sun big" id="reJoin" type="button">다시 연결</button>';
+  show("s-play");
+  $("reJoin").onclick=()=>{$("sPlay").innerHTML='<div class="status">다시 연결하는 중…</div>'; connectStudent(code,name);};
+}
+function onStudentData(d){
+  if(!d||typeof d!=="object") return;
+  if(d.t==="reject"){sMsg(d.msg||"들어갈 수 없어요."); resetJoinBtn(); show("s-join"); try{S.conn.close()}catch(e){} S.conn=null; return;}
+  if(d.t==="state"){resetJoinBtn(); renderStudent(d);}
+}
+function wakeOn(){try{if(navigator.wakeLock&&!S.wake) navigator.wakeLock.request("screen").then(w=>{S.wake=w},()=>{});}catch(e){}}
+function renderStudent(v){
+  const prev=S.v; S.v=v; if($("s-play").hidden) show("s-play"); const el=$("sPlay");
+  const me=(pose)=>'<div class="me">'+sprite(v.char,pose||"idle")+'</div><div class="mename">'+esc(v.name)+'</div>';
+  if(v.phase==="lobby"||v.phase==="setup"){el.innerHTML=me("idle")+say('잘 들어왔어요! 선생님이 <b>출발</b>할 때까지 기다려요.'); return;}
+  if(v.phase==="countdown"){el.innerHTML='<div class="bigtxt" style="font-size:8rem;color:var(--blue)">'+v.cd+'</div>'+say('<b>출발!</b> 하면 노란 버튼을 마구 눌러요.'); wakeOn(); return;}
+  if(v.phase==="race"){
+    if(!prev||prev.phase!=="race"||!$("tapBtn")){
+      el.innerHTML='<div class="evt" id="sEvt"></div><button class="tap" id="tapBtn" type="button">'+face(v.char)+'<span>달려!</span></button><div class="meter" style="max-width:340px"><i id="sBar" style="width:0"></i></div><div class="status" id="sRank"></div>';
+      const b=$("tapBtn");
+      b.addEventListener("pointerdown",e=>{e.preventDefault(); S.taps++; b.classList.add("hit"); setTimeout(()=>b.classList.remove("hit"),60); try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}});
+      b.addEventListener("contextmenu",e=>e.preventDefault());
+    }
+    $("sBar").style.width=v.prog+"%"; $("sEvt").textContent=v.evt||"";
+    if(v.rank){$("sRank").textContent=v.rank+"등으로 들어왔어요!"; $("tapBtn").disabled=true;}
+    return;
+  }
+  if(v.phase==="podium"){el.innerHTML=me("win")+'<div class="bigtxt" style="font-size:4.4rem;color:var(--blue)">'+v.rank+'등</div>'+say('곧 들어온 순서대로 자리를 골라요.'); return;}
+  if(v.phase==="pick"){
+    const ord='<div class="card stack" style="width:100%;text-align:left"><h3>고르는 순서</h3><div class="order">'+orderHtml(v.order||[],v.meId)+'</div></div>';
+    if(v.mySeat){el.innerHTML=me("win")+'<div class="status">내 자리</div><div class="bigtxt" style="font-size:3rem">'+esc(v.mySeat)+'</div>'+say('친구들이 다 고를 때까지 기다려요.')+ord; return;}
+    if(v.myTurn&&v.map){
+      if(!(prev&&prev.myTurn)) S.picked=false;
+      S.deadline=Date.now()+v.left*1000;
+      el.innerHTML=say('<b>내 차례예요!</b> 앉고 싶은 책상을 눌러요.')+'<div class="bigtxt" id="sLeft" style="font-size:2.4rem;color:var(--coral)">'+v.left+'초</div><div style="width:100%" class="room"><div class="board">칠판</div><div class="seatwrap"><div class="seats" id="sSeats"></div></div></div><p class="small muted">흐린 책상은 고를 수 없어요.</p>';
+      renderSeats($("sSeats"),v.map,(b,i)=>{
+        const st=v.map.st[i];
+        if(st==="x"){b.classList.add("off"); return;}
+        if(st==="t"){b.classList.add("taken"); b.innerHTML='<span class="lbl">찜</span>'; return;}
+        b.innerHTML='<span class="lbl">'+seatLabel(i,v.map.cols)+'</span>';
+        if(st==="b"){b.classList.add("blocked"); return;}
+        b.classList.add("open");
+        b.onclick=()=>{if(S.picked) return; S.picked=true; b.classList.add("sel"); try{S.conn.send({t:"pick",seat:i})}catch(e){} $("sLeft").textContent="고르는 중…";};
+      });
+      clearInterval(S.timer); S.timer=setInterval(()=>{const l=$("sLeft"); if(!l||S.picked){clearInterval(S.timer);return;} l.textContent=Math.max(0,Math.ceil((S.deadline-Date.now())/1000))+"초";},250);
+      return;
+    }
+    el.innerHTML=me("idle")+'<div class="bigtxt" style="font-size:2.6rem;color:var(--blue)">'+(v.myPos||"")+'번째 순서</div>'+say((v.ahead>0?'앞에 <b>'+v.ahead+'명</b> 남았어요.':'곧 내 차례예요!')+' 지금은 <b>'+esc(v.curName)+'</b> 차례예요.')+ord; return;
+  }
+  if(v.phase==="done"){el.innerHTML=me("win")+'<div class="status">내 새 자리는</div><div class="bigtxt" style="font-size:3.4rem">'+(v.mySeat?esc(v.mySeat):"선생님께 물어봐요")+'</div>'+say('칠판 자리표를 보고 새 자리로 옮겨요.'); return;}
+}
+setInterval(()=>{if(S.conn&&S.conn.open&&S.taps!==S.sent){try{S.conn.send({t:"taps",n:S.taps}); S.sent=S.taps;}catch(e){}}},150);
+
+/* 시작 */
+/* 학생은 처음 화면이 바로 들어가기. 선생님은 주소 끝에 #teacher 를 붙여 들어와요. */
+function route(){
+  if(location.hash==="#teacher"){ if(!document.querySelector(".screen[id^='t-']:not([hidden])")){H.phase="setup"; show("t-setup"); renderSetup(); renderEditor();} }
+  else if(!document.querySelector(".screen[id^='s-']:not([hidden])")){ renderCharPick(); show("s-join"); }
+}
+$("goTeacher").onclick=()=>{location.hash="teacher";};
+$("exitTeacher").onclick=()=>{location.hash=""; renderCharPick(); show("s-join");};
+$("podBack").onclick=()=>{$("again").click();};
+let room=null; try{room=new URLSearchParams(location.search).get("room");}catch(e){}
+if(room&&/^\d{4}$/.test(room)) $("sCode").value=room;
+window.addEventListener("hashchange",route);
+route();
+})();
+</script>
+
+</body></html>
