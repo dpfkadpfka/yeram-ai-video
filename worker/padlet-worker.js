@@ -30,6 +30,18 @@ async function lookupUser(idToken) {
   if (!x) return null;
   return { uid: x.localId, email: x.email || "", name: x.displayName || "", google: (x.providerUserInfo || []).some(p => p.providerId === "google.com") };
 }
+// 구글(Vertex) 이미지 호출: 순간 몰림(429)이면 잠깐 쉬었다 다시, 그래도 안 되면 미국 서버로 한 번 더
+async function vtxImg(sa, tok, m, body) {
+  const tries = [["global", 0], ["global", 1500], ["us-central1", 0], ["global", 3500]];
+  let last = null;
+  for (const [loc, wait] of tries) {
+    if (wait) await new Promise(z => setTimeout(z, wait));
+    const host = loc === "global" ? "aiplatform.googleapis.com" : `${loc}-aiplatform.googleapis.com`;
+    last = await fetch(`https://${host}/v1/projects/${sa.project_id}/locations/${loc}/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
+    if (last.status !== 429 && !(loc !== "global" && last.status === 404)) return last;
+  }
+  return last;
+}
 async function isAdmin(idToken) {
   if (!idToken) return false;
   const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FB_KEY}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idToken }) });
@@ -159,7 +171,7 @@ export default {
         if (ex.length) { parts.push({ text: `The next ${ex.length} image(s) show OTHER character(s) who must ALSO appear in this same scene together with the main character. Keep each character's face, hair, outfit and colors exactly as in their image, redrawn in the same art style as the main character.` }); ex.forEach(m => parts.push({ inlineData: { mimeType: m[1], data: m[2] } })); }
         const body = { contents: [{ role: "user", parts }], generationConfig: { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: ratio } } };
         for (const m of ["gemini-nano-banana-2.1", "gemini-3.1-flash-image", "gemini-2.5-flash-image"]) {
-          const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
+          const r = await vtxImg(sa, tok, m, body);
           if (!r.ok) continue;
           const d = await r.json(); const im = (d?.candidates?.[0]?.content?.parts || []).find(x => x.inlineData || x.inline_data); if (!im) continue;
           const idt = im.inlineData || im.inline_data; await bump("scene"); logIt("scene", prompt, m, { ref: { booleanValue: true }, extra: { integerValue: String(ex.length) } });
@@ -259,7 +271,7 @@ export default {
       const errs = [];
       const IMGM = ["gemini-nano-banana-2.1", "gemini-3-pro-image", "gemini-3.1-flash-image", "gemini-2.5-flash-image"];
       for (const m of (admin && IMGM.includes(b.model) ? [b.model] : ["gemini-nano-banana-2.1", "gemini-3.1-flash-image", "gemini-2.5-flash-image"])) {
-        const r = await fetch(`https://aiplatform.googleapis.com/v1/projects/${sa.project_id}/locations/global/publishers/google/models/${m}:generateContent`, { method: "POST", headers: { "content-type": "application/json", authorization: "Bearer " + tok }, body: JSON.stringify(body) });
+        const r = await vtxImg(sa, tok, m, body);
         if (!r.ok) { errs.push(m + " " + r.status + " " + (await r.text()).slice(0, 200)); continue; }
         const d = await r.json();
         const im = (d?.candidates?.[0]?.content?.parts || []).find(x => x.inlineData || x.inline_data);
