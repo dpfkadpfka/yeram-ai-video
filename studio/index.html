@@ -2207,7 +2207,8 @@ body[data-stage="s5"] .main,body[data-stage="s5"] .startcard,body[data-stage="s5
 .stpop .pktiles{max-height:340px;overflow:auto;padding:2px}
 body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
 .st-subh{font-size:13px;font-weight:800;margin-top:4px}.st-subh small{color:var(--muted);font-weight:600;margin-left:4px}
-.st-refs-ex .st-ref{aspect-ratio:2/1}.st-refs-ex .st-ph{font-size:12.5px}
+.st-refs-ex{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:2px}.st-refs-ex .st-ref{width:64px;height:64px;aspect-ratio:auto;border-style:solid;border-radius:12px;order:-1}.st-refs-ex .st-ref.empty{display:none}.st-refs-ex .st-ph{display:none}.st-refs-ex .st-x{top:3px;right:3px}
+.st-exadd{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);font:inherit;font-size:13.5px;font-weight:700;color:var(--ink);cursor:pointer;transition:border-color .15s,color .15s}.st-exadd:hover{border-color:var(--accent);color:var(--accent-deep)}.st-exadd i{font-style:normal;font-size:16px;color:var(--accent)}.st-exadd small{color:var(--muted);font-weight:600}.st-exadd[hidden]{display:none}
 .st-aud{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.st-audl{font-size:13px;font-weight:800;margin-right:4px}
 .st-tg{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)}
 .st-tg[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep,var(--accent))}
@@ -2489,10 +2490,10 @@ body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
             <label class="st-ref" data-ref="sheet"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 시트</span><img alt="" hidden><button type="button" class="st-x" data-refx="sheet" hidden aria-label="삭제">✕</button></label>
           </div>
           <small class="hint" id="stRefHint">캐릭터 만들기에서 그린 그림이 있으면 자동으로 들어와요. 직접 올려도 돼요.</small>
-          <div class="st-subh">함께 나올 캐릭터 <small>선택 · 최대 2명</small></div>
           <div class="st-refs st-refs-ex">
-            <label class="st-ref sm" data-ref="ex1"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 추가</span><img alt="" hidden><button type="button" class="st-x" data-refx="ex1" hidden aria-label="삭제">✕</button></label>
-            <label class="st-ref sm" data-ref="ex2"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 추가</span><img alt="" hidden><button type="button" class="st-x" data-refx="ex2" hidden aria-label="삭제">✕</button></label>
+            <button type="button" class="st-exadd" id="stExAdd"><i>＋</i>함께 나올 캐릭터 추가 <small>최대 2명</small></button>
+            <label class="st-ref sm empty" data-ref="ex1"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 추가</span><img alt="" hidden><button type="button" class="st-x" data-refx="ex1" hidden aria-label="삭제">✕</button></label>
+            <label class="st-ref sm empty" data-ref="ex2"><input type="file" accept="image/*" hidden><span class="st-ph"><i>＋</i>캐릭터 추가</span><img alt="" hidden><button type="button" class="st-x" data-refx="ex2" hidden aria-label="삭제">✕</button></label>
           </div>
         </div>
         <div class="st-sec">
@@ -4292,7 +4293,8 @@ setTimeout(()=>{try{if(fb&&isAdmin())document.body.classList.add("studio-on")}ca
 const ST={ref:{base:"",sheet:""},ratio:"9:16",dur:8,img:"",vid:"",hist:[],busy:0};
 function audOf(pre){const on=k=>document.querySelector(`[data-aud="${pre}:${k}"]`)?.getAttribute("aria-pressed")==="true";return {sfx:on("sfx"),speech:on("speech"),line:on("speech")?($("#"+pre+"Line").value||"").trim():""}}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-aud]");if(!b)return;const v=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",String(v));const [pre,k]=b.dataset.aud.split(":");if(k==="speech")$("#"+pre+"Line").hidden=!v});
-function stSetRef(k,src){ST.ref[k]=src||"";const L=$(`.st-ref[data-ref="${k}"]`),im=L.querySelector("img");im.hidden=!src;if(src)im.src=src;L.querySelector(".st-ph").hidden=!!src;L.querySelector(".st-x").hidden=!src}
+function stSetRef(k,src){ST.ref[k]=src||"";const L=$(`.st-ref[data-ref="${k}"]`),im=L.querySelector("img");im.hidden=!src;if(src)im.src=src;L.querySelector(".st-ph").hidden=!!src;L.querySelector(".st-x").hidden=!src;stExSync()}
+function stExSync(){["ex1","ex2"].forEach(k=>{const L=$(`.st-ref[data-ref="${k}"]`);if(L)L.classList.toggle("empty",!ST.ref[k])});const a=$("#stExAdd");if(a)a.hidden=!!(ST.ref.ex1&&ST.ref.ex2)}
 function stAuto(){["base","sheet"].forEach(k=>{if(!ST.ref[k]){const g=(typeof GEN!=="undefined"&&GEN[k]&&GEN[k][GSEL[k]])||"";if(g)stSetRef(k,g)}})}
 function stShrink(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=1280,sc=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.88))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(f)})}
 async function stDataUrl(src){if(!src||src.startsWith("data:"))return src;const b=await (await fetch(src)).blob();return await stShrink(b)}
@@ -4327,6 +4329,7 @@ async function stHelp(k){const b=$(`[data-stai="${k}"]`),ta=k==="img"?$("#stImgP
 document.addEventListener("click",e=>{const t=e.target;let b;
   if(t.closest("[data-studio]")){setStage("studio");window.scrollTo({top:0});stAuto();return}
   if((b=t.closest("[data-refx]"))){e.preventDefault();stSetRef(b.dataset.refx,"");return}
+  if(t.closest("#stExAdd")){const k=!ST.ref.ex1?"ex1":"ex2";$(`.st-ref[data-ref="${k}"] input`).click();return}
   if((b=t.closest("[data-sr]"))){ST.ratio=b.dataset.sr;$$("[data-sr]").forEach(x=>x.setAttribute("aria-pressed",x===b));$("#stStage").dataset.r=ST.ratio;stMoveNote();return}
   if((b=t.closest("[data-sd]"))){ST.dur=+b.dataset.sd;$$("[data-sd]").forEach(x=>x.setAttribute("aria-pressed",x===b));return}
   if((b=t.closest("[data-stai]"))){stHelp(b.dataset.stai);return}
@@ -4692,7 +4695,7 @@ document.addEventListener("click",e=>{if(document.body.classList.contains("fsope
 document.addEventListener("click",e=>{if(e.target.closest("[data-cresume]")){cQuick.innerHTML="";cme("이어서 보기");document.body.classList.remove("cfresh");if(cv("act")&&cv("place")&&cv("style"))cDone();else cAdvance0()}else if(e.target.closest("[data-cnew]")){cStart(true)}});
 $("#pdGo").addEventListener("click",()=>{document.body.classList.remove("cpre");try{$("#cSay").focus({preventScroll:true})}catch(e){}});
 
-document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793245382"+(MDL_OLD?"&old=1":"")}});
+document.addEventListener("click",e=>{if(e.target.closest("[data-models]")){setStage("models");window.scrollTo({top:0});const f=$("#modelsFrame");if(!f.src)f.src="../models/index.html?v=1793247407"+(MDL_OLD?"&old=1":"")}});
 /* 3단계: 장면 프롬프트 (이야기 → 씬 → 이미지·영상) */
 const SC3={total:"30",ratio:"16:9",sec:"6",tg:{cam:true,view:true,sfx:true,voice:false,bgm:false}};
 const STYLE_EN={"실사 영화": "photorealistic live-action film still", "3D 애니메이션": "3D animated feature film style with soft subsurface shading", "실사 3D": "hyper-realistic 3D render", "일본 애니": "Japanese anime film style with hand-painted backgrounds", "2D 웹툰": "Korean webtoon style with clean line art and cel shading", "웹툰": "Korean webtoon style with clean line art and cel shading", "디테일 일러스트": "detailed storybook illustration", "수채화": "soft watercolor illustration with paper texture", "클레이": "claymation stop-motion style with handmade clay texture", "플랫 일러스트": "flat vector illustration with simple shapes", "치비": "cute chibi style with big head and small body", "픽셀 아트": "16-bit pixel art", "3D 치비": "cute 2-3 head-tall 3D chibi with soft matte materials and gentle animated-film lighting, no glossy plastic shine", "종이공예": "layered paper-cut craft made of real cut colored paper pieces with visible paper fibers, cut edges and soft layered shadows", "레트로 애니": "hand-drawn late-1980s to early-1990s cel animation with delicate line art, almond-shaped eyes, broad hair highlights and restrained two-tone cel shading, no sepia filter"};
@@ -5077,7 +5080,7 @@ function paintPgh(){const st=document.body.dataset.stage,P=PGH[st],h=$("#pgh");h
   if(h.dataset.st!==st){h.dataset.st=st;$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}}
 $("#pghHelp").addEventListener("click",e=>{if(e.target.closest(".hb-ok")){$("#pghHelp").hidden=true;$("#pghHelpB").setAttribute("aria-expanded","false")}});
 $("#pghHelpB").addEventListener("click",()=>{const hp=$("#pghHelp"),o=hp.hidden;hp.hidden=!o;$("#pghHelpB").setAttribute("aria-expanded",o)});
-$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793245382"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
+$("#pghLink").addEventListener("click",e=>{e.preventDefault();const m=$("#mdlPop"),f=$("#mdlPopF");if(!f.src)f.src="../models/index.html?v=1793247407"+(MDL_OLD?"&old=1":"");m.hidden=false;document.body.style.overflow="hidden";$("#mdlPopX").focus()});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-survey],[data-comcontest]");if(!a)return;e.preventDefault();const f=$("#svPopF"),wide=a.hasAttribute("data-comcontest");$("#svPopT").textContent=wide?"AI 공모전 모아보기":"강의 만족도 조사";if(f.getAttribute("src")!==a.href)f.src=a.href;document.querySelector(".svpop-c").classList.toggle("wide",wide);$("#svPop").hidden=false;document.body.style.overflow="hidden"});
 const svClose=()=>{try{$("#svPopF").src="about:blank"}catch(_){}$("#svPop").hidden=true;document.body.style.overflow="";if($("#svPopT").textContent==="영상 올리기")loadPadJson()};$("#svPopX").addEventListener("click",svClose);$("#svPop").addEventListener("click",e=>{if(e.target.id==="svPop")svClose()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#svPop").hidden)svClose()});
 const mdlClose=()=>{pauseAllMedia();$("#mdlPop").hidden=true;document.body.style.overflow=""};
