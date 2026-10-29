@@ -292,6 +292,17 @@ label{font-size:.95rem;font-weight:700}
 .demobar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;font-family:var(--display);font-size:1.2rem;background:var(--soft)}
 .demowrap iframe{width:100%;height:100%;border:0;display:block}
 .demotag{font-family:var(--display);background:var(--pink);color:#fff;border-radius:999px;padding:.35em 1em;font-size:.95rem;box-shadow:0 4px 0 #d94f7a}
+#s-play.racing .stage{grid-template-columns:1fr;min-height:0}
+#s-play.racing .mascot{display:none}
+#s-play.racing .qpanel{padding:40px 18px 18px}
+.raceplay{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:18px;align-items:center;width:100%}
+@media (max-width:760px){.raceplay{grid-template-columns:1fr}}
+.track.mini{padding:10px;border-radius:22px;box-shadow:0 6px 0 var(--grass-d)}
+.tapside{display:grid;gap:10px;justify-items:center}
+.tapside .tap{width:min(100%,260px)}
+.lane.mine .who{background:rgba(255,204,46,.55);color:var(--ink)}
+.lane.mine .who .no{background:var(--sun2);color:#fff}
+.lane.mine{box-shadow:inset 0 0 0 3px var(--sun)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head><body>
@@ -647,7 +658,7 @@ $("clearBots").onclick=()=>{H.students=H.students.filter(s=>!s.bot); renderLobby
 function stateFor(s){
   const now=Date.now(); const v={t:"state",phase:H.phase,name:s.name,char:s.char};
   if(H.phase==="countdown") v.cd=Math.max(1,Math.ceil((H.raceStart-now)/1000));
-  if(H.phase==="race"){v.prog=Math.round(s.prog); v.rank=s.rank; v.evt=now<s.evtUntil?s.evt:"";}
+  if(H.phase==="race"){v.prog=Math.round(s.prog); v.rank=s.rank; v.evt=now<s.evtUntil?s.evt:""; v.all=H.students.map(x=>({n:label(x),c:x.char,p:Math.round(x.prog*10)/10,ps:x.pose,r:x.rank,e:now<x.evtUntil?x.evt:"",me:x===s}));}
   if(H.phase==="podium") v.rank=s.rank;
   if(H.phase==="pick"){
     const cur=H.order[H.turn]; v.rank=s.rank; v.mySeat=s.seat>=0?seatLabel(s.seat,H.cfg.cols):"";
@@ -993,8 +1004,22 @@ function connectStudent(code,name){
     resetJoinBtn();
   });
 }
+function buildMini(all){
+  const n=Math.max(1,all.length); const lh=Math.max(22,Math.min(60,Math.floor((window.innerHeight-200)/n)));
+  $("sTrack").style.setProperty("--lh",lh+"px");
+  $("sTrack").innerHTML=all.map((a,i)=>'<div class="lane'+(a.me?' mine':'')+'"><div class="who"><span class="no">'+(i+1)+'</span><span class="nm">'+esc(a.n)+'</span><span class="rk" id="mk'+i+'"></span></div><div class="run"><div class="rw" id="mw'+i+'">'+sprite(a.c,"idle",' id="ms'+i+'"')+'<span class="tag" id="mt'+i+'" hidden></span></div></div></div>').join("");
+  S.mini=all;
+}
+function drawMini(all){
+  S.mini=all;
+  all.forEach((a,i)=>{const w=$("mw"+i); if(!w) return; w.style.setProperty("--p",(a.p/100).toFixed(4));
+    $("mk"+i).textContent=a.r?a.r+"등":""; const t=$("mt"+i); t.hidden=!a.e; if(a.e) t.textContent=a.e; poseMini(i,a);});
+}
+function poseMini(i,a){const sp=$("ms"+i); if(!sp) return; let p=a.ps||"idle"; if(p==="run1"||p==="run2") p=(Math.floor(Date.now()/150)+i)%2?"run1":"run2"; if(sp.dataset.p!==p) sp.dataset.p=p;}
+setInterval(()=>{if(S.mini&&$("sTrack")&&!$("s-play").hidden) S.mini.forEach((a,i)=>poseMini(i,a));},75);
 function play(title,bubble,mascot,html){
   if($("s-play").hidden) show("s-play");
+  if(title!=="달려라!"&&title!=="도착!") $("s-play").classList.remove("racing");
   $("pTitle").textContent=title; $("pBubble").innerHTML=bubble;
   const src="art/animals/"+(mascot||"rabbit/idle")+".png"; if(!$("pMascot").src.endsWith(src)) $("pMascot").src=src;
   if(html!=null) $("sPlay").innerHTML=html;
@@ -1016,13 +1041,15 @@ function renderStudent(v){
   if(v.phase==="lobby"||v.phase==="setup"){play("기다리는 중","잘 들어왔어요! 선생님이 <b>출발</b>할 때까지 기다려요.","rabbit/idle",mine("idle")); return;}
   if(v.phase==="countdown"){play("준비!","<b>출발!</b> 하면 노란 버튼을 마구 눌러요!","rabbit/run1",'<div class="bigtxt" style="font-size:9rem;color:var(--blue)">'+v.cd+'</div>'); wakeOn(); return;}
   if(v.phase==="race"){
-    if(!prev||prev.phase!=="race"||!$("tapBtn")){
-      play("달려라!","노란 버튼을 <b>빠르게</b> 마구 눌러요!","rabbit/run2",'<div class="evt" id="sEvt"></div><button class="tap" id="tapBtn" type="button">'+face(v.char)+'<span>달려!</span></button><div class="meter" style="max-width:420px"><i id="sBar" style="width:0"></i></div><div class="status" id="sRank"></div>');
+    if(!prev||prev.phase!=="race"||!$("tapBtn")||($("sTrack")&&$("sTrack").children.length!==(v.all||[]).length)){
+      $("s-play").classList.add("racing");
+      play("달려라!","노란 버튼을 <b>빠르게</b> 마구 눌러요!","rabbit/run2",'<div class="raceplay"><div class="track mini"><div class="lanes2" id="sTrack"></div></div><div class="tapside"><div class="evt" id="sEvt"></div><button class="tap" id="tapBtn" type="button">'+face(v.char)+'<span>달려!</span></button><div class="status" id="sRank"></div></div></div>');
+      buildMini(v.all||[]);
       const b=$("tapBtn");
       b.addEventListener("pointerdown",e=>{e.preventDefault(); S.taps++; b.classList.add("hit"); setTimeout(()=>b.classList.remove("hit"),60); try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}});
       b.addEventListener("contextmenu",e=>e.preventDefault());
     }
-    $("sBar").style.width=v.prog+"%"; $("sEvt").textContent=v.evt||"";
+    drawMini(v.all||[]); $("sEvt").textContent=v.evt||"";
     if(v.rank){$("sRank").textContent=v.rank+"등으로 들어왔어요!"; $("tapBtn").disabled=true; play("도착!","<b>"+v.rank+"등</b>으로 들어왔어요! 친구들을 기다려요.","rabbit/win");}
     return;
   }
@@ -1081,13 +1108,13 @@ function runDemo(name){
   let t0=Date.now()+1800; let phase="cd";
   const loop=setInterval(()=>{
     const now=Date.now();
-    if(phase==="cd"){ const c=Math.ceil((t0+3000-now)/1000); if(now<t0) return; if(c>0){R({phase:"countdown",cd:c});return;} phase="race"; t0=now; last=now; lastTaps=taps; R({phase:"race",prog:0}); return; }
+    if(phase==="cd"){ const c=Math.ceil((t0+3000-now)/1000); if(now<t0) return; if(c>0){R({phase:"countdown",cd:c});return;} phase="race"; t0=now; last=now; lastTaps=taps; R({phase:"race",prog:0,all:all.map(a=>({n:a.name,c:a.char,p:0,r:0,e:"",me:!!a.me,ps:"idle"}))}); return; }
     if(phase==="race"){
       const dt=(now-last)/1000; last=now; const rate=(taps-lastTaps)/Math.max(dt,.001); lastTaps=taps; myRate=myRate*.85+rate*.15;
       if(!me.rank) me.prog=Math.min(100,me.prog+(100/9)*(0.3+0.7*Math.min(myRate,7)/7)*dt);
       bots.forEach(b=>{if(!b.rank) b.prog=Math.min(100,b.prog+(100/9)*(0.5+Math.random()*0.5)*dt);});
       all.forEach(a=>{if(!a.rank&&a.prog>=100) a.rank=all.filter(x=>x.rank).length+1;});
-      R({phase:"race",prog:Math.round(me.prog),rank:me.rank});
+      const tnow=Date.now(); R({phase:"race",prog:Math.round(me.prog),rank:me.rank,all:all.map(a=>({n:a.name,c:a.char,p:Math.round(a.prog*10)/10,r:a.rank,e:"",me:!!a.me,ps:a.rank?"win":(a.me?(myRate>0.4?"run1":"idle"):"run1")}))});
       if(all.every(a=>a.rank)||now-t0>13000){ let r=all.filter(x=>x.rank).length; all.filter(a=>!a.rank).sort((a,b)=>b.prog-a.prog).forEach(a=>a.rank=++r);
         phase="pod"; t0=now; R({phase:"podium",rank:me.rank}); }
       return;
