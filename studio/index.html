@@ -5160,7 +5160,7 @@ function cAsk(sec,k){
   if(sec==="subj"){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
-    cbot(cLog.children.length?`<b class="hl">피사체</b> · 누구를 그릴까요? 생김새·머리·옷을 글로 써 주세요.`:`안녕하세요! 캐릭터를 같이 만들어 볼게요. 먼저 <b class="hl">누구</b>를 그릴까요? 생김새·머리·옷을 글로 써 주세요.`);
+    cbot(cLog.children.length?`<b class="hl">피사체</b> · 어떤 캐릭터인지 생김새·머리·옷을 글로 써 주세요.`:`안녕하세요! 캐릭터를 같이 만들어 볼게요.<br>먼저 <b class="hl">피사체</b>예요. 어떤 캐릭터인지 생김새·머리·옷을 글로 써 주세요.`);
     sb.sel={};sb.sum=null;sb.dirty=false;$("#cSay").value="";
     cQuick.innerHTML=`<div class="txthint">예) 짧은 검정 머리에 안경을 쓴 남자 선생님, 파란 셔츠와 갈색 바지<br>예) 갈색 털에 빨간 목도리를 한 귀여운 강아지</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
   }else if(sec==="act"){
@@ -5182,7 +5182,7 @@ function cAsk(sec,k){
     cbot("마지막으로 몸 비율은요? 이모티콘처럼 단순하게 할지, 늘씬하게 할지 골라 주세요.");
     cQuick.innerHTML=chips((sb.sel.kind==="동물"||!!sb.sel.isA)?RATIO_A:RATIO_P,t=>cv("ratio")===t,"data-cv");
   }
-  $("#cSay").placeholder=sec==="subj"?"누구를 그릴지 써 주세요":sec==="act"?"포즈와 표정을 써 주세요":sec==="place"?"배경을 써 주세요":sec==="point"?"색을 고르거나 [없어요]를 눌러 주세요":"골라도 되고, 직접 써도 돼요";
+  $("#cSay").placeholder=sec==="subj"?"피사체를 써 주세요 (생김새·머리·옷)":sec==="act"?"포즈와 표정을 써 주세요":sec==="place"?"배경을 써 주세요":sec==="point"?"색을 고르거나 [없어요]를 눌러 주세요":"골라도 되고, 직접 써도 돼요";
   renderCards();
 }
 function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
