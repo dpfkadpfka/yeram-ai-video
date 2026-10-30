@@ -22,6 +22,17 @@ async function getIdx(env) {
   } catch (e) { x.tmp = 1; } // 옮기기 실패(한도 초과 등): 저장하지 않고 다음에 다시
   return x;
 }
+// 관리자가 '로그인 없이 쓰기'를 켜면(config/site.openLogin) 익명 로그인도 생성 기능 사용 가능
+let _openC = { t: 0, v: false };
+async function openLogin(idToken) {
+  if (Date.now() - _openC.t < 20000) return _openC.v;
+  try {
+    const r = await fetch("https://firestore.googleapis.com/v1/projects/yeram-ai-video/databases/(default)/documents/config/site?mask.fieldPaths=openLogin", { headers: idToken ? { authorization: "Bearer " + idToken } : {} });
+    const d = r.ok ? await r.json() : {};
+    _openC = { t: Date.now(), v: !!(d.fields && d.fields.openLogin && d.fields.openLogin.booleanValue) };
+  } catch (e) { _openC = { t: Date.now(), v: false }; }
+  return _openC.v;
+}
 async function lookupUser(idToken) {
   if (!idToken) return null;
   const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FB_KEY}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idToken }) });
@@ -147,7 +158,7 @@ export default {
     if (req.method === "POST" && (act === "scene" || act === "vid" || act === "vidpoll" || act === "tts")) {
       const b = await req.json().catch(() => ({}));
       const who = await lookupUser(b.idToken);
-      if (!who || !who.google) return J({ error: "login" }, 401);
+      if (!who || (!who.google && !(await openLogin(b.idToken)))) return J({ error: "login" }, 401);
       const admin = await isAdmin(b.idToken);
       let sa; try { sa = JSON.parse(env.VERTEX_SA); } catch (e) { return J({ error: "nosa" }, 503); }
       const tok = await vertexToken(sa);
@@ -246,7 +257,7 @@ export default {
       // 나노바나나(Vertex AI) 이미지 생성: 구글 로그인 사용자만, 하루 기본 이미지 5장·캐릭터 시트 5장, 기록은 Firestore imglog
       const b = await req.json().catch(() => ({}));
       const who = await lookupUser(b.idToken);
-      if (!who || !who.google) return J({ error: "login" }, 401);
+      if (!who || (!who.google && !(await openLogin(b.idToken)))) return J({ error: "login" }, 401);
       const admin = await isAdmin(b.idToken);
       const kind = b.kind === "sheet" ? "sheet" : "base";
       const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
