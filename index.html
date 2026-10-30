@@ -2243,6 +2243,11 @@ body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
   html.kb-open body[data-stage="char"].cfresh:not(.cpre) .cchat.phone .quick{max-height:28vh}
   body[data-stage="char"].cfresh:not(.cpre) #cSay{font-size:16px}
 }
+
+.txthint{font-size:13.5px;line-height:1.7;color:var(--muted);background:var(--bg);border-radius:12px;padding:10px 14px;margin:0 0 8px}
+
+.phone .quick:has(.txthint)::before,.phone .quick:has(.sbpanel>.pcrow:first-child)::before{display:none}
+.sbpanel>.pcrow:first-child{margin-top:0;padding-top:0;border-top:0}
 </style>
 
 <div class="wrap"><nav class="extlinks" id="extLinks" aria-label="바로가기"></nav>
@@ -4041,7 +4046,7 @@ const SB_ANIMAL=[SB_KIND,
 let sb={sel:{},step:0};
 const SB_BY={남자:{hair:["짧은 머리","투블럭","댄디컷","곱슬머리","가르마 펌","스포츠머리","장발"],cloth:["셔츠","티셔츠","후드티","맨투맨","정장","교복","한복","청바지","슬랙스","반바지","모자","백팩","헤드폰","넥타이","손목시계"]},
  아이:{hair:["짧은 머리","단발","바가지 머리","양갈래","포니테일","곱슬머리"],cloth:["티셔츠","원피스","후드티","체육복","한복","청바지","반바지","치마","멜빵바지","모자","가방","리본","머리띠","안전모"]}};
-function sbGroups(){if(sb.sel.kind==="동물")return SB_ANIMAL;const by=SB_BY[sb.sel.kind];return by?SB_PERSON.map(g=>by[g.k]?{...g,o:by[g.k]}:g):SB_PERSON}
+function sbGroups(){if((sb.sel.kind==="동물"||!!sb.sel.isA))return SB_ANIMAL;const by=SB_BY[sb.sel.kind];return by?SB_PERSON.map(g=>by[g.k]?{...g,o:by[g.k]}:g):SB_PERSON}
 function sbCompose(){
   const G=sbGroups(),v=k=>sb.sel[k];const out=[];
   if(v("kind")==="동물"){const sp=v("species");if(sp)out.push([v("fur")?v("fur")+" 털의":"",sp].filter(Boolean).join(" "));else if(v("fur"))out.push(v("fur")+" 털");}
@@ -5155,23 +5160,29 @@ function cAsk(sec,k){
   if(sec==="subj"){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
-    cbot(cLog.children.length?`<b class="hl">피사체</b> · 누구를 그릴까요?`:`안녕하세요! 캐릭터를 같이 만들어 볼게요. 먼저 <b class="hl">누구</b>를 그릴까요?`);
-    sb.sel={};sb.sum=null;sb.dirty=false;subjPanel();
+    cbot(cLog.children.length?`<b class="hl">피사체</b> · 누구를 그릴까요? 생김새·머리·옷을 글로 써 주세요.`:`안녕하세요! 캐릭터를 같이 만들어 볼게요. 먼저 <b class="hl">누구</b>를 그릴까요? 생김새·머리·옷을 글로 써 주세요.`);
+    sb.sel={};sb.sum=null;sb.dirty=false;$("#cSay").value="";
+    cQuick.innerHTML=`<div class="txthint">예) 짧은 검정 머리에 안경을 쓴 남자 선생님, 파란 셔츠와 갈색 바지<br>예) 갈색 털에 빨간 목도리를 한 귀여운 강아지</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
   }else if(sec==="act"){
-    cbot('<b class="hl">동작</b> · 어떤 포즈와 표정일까요? 기본 이미지는 정면 전신 포즈를 추천해요.');
-    pkOpen("act");
+    cbot('<b class="hl">동작</b> · 어떤 포즈와 표정일까요? 글로 써 주세요. 건너뛰면 정면 전신 기본 포즈로 그려요.');
+    pk=null;$("#cSay").value="";
+    cQuick.innerHTML=`<div class="txthint">예) 정면을 보고 활짝 웃으며 한 손을 흔든다<br>예) 두 손을 모으고 고개를 살짝 기울인다</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기 (기본 포즈)</button></div>`;
   }else if(sec==="place"){
-    cbot('<b class="hl">장소</b> · 배경은 어떻게 할까요? 기본은 흰 배경이에요.');
-    pkOpen("place");
+    cbot('<b class="hl">장소</b> · 배경은 어떻게 할까요? 글로 써 주세요. 건너뛰면 흰 배경으로 그려요.');
+    pk=null;$("#cSay").value="";
+    cQuick.innerHTML=`<div class="txthint">예) 햇살이 드는 교실<br>예) 투명 배경 (캐릭터만)</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기 (흰 배경)</button></div>`;
+  }else if(sec==="point"){
+    cbot('<b class="hl">포인트 컬러</b>도 있나요? 캐릭터에 꼭 들어갔으면 하는 색이 있으면 골라 주세요. 없으면 [없어요]를 누르면 돼요.');
+    pk={sec:"point",sel:[],sum:null,dirty:false,multi:false};pkPaint();
   }else if(sec==="style"){
     cbot('<b class="hl">스타일</b> · 어떤 그림체로 할까요? 그림을 고르거나 직접 써도 돼요.');
-    const animal=sb.sel.kind==="동물", list=STYLES.filter(x=>animal?x.g==="동물":x.g==="인물");
+    const animal=(sb.sel.kind==="동물"||!!sb.sel.isA), list=STYLES.filter(x=>animal?x.g==="동물":x.g==="인물");
     pkOpen("style");
   }else if(sec==="ratio"){
     cbot("마지막으로 몸 비율은요? 이모티콘처럼 단순하게 할지, 늘씬하게 할지 골라 주세요.");
-    cQuick.innerHTML=chips(sb.sel.kind==="동물"?RATIO_A:RATIO_P,t=>cv("ratio")===t,"data-cv");
+    cQuick.innerHTML=chips((sb.sel.kind==="동물"||!!sb.sel.isA)?RATIO_A:RATIO_P,t=>cv("ratio")===t,"data-cv");
   }
-  $("#cSay").placeholder=sec==="subj"&&k==="kind"?"외형, 헤어, 의상, 소품, 특징을 써 주세요":"골라도 되고, 직접 써도 돼요";
+  $("#cSay").placeholder=sec==="subj"?"누구를 그릴지 써 주세요":sec==="act"?"포즈와 표정을 써 주세요":sec==="place"?"배경을 써 주세요":sec==="point"?"색을 고르거나 [없어요]를 눌러 주세요":"골라도 되고, 직접 써도 돼요";
   renderCards();
 }
 function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
@@ -5181,14 +5192,15 @@ function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
 }
 /* 동작·장소·스타일: 팝업에서 고르고, 칸에서 고치고, [다음]으로 넘어가기 */
 let pk=null;
-function pkList(sec){if(sec==="act")return ACT_O.map(t=>({v:t}));if(sec==="place")return PLACE_O.map(t=>({v:t}));const animal=sb.sel.kind==="동물";return STYLES.filter(x=>animal?x.g==="동물":x.g==="인물").map(x=>({v:x.t,img:STYLE_IMG[x.id]}))}
+function pkList(sec){if(sec==="act")return ACT_O.map(t=>({v:t}));if(sec==="place")return PLACE_O.map(t=>({v:t}));const animal=(sb.sel.kind==="동물"||!!sb.sel.isA);return STYLES.filter(x=>animal?x.g==="동물":x.g==="인물").map(x=>({v:x.t,img:STYLE_IMG[x.id]}))}
 function pkOpen(sec){const curv={act:actLabel(),place:placeLabel(),style:cv("style")}[sec]||"";pk={sec,sel:curv?curv.split(/\s*,\s*/).filter(Boolean):[],sum:null,dirty:false,multi:sec==="act"};pkPaint()}
-function pkPaint(){const L=pkList(pk.sec),on=v=>pk.sel.includes(v),val=pk.sum!=null?pk.sum:pk.sel.join(", ");
+function pkPaint(){const L=pk.sec==="point"?[]:pkList(pk.sec),on=v=>pk.sel.includes(v),val=pk.sum!=null?pk.sum:pk.sel.join(", ");
   const items=pk.sec==="style"?`<div class="pktiles">${L.map(x=>`<button type="button" class="pktile" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${x.img?`<img src="${x.img}" alt="">`:`<i class="pkph">예시 준비 중</i>`}<span>${esc(x.v)}</span></button>`).join("")}</div>`:`<div class="sbc">${L.map(x=>`<button type="button" class="opt" data-pkv="${esc(x.v)}" aria-pressed="${on(x.v)}">${esc(x.v)}</button>`).join("")}</div>`;
   const pcs=cv("point")?cv("point").split(","):[],pc=pcs[pcs.length-1]||"",PAL=[["","원래 색"],["#F06292","분홍"],["#E53935","빨강"],["#FB8C00","주황"],["#FDD835","노랑"],["#43A047","초록"],["#26C6DA","민트"],["#29B6F6","하늘"],["#1E88E5","파랑"],["#8E24AA","보라"],["#6D4C41","갈색"],["#37474F","검정"]];
-  const pal=pk.sec==="style"?`<div class="pcrow"><b>포인트 컬러 <small>선택 · 최대 3개</small></b><div class="pcpick2"><input type="color" class="pcin" id="pcIn" value="${window._pcLast||"#E65588"}" aria-label="색 고르기"><span class="pchex" id="pcHex">${(window._pcLast||"#E65588").toUpperCase()}</span><button type="button" class="btn sm primary" data-pcadd${pcs.length>=3?" disabled":""}>선택하기</button></div>${pcs.length?`<div class="pcpick"><span class="pcl">고른 색</span>${pcs.map(h=>`<span class="pcchip"><i style="background:${h}"></i>${h}<button type="button" data-pcx="${h}" aria-label="${h} 빼기">✕</button></span>`).join("")}</div>`:""}</div>`:"";
+  const pal=pk.sec==="point"?`<div class="pcrow"><b>포인트 컬러 <small>최대 3개</small></b><div class="pcpick2"><input type="color" class="pcin" id="pcIn" value="${window._pcLast||"#E65588"}" aria-label="색 고르기"><span class="pchex" id="pcHex">${(window._pcLast||"#E65588").toUpperCase()}</span><button type="button" class="btn sm primary" data-pcadd${pcs.length>=3?" disabled":""}>선택하기</button></div>${pcs.length?`<div class="pcpick"><span class="pcl">고른 색</span>${pcs.map(h=>`<span class="pcchip"><i style="background:${h}"></i>${h}<button type="button" data-pcx="${h}" aria-label="${h} 빼기">✕</button></span>`).join("")}</div>`:""}</div>`:"";
+  if(pk.sec==="point"){cQuick.innerHTML=`<div class="sbpanel">${pal}</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>없어요</button><button type="button" class="opt sbdone" data-pkdone${pcs.length?"":" hidden"}>다 골랐어요 →</button></div>`;$("#cSay").value="";return}
   cQuick.innerHTML=`<div class="sbpanel${pk.sec==="style"?" pkstyle":""}">${items}${pal}</div><div class="sbact"><button type="button" class="opt optskip" data-cback>← 이전</button><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;$("#cSay").value=val}
-function pkCommit(){const v=$("#cSay").value;const t=(v||"").trim();if(!t){toast("고르거나 써 주세요");return}const sec=pk.sec;pk=null;$("#cSay").value="";cme(t);
+function pkCommit(){if(pk&&pk.sec==="point"){pk=null;const pcs=cv("point")?cv("point").split(","):[];cme(pcs.length?"포인트 컬러 "+pcs.join(", "):"없어요");return cAdvance()}const v=$("#cSay").value;const t=(v||"").trim();if(!t){toast("고르거나 써 주세요");return}const sec=pk.sec;pk=null;$("#cSay").value="";cme(t);
   if(sec==="act")cSet("act",t==="기본 포즈(정면 전신)"?ACT_FULL:t.replace("기본 포즈(정면 전신)",ACT_FULL));else if(sec==="place")cSet("place",t==="투명 배경(PNG)"?PLACE_PNG:t.replace("기본 배경(흰 배경)","흰 배경"));else cSet("style",t);cAdvance()}
 function actLabel(){const v=cv("act");return v===ACT_FULL?"기본 포즈(정면 전신)":v}
 function placeLabel(){const v=cv("place");return v===PLACE_PNG?"투명 배경(PNG)":v==="흰 배경"?"기본 배경(흰 배경)":v}
@@ -5197,7 +5209,8 @@ const PLACE_PNG="투명 배경(PNG 파일, 배경 없이 캐릭터만)";
 function nextSub(k){const G=sbGroups();const i=G.findIndex(x=>x.k===k);return G[i+1]&&G[i+1].k}
 function cAdvance(){
   const q=cq;if(!q)return;
-  if(q.sec==="subj"&&!cDoneOnly&&!cv("act"))return cAsk("act");
+  if(q.sec==="subj"&&!cDoneOnly)return cAsk("point");
+  if(q.sec==="point"&&!cDoneOnly&&!cv("act"))return cAsk("act");
   if(cDoneOnly){cDoneOnly=false;return cDone()}
   if(!cv("act"))return cAsk("act");if(!cv("place"))return cAsk("place");if(!cv("style"))return cAsk("style");
   cDone();
@@ -5222,7 +5235,7 @@ function cPick(t){
 function cFree(text){
   text=text.trim();if(!text)return;cme(text);
   const q=cq;if(!q){cbot("바꾸고 싶은 칸을 왼쪽에서 누르면 다시 물어볼게요.");return}
-  if(q.sec==="subj"){sb.sel={kind:"",free:text};cSet("subj",text);return cAdvance()}
+  if(q.sec==="subj"){sb.sel={kind:"",free:text,isA:/강아지|고양이|곰|토끼|펭귄|여우|판다|햄스터|동물|새|병아리|오리|사자|호랑이|코끼리|기린|원숭이|돼지|양|말|소|용|공룡|물고기|개구리|다람쥐|부엉이|올빼미/.test(text)&&!/사람|남자|여자|아이|소년|소녀|선생님|학생/.test(text)};cSet("subj",text);return cAdvance()}
   if(false){
     const g=sbGroups().find(x=>x.k===q.k);sb.sel[q.k]=g.m?[...(sb.sel[q.k]||[]),text]:text;cSet("subj",sbCompose());return cAdvance()}
   if(q.sec==="style"){cSet("style",text);return cAdvance()}
@@ -5282,7 +5295,7 @@ document.addEventListener("click",e=>{const t=e.target;let b;
   if(t.closest("[data-cback]")){const q=cq;if(!q)return;const O=["subj","act","place","style"],i=O.indexOf(q.sec);if(i<1)return;const pv=O[i-1];cme("← 이전 질문");cDoneOnly=false;
     if(pv==="subj"){const inp=$("#cSay");if(cv("subj")){sb.sum=cv("subj");sb.dirty=true}cAsk("subj","kind");setTimeout(()=>{inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}},50)}else cAsk(pv);
     cq.back=true;return}
-  if(t.closest("[data-cskip]")){const q=cq;if(!q)return;$("#cSay").value="";sb.sum=null;sb.dirty=false;cme("건너뛰기");const D={subj:"생김새는 자유롭게 정한 귀여운 캐릭터",act:ACT_FULL,place:"흰 배경",style:"3D 애니메이션"};
+  if(t.closest("[data-cskip]")){const q=cq;if(!q)return;$("#cSay").value="";sb.sum=null;sb.dirty=false;cme("건너뛰기");const D={subj:"생김새는 자유롭게 정한 귀여운 캐릭터",act:ACT_FULL,place:"흰 배경",style:"3D 애니메이션",point:""};if(q.sec==="point"){pk=null;$("#c_point").value="";renderChar();saveChar();renderCards();return cAdvance()}
     if(!cv(q.sec)){if(q.sec==="subj")sb.sel={kind:"",free:D.subj};cSet(q.sec,D[q.sec])}return cAdvance()}
   if(t.closest("[data-cnext]")){const q=cq;if(q&&q.sec==="subj"){const g=sbGroups().find(x=>x.k===q.k);const v=sb.sel[q.k];if(v&&(!Array.isArray(v)||v.length))cme(Array.isArray(v)?v.join(", "):v);else cme("건너뛰기")}cAdvance();return}
   if((b=t.closest("[data-cstyle]"))){const st=STYLES.find(x=>x.id===b.dataset.cstyle);cme(st.t);cSet("style",st.t);cAdvance();return}
