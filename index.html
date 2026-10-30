@@ -2234,6 +2234,15 @@ body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
 .evt-ms{display:grid;gap:10px;margin:10px 0 14px}.evt-m{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:8px}.evt-m small{display:block}.evt-n{max-width:70px}
 .wkscprev{width:100%;max-height:300px;border-radius:14px;background:#141210;object-fit:contain}
 @media (max-width:560px){.st-tools{grid-auto-flow:row;grid-template-columns:1fr 1fr}.st-tools>*:last-child:nth-child(3){grid-column:1/-1}.st-sec{padding:18px 16px}}
+
+@media (max-width:900px){
+  html:has(body[data-stage="char"].cfresh:not(.cpre)){overflow:hidden;height:100%;overscroll-behavior:none}
+  body[data-stage="char"].cfresh:not(.cpre) .cchat.phone{top:calc(var(--vvt,0px) + var(--toph,56px))!important;bottom:auto!important;height:calc(var(--vvh,100dvh) - var(--toph,56px) - var(--navh,70px))!important}
+  html.kb-open body[data-stage="char"].cfresh:not(.cpre) .cchat.phone{height:calc(var(--vvh,100dvh) - var(--toph,56px))!important}
+  html.kb-open body[data-stage="char"].cfresh:not(.cpre) nav.sidenav{display:none!important}
+  html.kb-open body[data-stage="char"].cfresh:not(.cpre) .cchat.phone .quick{max-height:28vh}
+  body[data-stage="char"].cfresh:not(.cpre) #cSay{font-size:16px}
+}
 </style>
 
 <div class="wrap"><nav class="extlinks" id="extLinks" aria-label="바로가기"></nav>
@@ -4059,7 +4068,6 @@ function charBase(){
   const st=styleByName(cv("style")), sty=st?st.d:(cv("style")||STYLES[0].d), gd=charGender();
   return ["캐릭터 1명을 그려 줘.",`- 그림체: ${sty}`,
     `- 피사체: ${cv("subj")||"(누구인지, 생김새·옷·색을 적어 주세요)"}`,
-    ...(gd==="남자"?["- 성별: 남자. 반드시 남자 캐릭터로 그려 줘."]:gd==="여자"?["- 성별: 여자."]:gd==="아이"?["- 나이: 어린아이. 반드시 어린아이로 그려 줘."]:[]),
     `- 동작·표정: ${cv("act")||"정면을 보며 밝게 웃기"}`,
     `- 장소·배경: ${cv("place")||"흰 배경"}${/투명/.test(cv("place"))?" (투명이 안 되면 흰색 단색 배경)":""}`,
     "- 정사각형 1:1. 캐릭터를 가운데에 두고, 머리·손·발이 잘리지 않게 여백을 남겨 줘.",
@@ -5055,6 +5063,13 @@ if(matchMedia("(hover:hover)").matches){let ytHT=0;
 renderYT();
 (async()=>{try{const j=await fetch(PAD_API.replace(/\/$/,"")+"/?act=yt").then(r=>r.json());const have=new Set(YTV.map(v=>v[0]));const add=(j.v||[]).filter(v=>!have.has(v.id)).sort((a,b)=>String(b.at).localeCompare(String(a.at)));if(!add.length)return;add.slice().reverse().forEach(v=>{const i=v.sh?YTV.findIndex(x=>x[2]==="short"):0;YTV.splice(Math.max(0,i),0,[v.id,v.t,v.sh?"short":"new"])});renderYT()}catch(_){}})();
 /* 모바일: 챗봇을 화면에 고정 */
+/* 모바일 키보드(특히 아이폰)가 올라와도 채팅창이 보이는 화면 안에 그대로 있게 */
+(function(){const vv=window.visualViewport;if(!vv)return;const de=document.documentElement;
+  const set=()=>{if(innerWidth>900)return;const kb=Math.max(0,innerHeight-vv.height-vv.offsetTop);const open=kb>120;
+    de.style.setProperty("--vvh",Math.round(vv.height)+"px");de.style.setProperty("--vvt",Math.round(vv.offsetTop)+"px");de.classList.toggle("kb-open",open);
+    if(document.body.classList.contains("cfresh")&&!document.body.classList.contains("cpre")&&document.body.dataset.stage==="char"&&scrollY!==0)scrollTo(0,0)};
+  vv.addEventListener("resize",set);vv.addEventListener("scroll",set);addEventListener("orientationchange",()=>setTimeout(set,300));set()})();
+
 (function(){const set=()=>{const h=document.querySelector("header.side"),n=document.querySelector("nav.sidenav");if(innerWidth>900)return;const ht=h?Math.round(h.getBoundingClientRect().height):56,nv=n?Math.round(innerHeight-n.getBoundingClientRect().top):70;document.documentElement.style.setProperty("--toph",ht+"px");document.documentElement.style.setProperty("--navh",Math.max(0,nv)+"px")};addEventListener("resize",set);if(window.visualViewport)visualViewport.addEventListener("resize",set);setTimeout(set,300);set()})();
 (function(){const s=$("#cfMore");if(!s||!window.IntersectionObserver)return;new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!cfEnd&&!$("#charFeed").hidden)loadCharFeed(true)},{rootMargin:"300px"}).observe(s)})();
 /* 바로가기: 설치된 앱(PWA)이 링크를 가로채지 않게 빈 새 탭을 먼저 열고 이동 */
@@ -5253,7 +5268,7 @@ function charBase(){
 document.addEventListener("click",e=>{const t=e.target;let b;
   if((b=t.closest("[data-cv]"))){cPick(b.dataset.cv);return}
   if((b=t.closest("[data-sk]"))){const k=b.dataset.sk,v=b.dataset.sv,v0=v,G=sbGroups(),g=G.find(x=>x.k===k)||SB_KIND;
-    if(k==="kind"){sb.sel=sb.sel.kind===v?{}:{kind:v}}else if(g.m){const a=(sb.sel[k]||[]).filter(x=>x!=="없음");const i=a.indexOf(v);if(v==="없음")sb.sel[k]=["없음"];else{i>=0?a.splice(i,1):a.push(v);sb.sel[k]=a}}else sb.sel[k]=sb.sel[k]===v?undefined:v;
+    if(k==="kind"){const prevG=sbGroups();sb.sel=sb.sel.kind===v?{}:{kind:v};if(sb.dirty){const opts=new Set(prevG.flatMap(x=>x.o).concat(SB_KIND.o));const rest=String($("#cSay").value||"").split(/\s*,\s*/).filter(x=>x&&!opts.has(x));$("#cSay").value=(sb.sel.kind?[sb.sel.kind]:[]).concat(rest).join(", ");sb.sum=$("#cSay").value;subjPanel();$("#cSay").value=sb.sum;return}}else if(g.m){const a=(sb.sel[k]||[]).filter(x=>x!=="없음");const i=a.indexOf(v);if(v==="없음")sb.sel[k]=["없음"];else{i>=0?a.splice(i,1):a.push(v);sb.sel[k]=a}}else sb.sel[k]=sb.sel[k]===v?undefined:v;
     {const cur=$("#cSay");if(cur&&sb.dirty){let v=cur.value;const on=k==="kind"?!!sb.sel.kind:(g.m?(sb.sel[k]||[]).includes(v0):sb.sel[k]===v0);
       if(on&&!v.includes(v0))v=v?v.replace(/[,\s]+$/,"")+", "+v0:v0;if(!on)v=v.split(/\s*,\s*/).filter(x=>x&&x!==v0).join(", ");sb.sum=v}else sb.sum=null}
     subjPanel();return}
