@@ -5160,7 +5160,7 @@ function cAsk(sec,k){
   if(sec==="subj"){
     const G=sbGroups(),g=G.find(x=>x.k===k),cur=sb.sel[k];
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
-    cbot(cLog.children.length?`<b class="hl">피사체</b> · 어떤 캐릭터인지 생김새·머리·옷을 글로 써 주세요.`:`안녕하세요! 캐릭터를 같이 만들어 볼게요.<br>먼저 <b class="hl">피사체</b>예요. 어떤 캐릭터인지 생김새·머리·옷을 글로 써 주세요.`);
+    cbot(cLog.children.length?`<b class="hl">피사체</b>는 그림에 그릴 주인공이에요. 아래 내용을 글로 써 주세요.<br>· <b>누구</b>: 남자·여자·아이·동물 등<br>· <b>생김새</b>: 머리 모양·머리색·얼굴 특징<br>· <b>옷·소품</b>: 입은 옷, 안경·모자·가방 등`:`안녕하세요! 캐릭터를 같이 만들어 볼게요.<br><br>먼저 <b class="hl">피사체</b>는 그림에 그릴 주인공이에요. 아래 내용을 글로 써 주세요.<br>· <b>누구</b>: 남자·여자·아이·동물 등<br>· <b>생김새</b>: 머리 모양·머리색·얼굴 특징<br>· <b>옷·소품</b>: 입은 옷, 안경·모자·가방 등`);
     sb.sel={};sb.sum=null;sb.dirty=false;$("#cSay").value="";
     cQuick.innerHTML=`<div class="txthint">예) 짧은 검정 머리에 안경을 쓴 남자 선생님, 파란 셔츠와 갈색 바지<br>예) 갈색 털에 빨간 목도리를 한 귀여운 강아지</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
   }else if(sec==="act"){
