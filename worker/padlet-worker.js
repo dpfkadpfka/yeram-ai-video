@@ -276,7 +276,7 @@ export default {
       const ref = String(b.ref || "").match(/^data:(image\/[\w.+-]+);base64,(.+)$/);
       if (ref) parts.push({ inlineData: { mimeType: ref[1], data: ref[2] } });
       const sref = String(b.sref || "").match(/^data:(image\/[\w.+-]+);base64,(.+)$/);
-      if (sref && kind === "base") { parts.push({ text: "STYLE REFERENCE ONLY: match this image's art style exactly (rendering, line quality, shading, color palette, eye and face style, head-to-body proportion). Do NOT copy its character, hair, outfit, horns, wings, colors of clothing, or pose. Draw the character described above." }); parts.push({ inlineData: { mimeType: sref[1], data: sref[2] } }); }
+      if (sref && kind === "base") { parts.push({ text: "STYLE REFERENCE ONLY: match this image's art style exactly (rendering, line quality, shading, color palette, eye and face style, head-to-body proportion). Do NOT copy its character, gender, age, hair, outfit, horns, wings, colors of clothing, or pose. Draw the character described above." }); parts.push({ inlineData: { mimeType: sref[1], data: sref[2] } }); }
       const ratio = ["1:1", "16:9", "9:16", "4:3", "3:4"].includes(b.ratio) ? b.ratio : "1:1";
       const body = { contents: [{ role: "user", parts }], generationConfig: { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: ratio } } };
       const errs = [];

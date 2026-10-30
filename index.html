@@ -4054,10 +4054,12 @@ function sbPick(t){
   $("#c_subj").value=sbCompose();renderChar();saveChar();renderSB();
 }
 function cv(id){return $("#c_"+id).value.trim()}
+function charGender(){const k=sb&&sb.sel&&sb.sel.kind;if(k)return k;const t=cv("subj");if(/남자|남성|소년|남학생|남자아이|아저씨|할아버지|아빠|오빠|왕자|\bboy\b|\bman\b/i.test(t))return "남자";if(/여자|여성|소녀|여학생|여자아이|엄마|할머니|언니|누나|공주|\bgirl\b|\bwoman\b/i.test(t))return "여자";if(/아이|어린이|꼬마|유치원/.test(t))return "아이";return ""}
 function charBase(){
-  const st=styleByName(cv("style")), sty=st?st.d:(cv("style")||STYLES[0].d);
+  const st=styleByName(cv("style")), sty=st?st.d:(cv("style")||STYLES[0].d), gd=charGender();
   return ["캐릭터 1명을 그려 줘.",`- 그림체: ${sty}`,
     `- 피사체: ${cv("subj")||"(누구인지, 생김새·옷·색을 적어 주세요)"}`,
+    ...(gd==="남자"?["- 성별: 남자. 반드시 남자 캐릭터로 그려 줘."]:gd==="여자"?["- 성별: 여자."]:gd==="아이"?["- 나이: 어린아이. 반드시 어린아이로 그려 줘."]:[]),
     `- 동작·표정: ${cv("act")||"정면을 보며 밝게 웃기"}`,
     `- 장소·배경: ${cv("place")||"흰 배경"}${/투명/.test(cv("place"))?" (투명이 안 되면 흰색 단색 배경)":""}`,
     "- 정사각형 1:1. 캐릭터를 가운데에 두고, 머리·손·발이 잘리지 않게 여백을 남겨 줘.",
@@ -4099,7 +4101,7 @@ function saveChar(){
   if(!S.character.subj){return}
   if(S.character.subj){S.chars=S.chars||[];const i=S.chars.findIndex(x=>x.id===id);if(i>=0)S.chars[i]={...S.character};else S.chars.unshift({...S.character})}
   persist()}
-function loadChar(){loadCharFeed();document.body.classList.toggle("cfresh",!(S.character&&S.character.act)||!!document.querySelector("[data-cresume]"));const c=S.character||{};sb=c.sb?JSON.parse(JSON.stringify(c.sb)):{sel:{},step:0};setTimeout(renderSB,0);["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=c[k]||"");
+function loadChar(){loadCharFeed();document.body.classList.toggle("cfresh",!(S.character&&S.character.act&&S.character.place&&S.character.style)||!!document.querySelector("[data-cresume]"));const c=S.character||{};sb=c.sb?JSON.parse(JSON.stringify(c.sb)):{sel:{},step:0};setTimeout(renderSB,0);["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=c[k]||"");
   $$("[data-cex]").forEach(box=>{const k=box.dataset.cex;box.innerHTML=CEX[k].map(t=>`<button type="button" class="opt" data-cfill="${k}" data-v="${esc(t)}">${esc(t)}</button>`).join("")});renderChar();markChips()}
 function loadCharFromInputs(){$$("[data-cex]").forEach(box=>{const k=box.dataset.cex;box.innerHTML=CEX[k].map(t=>`<button type="button" class="opt" data-cfill="${k}" data-v="${esc(t)}">${esc(t)}</button>`).join("")});renderChar();markChips();saveChar()}
 function styleToImg(t){const st=styleByName(t);if(st)return ({fig3d:"chibi3d",paper:"paper",retro:"retro",us3d:"3d",real3d:"photo",anichar:"anime",a3d:"3d",flat:"flat",aflat:"flat",water:"water",clay:"clay",webtoon:"webtoon",pixel:"pixel",minipixel:"pixel"})[st.id]||"anime";return /3D/.test(t)?"3d":/플랫/.test(t)?"flat":/수채/.test(t)?"water":/클레이/.test(t)?"clay":/실사|사진/.test(t)?"photo":"anime"}
@@ -5159,7 +5161,7 @@ function cAsk(sec,k){
 }
 function subjPanel(){const G=sbGroups(),k=sb.sel.kind;
   const row=(g)=>{const cur=sb.sel[g.k];const on=t=>g.m?(cur||[]).includes(t):cur===t;return `<div class="sbrow"><span class="sbl">${g.k==="kind"?"누구":esc(g.t)}${g.m?'<small class="sbm">여러 개</small>':""}</span><div class="sbc">${g.o.map(t=>`<button type="button" class="opt" data-sk="${g.k}" data-sv="${esc(t)}" aria-pressed="${on(t)}">${esc(t)}</button>`).join("")}</div></div>`};
-  cQuick.innerHTML=`<div class="sbpanel">${row(SB_KIND)}${k?G.filter(g=>g.k!=="kind").map(row).join(""):""}</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt sbdone" data-sbdone hidden>다 골랐어요</button></div>`;
+  cQuick.innerHTML=`<div class="sbpanel">${row(SB_KIND)}${k?G.filter(g=>g.k!=="kind").map(row).join(""):""}</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기</button><button type="button" class="opt sbdone" data-sbdone${k?"":" hidden"}>다 골랐어요 →</button></div>`;
   {const i=$("#cSay");i.value=sb.sum!=null?sb.sum:sbCompose()}
 }
 /* 동작·장소·스타일: 팝업에서 고르고, 칸에서 고치고, [다음]으로 넘어가기 */
@@ -5230,7 +5232,7 @@ function cStart(fresh){document.body.classList.add("cfresh");if(!cv("subj")||fre
 }
 function cAdvance0(){if(!cv("act"))return cAsk("act");if(!cv("place"))return cAsk("place");if(!cv("style"))return cAsk("style");cDone()}
 /* 기존 함수 덮어쓰기 */
-function loadChar(){loadCharFeed();document.body.classList.toggle("cfresh",!(S.character&&S.character.act)||!!document.querySelector("[data-cresume]"));const c=S.character||{};sb=c.sb?JSON.parse(JSON.stringify(c.sb)):{sel:{},step:0};["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=c[k]||"");renderChar();renderCards();if(!cLog.children.length)cStart(false)}
+function loadChar(){loadCharFeed();document.body.classList.toggle("cfresh",!(S.character&&S.character.act&&S.character.place&&S.character.style)||!!document.querySelector("[data-cresume]"));const c=S.character||{};sb=c.sb?JSON.parse(JSON.stringify(c.sb)):{sel:{},step:0};["subj","act","place","style","ratio","point"].forEach(k=>$("#c_"+k).value=c[k]||"");renderChar();renderCards();if(!cLog.children.length)cStart(false)}
 function loadCharFromInputs(){sb={sel:{free:cv("subj")},step:0};renderChar();renderCards();saveChar();cLog.innerHTML="";cbot("갤러리 프롬프트로 채웠어요. 바꾸고 싶은 칸은 왼쪽에서 그 칸을 누르세요.");cDone()}
 function markChips(){renderCards()}
 function renderSB(){}
@@ -5501,7 +5503,9 @@ async function genImage(kind,btn){
   const box=$("#gen_"+kind);box.hidden=false;box.classList.add("busy");box.scrollIntoView({block:"nearest",behavior:"smooth"});
   $$(`[data-gen="${kind}"]`).forEach(b=>{b.disabled=true;{const g=b.querySelector(".gl");if(g)g.textContent="생성 중…"}});
   try{const idToken=await user().getIdToken();
-    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=img",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt,kind,ref,sref:(kind==="base"&&(st0=>st0&&!["detail","anime","webtoon"].includes(st0.id)&&STYLE_IMG[st0.id])(styleByName(cv("style"))))||"",ratio:kind==="sheet"?"16:9":"1:1"})});
+    let __sref=(kind==="base"&&!["남자","아이"].includes(charGender())&&(st0=>st0&&!["detail","anime","webtoon"].includes(st0.id)&&STYLE_IMG[st0.id])(styleByName(cv("style"))))||"";
+    if(__sref&&!__sref.startsWith("data:")){try{const bl=await (await fetch(__sref)).blob();__sref=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(bl)})}catch(_){__sref=""}}
+    const r=await fetch(PAD_API.replace(/\/$/,"")+"/?act=img",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({idToken,prompt,kind,ref,sref:__sref,ratio:kind==="sheet"?"16:9":"1:1"})});
     const j=await r.json().catch(()=>({}));
     if(r.status===429){GUSED[kind]={used:j.used,limit:j.limit};paintQuota();toast(`오늘은 ${kind==="sheet"?"캐릭터 시트":"기본 이미지"}를 ${j.limit}장 다 그렸어요. 내일 다시 그릴 수 있어요`);return}
     if(!r.ok||!j.image)throw 0;
