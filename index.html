@@ -5162,15 +5162,15 @@ function cAsk(sec,k){
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
     cbot(cLog.children.length?`<b class="hl">피사체</b>는 그림에 그릴 주인공이에요. 아래 내용을 글로 써 주세요.<br>· <b>누구</b>: 남자·여자·아이·동물 등<br>· <b>생김새</b>: 머리 모양·머리색·얼굴 특징<br>· <b>옷·소품</b>: 입은 옷, 안경·모자·가방 등`:`안녕하세요! 캐릭터를 같이 만들어 볼게요.<br><br>먼저 <b class="hl">피사체</b>는 그림에 그릴 주인공이에요. 아래 내용을 글로 써 주세요.<br>· <b>누구</b>: 남자·여자·아이·동물 등<br>· <b>생김새</b>: 머리 모양·머리색·얼굴 특징<br>· <b>옷·소품</b>: 입은 옷, 안경·모자·가방 등`);
     sb.sel={};sb.sum=null;sb.dirty=false;$("#cSay").value="";
-    cQuick.innerHTML=`<div class="txthint">예) 짧은 검정 머리에 안경을 쓴 남자 선생님, 파란 셔츠와 갈색 바지<br>예) 갈색 털에 빨간 목도리를 한 귀여운 강아지</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;
+    cQuick.innerHTML=`<div class="txthint">예) 짧은 검정 머리에 안경을 쓴 남자 선생님, 파란 셔츠와 갈색 바지<br>예) 갈색 털에 빨간 목도리를 한 귀여운 강아지</div>`;
   }else if(sec==="act"){
-    cbot('<b class="hl">동작</b> · 어떤 포즈와 표정일까요? 글로 써 주세요. 건너뛰면 정면 전신 기본 포즈로 그려요.');
+    cbot('<b class="hl">동작</b> · 어떤 포즈와 표정일까요? 글로 써 주세요. 처음 만드는 캐릭터는 정면 전신 포즈를 추천해요.');
     pk=null;$("#cSay").value="";
-    cQuick.innerHTML=`<div class="txthint">예) 정면을 보고 활짝 웃으며 한 손을 흔든다<br>예) 두 손을 모으고 고개를 살짝 기울인다</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기 (기본 포즈)</button></div>`;
+    cQuick.innerHTML=`<div class="txthint">예) 정면을 보고 활짝 웃으며 한 손을 흔든다<br>예) 두 손을 모으고 고개를 살짝 기울인다</div>`;
   }else if(sec==="place"){
-    cbot('<b class="hl">장소</b> · 배경은 어떻게 할까요? 글로 써 주세요. 건너뛰면 흰 배경으로 그려요.');
+    cbot('<b class="hl">장소</b> · 배경은 어떻게 할까요? 글로 써 주세요. 처음 만드는 캐릭터는 흰 배경을 추천해요.');
     pk=null;$("#cSay").value="";
-    cQuick.innerHTML=`<div class="txthint">예) 햇살이 드는 교실<br>예) 투명 배경 (캐릭터만)</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>건너뛰기 (흰 배경)</button></div>`;
+    cQuick.innerHTML=`<div class="txthint">예) 햇살이 드는 교실<br>예) 흰 배경<br>예) 투명 배경 (캐릭터만)</div>`;
   }else if(sec==="point"){
     cbot('<b class="hl">포인트 컬러</b>도 있나요? 캐릭터에 꼭 들어갔으면 하는 색이 있으면 골라 주세요. 없으면 [없어요]를 누르면 돼요.');
     pk={sec:"point",sel:[],sum:null,dirty:false,multi:false};pkPaint();
@@ -5199,7 +5199,7 @@ function pkPaint(){const L=pk.sec==="point"?[]:pkList(pk.sec),on=v=>pk.sel.inclu
   const pcs=cv("point")?cv("point").split(","):[],pc=pcs[pcs.length-1]||"",PAL=[["","원래 색"],["#F06292","분홍"],["#E53935","빨강"],["#FB8C00","주황"],["#FDD835","노랑"],["#43A047","초록"],["#26C6DA","민트"],["#29B6F6","하늘"],["#1E88E5","파랑"],["#8E24AA","보라"],["#6D4C41","갈색"],["#37474F","검정"]];
   const pal=pk.sec==="point"?`<div class="pcrow"><b>포인트 컬러 <small>최대 3개</small></b><div class="pcpick2"><input type="color" class="pcin" id="pcIn" value="${window._pcLast||"#E65588"}" aria-label="색 고르기"><span class="pchex" id="pcHex">${(window._pcLast||"#E65588").toUpperCase()}</span><button type="button" class="btn sm primary" data-pcadd${pcs.length>=3?" disabled":""}>선택하기</button></div>${pcs.length?`<div class="pcpick"><span class="pcl">고른 색</span>${pcs.map(h=>`<span class="pcchip"><i style="background:${h}"></i>${h}<button type="button" data-pcx="${h}" aria-label="${h} 빼기">✕</button></span>`).join("")}</div>`:""}</div>`:"";
   if(pk.sec==="point"){cQuick.innerHTML=`<div class="sbpanel">${pal}</div><div class="sbact"><button type="button" class="opt optskip" data-cskip>없어요</button><button type="button" class="opt sbdone" data-pkdone${pcs.length?"":" hidden"}>다 골랐어요 →</button></div>`;$("#cSay").value="";return}
-  cQuick.innerHTML=`<div class="sbpanel${pk.sec==="style"?" pkstyle":""}">${items}${pal}</div><div class="sbact"><button type="button" class="opt optskip" data-cback>← 이전</button><button type="button" class="opt optskip" data-cskip>건너뛰기</button></div>`;$("#cSay").value=val}
+  cQuick.innerHTML=`<div class="sbpanel${pk.sec==="style"?" pkstyle":""}">${items}${pal}</div><div class="sbact"><button type="button" class="opt optskip" data-cback>← 이전</button></div>`;$("#cSay").value=val}
 function pkCommit(){if(pk&&pk.sec==="point"){pk=null;const pcs=cv("point")?cv("point").split(","):[];cme(pcs.length?"포인트 컬러 "+pcs.join(", "):"없어요");return cAdvance()}const v=$("#cSay").value;const t=(v||"").trim();if(!t){toast("고르거나 써 주세요");return}const sec=pk.sec;pk=null;$("#cSay").value="";cme(t);
   if(sec==="act")cSet("act",t==="기본 포즈(정면 전신)"?ACT_FULL:t.replace("기본 포즈(정면 전신)",ACT_FULL));else if(sec==="place")cSet("place",t==="투명 배경(PNG)"?PLACE_PNG:t.replace("기본 배경(흰 배경)","흰 배경"));else cSet("style",t);cAdvance()}
 function actLabel(){const v=cv("act");return v===ACT_FULL?"기본 포즈(정면 전신)":v}
@@ -5295,7 +5295,7 @@ document.addEventListener("click",e=>{const t=e.target;let b;
   if(t.closest("[data-cback]")){const q=cq;if(!q)return;const O=["subj","act","place","style"],i=O.indexOf(q.sec);if(i<1)return;const pv=O[i-1];cme("← 이전 질문");cDoneOnly=false;
     if(pv==="subj"){const inp=$("#cSay");if(cv("subj")){sb.sum=cv("subj");sb.dirty=true}cAsk("subj","kind");setTimeout(()=>{inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}},50)}else cAsk(pv);
     cq.back=true;return}
-  if(t.closest("[data-cskip]")){const q=cq;if(!q)return;$("#cSay").value="";sb.sum=null;sb.dirty=false;cme("건너뛰기");const D={subj:"생김새는 자유롭게 정한 귀여운 캐릭터",act:ACT_FULL,place:"흰 배경",style:"3D 애니메이션",point:""};if(q.sec==="point"){pk=null;$("#c_point").value="";renderChar();saveChar();renderCards();return cAdvance()}
+  if(t.closest("[data-cskip]")){const q=cq;if(!q)return;if(q.sec!=="point"){toast("피사체·동작·장소·스타일은 꼭 써 주세요");return}$("#cSay").value="";sb.sum=null;sb.dirty=false;cme("건너뛰기");const D={subj:"생김새는 자유롭게 정한 귀여운 캐릭터",act:ACT_FULL,place:"흰 배경",style:"3D 애니메이션",point:""};if(q.sec==="point"){pk=null;$("#c_point").value="";renderChar();saveChar();renderCards();return cAdvance()}
     if(!cv(q.sec)){if(q.sec==="subj")sb.sel={kind:"",free:D.subj};cSet(q.sec,D[q.sec])}return cAdvance()}
   if(t.closest("[data-cnext]")){const q=cq;if(q&&q.sec==="subj"){const g=sbGroups().find(x=>x.k===q.k);const v=sb.sel[q.k];if(v&&(!Array.isArray(v)||v.length))cme(Array.isArray(v)?v.join(", "):v);else cme("건너뛰기")}cAdvance();return}
   if((b=t.closest("[data-cstyle]"))){const st=STYLES.find(x=>x.id===b.dataset.cstyle);cme(st.t);cSet("style",st.t);cAdvance();return}
