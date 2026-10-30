@@ -5320,7 +5320,7 @@ function evC(k){const D=EVT_DEF.find(x=>x[0]===k)||[],c=(EVT.m||{})[k]||{},n=+c.
 let EVT={on:false,day:"",m:{}};const EVT_SEEN=new Set();let evtUnsub=null,evtBoot=false;
 const kday=()=>new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
 function evtLive(){return !!(EVT.on&&EVT.day===kday())}
-async function loadEvt(){if(!fb)return;try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","event"));if(d.exists())EVT=Object.assign({on:false,day:"",m:{}},d.data())}catch(_){}evtListen()}
+async function loadEvt(){if(!fb||window.__evtCfgU)return;try{window.__evtCfgU=fb.fs.onSnapshot(fb.fs.doc(fb.db,"config","event"),d=>{if(d.exists())EVT=Object.assign({on:false,day:"",m:{}},d.data());evtListen()},()=>{})}catch(_){try{const d=await fb.fs.getDoc(fb.fs.doc(fb.db,"config","event"));if(d.exists())EVT=Object.assign({on:false,day:"",m:{}},d.data())}catch(_){}evtListen()}}
 function evtListen(){if(!fb||evtUnsub||!evtLive())return;const F=fb.fs;evtBoot=false;
   evtUnsub=F.onSnapshot(F.query(F.collection(fb.db,"events"),F.where("day","==",kday())),sn=>{sn.docChanges().forEach(c=>{const d=c.doc.data();if(c.type!=="added"||EVT_SEEN.has(c.doc.id))return;EVT_SEEN.add(c.doc.id);if(!evtBoot)return;const u=user();if((u&&u.uid===d.uid)||isAdmin())evtPop(d)});evtBoot=true;if(document.getElementById("evtList"))renderEvtAdmin()},()=>{})}
 async function tryWin(m){try{if(!fb||!evtLive())return;const cfg=(EVT.m||{})[m]||{};if(cfg.on===false)return;const u=user();if(!u||isAdmin())return;
