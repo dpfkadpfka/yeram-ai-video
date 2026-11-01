@@ -2256,7 +2256,7 @@ body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
   body[data-stage="char"].cfresh:not(.cpre) #cSay{font-size:16px}
 }
 
-.txthint{font-size:13.5px;line-height:1.7;color:var(--muted);background:var(--bg);border-radius:12px;padding:10px 14px;margin:0 0 8px}
+.quick:empty{display:none!important}.txthint{display:none!important;font-size:13.5px;line-height:1.7;color:var(--muted);background:var(--bg);border-radius:12px;padding:10px 14px;margin:0 0 8px}
 
 .phone .quick:has(.txthint)::before,.phone .quick:has(.sbpanel>.pcrow:first-child)::before{display:none}
 .sbpanel>.pcrow:first-child{margin-top:0;padding-top:0;border-top:0}
@@ -5180,15 +5180,15 @@ function cAsk(sec,k){
     const on=t=>g.m?(cur||[]).includes(t):cur===t;
     cbot(cLog.children.length?`<b class="hl">피사체</b>는 그림에 그릴 주인공이에요. 아래 내용을 글로 써 주세요.<br>· <b>누구</b>: 남자·여자·아이·동물 등<br>· <b>생김새</b>: 머리 모양·머리색·얼굴 특징<br>· <b>옷·소품</b>: 입은 옷, 안경·모자·가방 등`:`안녕하세요! 캐릭터를 같이 만들어 볼게요.<br><br>먼저 <b class="hl">피사체</b>는 그림에 그릴 주인공이에요. 아래 내용을 글로 써 주세요.<br>· <b>누구</b>: 남자·여자·아이·동물 등<br>· <b>생김새</b>: 머리 모양·머리색·얼굴 특징<br>· <b>옷·소품</b>: 입은 옷, 안경·모자·가방 등`);
     sb.sel={};sb.sum=null;sb.dirty=false;$("#cSay").value="";
-    cQuick.innerHTML=`<div class="txthint">예) 짧은 검정 머리에 안경을 쓴 남자 선생님, 파란 셔츠와 갈색 바지<br>예) 갈색 털에 빨간 목도리를 한 귀여운 강아지</div>`;
+    cQuick.innerHTML="";
   }else if(sec==="act"){
     cbot('<b class="hl">동작</b> · 어떤 포즈와 표정일까요? 글로 써 주세요. 처음 만드는 캐릭터는 정면 전신 포즈를 추천해요.');
     pk=null;$("#cSay").value="";
-    cQuick.innerHTML=`<div class="txthint">예) 정면을 보고 활짝 웃으며 한 손을 흔든다<br>예) 두 손을 모으고 고개를 살짝 기울인다</div>`;
+    cQuick.innerHTML="";
   }else if(sec==="place"){
     cbot('<b class="hl">장소</b> · 배경은 어떻게 할까요? 글로 써 주세요. 처음 만드는 캐릭터는 흰 배경을 추천해요.');
     pk=null;$("#cSay").value="";
-    cQuick.innerHTML=`<div class="txthint">예) 햇살이 드는 교실<br>예) 흰 배경<br>예) 투명 배경 (캐릭터만)</div>`;
+    cQuick.innerHTML="";
   }else if(sec==="point"){
     cbot('<b class="hl">포인트 컬러</b>도 있나요? 캐릭터에 꼭 들어갔으면 하는 색이 있으면 골라 주세요. 없으면 [없어요]를 누르면 돼요.');
     pk={sec:"point",sel:[],sum:null,dirty:false,multi:false};pkPaint();
