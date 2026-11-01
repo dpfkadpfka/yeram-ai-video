@@ -4890,7 +4890,11 @@ $("#cvWrap").innerHTML=CV.map(([n,a],i)=>`<section class="cvsec"><div class="cvs
 /* 커뮤니티 */
 const COM_CAT={review:"수강 후기",qna:"질문",free:"자유",contest:"자유",tip:"자유",show:"자유"};const comCatOf=c=>["review","qna"].includes(c)?c:"free";let comTab="all",comOpen=null,comItems=[];
 const fmtD=t=>{try{const d=t&&t.toDate?t.toDate():new Date(t);return `${d.getMonth()+1}.${d.getDate()}`}catch(e){return ""}};
-const myNick=()=>(S.profile&&S.profile.nick)||(user()&&(user().displayName||(user().email||"").split("@")[0]))||"선생님";
+const ANI_A=["용감한","졸린","신난","수줍은","반짝이는","씩씩한","느긋한","호기심 많은","행복한","똑똑한","엉뚱한","다정한","부지런한","상냥한","명랑한","꼼꼼한","재빠른","포근한","당당한","귀여운","춤추는","노래하는","배고픈","꿈꾸는"];
+const ANI_B=["판다","수달","펭귄","코알라","다람쥐","고슴도치","여우","토끼","햄스터","사막여우","알파카","돌고래","부엉이","너구리","레서판다","거북이","고양이","강아지","쿼카","북극곰","기린","해달","카피바라","치타"];
+function animalNick(){let n="";try{n=localStorage.getItem("animalNick")||""}catch(_){}if(!n){n=ANI_A[Math.random()*ANI_A.length|0]+" "+ANI_B[Math.random()*ANI_B.length|0];try{localStorage.setItem("animalNick",n)}catch(_){}}return n}
+const isAnonU=()=>!!(user()&&user().isAnonymous);
+const myNick=()=>(S.profile&&S.profile.nick)||(user()&&!isAnonU()&&(user().displayName||(user().email||"").split("@")[0]))||animalNick();
 const comCol=id=>{const it=comItems.find(x=>x.id===id);return it&&it.priv?"cpriv":"community"};
 const tms=t=>t&&t.toMillis?t.toMillis():(t?+new Date(t):Date.now());
 async function loadCom(){const box=$("#comList");box.innerHTML=`<p class="comempty">불러오는 중…</p>`;comItems=[];
@@ -5528,7 +5532,7 @@ document.addEventListener("click",async e=>{let b=e.target.closest("[data-vdl]")
 const GEN={base:[],sheet:[]},GSEL={base:0,sheet:0},GUSED={};
 function isGoogle(){const u=user();return !!(u&&((u.providerData||[]).some(p=>p.providerId==="google.com")||(OPEN_LOGIN&&u.isAnonymous)))}
 let OPEN_LOGIN=false,openU=null;
-function anonIn(){if(!fb||!fb.am.signInAnonymously)return Promise.reject();return fb.am.signInAnonymously(fb.auth).then(c=>{fb.user=fb.user||c.user;return c.user})}
+function anonIn(){if(!fb||!fb.am.signInAnonymously)return Promise.reject();return fb.am.signInAnonymously(fb.auth).then(c=>{fb.user=fb.user||c.user;try{if(c.user&&!c.user.displayName&&fb.am.updateProfile)fb.am.updateProfile(c.user,{displayName:animalNick()}).catch(()=>{})}catch(_){}return c.user})}
 function watchOpen(){if(!fb||openU)return;try{openU=fb.fs.onSnapshot(fb.fs.doc(fb.db,"config","site"),d=>{const v=!!(d.exists()&&d.data().openLogin),ch=v!==OPEN_LOGIN;OPEN_LOGIN=v;document.body.classList.toggle("open-login",v);const ck=document.getElementById("openLogin");if(ck)ck.checked=v;if(v&&!user())anonIn().catch(()=>{});if(ch){try{renderAcct()}catch(_){}try{loadQuota()}catch(_){}}},()=>{})}catch(_){}}
 document.addEventListener("change",async e=>{if(!e.target||e.target.id!=="openLogin")return;const v=e.target.checked;try{await fb.fs.setDoc(fb.fs.doc(fb.db,"config","site"),{openLogin:v},{merge:true});toast(v?"로그인 없이 쓰기를 켰어요":"로그인 없이 쓰기를 껐어요")}catch(_){e.target.checked=!v;toast("저장하지 못했어요")}});
 function paintGen(kind){try{const nb=!GEN.base.length;$("#sheetNeed").hidden=!nb;document.querySelectorAll('[data-gen="sheet"]').forEach(b=>b.classList.toggle("locked",nb))}catch(_){}const box=$("#gen_"+kind),L=GEN[kind];if(!box)return;box.hidden=!L.length&&!box.classList.contains("busy");if(!L.length)return;const i=Math.min(GSEL[kind],L.length-1);
