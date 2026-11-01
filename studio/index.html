@@ -2849,6 +2849,18 @@ body.hm-studio #stepper li:has(.sn[data-studio]){display:none!important}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+(function(){var ua=navigator.userAgent||"",isIOS=/iPhone|iPad|iPod/i.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),isAnd=/Android/i.test(ua),isK=/KAKAOTALK/i.test(ua);
+var inApp=isK||/NAVER\(inapp|Instagram|FBAN|FBAV|FB_IAB|Line\/|DaumApps|BAND\/|everytimeApp/i.test(ua)||(isAnd&&/; wv\)/.test(ua));
+window.__inApp=inApp;
+window.inAppEscape=function(show){var u=location.href;if(isK){location.href="kakaotalk://web/openExternal?url="+encodeURIComponent(u);return}if(isAnd){location.href="intent://"+u.replace(/^https?:\/\//,"")+"#Intent;scheme=https;package=com.android.chrome;end";return}if(show){var b=document.getElementById("inappBar");if(b)b.hidden=false}};
+if(!inApp)return;
+document.addEventListener("DOMContentLoaded",function(){var b=document.createElement("div");b.id="inappBar";
+b.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:99999;background:#1b1a1f;color:#fff;border-radius:16px;padding:14px 16px;font-size:14px;line-height:1.5;box-shadow:0 12px 32px -8px rgba(0,0,0,.5);display:grid;gap:10px";
+b.innerHTML='<div><b>이 앱 안에서는 구글 로그인이 안 돼요.</b><br><span style="opacity:.85">'+(isIOS&&!isK?'오른쪽 아래 <b>⋯ 또는 공유</b> → <b>Safari로 열기</b>를 눌러 주세요.':'아래 버튼을 누르면 크롬·사파리로 열려요.')+'</span></div><div style="display:flex;gap:8px"><button type="button" id="inappGo" style="flex:1;height:40px;border:0;border-radius:999px;background:#E8558A;color:#fff;font:inherit;font-weight:700">'+(isIOS&&!isK?'주소 복사하기':'브라우저로 열기')+'</button><button type="button" id="inappX" style="height:40px;padding:0 14px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:none;color:#fff;font:inherit">닫기</button></div>';
+document.body.appendChild(b);document.getElementById("inappX").onclick=function(){b.hidden=true};
+document.getElementById("inappGo").onclick=function(){if(isIOS&&!isK){var g=document.getElementById("inappGo");try{navigator.clipboard.writeText(location.href).then(function(){g.textContent="복사했어요! Safari 주소창에 붙여 넣어 주세요"},function(){prompt("주소를 복사해 주세요",location.href)})}catch(e){prompt("주소를 복사해 주세요",location.href)}}else inAppEscape(true)};
+if(isK||isAnd)setTimeout(function(){inAppEscape(false)},300)});})();
+</script><script>
 /* ===== Firebase 설정 (배포할 때 채움) ===== */
 const FIREBASE_CONFIG = {apiKey:"AIzaSyCZ-UaL2zBCzYYkjwzrdEUAA9dEVLg5uKM", authDomain:"yeram-ai-video.firebaseapp.com", projectId:"yeram-ai-video", storageBucket:"yeram-ai-video.firebasestorage.app", messagingSenderId:"590325912000", appId:"1:590325912000:web:8056b70fbd73e29d34f825"};
 const FB_VER = "10.12.2";
